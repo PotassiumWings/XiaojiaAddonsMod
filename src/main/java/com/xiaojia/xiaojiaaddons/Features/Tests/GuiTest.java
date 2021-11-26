@@ -27,6 +27,7 @@ public class GuiTest {
         GuiUtils.drawBoxAtEntity(player, 0, 255, 0, 255, 0.5F, 1, 0);
         GuiUtils.drawBoxAtBlock(floor(getX(player) - 10), floor(getY(player) - 5), floor(getZ(player) - 10), 255, 0, 0, 255, 5, 5);
         GuiUtils.drawFilledBoxAtEntity(player, 0, 0, 255, 255, 0.2F, 0.2F, 0.2F);
-        GuiUtils.drawString("owo", getX(player) - 10, getY(player) - 5, getZ(player) - 10, 0x003300, false, 1, false);
+        GuiUtils.drawString("owo", 0, 100, 0, 0x003300, false, 0.5F, false);
+        GuiUtils.showTitle(ChatLib.addColor("&5owo"), "", 0, 5, 0);
     }
 }

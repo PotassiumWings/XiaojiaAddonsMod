@@ -24,8 +24,14 @@ public class SkyblockUtils {
         ArrayList<String> lines = ScoreBoard.getLines();
         if (lines.size() < 5) return "";
         String line = lines.get(lines.size() - 4) + lines.get(lines.size() - 5);
+        StringBuilder removeSkippingChar = new StringBuilder();
         line = ChatLib.removeFormatting(line);
-        System.out.println(line);
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+            if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '\'' || c == ' ')
+                removeSkippingChar.append(c);
+        }
+        line = removeSkippingChar.toString();
 
         String result = "Others";
         for (String map : maps) {
@@ -45,7 +51,7 @@ public class SkyblockUtils {
     }
 
     public static boolean isInSpiderDen() {
-        return currentMap.equals("Spider's den");
+        return currentMap.equals("Spider's Den");
     }
 
     public static String getCurrentServer() {

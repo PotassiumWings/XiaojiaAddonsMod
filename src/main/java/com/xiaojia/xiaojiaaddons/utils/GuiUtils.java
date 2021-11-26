@@ -37,7 +37,6 @@ public class GuiUtils {
         Vector3f renderPos = getRenderPos(x, y, z);
         if (increase) {
             float f1 = renderPos.x * renderPos.x + renderPos.y * renderPos.y + renderPos.z * renderPos.z;
-            boolean bool = false;
             float distance = (float) Math.sqrt(f1);
             float multiplier = distance / 120.0F;
             lScale *= 0.45F * multiplier;

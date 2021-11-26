@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import scala.Tuple3;
@@ -37,11 +38,17 @@ public class Spider {
             {-212, 59, -314, -215, 63, -312},   // 3 * 3 * 2
             {-218, 59, -319, -221, 64, -315}    // 3 * 5 * 4
     };
+    private static boolean debug = false;
     private final HashMap<String, Long> lastDeathWarnTime = new HashMap<>();
     private final HashMap<String, Long> lastWarnTime = new HashMap<>();
     private ArrayList<EntityInfo> renderEntities = new ArrayList<>();
     private ArrayList<Tuple3<Integer, Integer, Integer>> bestShadowFuryPoints = new ArrayList<>();
     private boolean shadowFuryWarnedInThisLobby = false;
+
+    public static void setDebug() {
+        debug = !debug;
+        ChatLib.chat("debug: " + debug);
+    }
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
@@ -54,22 +61,23 @@ public class Spider {
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("entity", entity);
                 if (entity instanceof EntityArmorStand) {
-                    hashMap.put("yOffset", 1);
+                    hashMap.put("yOffset", 1.0F);
                     hashMap.put("drawString", EnumDraw.DRAW_KIND);
-                    hashMap.put("width", 1);
+                    hashMap.put("width", 1.0F);
                     hashMap.put("fontColor", 0x33ff33);
+                    hashMap.put("isFilled", true);
                     String name = ChatLib.removeFormatting(entity.getName());
                     if (name.contains(ARACHNEKEEPER_STRING)) {
                         hashMap.put("kind", ARACHNEKEEPER_STRING);
                         newEntities.add(new EntityInfo(hashMap));
                         if (true) {
-                            GuiUtils.showTitle(ARACHNEKEEPER_SHOW, "", 0, 2, 0);
+                            GuiUtils.showTitle(ARACHNEKEEPER_SHOW, "", 0, 5, 0);
                         }
                     } else if (name.contains(BROODMOTHER_STRING)) {
                         hashMap.put("kind", BROODMOTHER_STRING);
                         newEntities.add(new EntityInfo(hashMap));
                         if (true) {
-                            GuiUtils.showTitle(BROODMOTHER_SHOW, "", 0, 2, 0);
+                            GuiUtils.showTitle(BROODMOTHER_SHOW, "", 0, 5, 0);
                         }
                     }
 
@@ -132,18 +140,21 @@ public class Spider {
             if (true && hasOutsideSpider && !shadowFuryWarnedInThisLobby) {
                 shadowFuryWarnedInThisLobby = true;
                 ChatLib.chat("&5Be aware: Kill the outside mobs before shadow fury!");
-
             }
         } catch (Exception e) {
             e.printStackTrace();
+            ChatLib.chat("owo?");
         }
         renderEntities = newEntities;
+        if (debug) ChatLib.chat(renderEntities.size() + ", onTick");
     }
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
         if (!SkyblockUtils.isInSpiderDen()) return;
-        renderEntities.forEach(entityInfo -> {
+        if (debug) ChatLib.chat(renderEntities.size() + ", onRenderWorld");
+        for (EntityInfo entityInfo : renderEntities) {
+            // TODO: 把这里抽象出来
             EnumDraw draw = entityInfo.getDrawString();
             Entity entity = entityInfo.getEntity();
             String kind = entityInfo.getKind();
@@ -157,7 +168,8 @@ public class Spider {
                 drawString = DisplayUtils.getHPDisplayFromArmorStandName(name, kind);
             else if (draw == EnumDraw.DRAW_ENTITY_HP)
                 drawString = DisplayUtils.hpToString(((EntityLivingBase) entity).getHealth());
-            GuiUtils.drawString(drawString, getX(entity), getY(entity), getZ(entity), entityInfo.getFontColor(), false, entityInfo.getScale(), false);
+            GuiUtils.drawString(drawString, getX(entity), getY(entity), getZ(entity), entityInfo.getFontColor(), false, entityInfo.getScale(), true);
+            if (debug) ChatLib.chat(filled + ", " + drawString);
 
             // warn
             long curTime = TimeUtils.curTime();
@@ -180,14 +192,19 @@ public class Spider {
             int r = entityInfo.getR(), g = entityInfo.getG(), b = entityInfo.getB();
             float width = entityInfo.getWidth(), height = entityInfo.getHeight();
             float yOffset = entityInfo.getyOffset();
-            if (filled) GuiUtils.drawBoxAtEntity(entity, r, g, b, 100, width, height, yOffset);
+            if (!filled) GuiUtils.drawBoxAtEntity(entity, r, g, b, 255, width, height, yOffset);
             else GuiUtils.drawFilledBoxAtEntity(entity, r, g, b, 100, width, height, yOffset);
-        });
+        }
         if (true) {
             bestShadowFuryPoints.forEach(pos -> {
                 int x = pos._1(), y = pos._2(), z = pos._3();
                 GuiUtils.drawBoxAtBlock(x, y, z, 0, 255, 0, 100, 1, 1);
             });
         }
+    }
+
+    @SubscribeEvent
+    public void onWorldLoad(WorldEvent.Load event) {
+        shadowFuryWarnedInThisLobby = false;
     }
 }

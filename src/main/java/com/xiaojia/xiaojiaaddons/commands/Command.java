@@ -1,5 +1,7 @@
 package com.xiaojia.xiaojiaaddons.commands;
 
+import com.xiaojia.xiaojiaaddons.Features.Bestiary.Spider;
+import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.command.CommandBase;
@@ -35,7 +37,10 @@ public class Command extends CommandBase {
         }
         String arg = strings[0];
         if (arg.equals("curmap")) ChatLib.chat(SkyblockUtils.getCurrentMap());
-        else ChatLib.chat(getUsage());
+        else if (arg.equals("debug")) {
+            Spider.setDebug();
+            BlockAbility.setDebug();
+        } else ChatLib.chat(getUsage());
     }
 
     private String getUsage() {

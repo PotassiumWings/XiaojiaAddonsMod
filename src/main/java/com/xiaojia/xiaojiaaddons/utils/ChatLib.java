@@ -18,21 +18,23 @@ public class ChatLib {
         return matcher.replaceAll("");
     }
 
-    public static void chat(String text) {
-        if (text == null) {
-            text = "null";
-        }
-        text = "&9[XiaojiaAddonsMod] > &b" + text;
-        text = addColor(text);
-        System.out.println(text);
-        EntityPlayerSP player = mc.thePlayer;
-        if (player != null) {
-            IChatComponent component = new ChatComponentText(text);
-            player.addChatMessage(component);
+    public static void chat(String chatMessage) {
+        if (chatMessage == null) chatMessage = "null";
+        String[] texts = chatMessage.split("\n");
+        for (String text : texts) {
+            text = "&9[XiaojiaAddonsMod] > &b" + text;
+            text = addColor(text);
+            System.out.println(text);
+            EntityPlayerSP player = mc.thePlayer;
+            if (player != null) {
+                IChatComponent component = new ChatComponentText(text);
+                player.addChatMessage(component);
+            }
         }
     }
 
     public static String addColor(String text) {
+        if (text == null) return "";
         Pattern pattern = Pattern.compile("((?<!\\\\))&(?![^0-9a-fklmnor]|$)");
         Matcher matcher = pattern.matcher(text);
         return matcher.replaceAll("\u00a7");

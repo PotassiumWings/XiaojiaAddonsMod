@@ -1,8 +1,11 @@
 package com.xiaojia.xiaojiaaddons;
 
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.Spider;
+import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
+import com.xiaojia.xiaojiaaddons.Features.QOL.GhostBlock;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import com.xiaojia.xiaojiaaddons.commands.Command;
+import com.xiaojia.xiaojiaaddons.commands.TestControl;
 import com.xiaojia.xiaojiaaddons.commands.TestGui;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.ScoreBoard;
@@ -24,11 +27,15 @@ public class XiaojiaAddons {
     public void preInit(FMLPreInitializationEvent event) {
         ClientCommandHandler.instance.registerCommand(new Command());
         ClientCommandHandler.instance.registerCommand(new TestGui());
+        ClientCommandHandler.instance.registerCommand(new TestControl());
 
         MinecraftForge.EVENT_BUS.register(new MathUtils());
         MinecraftForge.EVENT_BUS.register(new ScoreBoard());
         MinecraftForge.EVENT_BUS.register(new SkyblockUtils());
         MinecraftForge.EVENT_BUS.register(new GuiTest());
+
+        MinecraftForge.EVENT_BUS.register(new GhostBlock());
+        MinecraftForge.EVENT_BUS.register(new BlockAbility());
 
         MinecraftForge.EVENT_BUS.register(new Spider());
     }
