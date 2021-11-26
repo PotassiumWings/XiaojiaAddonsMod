@@ -3,16 +3,12 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.BlockPos;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class GhostBlock {
-    private static final Minecraft mc = Minecraft.getMinecraft();
-    private static EntityPlayerSP player = mc.thePlayer;
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
+public class GhostBlock {
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (false) return;

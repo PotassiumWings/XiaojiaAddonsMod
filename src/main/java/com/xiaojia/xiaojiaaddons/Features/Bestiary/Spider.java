@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.EntityInfo;
@@ -8,7 +9,6 @@ import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
@@ -25,9 +25,9 @@ import java.util.List;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Spider {
-    private static final Minecraft mc = Minecraft.getMinecraft();
     private static final String ARACHNEKEEPER_STRING = "Arachne's Keeper";
     private static final String ARACHNEKEEPER_SHOW = "&c&lArachne's Keeper";
     private static final String BROODMOTHER_STRING = "Brood Mother";
@@ -38,17 +38,11 @@ public class Spider {
             {-212, 59, -314, -215, 63, -312},   // 3 * 3 * 2
             {-218, 59, -319, -221, 64, -315}    // 3 * 5 * 4
     };
-    private static boolean debug = false;
     private final HashMap<String, Long> lastDeathWarnTime = new HashMap<>();
     private final HashMap<String, Long> lastWarnTime = new HashMap<>();
     private ArrayList<EntityInfo> renderEntities = new ArrayList<>();
     private ArrayList<Tuple3<Integer, Integer, Integer>> bestShadowFuryPoints = new ArrayList<>();
     private boolean shadowFuryWarnedInThisLobby = false;
-
-    public static void setDebug() {
-        debug = !debug;
-        ChatLib.chat("debug: " + debug);
-    }
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
@@ -56,7 +50,7 @@ public class Spider {
         ArrayList<EntityInfo> newEntities = new ArrayList<>();
         ArrayList<Entity> shadowFuryEntities = new ArrayList<>();
         try {
-            List<Entity> list = mc.theWorld.loadedEntityList;
+            List<Entity> list = getWorld().loadedEntityList;
             for (Entity entity : list) {
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("entity", entity);
@@ -146,13 +140,13 @@ public class Spider {
             ChatLib.chat("owo?");
         }
         renderEntities = newEntities;
-        if (debug) ChatLib.chat(renderEntities.size() + ", onTick");
+        if (XiaojiaAddons.isDebug()) ChatLib.chat(renderEntities.size() + ", onTick");
     }
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
         if (!SkyblockUtils.isInSpiderDen()) return;
-        if (debug) ChatLib.chat(renderEntities.size() + ", onRenderWorld");
+        if (XiaojiaAddons.isDebug()) ChatLib.chat(renderEntities.size() + ", onRenderWorld");
         for (EntityInfo entityInfo : renderEntities) {
             // TODO: 把这里抽象出来
             EnumDraw draw = entityInfo.getDrawString();
@@ -169,7 +163,7 @@ public class Spider {
             else if (draw == EnumDraw.DRAW_ENTITY_HP)
                 drawString = DisplayUtils.hpToString(((EntityLivingBase) entity).getHealth());
             GuiUtils.drawString(drawString, getX(entity), getY(entity), getZ(entity), entityInfo.getFontColor(), false, entityInfo.getScale(), true);
-            if (debug) ChatLib.chat(filled + ", " + drawString);
+            if (XiaojiaAddons.isDebug()) ChatLib.chat(filled + ", " + drawString);
 
             // warn
             long curTime = TimeUtils.curTime();

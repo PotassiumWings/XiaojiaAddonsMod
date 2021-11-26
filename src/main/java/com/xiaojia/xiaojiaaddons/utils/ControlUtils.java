@@ -1,7 +1,5 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -10,23 +8,23 @@ import net.minecraft.util.Tuple;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class ControlUtils {
-    private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final EntityPlayerSP player = mc.thePlayer;
 
     public static void rightClick() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        player.closeScreen();
+        getPlayer().closeScreen();
         Method rightClickMethod = mc.getClass().getDeclaredMethod("rightClickMouse");
         rightClickMethod.setAccessible(true);
         rightClickMethod.invoke(mc);
     }
 
     public static void leftClick() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        player.closeScreen();
+        getPlayer().closeScreen();
         Method leftClickMethod = mc.getClass().getDeclaredMethod("clickMouse");
         leftClickMethod.setAccessible(true);
         leftClickMethod.invoke(mc);
@@ -38,12 +36,12 @@ public class ControlUtils {
             return;
         }
         System.out.println("changed dir! " + yaw + ", " + pitch);
-        player.rotationYaw += MathHelper.wrapAngleTo180_float(yaw - player.rotationYaw);
-        player.rotationPitch += MathHelper.wrapAngleTo180_float(pitch - player.rotationPitch);
+        getPlayer().rotationYaw += MathHelper.wrapAngleTo180_float(yaw - getPlayer().rotationYaw);
+        getPlayer().rotationPitch += MathHelper.wrapAngleTo180_float(pitch - getPlayer().rotationPitch);
     }
 
     public static void face(float tx, float ty, float tz) {
-        player.closeScreen();
+        getPlayer().closeScreen();
         Tuple<Float, Float> res = getFaceYawAndPitch(tx, ty, tz);
         float yaw = res.getFirst(), pitch = res.getSecond();
         changeDirection(yaw, pitch);
@@ -51,7 +49,7 @@ public class ControlUtils {
 
     private static Tuple<Float, Float> getFaceYawAndPitch(float tx, float ty, float tz) {
         float PI = (float) Math.PI;
-        float x = getX(player), y = getY(player) + 1.5F, z = getZ(player);
+        float x = getX(getPlayer()), y = getY(getPlayer()) + 1.5F, z = getZ(getPlayer());
         float dx = tx - x, dy = ty - y, dz = tz - z;
         float X = (float) Math.sqrt((x - tx) * (x - tx) + (z - tz) * (z - tz));
         float alpha = (float) Math.atan2(dy, X);
@@ -65,8 +63,8 @@ public class ControlUtils {
     }
 
     public static ItemStack getHeldItemStack() {
-        if (player == null) return null;
-        InventoryPlayer inventoryPlayer = player.inventory;
+        if (getPlayer() == null) return null;
+        InventoryPlayer inventoryPlayer = getPlayer().inventory;
         if (inventoryPlayer == null) return null;
         return inventoryPlayer.getCurrentItem();
     }

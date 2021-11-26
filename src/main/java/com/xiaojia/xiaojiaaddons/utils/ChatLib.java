@@ -1,6 +1,5 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
@@ -8,8 +7,9 @@ import net.minecraft.util.IChatComponent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
+
 public class ChatLib {
-    private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static String removeFormatting(String text) {
         if (text == null) return null;

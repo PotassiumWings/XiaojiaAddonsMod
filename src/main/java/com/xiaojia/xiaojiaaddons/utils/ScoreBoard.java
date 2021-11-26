@@ -1,7 +1,6 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
@@ -10,8 +9,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
+
 public class ScoreBoard {
-    private static final Minecraft mc = Minecraft.getMinecraft();
     public static boolean update = true;
     private static ArrayList<String> lines = new ArrayList<>();
 
@@ -27,7 +27,7 @@ public class ScoreBoard {
 //        ChatLib.chat("updating lines...");
         ArrayList<String> newLines = new ArrayList<>();
         try {
-            Scoreboard scoreBoard = mc.thePlayer.getWorldScoreboard();
+            Scoreboard scoreBoard = getPlayer().getWorldScoreboard();
             ArrayList<Score> list = new ArrayList<>(
                     scoreBoard.getSortedScores(scoreBoard.getObjectiveInDisplaySlot(1))
             );
@@ -51,7 +51,6 @@ public class ScoreBoard {
                 newLines.add(s);
             }
             lines = newLines;
-//            lines.forEach(ChatLib::chat);
         } catch (Exception e) {
 //            e.printStackTrace();
         }

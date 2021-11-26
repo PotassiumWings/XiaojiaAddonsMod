@@ -1,6 +1,5 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -11,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SkyblockUtils {
-    private static final Minecraft mc = Minecraft.getMinecraft();
     private static final ArrayList<String> maps = new ArrayList<>(Arrays.asList(
             "Hub", "Spider's Den", "Gunpowder Mines", "Void Sepulture", "Dragon's Nest",
             "The End", "The Mist", "Blazing Fortress", "The Catacombs", "Howling Cave",

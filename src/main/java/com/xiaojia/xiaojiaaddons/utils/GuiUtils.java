@@ -13,13 +13,13 @@ import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class GuiUtils {
-    private static final Minecraft mc = Minecraft.getMinecraft();
-
     private static final Tessellator tessellator = Tessellator.getInstance();
     private static final WorldRenderer worldRenderer = tessellator.getWorldRenderer();
 
@@ -92,7 +92,7 @@ public class GuiUtils {
     }
 
     private static void drawFilledBoundingBoxAbsolute(float sx, float sy, float sz, float tx, float ty, float tz, int r, int g, int b, int a) {
-        EntityPlayerSP player = mc.thePlayer;
+        EntityPlayerSP player = getPlayer();
         float px = getX(player), py = getY(player), pz = getZ(player);
         sx -= px;
         sy -= py;
