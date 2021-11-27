@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons;
 
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.Spider;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostBlock;
@@ -10,6 +11,7 @@ import com.xiaojia.xiaojiaaddons.commands.TestControl;
 import com.xiaojia.xiaojiaaddons.commands.TestGui;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
+import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.KeyBindUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
@@ -48,11 +50,13 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new MathUtils());
         MinecraftForge.EVENT_BUS.register(new ScoreBoard());
         MinecraftForge.EVENT_BUS.register(new SkyblockUtils());
+        MinecraftForge.EVENT_BUS.register(new CommandsUtils());
         MinecraftForge.EVENT_BUS.register(new GuiTest());
 
         MinecraftForge.EVENT_BUS.register(new GhostBlock());
         MinecraftForge.EVENT_BUS.register(new BlockAbility());
         MinecraftForge.EVENT_BUS.register(new StonklessStonk());
+        MinecraftForge.EVENT_BUS.register(new MimicWarn());
 
         MinecraftForge.EVENT_BUS.register(new Spider());
         for (KeyBind keyBind : KeyBindUtils.keyBinds.values()) {

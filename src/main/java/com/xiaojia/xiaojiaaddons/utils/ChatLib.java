@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class ChatLib {
 
@@ -25,10 +26,21 @@ public class ChatLib {
             text = "&9[XiaojiaAddonsMod] > &b" + text;
             text = addColor(text);
             System.out.println(text);
-            EntityPlayerSP player = mc.thePlayer;
+            EntityPlayerSP player = getPlayer();
             if (player != null) {
                 IChatComponent component = new ChatComponentText(text);
                 player.addChatMessage(component);
+            }
+        }
+    }
+
+    public static void say(String message) {
+        if (message == null) message = "null";
+        EntityPlayerSP player = getPlayer();
+        String[] texts = message.split("\n");
+        for (String text : texts) {
+            if (player != null) {
+                player.sendChatMessage(text);
             }
         }
     }
