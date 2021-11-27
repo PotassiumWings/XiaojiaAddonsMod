@@ -1,6 +1,8 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -53,8 +55,19 @@ public class SkyblockUtils {
         return currentMap.equals("Spider's Den");
     }
 
+    public static boolean isInDungeon() {
+        return currentMap.equals("The Catacombs");
+    }
+
     public static String getCurrentServer() {
         return currentServer;
+    }
+
+    public static String getSkyBlockID(ItemStack itemStack) {
+        if (itemStack == null) return "";
+        NBTTagCompound extraAttributes = itemStack.getSubCompound("ExtraAttributes", false);
+        if (extraAttributes != null && extraAttributes.hasKey("id")) return extraAttributes.getString("id");
+        return "";
     }
 
     @SubscribeEvent

@@ -18,6 +18,11 @@ public class MathUtils {
         return distanceSquaredFromPoints(x, y, z, tx, ty, tz);
     }
 
+    public static double distanceSquareFromPlayer(Entity entity) {
+        double tx = getX(entity), ty = getY(entity), tz = getZ(entity);
+        return distanceSquareFromPlayer(tx, ty, tz);
+    }
+
     public static float getX(Entity entity) {
         if (entity == null) return -10000;
         return (float) (entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks);

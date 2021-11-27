@@ -1,0 +1,97 @@
+package com.xiaojia.xiaojiaaddons.Features.QOL;
+
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Vec3;
+import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
+
+public class EntityQOL {
+    private static final ArrayList<String> summonItemIDs = new ArrayList<>(
+            Arrays.asList("HEAVY_HELMET", "ZOMBIE_KNIGHT_HELMET", "SKELETOR_HELMET")
+    );
+
+    private static boolean isSummon(Entity entity) {
+        if (entity instanceof EntityPlayer)
+            return entity.getName().equals("Lost Adventurer");
+        if (entity instanceof EntityZombie ||
+                entity instanceof EntitySkeleton)
+            for (int i = 0; i < 5; i++) {
+                ItemStack item = ((EntityMob) entity).getEquipmentInSlot(i);
+                if (summonItemIDs.contains(SkyblockUtils.getSkyBlockID(item)))
+                    return true;
+            }
+        return false;
+    }
+
+    private static boolean isPlayer(Entity entity) {
+        if (entity instanceof EntityOtherPlayerMP) {
+            return isPlayer((EntityOtherPlayerMP) entity);
+        }
+        return false;
+    }
+
+    private static boolean isPlayer(EntityOtherPlayerMP entity) {
+        UUID uuid = entity.getUniqueID();
+        if (XiaojiaAddons.isDebug()) ChatLib.chat(uuid.version() + "");
+        return (uuid.version() == 3 || uuid.version() == 4);
+    }
+
+    @SubscribeEvent
+    public void onRenderEntity(RenderLivingEvent.Pre<EntityLivingBase> event) {
+        if (isSummon(event.entity)) {
+            event.setCanceled(true);
+        }
+        if (isPlayer(event.entity)) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void onAttackEntity(AttackEntityEvent event) {
+        Entity target = event.target;
+        if (isSummon(target) || isPlayer(target)) {
+            float reach = mc.playerController.getBlockReachDistance();
+            Entity excludedEntity = mc.getRenderViewEntity();
+            Vec3 look = excludedEntity.getLook(0.0F);
+            AxisAlignedBB boundingBox = excludedEntity
+                    .getEntityBoundingBox()
+                    .addCoord(look.xCoord * reach, look.yCoord * reach, look.zCoord * reach)
+                    .expand(1.0D, 1.0D, 1.0D);
+            List<Entity> entitiesInRange = getWorld().getEntitiesWithinAABBExcludingEntity(excludedEntity, boundingBox);
+            if (XiaojiaAddons.isDebug()) for (Entity entity: entitiesInRange) ChatLib.chat(entity.getName());
+            entitiesInRange.removeIf(entity -> !entity.canBeCollidedWith());
+            entitiesInRange.removeIf(EntityQOL::isSummon);
+            entitiesInRange.removeIf(EntityQOL::isPlayer);
+            entitiesInRange.sort((Entity a, Entity b) -> MathUtils.distanceSquareFromPlayer(a) >= MathUtils.distanceSquareFromPlayer(b) ? 1 : -1);
+            if (entitiesInRange.size() > 0) {
+                event.setCanceled(true);
+                getPlayer().swingItem();
+                if (XiaojiaAddons.isDebug()) ChatLib.chat(entitiesInRange.get(0).toString());
+                if (XiaojiaAddons.isDebug()) ChatLib.chat("Attacking through summon!");
+                mc.playerController.attackEntity(getPlayer(), entitiesInRange.get(0));
+            }
+        }
+    }
+}
