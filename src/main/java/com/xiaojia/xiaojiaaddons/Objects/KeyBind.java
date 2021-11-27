@@ -1,5 +1,6 @@
-package com.xiaojia.xiaojiaaddons.utils;
+package com.xiaojia.xiaojiaaddons.Objects;
 
+import com.xiaojia.xiaojiaaddons.utils.KeyBindUtils;
 import net.minecraft.client.settings.KeyBinding;
 
 public class KeyBind {

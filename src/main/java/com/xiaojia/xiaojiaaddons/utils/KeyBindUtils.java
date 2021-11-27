@@ -1,5 +1,7 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
+
 import java.util.HashMap;
 
 public class KeyBindUtils {

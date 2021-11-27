@@ -3,8 +3,8 @@ package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
-import com.xiaojia.xiaojiaaddons.utils.EntityInfo;
-import com.xiaojia.xiaojiaaddons.utils.EnumDraw;
+import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
+import com.xiaojia.xiaojiaaddons.Objects.EnumDraw;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -148,7 +148,7 @@ public class Spider {
         if (!SkyblockUtils.isInSpiderDen()) return;
         if (XiaojiaAddons.isDebug()) ChatLib.chat(renderEntities.size() + ", onRenderWorld");
         for (EntityInfo entityInfo : renderEntities) {
-            // TODO: 把这里抽象出来
+            // TODO: abstract
             EnumDraw draw = entityInfo.getDrawString();
             Entity entity = entityInfo.getEntity();
             String kind = entityInfo.getKind();

@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
@@ -22,6 +23,16 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 public class GuiUtils {
     private static final Tessellator tessellator = Tessellator.getInstance();
     private static final WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+
+    public static void enableESP() {
+        GlStateManager.disableCull();
+        GlStateManager.disableDepth();
+    }
+
+    public static void disableESP() {
+        GlStateManager.enableCull();
+        GlStateManager.enableDepth();
+    }
 
     public static void showTitle(String title, String subtitle, int fadeIn, int time, int fadeOut) {
         GuiIngame gui = Minecraft.getMinecraft().ingameGUI;
@@ -78,17 +89,13 @@ public class GuiUtils {
 
     public static void drawFilledBoxAtEntity(Entity entity, int r, int g, int b, int a, float width, float height, float yOffset) {
         float x = getX(entity), y = getY(entity) - yOffset * height, z = getZ(entity);
+        if (XiaojiaAddons.isDebug()) ChatLib.chat(x + ", " + y + ", " + z);
         drawFilledBoundingBoxAbsolute(x - width, y, z - width, x + width, y + height, z + width, r, g, b, a);
     }
 
     public static void drawBoxAtBlock(int x, int y, int z, int r, int g, int b, int a, int width, int height) {
-        float delta = 0.01F;
-        x -= delta;
-        y -= delta;
-        z -= delta;
-        width += 2 * delta;
-        height += 2 * delta;
-        drawFilledBoundingBoxAbsolute(x, y, z, x + width, y + height, z + width, r, g, b, a);
+        float delta = 0.1F;
+        drawFilledBoundingBoxAbsolute(x - delta, y - delta, z - delta, x + width + delta, y + height + delta, z + width + delta, r, g, b, a);
     }
 
     private static void drawFilledBoundingBoxAbsolute(float sx, float sy, float sz, float tx, float ty, float tz, int r, int g, int b, int a) {
@@ -105,6 +112,7 @@ public class GuiUtils {
 
     private static void drawFilledBoundingBoxRelative(float sx, float sy, float sz, float tx, float ty, float tz, int r, int g, int b, int a) {
         GlStateManager.enableBlend();
+        GlStateManager.disableLighting();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 

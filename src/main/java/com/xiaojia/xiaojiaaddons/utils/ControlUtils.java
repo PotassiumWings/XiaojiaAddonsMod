@@ -1,6 +1,9 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.Objects.Inventory;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Tuple;
@@ -67,5 +70,11 @@ public class ControlUtils {
         InventoryPlayer inventoryPlayer = getPlayer().inventory;
         if (inventoryPlayer == null) return null;
         return inventoryPlayer.getCurrentItem();
+    }
+
+    public static Inventory getOpenedInventory() {
+        EntityPlayerSP player = getPlayer();
+        if (player == null || player.openContainer == null) return null;
+        return new Inventory(player.openContainer);
     }
 }

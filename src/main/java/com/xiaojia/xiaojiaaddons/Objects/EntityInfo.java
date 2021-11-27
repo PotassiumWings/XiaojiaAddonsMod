@@ -1,4 +1,4 @@
-package com.xiaojia.xiaojiaaddons.utils;
+package com.xiaojia.xiaojiaaddons.Objects;
 
 import net.minecraft.entity.Entity;
 

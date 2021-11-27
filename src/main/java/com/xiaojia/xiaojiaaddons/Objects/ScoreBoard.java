@@ -1,4 +1,4 @@
-package com.xiaojia.xiaojiaaddons.utils;
+package com.xiaojia.xiaojiaaddons.Objects;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.scoreboard.Score;
