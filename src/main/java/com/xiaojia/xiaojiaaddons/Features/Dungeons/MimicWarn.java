@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class MimicWarn {
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
-        if (event.entity instanceof EntityZombie && ((EntityZombie)(event.entity)).isChild()) { // baby zombie
+        if (event.entity instanceof EntityZombie && ((EntityZombie) (event.entity)).isChild()) { // baby zombie
             ChatLib.chat(event.entity.toString() + " dead");
             CommandsUtils.addCommand("/pc Mimic dead!");
         }

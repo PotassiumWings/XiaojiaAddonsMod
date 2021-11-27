@@ -93,8 +93,7 @@ public class GuiUtils {
         drawFilledBoundingBoxAbsolute(x - width, y, z - width, x + width, y + height, z + width, r, g, b, a);
     }
 
-    public static void drawBoxAtBlock(int x, int y, int z, int r, int g, int b, int a, int width, int height) {
-        float delta = 0.1F;
+    public static void drawBoxAtBlock(int x, int y, int z, int r, int g, int b, int a, int width, int height, float delta) {
         drawFilledBoundingBoxAbsolute(x - delta, y - delta, z - delta, x + width + delta, y + height + delta, z + width + delta, r, g, b, a);
     }
 

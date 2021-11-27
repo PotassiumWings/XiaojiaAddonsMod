@@ -7,7 +7,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 public class CommandsUtils {
-    private static Deque<String> commandsQueue = new LinkedList<>();
+    private static final Deque<String> commandsQueue = new LinkedList<>();
     private static long lastSent = 0;
 
     public static void addCommand(String command) {

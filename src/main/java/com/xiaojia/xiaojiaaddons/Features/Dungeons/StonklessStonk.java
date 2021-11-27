@@ -34,10 +34,9 @@ public class StonklessStonk {
     private static final int redstoneKeyHash = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2I4NTJiYTE1ODRkYTllNTcxNDg1OTk5NTQ1MWU0Yjk0NzQ4YzRkZDYzYWU0NTQzYzE1ZjlmOGFlYzY1YzgifX19".hashCode();
     private static final HashMap<BlockPos, Long> doneSecretsPos = new HashMap<>();
     private static boolean should = false;
-
+    private final HashMap<BlockPos, Block> blockHashMap = new HashMap<>();
     private BlockPos facingPos;
     private BlockPos lastPlayerPos;
-    private final HashMap<BlockPos, Block> blockHashMap = new HashMap<>();
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
@@ -122,8 +121,8 @@ public class StonklessStonk {
             if (doneSecretsPos.containsKey(pos)) continue;
             int x = pos.getX(), y = pos.getY(), z = pos.getZ();
             GuiUtils.enableESP();
-            if (pos == facingPos) GuiUtils.drawBoxAtBlock(x, y, z, 0, 255, 0, 100, 1, 1);
-            else GuiUtils.drawBoxAtBlock(x, y, z, 0xd3, 0xd3, 0xd3, 100, 1, 1);
+            if (pos == facingPos) GuiUtils.drawBoxAtBlock(x, y, z, 0, 255, 0, 100, 1, 1, 0);
+            else GuiUtils.drawBoxAtBlock(x, y, z, 0xd3, 0xd3, 0xd3, 100, 1, 1, 0);
             GuiUtils.disableESP();
         }
     }

@@ -3,7 +3,6 @@ package com.xiaojia.xiaojiaaddons.utils;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Tuple;

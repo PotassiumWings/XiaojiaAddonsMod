@@ -7,7 +7,6 @@ import net.minecraft.util.IChatComponent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class ChatLib {

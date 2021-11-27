@@ -1,10 +1,10 @@
 package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 
+import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
+import com.xiaojia.xiaojiaaddons.Objects.EnumDraw;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
-import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
-import com.xiaojia.xiaojiaaddons.Objects.EnumDraw;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -192,7 +192,7 @@ public class Spider {
         if (true) {
             bestShadowFuryPoints.forEach(pos -> {
                 int x = pos._1(), y = pos._2(), z = pos._3();
-                GuiUtils.drawBoxAtBlock(x, y, z, 0, 255, 0, 100, 1, 1);
+                GuiUtils.drawBoxAtBlock(x, y, z, 0, 255, 0, 100, 1, 1, 0.01F);
             });
         }
     }
