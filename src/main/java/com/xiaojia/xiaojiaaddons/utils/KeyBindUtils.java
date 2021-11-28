@@ -2,13 +2,13 @@ package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class KeyBindUtils {
-    public static final HashMap<String, KeyBind> keyBinds = new HashMap<>();
+    public static final ArrayList<KeyBind> keyBinds = new ArrayList<>();
 
-    public static void addKeyBind(String description, KeyBind keyBind) {
-        keyBinds.put(description, keyBind);
+    public static void addKeyBind(KeyBind keyBind) {
+        keyBinds.add(keyBind);
     }
 }
 

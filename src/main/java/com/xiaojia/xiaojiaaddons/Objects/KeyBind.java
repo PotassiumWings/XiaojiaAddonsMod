@@ -4,15 +4,23 @@ import com.xiaojia.xiaojiaaddons.utils.KeyBindUtils;
 import net.minecraft.client.settings.KeyBinding;
 
 public class KeyBind {
-    private static KeyBinding keyBinding;
+    private final KeyBinding keyBinding;
 
     public KeyBind(String description, int key) {
         keyBinding = new KeyBinding(description, key, "Addons - XiaojiaAddonsMod");
-        KeyBindUtils.addKeyBind(description, this);
+        KeyBindUtils.addKeyBind(this);
+    }
+
+    public KeyBind(KeyBinding keyBind) {
+        keyBinding = keyBind;
     }
 
     public boolean isPressed() {
         return keyBinding.isPressed();
+    }
+
+    public boolean isKeyDown() {
+        return keyBinding.isKeyDown();
     }
 
     public KeyBinding mcKeyBinding() {

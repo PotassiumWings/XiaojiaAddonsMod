@@ -1,0 +1,49 @@
+package com.xiaojia.xiaojiaaddons.Features.QOL;
+
+import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
+import com.xiaojia.xiaojiaaddons.Objects.StepEvent;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.input.Keyboard;
+
+import java.util.Random;
+
+public class SwordSwap extends StepEvent {
+    private static final KeyBind keyBind = new KeyBind("Ghost SwordSwap", Keyboard.KEY_NONE);
+    private static boolean should = false;
+
+    public SwordSwap() {
+        super(2);
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (keyBind.isPressed()) {
+            should = !should;
+            ChatLib.chat(should ? "Ghost SwordSwap &aactivated" : "Ghost SwordSwap &cdeactivated");
+        }
+    }
+
+    @Override
+    public void execute() {
+        if (!should) return;
+        if (!HotbarUtils.checkSoulwhip() || !HotbarUtils.checkEmeraldBlade()) return;
+        new Thread(() -> {
+            try {
+                ControlUtils.setHeldItemIndex(HotbarUtils.emeraldBladeSlot);
+                ControlUtils.setHeldItemIndex(HotbarUtils.soulwhipSlot);
+                ControlUtils.rightClick();
+                if (false) {
+                    Thread.sleep(new Random().nextInt(100) + 50);
+                }
+                ControlUtils.setHeldItemIndex(HotbarUtils.emeraldBladeSlot);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+}

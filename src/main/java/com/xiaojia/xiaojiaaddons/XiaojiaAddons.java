@@ -6,6 +6,8 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostBlock;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
+import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
+import com.xiaojia.xiaojiaaddons.Features.QOL.Terminator;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
@@ -16,6 +18,7 @@ import com.xiaojia.xiaojiaaddons.commands.TestControl;
 import com.xiaojia.xiaojiaaddons.commands.TestGui;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
+import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.KeyBindUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -51,6 +54,7 @@ public class XiaojiaAddons {
         ClientCommandHandler.instance.registerCommand(new TestControl());
 
         MinecraftForge.EVENT_BUS.register(new MathUtils());
+        MinecraftForge.EVENT_BUS.register(new HotbarUtils());
         MinecraftForge.EVENT_BUS.register(new ScoreBoard());
         MinecraftForge.EVENT_BUS.register(new SkyblockUtils());
         MinecraftForge.EVENT_BUS.register(new CommandsUtils());
@@ -61,12 +65,14 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new StonklessStonk());
         MinecraftForge.EVENT_BUS.register(new MimicWarn());
         MinecraftForge.EVENT_BUS.register(new EntityQOL());
+        MinecraftForge.EVENT_BUS.register(new Terminator());
+        MinecraftForge.EVENT_BUS.register(new SwordSwap());
 
         MinecraftForge.EVENT_BUS.register(new Spider());
 
         MinecraftForge.EVENT_BUS.register(new Voidgloom());
         MinecraftForge.EVENT_BUS.register(new Sven());
-        for (KeyBind keyBind : KeyBindUtils.keyBinds.values()) {
+        for (KeyBind keyBind : KeyBindUtils.keyBinds) {
             ClientRegistry.registerKeyBinding(keyBind.mcKeyBinding());
         }
     }

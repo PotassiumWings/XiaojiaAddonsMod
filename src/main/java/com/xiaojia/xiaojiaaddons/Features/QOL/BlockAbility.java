@@ -16,6 +16,7 @@ public class BlockAbility {
     public void onPlayerInteract(PlayerInteractEvent event) {
         try {
             ItemStack heldItem = ControlUtils.getHeldItemStack();
+            if (heldItem == null) return;
             String name = heldItem.getDisplayName();
             if (name.contains("Gloomlock Grimoire")) {
                 event.setCanceled(true);

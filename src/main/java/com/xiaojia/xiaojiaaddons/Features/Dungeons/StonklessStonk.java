@@ -29,7 +29,7 @@ import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class StonklessStonk {
-    private static final KeyBind keyBind = new KeyBind("Stonkless stonk", Keyboard.KEY_NONE);
+    private static final KeyBind keyBind = new KeyBind("Stonkless Stonk", Keyboard.KEY_NONE);
     private static final int witherEssenceHash = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzRkYjRhZGZhOWJmNDhmZjVkNDE3MDdhZTM0ZWE3OGJkMjM3MTY1OWZjZDhjZDg5MzQ3NDlhZjRjY2U5YiJ9fX0=".hashCode();
     private static final int redstoneKeyHash = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2I4NTJiYTE1ODRkYTllNTcxNDg1OTk5NTQ1MWU0Yjk0NzQ4YzRkZDYzYWU0NTQzYzE1ZjlmOGFlYzY1YzgifX19".hashCode();
     private static final HashMap<BlockPos, Long> doneSecretsPos = new HashMap<>();
@@ -43,9 +43,9 @@ public class StonklessStonk {
         if (false) return;
         if (keyBind.isPressed()) {
             should = !should;
-            ChatLib.chat(should ? "SecretAura &aactivated" : "SecretAura &cdeactivated");
+            ChatLib.chat(should ? "Stonkless Stonk &aactivated" : "Stonkless Stonk &cdeactivated");
         }
-        if (!should) return;
+        if (!should || ControlUtils.getHeldItemStack() == null) return;
 
         // held pickaxe!
         String heldItemName = ControlUtils.getHeldItemStack().getDisplayName();

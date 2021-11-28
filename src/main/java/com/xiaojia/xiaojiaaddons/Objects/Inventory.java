@@ -4,6 +4,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory {
@@ -22,7 +23,16 @@ public class Inventory {
     }
 
     public final List<ItemStack> getItemStacks() {
-        return container.inventoryItemStacks;
+        ArrayList<ItemStack> res = new ArrayList<>();
+        for (int i = 0; i < getSize(); i++) {
+            res.add(getItemInSlot(i));
+        }
+        return res;
+    }
+
+    public final ItemStack getItemInSlot(int slot) {
+        if (getSize() <= slot) return null;
+        return container.getSlot(slot).getStack();
     }
 
     public final String getName() {
