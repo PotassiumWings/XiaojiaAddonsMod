@@ -1,7 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Config.Setting;
 
 import com.xiaojia.xiaojiaaddons.Config.Property;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 
 import java.lang.reflect.Field;
 

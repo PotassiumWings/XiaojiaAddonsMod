@@ -18,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 public class Config {
@@ -54,7 +53,7 @@ public class Config {
             }
         }
         ArrayList<Setting> res = new ArrayList<>();
-        for (Setting setting: settings) {
+        for (Setting setting : settings) {
             if (setting.parent != null) continue;
             dfs(res, setting);
         }
@@ -63,7 +62,7 @@ public class Config {
 
     private static void dfs(ArrayList<Setting> settings, Setting currentSetting) {
         settings.add(currentSetting);
-        for (Setting setting: currentSetting.sons) {
+        for (Setting setting : currentSetting.sons) {
             dfs(settings, setting);
         }
     }

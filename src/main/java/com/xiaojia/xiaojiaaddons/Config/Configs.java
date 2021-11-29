@@ -56,7 +56,7 @@ public class Configs {
     public static boolean MimicWarn = false;
 
     // StonklessStonk
-    @Property(type = Property.Type.BOOLEAN, name = "Stonkless Stonk", parent = "Dungeons")
+    @Property(type = Property.Type.FOLDER, name = "Stonkless Stonk", parent = "Dungeons")
     public static boolean StonklessStonk = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Stonkless Stonk Enable", parent = "Stonkless Stonk")

@@ -1,6 +1,5 @@
 package com.xiaojia.xiaojiaaddons.Config.Buttons;
 
-import com.xiaojia.xiaojiaaddons.Config.Colors;
 import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
 import com.xiaojia.xiaojiaaddons.Config.Setting.FolderSetting;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;

@@ -63,6 +63,7 @@ public class EntityQOL {
     @SubscribeEvent
     public void onRenderEntity(RenderLivingEvent.Pre<EntityLivingBase> event) {
         if (!Checker.enabled) return;
+        if (SkyblockUtils.isInDungeon()) return;
         if (Configs.HideSummons && isSummon(event.entity)) {
             event.setCanceled(true);
         }

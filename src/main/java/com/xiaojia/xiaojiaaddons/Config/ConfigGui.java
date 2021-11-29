@@ -13,7 +13,6 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class ConfigGui extends GuiScreen {
     private static final int columnWidth = 300;
@@ -57,7 +56,7 @@ public class ConfigGui extends GuiScreen {
             if (setting.parent == null && i > 0)
                 drawRect(x, y - 3, getOffset() + columnWidth, y - 2, Colors.TRANSPARENT.getRGB());
             if (setting.illegal) {
-                GuiUtils.drawTexture(new ResourceLocation( XiaojiaAddons.MODID + ":warning.png"), x, y, 9, 9);
+                GuiUtils.drawTexture(new ResourceLocation(XiaojiaAddons.MODID + ":warning.png"), x, y, 9, 9);
                 x += 13;
             }
 

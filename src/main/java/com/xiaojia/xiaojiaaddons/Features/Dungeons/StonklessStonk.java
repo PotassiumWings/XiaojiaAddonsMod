@@ -54,7 +54,8 @@ public class StonklessStonk {
 
         // held pickaxe!
         String heldItemName = ControlUtils.getHeldItemStack().getDisplayName();
-        if (!Configs.StonklessStonkWithoutPickaxe && !heldItemName.contains("Stonk") && !heldItemName.contains("Pickaxe")) return;
+        if (!Configs.StonklessStonkWithoutPickaxe && !heldItemName.contains("Stonk") && !heldItemName.contains("Pickaxe"))
+            return;
 
         // opened inv
         Inventory inventory = ControlUtils.getOpenedInventory();

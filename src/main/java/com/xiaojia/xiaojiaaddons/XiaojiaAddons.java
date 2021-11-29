@@ -1,8 +1,6 @@
 package com.xiaojia.xiaojiaaddons;
 
 import com.xiaojia.xiaojiaaddons.Commands.Command;
-import com.xiaojia.xiaojiaaddons.Commands.TestControl;
-import com.xiaojia.xiaojiaaddons.Commands.TestGui;
 import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
