@@ -16,4 +16,17 @@ public class FolderSetting extends Setting {
         }
         return false;
     }
+
+    public boolean set(Object value) {
+        boolean success = super.set(value);
+        boolean val = (Boolean) value;
+        if (!val) {
+            for (Setting setting : sons) {
+                if (setting instanceof FolderSetting) {
+                    success &= setting.set(value);
+                }
+            }
+        }
+        return success;
+    }
 }

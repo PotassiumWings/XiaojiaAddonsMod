@@ -5,64 +5,63 @@ public class Configs {
 
     // BlockAbility
     @Property(type = Property.Type.FOLDER, name = "Block Abilities")
-    public static boolean blockAbility = false;
+    public static boolean BlockAbility = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Block Gloomlock Grimoire RightClick", parent = "Block Abilities")
-    public static boolean blockGloomlock = false;
+    public static boolean BlockGloomlock = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Block Pickobulus in Private Island", parent = "Block Abilities")
-    public static boolean blockPickobulus = false;
+    public static boolean BlockPickobulus = false;
 
     // EntityQOL
     @Property(type = Property.Type.FOLDER, name = "Summon/Player Features")
-    public static boolean entityQOL = false;
+    public static boolean EntityQOL = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Hide Summons", parent = "Summon/Player Features")
-    public static boolean hideSummons = false;
+    public static boolean HideSummons = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Click Through Summons", parent = "Summon/Player Features", illegal = true)
-    public static boolean clickThroughSummons = false;
+    public static boolean ClickThroughSummons = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Hide Nearby Players", parent = "Summon/Player Features")
-    public static boolean hidePlayers = false;
+    public static boolean HidePlayers = false;
 
     @Property(type = Property.Type.NUMBER, name = "Hide Nearby Players radius", parent = "Summon/Player Features")
-    public static int hidePlayerRadius = 4;
+    public static int HidePlayerRadius = 4;
 
     @Property(type = Property.Type.BOOLEAN, name = "Click Through Players", parent = "Summon/Player Features", illegal = true)
-    public static boolean clickThroughPlayers = false;
+    public static boolean ClickThroughPlayers = false;
 
     // GhostBlock
     @Property(type = Property.Type.BOOLEAN, name = "Ghost Block")
-    public static boolean ghostBlock = false;
+    public static boolean GhostBlock = false;
 
     // SwordSwap
     @Property(type = Property.Type.BOOLEAN, name = "Sword Swap")
-    public static boolean ghostSwordSwap = false;
+    public static boolean GhostSwordSwap = false;
 
     // Terminator
     @Property(type = Property.Type.BOOLEAN, name = "Terminator rightclick=100cps", illegal = true)
-    public static boolean terminatorAutoRightClick = false;
+    public static boolean TerminatorAutoRightClick = false;
 
 
     // Dungeons
 
     // MimicWarn
     @Property(type = Property.Type.BOOLEAN, name = "Mimic Warn")
-    public static boolean mimicWarn = false;
+    public static boolean MimicWarn = false;
 
     // StonklessStonk
     @Property(type = Property.Type.BOOLEAN, name = "Stonkless Stonk")
-    public static boolean stonklessStonk = false;
+    public static boolean StonklessStonk = false;
 
 
     // Bestiary
-//    @Property(type = Property.Type.FOLDER, name = "Bestiary")
-//    public static boolean BestiaryEnabled = false;
+    @Property(type = Property.Type.FOLDER, name = "Bestiary")
+    public static boolean BestiaryEnabled = false;
 
     // Spider
-//    @Property(type = Property.Type.FOLDER, name = "Spider", parent = "Bestiary")
-    @Property(type = Property.Type.FOLDER, name = "Spider")
+    @Property(type = Property.Type.FOLDER, name = "Spider", parent = "Bestiary")
     public static boolean SpiderEnabled = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Keeper Name", parent = "Spider")

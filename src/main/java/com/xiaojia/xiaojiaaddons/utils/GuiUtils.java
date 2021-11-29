@@ -229,14 +229,26 @@ public class GuiUtils {
         GL11.glPopMatrix();
     }
 
-    public static void drawRotatedTexture(ResourceLocation loc, int x, int y, int width, int height, int angle) {
+    public static void drawRotatedTexture(ResourceLocation resourceLocation, int x, int y, int width, int height, int angle) {
+        drawRotatedTexture(resourceLocation, x, y, width, height, width, height, 0, 0, angle);
+    }
+
+    public static void drawRotatedTexture(ResourceLocation loc, int x, int y, int width, int height, int textureWidth, int textureHeight, int textureX, int textureY, int angle) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x + width / 2.0F, y + height / 2.0F, 0.0F);
         GlStateManager.rotate(angle, 0.0F, 0.0F, 1.0F);
         GlStateManager.translate(-x - width / 2.0F, -y - height / 2.0F, 0.0F);
+        drawTexture(loc, x, y, width, height, textureWidth, textureHeight, textureX, textureY);
+        GlStateManager.popMatrix();
+    }
+
+    public static void drawTexture(ResourceLocation loc, int x, int y, int width, int height, int textureWidth, int textureHeight, int textureX, int textureY) {
         mc.getTextureManager().bindTexture(loc);
         GlStateManager.color(255.0F, 255.0F, 255.0F);
-        Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, width, height, width, height);
-        GlStateManager.popMatrix();
+        Gui.drawModalRectWithCustomSizedTexture(x, y, textureX, textureY, width, height, textureWidth, textureHeight);
+    }
+
+    public static void drawTexture(ResourceLocation loc, int x, int y, int width, int height) {
+        drawTexture(loc, x, y, width, height, width, height, 0, 0);
     }
 }

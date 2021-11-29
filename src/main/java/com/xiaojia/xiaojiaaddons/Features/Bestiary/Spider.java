@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -63,13 +64,13 @@ public class Spider {
                     if (name.contains(ARACHNEKEEPER_STRING)) {
                         hashMap.put("kind", ARACHNEKEEPER_STRING);
                         newEntities.add(new EntityInfo(hashMap));
-                        if (true) {
+                        if (Configs.ArachneKeeperWarnMode == 2) {
                             GuiUtils.showTitle(ARACHNEKEEPER_SHOW, "", 0, 5, 0);
                         }
                     } else if (name.contains(BROODMOTHER_STRING)) {
                         hashMap.put("kind", BROODMOTHER_STRING);
                         newEntities.add(new EntityInfo(hashMap));
-                        if (true) {
+                        if (Configs.BroodMotherWarn) {
                             GuiUtils.showTitle(BROODMOTHER_SHOW, "", 0, 5, 0);
                         }
                     }
@@ -130,7 +131,7 @@ public class Spider {
                     }
                 }
             }
-            if (true && hasOutsideSpider && !shadowFuryWarnedInThisLobby) {
+            if (Configs.SpiderDenShadowfuryPoint && hasOutsideSpider && !shadowFuryWarnedInThisLobby) {
                 shadowFuryWarnedInThisLobby = true;
                 ChatLib.chat("&5Be aware: Kill the outside mobs before shadow fury!");
             }
@@ -161,7 +162,9 @@ public class Spider {
                 drawString = DisplayUtils.getHPDisplayFromArmorStandName(name, kind);
             else if (draw == EntityInfo.EnumDraw.DRAW_ENTITY_HP)
                 drawString = DisplayUtils.hpToString(((EntityLivingBase) entity).getHealth());
-            GuiUtils.drawString(drawString, getX(entity), getY(entity), getZ(entity), entityInfo.getFontColor(), false, entityInfo.getScale(), true);
+            if (Configs.ArachneKeeperDisplayName && kind.contains(ARACHNEKEEPER_STRING) ||
+                    Configs.BroodMotherDisplayName && kind.contains(BROODMOTHER_STRING))
+                GuiUtils.drawString(drawString, getX(entity), getY(entity), getZ(entity), entityInfo.getFontColor(), false, entityInfo.getScale(), true);
             if (XiaojiaAddons.isDebug()) ChatLib.chat(filled + ", " + drawString);
 
             // warn
@@ -171,11 +174,11 @@ public class Spider {
                 long lastDeathWarn = lastDeathWarnTime.getOrDefault(curServer, 0L);
                 long lastWarn = lastWarnTime.getOrDefault(curServer, 0L);
                 if (name.contains("§e0§f/§a")) {  // keeper no health, died
-                    if (curTime > lastDeathWarn + 60 * 1000 && true) {
+                    if (curTime > lastDeathWarn + 60 * 1000 && Configs.ArachneKeeperDeathWarn) {
                         lastDeathWarnTime.put(curServer, curTime);
                         ChatLib.chat("&4&lKeeper died!");
                     }
-                } else if (curTime > lastWarn + 60 * 1000 && true) {
+                } else if (curTime > lastWarn + 60 * 1000 && Configs.ArachneKeeperWarnMode == 1) {
                     lastWarnTime.put(curServer, curTime);
                     ChatLib.chat(ARACHNEKEEPER_SHOW + " is in this lobby!");
                 }
@@ -185,10 +188,13 @@ public class Spider {
             int r = entityInfo.getR(), g = entityInfo.getG(), b = entityInfo.getB();
             float width = entityInfo.getWidth(), height = entityInfo.getHeight();
             float yOffset = entityInfo.getyOffset();
-            if (!filled) GuiUtils.drawBoxAtEntity(entity, r, g, b, 255, width, height, yOffset);
-            else GuiUtils.drawFilledBoxAtEntity(entity, r, g, b, 100, width, height, yOffset);
+            if (Configs.ArachneKeeperDisplayBox && kind.contains(ARACHNEKEEPER_STRING) ||
+                    Configs.BroodMotherDisplayBox && kind.contains(BROODMOTHER_STRING)) {
+                if (!filled) GuiUtils.drawBoxAtEntity(entity, r, g, b, 255, width, height, yOffset);
+                else GuiUtils.drawFilledBoxAtEntity(entity, r, g, b, 100, width, height, yOffset);
+            }
         }
-        if (true) {
+        if (Configs.SpiderDenShadowfuryPoint) {
             bestShadowFuryPoints.forEach(pos -> {
                 int x = pos._1(), y = pos._2(), z = pos._3();
                 GuiUtils.drawBoxAtBlock(x, y, z, 0, 255, 0, 100, 1, 1, 0.01F);

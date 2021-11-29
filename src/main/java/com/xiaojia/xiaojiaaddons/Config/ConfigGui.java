@@ -6,10 +6,12 @@ import com.xiaojia.xiaojiaaddons.Config.Setting.BooleanSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.FolderSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -30,12 +32,6 @@ public class ConfigGui extends GuiScreen {
     private static ArrayList<Setting> getSettings() {
         ArrayList<Setting> res = new ArrayList<>();
         for (Setting setting : XiaojiaAddons.settings) {
-//            System.out.println(setting.name);
-//            if (setting.parent != null) {
-//                System.out.println(setting.parent.name);
-//                System.out.println(setting.parent.get(Boolean.class));
-//            }
-
             if (setting.parent == null) {
                 res.add(setting);
             } else if (setting.parent.get(Boolean.class)) {
@@ -64,14 +60,12 @@ public class ConfigGui extends GuiScreen {
             if (setting.parent == null && i > 0)
                 drawRect(x, y - 3, getOffset() + columnWidth, y - 2, Colors.TRANSPARENT.getRGB());
             if (setting.illegal) {
-                // TODO: illegal png
+                GuiUtils.drawTexture(new ResourceLocation("shadyaddons:warning.png"), x, y, 9, 9);
                 x += 13;
             }
 
             char color = 'f';
             if (setting instanceof BooleanSetting && setting.get(Boolean.class))
-                color = 'a';
-            if (setting instanceof FolderSetting && ((FolderSetting) setting).isSonEnabled())
                 color = 'a';
             mc.fontRendererObj.drawString("\u00a7" + color + setting.name, x, y + 1, -1);
 //            if (setting.note != null) {
