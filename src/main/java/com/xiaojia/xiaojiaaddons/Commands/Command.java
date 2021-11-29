@@ -10,8 +10,6 @@ import net.minecraft.command.ICommandSender;
 
 import java.util.ArrayList;
 
-import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
-
 public class Command extends CommandBase {
     @Override
     public String getCommandName() {

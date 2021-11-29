@@ -1,19 +1,12 @@
 package com.xiaojia.xiaojiaaddons.Config.Setting;
 
-import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Property;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 
 import java.lang.reflect.Field;
 
-public class FolderSetting extends ParentSetting {
+public class FolderSetting extends Setting {
     public FolderSetting(Property annotation, Field field) {
         super(annotation, field);
-    }
-
-    public static boolean isEnabled(String name) {
-        Setting setting = Config.getSetting(name, XiaojiaAddons.settings);
-        return setting != null && ((FolderSetting) setting).isSonEnabled();
     }
 
     public boolean isSonEnabled() {

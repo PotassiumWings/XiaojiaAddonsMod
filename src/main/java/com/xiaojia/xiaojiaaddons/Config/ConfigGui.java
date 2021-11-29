@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Config.Setting.BooleanSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.FolderSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
@@ -29,6 +30,12 @@ public class ConfigGui extends GuiScreen {
     private static ArrayList<Setting> getSettings() {
         ArrayList<Setting> res = new ArrayList<>();
         for (Setting setting : XiaojiaAddons.settings) {
+//            System.out.println(setting.name);
+//            if (setting.parent != null) {
+//                System.out.println(setting.parent.name);
+//                System.out.println(setting.parent.get(Boolean.class));
+//            }
+
             if (setting.parent == null) {
                 res.add(setting);
             } else if (setting.parent.get(Boolean.class)) {
@@ -40,7 +47,6 @@ public class ConfigGui extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        System.out.println("Draw Screen -------------------------------------------------------");
         drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
         GlStateManager.color(255.0F, 255.0F, 255.0F);
@@ -54,7 +60,7 @@ public class ConfigGui extends GuiScreen {
         for (int i = 0; i < settings.size(); i++) {
             Setting setting = settings.get(i);
             int x = getOffset() + setting.getIndent(0);
-            int y = columnWidth / 3 + i * 17 - scrollOffset;
+            int y = columnWidth / 5 + i * 15 - scrollOffset;
             if (setting.parent == null && i > 0)
                 drawRect(x, y - 3, getOffset() + columnWidth, y - 2, Colors.TRANSPARENT.getRGB());
             if (setting.illegal) {
@@ -87,6 +93,13 @@ public class ConfigGui extends GuiScreen {
     }
 
     @Override
+    protected void actionPerformed(GuiButton button) {
+        settings.clear();
+        settings = getSettings();
+        initGui();
+    }
+
+    @Override
     public void handleMouseInput() throws IOException {
         if (Mouse.getEventDWheel() != 0) {
             scrollScreen(Integer.signum(Mouse.getEventDWheel()) * -10, true);
@@ -96,7 +109,7 @@ public class ConfigGui extends GuiScreen {
 
     private void scrollScreen(int scroll, boolean pixels) {
         int viewport = height - 110;
-        int contentHeight = settings.size() * 17;
+        int contentHeight = settings.size() * 15;
         if (!pixels)
             scroll = scroll / viewport * contentHeight;
         if (contentHeight > viewport) {
@@ -109,9 +122,9 @@ public class ConfigGui extends GuiScreen {
     public void initGui() {
         this.buttonList.clear();
         for (int i = 0; i < settings.size(); i++) {
-            Setting setting = getSettings().get(i);
+            Setting setting = settings.get(i);
             int x = getOffset() + columnWidth;
-            int y = columnWidth / 3 + i * 15 - scrollOffset;
+            int y = columnWidth / 5 + i * 15 - scrollOffset;
             this.buttonList.add(Button.buttonFromSetting(setting, x, y));
         }
 //        int viewport = height - 110;

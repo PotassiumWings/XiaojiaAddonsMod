@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Config.Setting;
 import com.xiaojia.xiaojiaaddons.Config.Property;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 public class Setting {
     public String name;
@@ -10,7 +11,8 @@ public class Setting {
     public boolean illegal;
     public Property annotation;
     public Field field;
-    public ParentSetting parent = null;
+    public Setting parent = null;
+    public ArrayList<Setting> sons = new ArrayList<>();
 
     public Setting(Property annotation, Field field) {
         this.annotation = annotation;

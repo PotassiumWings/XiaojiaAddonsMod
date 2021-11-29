@@ -41,12 +41,11 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "XiaojiaAddons";
-    public static final String VERSION = "1.11";
+    public static final String VERSION = "2.0";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
-    private static boolean debug = false;
-
     public static GuiScreen guiToOpen = null;
+    private static boolean debug = false;
 
     public static void setDebug() {
         debug = !debug;

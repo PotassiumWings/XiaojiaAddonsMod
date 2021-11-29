@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -225,5 +227,16 @@ public class GuiUtils {
         tessellator.draw();
         GlStateManager.disableBlend();
         GL11.glPopMatrix();
+    }
+
+    public static void drawRotatedTexture(ResourceLocation loc, int x, int y, int width, int height, int angle) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x + width / 2.0F, y + height / 2.0F, 0.0F);
+        GlStateManager.rotate(angle, 0.0F, 0.0F, 1.0F);
+        GlStateManager.translate(-x - width / 2.0F, -y - height / 2.0F, 0.0F);
+        mc.getTextureManager().bindTexture(loc);
+        GlStateManager.color(255.0F, 255.0F, 255.0F);
+        Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, width, height, width, height);
+        GlStateManager.popMatrix();
     }
 }

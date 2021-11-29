@@ -17,7 +17,6 @@ public class CheckBoxInput extends Button {
 
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
-        this.hovered = (mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height);
         drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, Colors.WHITE.getRGB());
         if (this.setting.get(Boolean.class)) {
             FontUtils.drawString("\u00a70x", this.xPosition + 2, this.yPosition, false);
@@ -28,7 +27,7 @@ public class CheckBoxInput extends Button {
 
     @Override
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-        if (this.hovered) {
+        if (mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height) {
             this.setting.set(!this.setting.get(Boolean.class));
             return true;
         }

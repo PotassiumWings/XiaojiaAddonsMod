@@ -16,19 +16,18 @@ public class SwitchInput extends Button {
     }
 
     @Override
-    public void drawButton(Minecraft mc, int x, int y) {
+    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
         drawRect(xPosition, yPosition + 3, xPosition + width, yPosition + 6, Colors.WHITE.getRGB());
-        if (setting.get(Boolean.class)) {
+        if (setting.get(Boolean.class))
             drawRect(xPosition + width - 9, yPosition, xPosition + width, yPosition + height, Colors.GREEN.getRGB());
-        } else {
-            drawRect(xPosition, yPosition, xPosition + 9, yPosition + height, Colors.RED.getRGB());
-        }
+        else drawRect(xPosition, yPosition, xPosition + 9, yPosition + height, Colors.RED.getRGB());
     }
 
     @Override
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-        if (mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height) {
+        if (mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX <= this.xPosition + this.width && mouseY <= this.yPosition + this.height) {
             this.setting.set(!this.setting.get(Boolean.class));
+//            System.out.println(setting.name + "-----------------------------");
             return true;
         }
         return false;

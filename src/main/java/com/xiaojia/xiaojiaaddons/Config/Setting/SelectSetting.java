@@ -4,7 +4,7 @@ import com.xiaojia.xiaojiaaddons.Config.Property;
 
 import java.lang.reflect.Field;
 
-public class SelectSetting extends ParentSetting {
+public class SelectSetting extends Setting {
     public String[] options;
 
     public SelectSetting(Property annotation, Field field) {

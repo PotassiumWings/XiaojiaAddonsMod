@@ -5,7 +5,7 @@ import net.minecraft.util.MathHelper;
 
 import java.lang.reflect.Field;
 
-public class NumberSetting extends ParentSetting {
+public class NumberSetting extends Setting {
     public int step;
     public int min;
     public int max;

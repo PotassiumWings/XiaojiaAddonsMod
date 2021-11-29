@@ -10,8 +10,6 @@ public class NumberInput extends Button {
     private final int plusWidth = mc.fontRendererObj.getStringWidth("+");
     private final int gap = 3;
     public NumberSetting setting;
-    private boolean minusHovered = false;
-    private boolean plusHovered = false;
 
     public NumberInput(NumberSetting setting, int x, int y) {
         super(setting, x, y);
@@ -20,19 +18,25 @@ public class NumberInput extends Button {
         updateText();
     }
 
+    private boolean minusHovered(int mouseX, int mouseY) {
+        return (mouseX >= this.xPosition - this.width && mouseY >= this.yPosition && mouseX < this.xPosition - this.width + this.minusWidth + this.gap && mouseY < this.yPosition + this.height);
+    }
+
+    private boolean plusHovered(int mouseX, int mouseY) {
+        return (mouseX >= this.xPosition - this.plusWidth - this.gap && mouseY >= this.yPosition && mouseX < this.xPosition && mouseY < this.yPosition + this.height);
+    }
+
     public void func_146112_a(Minecraft mc, int mouseX, int mouseY) {
-        this.plusHovered = (mouseX >= this.xPosition - this.plusWidth - this.gap && mouseY >= this.yPosition && mouseX < this.xPosition && mouseY < this.yPosition + this.height);
-        this.minusHovered = (mouseX >= this.xPosition - this.width && mouseY >= this.yPosition && mouseX < this.xPosition - this.width + this.minusWidth + this.gap && mouseY < this.yPosition + this.height);
-        mc.fontRendererObj.drawString((this.minusHovered ? "\u00a7c" : "\u00a77") + "-", this.xPosition - this.width, this.yPosition, -1);
+        mc.fontRendererObj.drawString((this.minusHovered(mouseX, mouseY) ? "\u00a7c" : "\u00a77") + "-", this.xPosition - this.width, this.yPosition, -1);
         mc.fontRendererObj.drawString(this.displayString, this.xPosition - this.width + this.minusWidth + this.gap, this.yPosition, -1);
-        mc.fontRendererObj.drawString((this.plusHovered ? "\u00a7a" : "\u00a77") + "+", this.xPosition - this.plusWidth, this.yPosition, -1);
+        mc.fontRendererObj.drawString((this.plusHovered(mouseX, mouseY) ? "\u00a7a" : "\u00a77") + "+", this.xPosition - this.plusWidth, this.yPosition, -1);
     }
 
     public boolean func_146116_c(Minecraft mc, int mouseX, int mouseY) {
-        if (this.plusHovered || this.minusHovered) {
-            if (this.plusHovered)
+        if (this.plusHovered(mouseX, mouseY) || this.minusHovered(mouseX, mouseY)) {
+            if (this.plusHovered(mouseX, mouseY))
                 this.setting.set(this.setting.get(Integer.class) + this.setting.step);
-            if (this.minusHovered)
+            if (this.minusHovered(mouseX, mouseY))
                 this.setting.set(this.setting.get(Integer.class) - this.setting.step);
             updateText();
             return true;
