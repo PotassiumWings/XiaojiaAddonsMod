@@ -1,4 +1,4 @@
-package com.xiaojia.xiaojiaaddons.commands;
+package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import net.minecraft.command.CommandBase;

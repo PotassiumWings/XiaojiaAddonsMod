@@ -19,6 +19,14 @@ public class HotbarUtils {
     public static int gloomlockSlot = -1;
     public static int zombieswordSlot = -1;
 
+    public static boolean checkSoulwhip() {
+        return checkHotbarItem(soulwhipSlot, "Soul Whip");
+    }
+
+    public static boolean checkEmeraldBlade() {
+        return checkHotbarItem(emeraldBladeSlot, "Emerald Blade") || checkHotbarItem(emeraldBladeSlot, "Giant's Sword");
+    }
+
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         Inventory inventory = ControlUtils.getOpenedInventory();
@@ -37,13 +45,5 @@ public class HotbarUtils {
             else if (name.contains("Zombie Sword")) zombieswordSlot = i;
             else if (name.contains("Gloomlock Grimoire")) gloomlockSlot = i;
         }
-    }
-
-    public static boolean checkSoulwhip() {
-        return checkHotbarItem(soulwhipSlot, "Soul Whip");
-    }
-
-    public static boolean checkEmeraldBlade() {
-        return checkHotbarItem(emeraldBladeSlot, "Emerald Blade") || checkHotbarItem(emeraldBladeSlot, "Giant's Sword");
     }
 }

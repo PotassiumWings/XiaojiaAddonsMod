@@ -2,7 +2,6 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.StepEvent;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
@@ -41,7 +40,7 @@ public class SwordSwap extends StepEvent {
                     Thread.sleep(new Random().nextInt(100) + 50);
                 }
                 ControlUtils.setHeldItemIndex(HotbarUtils.emeraldBladeSlot);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();

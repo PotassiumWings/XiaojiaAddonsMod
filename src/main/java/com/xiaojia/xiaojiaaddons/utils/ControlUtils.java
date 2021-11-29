@@ -38,7 +38,7 @@ public class ControlUtils {
             getPlayer().closeScreen();
             Method leftClickMethod;
             try {
-                leftClickMethod = mc.getClass().getDeclaredMethod("clickMouse");;
+                leftClickMethod = mc.getClass().getDeclaredMethod("clickMouse");
             } catch (NoSuchMethodException e) {
                 leftClickMethod = mc.getClass().getDeclaredMethod("func_147116_af");
             }

@@ -1,8 +1,5 @@
 package com.xiaojia.xiaojiaaddons.Objects;
 
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;

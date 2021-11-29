@@ -1361,7 +1361,7 @@ Build 1.10.2-12.18.1.2037:
 
 Build 1.10.2-12.18.1.2036:
 	cpw:
-		Clean up some legacy settings, making sure there's translation strings.
+		Clean up some legacy setting, making sure there's translation strings.
 		Closes  #2965 Thanks for the prompt Zaggy!
 
 Build 1.10.2-12.18.1.2035:
@@ -1574,7 +1574,7 @@ Build 1.10-12.18.0.1993-1.10.0:
 
 Build 1.10-12.18.0.1991-1.10.0:
 	LexManos:
-		Fixed shifted patch in GameSettings causing settings to not load
+		Fixed shifted patch in GameSettings causing setting to not load
 		properly. Closes #3025 #3022
 	LexManos: Fixed incorrect variable being sent to doSpecialSpawn. Closes #2986
 	LexManos: Fix incorrect logic in ChunkCache.isSideSolid. Closes #3026
@@ -6858,7 +6858,7 @@ Build 1.7.2-10.12.0.1041:
 Build 1.7.2-10.12.0.1040:
 	LexManos:
 		Updated FML:
-		MinecraftForge/FML@e8b60441ccca8cccdc130560b4c8bf400aebc605 Reload game settings after mod loading is finished to capture mod keybindings. Closes #378
+		MinecraftForge/FML@e8b60441ccca8cccdc130560b4c8bf400aebc605 Reload game setting after mod loading is finished to capture mod keybindings. Closes #378
 		MinecraftForge/FML@399770e572c9177babfb65a27280253023db2d9e Kill the modEventTypes list, register anything that extends FMLEvent, Fixes MissingMappingEvent handler, and any futureevents added.
 		MinecraftForge/FML@b7ad532ab5eb3e00d77ffde946d25675c9f69cf7 Re-enable post initalize texture pack reloading to allow Icons to be registerd through any init phase.
 
@@ -11458,7 +11458,7 @@ Build 4.0.0.184:
 Build 4.0.0.183:
 	LexManos: Update FML, Tons of bug fixes and proper merging of client and server.
 	LexManos: Delete Forge server projects
-	LexManos: Update debug settings to use Client's internal MinecraftServer.main to debug dedi-server env.
+	LexManos: Update debug setting to use Client's internal MinecraftServer.main to debug dedi-server env.
 	LexManos: Update release script to create universal binary distro.
 
 Build 4.0.0.182:

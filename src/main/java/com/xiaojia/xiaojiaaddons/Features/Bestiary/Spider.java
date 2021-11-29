@@ -1,7 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
-import com.xiaojia.xiaojiaaddons.Objects.EnumDraw;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
@@ -56,7 +55,7 @@ public class Spider {
                 hashMap.put("entity", entity);
                 if (entity instanceof EntityArmorStand) {
                     hashMap.put("yOffset", 1.0F);
-                    hashMap.put("drawString", EnumDraw.DRAW_KIND);
+                    hashMap.put("drawString", EntityInfo.EnumDraw.DRAW_KIND);
                     hashMap.put("width", 1.0F);
                     hashMap.put("fontColor", 0x33ff33);
                     hashMap.put("isFilled", true);
@@ -149,7 +148,7 @@ public class Spider {
         if (XiaojiaAddons.isDebug()) ChatLib.chat(renderEntities.size() + ", onRenderWorld");
         for (EntityInfo entityInfo : renderEntities) {
             // TODO: abstract
-            EnumDraw draw = entityInfo.getDrawString();
+            EntityInfo.EnumDraw draw = entityInfo.getDrawString();
             Entity entity = entityInfo.getEntity();
             String kind = entityInfo.getKind();
             String name = entity.getName();
@@ -157,10 +156,10 @@ public class Spider {
             boolean filled = entityInfo.isFilled();  // box filled / string
 
             // string
-            if (draw == EnumDraw.DRAW_KIND) drawString = entityInfo.getKind();
-            else if (draw == EnumDraw.DRAW_ARMORSTAND_HP)
+            if (draw == EntityInfo.EnumDraw.DRAW_KIND) drawString = entityInfo.getKind();
+            else if (draw == EntityInfo.EnumDraw.DRAW_ARMORSTAND_HP)
                 drawString = DisplayUtils.getHPDisplayFromArmorStandName(name, kind);
-            else if (draw == EnumDraw.DRAW_ENTITY_HP)
+            else if (draw == EntityInfo.EnumDraw.DRAW_ENTITY_HP)
                 drawString = DisplayUtils.hpToString(((EntityLivingBase) entity).getHealth());
             GuiUtils.drawString(drawString, getX(entity), getY(entity), getZ(entity), entityInfo.getFontColor(), false, entityInfo.getScale(), true);
             if (XiaojiaAddons.isDebug()) ChatLib.chat(filled + ", " + drawString);

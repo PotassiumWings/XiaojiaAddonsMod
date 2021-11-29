@@ -80,7 +80,7 @@ public class EntityQOL {
                     .addCoord(look.xCoord * reach, look.yCoord * reach, look.zCoord * reach)
                     .expand(1.0D, 1.0D, 1.0D);
             List<Entity> entitiesInRange = getWorld().getEntitiesWithinAABBExcludingEntity(excludedEntity, boundingBox);
-            if (XiaojiaAddons.isDebug()) for (Entity entity: entitiesInRange) ChatLib.chat(entity.getName());
+            if (XiaojiaAddons.isDebug()) for (Entity entity : entitiesInRange) ChatLib.chat(entity.getName());
             entitiesInRange.removeIf(entity -> !entity.canBeCollidedWith());
             entitiesInRange.removeIf(EntityQOL::isSummon);
             entitiesInRange.removeIf(EntityQOL::isPlayer);

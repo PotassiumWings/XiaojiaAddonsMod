@@ -2,13 +2,9 @@ package com.xiaojia.xiaojiaaddons.utils;
 
 public class DisplayUtils {
     public static String getHPDisplayFromArmorStandName(String name, String kind) {
-        // name &x160k/160k &r❤
-        // name &x160k &r❤
-        // to: 160k
         int startIndex = name.indexOf(kind) + kind.length() + 3;
         int endIndex = name.indexOf("❤") - 2;
-        String hpStr = name.substring(startIndex, endIndex);
-        return hpStr;
+        return name.substring(startIndex, endIndex);
     }
 
     public static String hpToString(double hp) {
