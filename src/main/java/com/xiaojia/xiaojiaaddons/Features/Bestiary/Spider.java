@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -46,6 +47,7 @@ public class Spider {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
+        if (!Checker.enabled) return;
         if (!SkyblockUtils.isInSpiderDen()) return;
         ArrayList<EntityInfo> newEntities = new ArrayList<>();
         ArrayList<Entity> shadowFuryEntities = new ArrayList<>();
@@ -145,6 +147,7 @@ public class Spider {
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
+        if (!Checker.enabled) return;
         if (!SkyblockUtils.isInSpiderDen()) return;
         if (XiaojiaAddons.isDebug()) ChatLib.chat(renderEntities.size() + ", onRenderWorld");
         for (EntityInfo entityInfo : renderEntities) {
@@ -204,6 +207,7 @@ public class Spider {
 
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
+        if (!Checker.enabled) return;
         shadowFuryWarnedInThisLobby = false;
     }
 }

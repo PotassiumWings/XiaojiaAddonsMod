@@ -1,5 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
@@ -40,7 +42,8 @@ public class StonklessStonk {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (false) return;
+        if (!Checker.enabled) return;
+        if (!Configs.StonklessStonk) return;
         if (keyBind.isPressed()) {
             should = !should;
             ChatLib.chat(should ? "Stonkless Stonk &aactivated" : "Stonkless Stonk &cdeactivated");
@@ -94,7 +97,8 @@ public class StonklessStonk {
 
     @SubscribeEvent
     public void getSecretsOnTick(TickEvent.ClientTickEvent event) {
-        if (false) return;
+        if (!Checker.enabled) return;
+        if (!Configs.StonklessStonk) return;
         int px = MathUtils.getBlockX(getPlayer()), py = MathUtils.getBlockY(getPlayer()), pz = MathUtils.getBlockZ(getPlayer());
         BlockPos playerPos = new BlockPos(MathUtils.floor(px), MathUtils.floor(py), MathUtils.floor(pz));
         if (playerPos.equals(lastPlayerPos)) return;
@@ -115,7 +119,8 @@ public class StonklessStonk {
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
-        if (false) return;
+        if (!Checker.enabled) return;
+        if (!Configs.StonklessStonk) return;
         for (Map.Entry<BlockPos, Block> entry : blockHashMap.entrySet()) {
             BlockPos pos = entry.getKey();
             if (doneSecretsPos.containsKey(pos)) continue;
@@ -129,6 +134,7 @@ public class StonklessStonk {
 
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
+        if (!Checker.enabled) return;
         blockHashMap.clear();
         doneSecretsPos.clear();
         facingPos = null;

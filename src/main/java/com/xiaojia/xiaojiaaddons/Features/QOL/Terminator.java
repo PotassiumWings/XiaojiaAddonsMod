@@ -1,5 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.StepEvent;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
@@ -22,6 +24,8 @@ public class Terminator extends StepEvent {
 
     @Override
     public void execute() {
+        if (!Checker.enabled) return;
+        if (!Configs.TerminatorAutoRightClick) return;
         if (useKeyBind.isKeyDown() && ControlUtils.checkHoldingItem(terminatorNames)) {
             ControlUtils.rightClick();
             if (XiaojiaAddons.isDebug()) ChatLib.chat("rightClick!");

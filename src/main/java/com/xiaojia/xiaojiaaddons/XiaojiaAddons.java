@@ -17,6 +17,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.Terminator;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -63,6 +64,8 @@ public class XiaojiaAddons {
         ClientCommandHandler.instance.registerCommand(new Command());
         ClientCommandHandler.instance.registerCommand(new TestGui());
         ClientCommandHandler.instance.registerCommand(new TestControl());
+
+        MinecraftForge.EVENT_BUS.register(new Checker());
 
         MinecraftForge.EVENT_BUS.register(this);
 

@@ -1,5 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
@@ -60,18 +62,21 @@ public class EntityQOL {
 
     @SubscribeEvent
     public void onRenderEntity(RenderLivingEvent.Pre<EntityLivingBase> event) {
-        if (isSummon(event.entity)) {
+        if (!Checker.enabled) return;
+        if (Configs.HideSummons && isSummon(event.entity)) {
             event.setCanceled(true);
         }
-        if (isPlayer(event.entity)) {
+        if (Configs.ClickThroughPlayers && isPlayer(event.entity)) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public void onAttackEntity(AttackEntityEvent event) {
+        if (!Checker.enabled) return;
         Entity target = event.target;
-        if (isSummon(target) || isPlayer(target)) {
+        if (Configs.ClickThroughSummons && isSummon(target) ||
+                Configs.ClickThroughPlayers && isPlayer(target)) {
             float reach = mc.playerController.getBlockReachDistance();
             Entity excludedEntity = mc.getRenderViewEntity();
             Vec3 look = excludedEntity.getLook(0.0F);
@@ -82,8 +87,8 @@ public class EntityQOL {
             List<Entity> entitiesInRange = getWorld().getEntitiesWithinAABBExcludingEntity(excludedEntity, boundingBox);
             if (XiaojiaAddons.isDebug()) for (Entity entity : entitiesInRange) ChatLib.chat(entity.getName());
             entitiesInRange.removeIf(entity -> !entity.canBeCollidedWith());
-            entitiesInRange.removeIf(EntityQOL::isSummon);
-            entitiesInRange.removeIf(EntityQOL::isPlayer);
+            if (Configs.ClickThroughSummons) entitiesInRange.removeIf(EntityQOL::isSummon);
+            if (Configs.ClickThroughPlayers) entitiesInRange.removeIf(EntityQOL::isPlayer);
             entitiesInRange.sort((Entity a, Entity b) -> MathUtils.distanceSquareFromPlayer(a) >= MathUtils.distanceSquareFromPlayer(b) ? 1 : -1);
             if (entitiesInRange.size() > 0) {
                 event.setCanceled(true);

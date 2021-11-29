@@ -1,5 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
@@ -14,20 +16,21 @@ import java.util.List;
 public class BlockAbility {
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event) {
+        if (!Checker.enabled) return;
         try {
             ItemStack heldItem = ControlUtils.getHeldItemStack();
             if (heldItem == null) return;
             String name = heldItem.getDisplayName();
-            if (name.contains("Gloomlock Grimoire")) {
+            if (Configs.BlockGloomlock && name.contains("Gloomlock Grimoire")) {
                 event.setCanceled(true);
                 ChatLib.chat("&bBlocked Gloomlock Grimoire Right Click!");
             }
-            if (SkyblockUtils.getCurrentMap().equals("Your Island")) {
+            if (Configs.BlockPickobulus && SkyblockUtils.getCurrentMap().equals("Your Island")) {
                 if (name.contains("Pickaxe") || name.contains("Drill") || name.contains("Stonk")) {
                     List<String> lore = NBTUtils.getLore(heldItem);
-                    for (int i = 0; i < lore.size(); i++) {
-                        if (XiaojiaAddons.isDebug()) ChatLib.chat(lore.get(i));
-                        if (lore.get(i).contains("Pickobulus")) {
+                    for (String s : lore) {
+                        if (XiaojiaAddons.isDebug()) ChatLib.chat(s);
+                        if (s.contains("Pickobulus")) {
                             event.setCanceled(true);
                             ChatLib.chat("&bBlocked Pickobulus Ability!");
                             return;
