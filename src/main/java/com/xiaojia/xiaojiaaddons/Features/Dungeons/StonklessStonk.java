@@ -10,6 +10,7 @@ import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -35,7 +36,7 @@ public class StonklessStonk {
     private static final int witherEssenceHash = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzRkYjRhZGZhOWJmNDhmZjVkNDE3MDdhZTM0ZWE3OGJkMjM3MTY1OWZjZDhjZDg5MzQ3NDlhZjRjY2U5YiJ9fX0=".hashCode();
     private static final int redstoneKeyHash = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2I4NTJiYTE1ODRkYTllNTcxNDg1OTk5NTQ1MWU0Yjk0NzQ4YzRkZDYzYWU0NTQzYzE1ZjlmOGFlYzY1YzgifX19".hashCode();
     private static final HashMap<BlockPos, Long> doneSecretsPos = new HashMap<>();
-    private static boolean should = false;
+    private static boolean should = true;
     private final HashMap<BlockPos, Block> blockHashMap = new HashMap<>();
     private BlockPos facingPos;
     private BlockPos lastPlayerPos;
@@ -43,16 +44,17 @@ public class StonklessStonk {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (!Checker.enabled) return;
-        if (!Configs.StonklessStonk) return;
         if (keyBind.isPressed()) {
             should = !should;
             ChatLib.chat(should ? "Stonkless Stonk &aactivated" : "Stonkless Stonk &cdeactivated");
         }
+        if (!SkyblockUtils.isInDungeon()) return;
+        if (!Configs.StonklessStonkEnable) return;
         if (!should || ControlUtils.getHeldItemStack() == null) return;
 
         // held pickaxe!
         String heldItemName = ControlUtils.getHeldItemStack().getDisplayName();
-        if (!heldItemName.contains("Stonk") && !heldItemName.contains("Pickaxe")) return;
+        if (!Configs.StonklessStonkWithoutPickaxe && !heldItemName.contains("Stonk") && !heldItemName.contains("Pickaxe")) return;
 
         // opened inv
         Inventory inventory = ControlUtils.getOpenedInventory();
@@ -75,7 +77,7 @@ public class StonklessStonk {
             lastZ = fz;
 
             BlockPos pos = new BlockPos(fx, fy, fz);
-            if (doneSecretsPos.containsKey(pos) && TimeUtils.curTime() - doneSecretsPos.get(pos) < 2000) continue;
+            if (doneSecretsPos.containsKey(pos) && TimeUtils.curTime() - doneSecretsPos.get(pos) < 1000) continue;
 
             Block block = BlockUtils.getBlockAt(pos);
             if (isSecret(block, pos)) {
@@ -98,7 +100,8 @@ public class StonklessStonk {
     @SubscribeEvent
     public void getSecretsOnTick(TickEvent.ClientTickEvent event) {
         if (!Checker.enabled) return;
-        if (!Configs.StonklessStonk) return;
+        if (!Configs.StonklessStonkEnable) return;
+        if (!SkyblockUtils.isInDungeon()) return;
         int px = MathUtils.getBlockX(getPlayer()), py = MathUtils.getBlockY(getPlayer()), pz = MathUtils.getBlockZ(getPlayer());
         BlockPos playerPos = new BlockPos(MathUtils.floor(px), MathUtils.floor(py), MathUtils.floor(pz));
         if (playerPos.equals(lastPlayerPos)) return;
@@ -120,7 +123,8 @@ public class StonklessStonk {
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
         if (!Checker.enabled) return;
-        if (!Configs.StonklessStonk) return;
+        if (!Configs.StonklessStonkEnable) return;
+        if (!SkyblockUtils.isInDungeon()) return;
         for (Map.Entry<BlockPos, Block> entry : blockHashMap.entrySet()) {
             BlockPos pos = entry.getKey();
             if (doneSecretsPos.containsKey(pos)) continue;

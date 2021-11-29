@@ -62,8 +62,8 @@ public class XiaojiaAddons {
         Config.load();
 
         ClientCommandHandler.instance.registerCommand(new Command());
-        ClientCommandHandler.instance.registerCommand(new TestGui());
-        ClientCommandHandler.instance.registerCommand(new TestControl());
+//        ClientCommandHandler.instance.registerCommand(new TestGui());
+//        ClientCommandHandler.instance.registerCommand(new TestControl());
 
         MinecraftForge.EVENT_BUS.register(new Checker());
 

@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class Config {
@@ -26,12 +27,9 @@ public class Config {
     public static ArrayList<Setting> collect(Class<Configs> instance) {
         Field[] fields = instance.getDeclaredFields();
         ArrayList<Setting> settings = new ArrayList<>();
-//        System.out.println("collecting---------------------------------------------------" + fields.length);
         for (Field field : fields) {
-//            System.out.println(field + "---------------------------------------------------");
             Property annotation = field.getAnnotation(Property.class);
             if (annotation == null) continue;
-//            System.out.println(annotation + "---------------------------------------------------");
             switch (annotation.type()) {
                 case BOOLEAN:
                 case CHECKBOX:
@@ -55,7 +53,19 @@ public class Config {
                     setting.parent.sons.add(setting);
             }
         }
-        return settings;
+        ArrayList<Setting> res = new ArrayList<>();
+        for (Setting setting: settings) {
+            if (setting.parent != null) continue;
+            dfs(res, setting);
+        }
+        return res;
+    }
+
+    private static void dfs(ArrayList<Setting> settings, Setting currentSetting) {
+        settings.add(currentSetting);
+        for (Setting setting: currentSetting.sons) {
+            dfs(settings, setting);
+        }
     }
 
     public static Setting getSetting(String name, ArrayList<Setting> settings) {

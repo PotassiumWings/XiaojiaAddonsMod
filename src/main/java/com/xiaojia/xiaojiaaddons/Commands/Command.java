@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -30,6 +31,7 @@ public class Command extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender iCommandSender, String[] strings) throws CommandException {
+        if (!Checker.enabled) return;
         if (strings == null) return;
         if (strings.length == 0) {
             ChatLib.chat(getUsage());
@@ -40,9 +42,9 @@ public class Command extends CommandBase {
             case "curmap":
                 ChatLib.chat(SkyblockUtils.getCurrentMap());
                 break;
-            case "debug":
-                XiaojiaAddons.setDebug();
-                break;
+//            case "debug":
+//                XiaojiaAddons.setDebug();
+//                break;
             case "s":
                 XiaojiaAddons.guiToOpen = new ConfigGui();
                 break;
@@ -53,7 +55,8 @@ public class Command extends CommandBase {
     }
 
     private String getUsage() {
-        return "/xj curmap for current map information.\n/xj debug to debug.\n/xj s to open gui settings";
+//        return "/xj curmap for current map information.\n/xj debug to debug.\n/xj s to open gui settings";
+        return "/xj curmap for current map information.\n/xj s to open gui settings";
     }
 
     @Override

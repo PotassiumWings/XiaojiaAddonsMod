@@ -23,7 +23,6 @@ public class Checker {
     public void onTick(TickEvent.ClientTickEvent event) {
         try {
             enabled = pool.contains(getPlayer().getUniqueID().toString());
-            System.out.println(enabled);
         } catch (Exception e) {
             enabled = false;
         }

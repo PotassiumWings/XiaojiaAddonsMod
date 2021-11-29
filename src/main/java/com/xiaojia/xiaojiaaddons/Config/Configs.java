@@ -2,9 +2,11 @@ package com.xiaojia.xiaojiaaddons.Config;
 
 public class Configs {
     // QOL
+    @Property(type = Property.Type.FOLDER, name = "QOL")
+    public static boolean QOLEnabled = false;
 
     // BlockAbility
-    @Property(type = Property.Type.FOLDER, name = "Block Abilities")
+    @Property(type = Property.Type.FOLDER, name = "Block Abilities", parent = "QOL")
     public static boolean BlockAbility = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Block Gloomlock Grimoire RightClick", parent = "Block Abilities")
@@ -14,7 +16,7 @@ public class Configs {
     public static boolean BlockPickobulus = false;
 
     // EntityQOL
-    @Property(type = Property.Type.FOLDER, name = "Summon/Player Features")
+    @Property(type = Property.Type.FOLDER, name = "Summon/Player Features", parent = "QOL")
     public static boolean EntityQOL = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Hide Summons", parent = "Summon/Player Features")
@@ -33,27 +35,35 @@ public class Configs {
     public static boolean ClickThroughPlayers = false;
 
     // GhostBlock
-    @Property(type = Property.Type.BOOLEAN, name = "Ghost Block")
+    @Property(type = Property.Type.BOOLEAN, name = "Ghost Block", parent = "QOL")
     public static boolean GhostBlock = false;
 
     // SwordSwap
-    @Property(type = Property.Type.BOOLEAN, name = "Sword Swap")
+    @Property(type = Property.Type.BOOLEAN, name = "Sword Swap", parent = "QOL")
     public static boolean GhostSwordSwap = false;
 
     // Terminator
-    @Property(type = Property.Type.BOOLEAN, name = "Terminator rightclick=100cps", illegal = true)
+    @Property(type = Property.Type.BOOLEAN, name = "Terminator rightclick=100cps", illegal = true, parent = "QOL")
     public static boolean TerminatorAutoRightClick = false;
 
 
     // Dungeons
+    @Property(type = Property.Type.FOLDER, name = "Dungeons")
+    public static boolean DungeonEnabled = false;
 
     // MimicWarn
-    @Property(type = Property.Type.BOOLEAN, name = "Mimic Warn")
+    @Property(type = Property.Type.BOOLEAN, name = "Mimic Warn", parent = "Dungeons")
     public static boolean MimicWarn = false;
 
     // StonklessStonk
-    @Property(type = Property.Type.BOOLEAN, name = "Stonkless Stonk")
+    @Property(type = Property.Type.BOOLEAN, name = "Stonkless Stonk", parent = "Dungeons")
     public static boolean StonklessStonk = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Stonkless Stonk Enable", parent = "Stonkless Stonk")
+    public static boolean StonklessStonkEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Illegal Stonkless Stonk", parent = "Stonkless Stonk", illegal = true)
+    public static boolean StonklessStonkWithoutPickaxe = false;
 
 
     // Bestiary

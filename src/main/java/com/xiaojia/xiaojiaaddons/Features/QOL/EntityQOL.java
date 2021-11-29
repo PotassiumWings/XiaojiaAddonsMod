@@ -57,7 +57,7 @@ public class EntityQOL {
     private static boolean isPlayer(EntityOtherPlayerMP entity) {
         UUID uuid = entity.getUniqueID();
         if (XiaojiaAddons.isDebug()) ChatLib.chat(uuid.version() + "");
-        return (uuid.version() == 3 || uuid.version() == 4);
+        return (uuid.version() == 3 || uuid.version() == 4) && !entity.getName().contains(" ");
     }
 
     @SubscribeEvent
@@ -66,7 +66,8 @@ public class EntityQOL {
         if (Configs.HideSummons && isSummon(event.entity)) {
             event.setCanceled(true);
         }
-        if (Configs.ClickThroughPlayers && isPlayer(event.entity)) {
+        if (Configs.HidePlayers && isPlayer(event.entity) &&
+                MathUtils.distanceSquareFromPlayer(event.entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius) {
             event.setCanceled(true);
         }
     }

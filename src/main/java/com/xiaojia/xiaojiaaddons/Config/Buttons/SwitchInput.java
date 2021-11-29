@@ -1,14 +1,15 @@
 package com.xiaojia.xiaojiaaddons.Config.Buttons;
 
 import com.xiaojia.xiaojiaaddons.Config.Colors;
+import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
 import com.xiaojia.xiaojiaaddons.Config.Setting.BooleanSetting;
 import net.minecraft.client.Minecraft;
 
 public class SwitchInput extends Button {
     public BooleanSetting setting;
 
-    public SwitchInput(BooleanSetting setting, int x, int y) {
-        super(setting, x, y);
+    public SwitchInput(ConfigGui gui, BooleanSetting setting, int x, int y) {
+        super(gui, setting, x, y);
         this.setting = setting;
         width = 25;
         height = 9;
@@ -27,7 +28,7 @@ public class SwitchInput extends Button {
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
         if (mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX <= this.xPosition + this.width && mouseY <= this.yPosition + this.height) {
             this.setting.set(!this.setting.get(Boolean.class));
-//            System.out.println(setting.name + "-----------------------------");
+            gui.update();
             return true;
         }
         return false;

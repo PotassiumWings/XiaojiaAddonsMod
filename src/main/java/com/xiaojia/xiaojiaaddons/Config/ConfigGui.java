@@ -1,13 +1,10 @@
 package com.xiaojia.xiaojiaaddons.Config;
 
 import com.xiaojia.xiaojiaaddons.Config.Buttons.Button;
-import com.xiaojia.xiaojiaaddons.Config.Buttons.ScrollBar;
 import com.xiaojia.xiaojiaaddons.Config.Setting.BooleanSetting;
-import com.xiaojia.xiaojiaaddons.Config.Setting.FolderSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
@@ -16,13 +13,13 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ConfigGui extends GuiScreen {
     private static final int columnWidth = 300;
     private static int scrollOffset = 0;
     private static ArrayList<Setting> settings;
     private final boolean isScrolling = false;
-    private ScrollBar scrollBar;
     private int prevHeight = -1, prevWidth = -1;
 
     public ConfigGui() {
@@ -60,7 +57,7 @@ public class ConfigGui extends GuiScreen {
             if (setting.parent == null && i > 0)
                 drawRect(x, y - 3, getOffset() + columnWidth, y - 2, Colors.TRANSPARENT.getRGB());
             if (setting.illegal) {
-                GuiUtils.drawTexture(new ResourceLocation("shadyaddons:warning.png"), x, y, 9, 9);
+                GuiUtils.drawTexture(new ResourceLocation( XiaojiaAddons.MODID + ":warning.png"), x, y, 9, 9);
                 x += 13;
             }
 
@@ -86,8 +83,7 @@ public class ConfigGui extends GuiScreen {
         Config.save();
     }
 
-    @Override
-    protected void actionPerformed(GuiButton button) {
+    public void update() {
         settings.clear();
         settings = getSettings();
         initGui();
@@ -119,13 +115,8 @@ public class ConfigGui extends GuiScreen {
             Setting setting = settings.get(i);
             int x = getOffset() + columnWidth;
             int y = columnWidth / 5 + i * 15 - scrollOffset;
-            this.buttonList.add(Button.buttonFromSetting(setting, x, y));
+            this.buttonList.add(Button.buttonFromSetting(this, setting, x, y));
         }
-//        int viewport = height - 110;
-//        int contentHeight = settings.size() * 17;
-//        int scrollbarX = getOffset() + columnWidth + 10;
-//        scrollBar = new ScrollBar(viewport, contentHeight, scrollOffset, scrollbarX, isScrolling);
-//        this.buttonList.add(this.scrollBar);
     }
 
     private int getOffset() {

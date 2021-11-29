@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Config.Setting;
 
 import com.xiaojia.xiaojiaaddons.Config.Property;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 
 import java.lang.reflect.Field;
 
@@ -17,13 +18,12 @@ public class FolderSetting extends Setting {
         return false;
     }
 
-    public boolean set(Object value) {
-        boolean success = super.set(value);
-        boolean val = (Boolean) value;
-        if (!val) {
+    public boolean setRecursively(boolean value) {
+        boolean success = set(value);
+        if (!value) {
             for (Setting setting : sons) {
                 if (setting instanceof FolderSetting) {
-                    success &= setting.set(value);
+                    success &= ((FolderSetting) setting).setRecursively(false);
                 }
             }
         }

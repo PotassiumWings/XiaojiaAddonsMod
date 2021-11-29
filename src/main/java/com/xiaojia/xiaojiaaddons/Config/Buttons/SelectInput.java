@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Config.Buttons;
 
+import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
 import com.xiaojia.xiaojiaaddons.Config.Setting.SelectSetting;
 import net.minecraft.client.Minecraft;
 
@@ -11,8 +12,8 @@ public class SelectInput extends Button {
     private final int gap = 3;
     public SelectSetting setting;
 
-    public SelectInput(SelectSetting setting, int x, int y) {
-        super(setting, x, y);
+    public SelectInput(ConfigGui gui, SelectSetting setting, int x, int y) {
+        super(gui, setting, x, y);
         this.setting = setting;
         height = 10;
         updateText();
@@ -41,6 +42,7 @@ public class SelectInput extends Button {
             if (leftHovered(mouseX, mouseY))
                 this.setting.set(this.setting.get(Integer.class) - 1);
             updateText();
+            gui.update();
             return true;
         }
         return false;
