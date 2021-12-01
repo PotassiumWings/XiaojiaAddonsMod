@@ -46,6 +46,16 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Terminator rightclick=100cps", illegal = true, parent = "QOL")
     public static boolean TerminatorAutoRightClick = false;
 
+    // GhostQOL
+    @Property(type = Property.Type.FOLDER, name = "Ghost QOL", parent = "QOL")
+    public static boolean GhostQOL = false;
+
+    @Property(type = Property.Type.SELECT, name = "Visible Ghost", parent = "Ghost QOL", options = {"Disable", "OutlineBox", "FilledOutlineBox", "Vanilla Creeper"})
+    public static int VisibleGhost = 0;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Runic Ghost", parent = "Ghost QOL")
+    public static boolean ShowRunicGhost = false;
+
 
     // Dungeons
     @Property(type = Property.Type.FOLDER, name = "Dungeons")

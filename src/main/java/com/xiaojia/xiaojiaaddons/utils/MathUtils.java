@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class MathUtils {
-    private static float partialTicks = 0;
+    public static float partialTicks = 0;
 
     public static double distanceSquaredFromPoints(double x, double y, double z, double tx, double ty, double tz) {
         return (tx - x) * (tx - x) + (ty - y) * (ty - y) + (tz - z) * (tz - z);

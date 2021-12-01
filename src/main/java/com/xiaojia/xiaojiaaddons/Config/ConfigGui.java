@@ -15,6 +15,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ConfigGui extends GuiScreen {
+    private static final int beginGap = 100;
+    private static final int titleSettingGap = 10;
+    private static final int blankGap = 200;
+
     private static final int columnWidth = 300;
     private static int scrollOffset = 0;
     private static ArrayList<Setting> settings;
@@ -46,13 +50,13 @@ public class ConfigGui extends GuiScreen {
                 mc.fontRendererObj,
                 "XiaojiaAddons - " + XiaojiaAddons.VERSION,
                 width / 2,
-                50 - scrollOffset,
+                beginGap - scrollOffset,
                 -1
         );
         for (int i = 0; i < settings.size(); i++) {
             Setting setting = settings.get(i);
             int x = getOffset() + setting.getIndent(0);
-            int y = columnWidth / 5 + i * 15 - scrollOffset;
+            int y = beginGap + titleSettingGap + i * 15 - scrollOffset;
             if (setting.parent == null && i > 0)
                 drawRect(x, y - 3, getOffset() + columnWidth, y - 2, Colors.TRANSPARENT.getRGB());
             if (setting.illegal) {
@@ -101,8 +105,9 @@ public class ConfigGui extends GuiScreen {
         int contentHeight = settings.size() * 15;
         if (!pixels)
             scroll = scroll / viewport * contentHeight;
-        if (contentHeight > viewport) {
-            scrollOffset = MathHelper.clamp_int(scrollOffset + scroll, 0, contentHeight - viewport);
+        if (contentHeight > viewport - 2 * blankGap) {
+//            System.out.printf("scrollOffset: %d, scroll: %d, contentHeight: %d, viewport: %d", scrollOffset, scroll, contentHeight, viewport);
+            scrollOffset = MathHelper.clamp_int(scrollOffset + scroll, -blankGap, contentHeight - viewport + blankGap);
             initGui();
         }
     }
@@ -113,7 +118,7 @@ public class ConfigGui extends GuiScreen {
         for (int i = 0; i < settings.size(); i++) {
             Setting setting = settings.get(i);
             int x = getOffset() + columnWidth;
-            int y = columnWidth / 5 + i * 15 - scrollOffset;
+            int y = beginGap + titleSettingGap + i * 15 - scrollOffset;
             this.buttonList.add(Button.buttonFromSetting(this, setting, x, y));
         }
     }

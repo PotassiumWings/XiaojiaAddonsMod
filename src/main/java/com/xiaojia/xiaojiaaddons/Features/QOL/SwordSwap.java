@@ -7,6 +7,7 @@ import com.xiaojia.xiaojiaaddons.Objects.StepEvent;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
@@ -27,6 +28,15 @@ public class SwordSwap extends StepEvent {
         if (keyBind.isPressed()) {
             should = !should;
             ChatLib.chat(should ? "Ghost SwordSwap &aactivated" : "Ghost SwordSwap &cdeactivated");
+        }
+    }
+
+    @SubscribeEvent
+    public void onChatReceived(ClientChatReceivedEvent event) {
+        String message = event.message.getUnformattedText();
+        if (message.equals("You died!") && should) {
+            should = false;
+            ChatLib.chat("Ghost SwordSwap &cdeactivated");
         }
     }
 

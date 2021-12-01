@@ -59,6 +59,10 @@ public class SkyblockUtils {
         return currentMap.equals("The Catacombs");
     }
 
+    public static boolean isInMist() {
+        return currentMap.equals("The Mist");
+    }
+
     public static String getCurrentServer() {
         return currentServer;
     }
