@@ -78,6 +78,10 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Click Secret", parent = "Stonkless Stonk", illegal = true)
     public static boolean StonklessStonkAutoClickSecret = false;
 
+    // AutoCloseSecretChest
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Close Secret Chest", parent = "Dungeons")
+    public static boolean AutoCloseSecretChest = false;
+
 
     // Bestiary
     @Property(type = Property.Type.FOLDER, name = "Bestiary")

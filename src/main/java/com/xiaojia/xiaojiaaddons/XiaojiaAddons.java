@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.Spider;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoCloseSecretChest;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
@@ -79,6 +80,8 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new BlockAbility());
         MinecraftForge.EVENT_BUS.register(new StonklessStonk());
         MinecraftForge.EVENT_BUS.register(new MimicWarn());
+        MinecraftForge.EVENT_BUS.register(new AutoCloseSecretChest());
+
         MinecraftForge.EVENT_BUS.register(new EntityQOL());
         MinecraftForge.EVENT_BUS.register(new Terminator());
         MinecraftForge.EVENT_BUS.register(new SwordSwap());
