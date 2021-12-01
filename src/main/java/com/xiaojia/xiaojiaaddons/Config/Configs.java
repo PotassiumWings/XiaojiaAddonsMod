@@ -72,8 +72,11 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Stonkless Stonk Enable", parent = "Stonkless Stonk")
     public static boolean StonklessStonkEnable = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Illegal Stonkless Stonk", parent = "Stonkless Stonk", illegal = true)
+    @Property(type = Property.Type.BOOLEAN, name = "Stonkless Stonk without Pickaxe", parent = "Stonkless Stonk", illegal = true)
     public static boolean StonklessStonkWithoutPickaxe = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Click Secret", parent = "Stonkless Stonk", illegal = true)
+    public static boolean StonklessStonkAutoClickSecret = false;
 
 
     // Bestiary

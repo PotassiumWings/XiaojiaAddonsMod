@@ -25,7 +25,6 @@ public abstract class RenderEntityESP {
 
     @SubscribeEvent
     public final void onTick(TickEvent.ClientTickEvent event) {
-        if (XiaojiaAddons.isDebug()) ChatLib.chat("RenderEntityESP");
         if (!Checker.enabled) return;
         try {
             ArrayList<EntityInfo> newEntities = new ArrayList<>();

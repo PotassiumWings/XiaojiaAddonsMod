@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -19,7 +20,9 @@ public class GhostBlock {
         try {
             if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
                 if (BlockUtils.isInteractive(mc.theWorld.getBlockState(event.pos).getBlock())) return;
-                String heldItemName = ControlUtils.getHeldItemStack().getDisplayName();
+                ItemStack heldItemStack = ControlUtils.getHeldItemStack();
+                if (heldItemStack == null || !heldItemStack.hasDisplayName()) return;
+                String heldItemName = heldItemStack.getDisplayName();
                 if (heldItemName.contains("Stonk") || heldItemName.contains("Pickaxe")) {
                     mc.theWorld.setBlockToAir(event.pos);
                     event.setCanceled(true);
