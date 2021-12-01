@@ -1,17 +1,15 @@
 package com.xiaojia.xiaojiaaddons.Objects;
 
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class Checker {
-    private static final HashSet<String>  pool = new HashSet<>(Arrays.asList(
+    private static final HashSet<String> pool = new HashSet<>(Arrays.asList(
             "1c6d48a9-6cb3-4656-8138-2590ec82fa68", "95cea3a6-9169-4f33-82a9-39ee8be011c3", "ed255f13-e4b2-4557-89c0-4d304a512f5e",
             "cd5aa0c4-7939-4e8b-812d-1a755e450ef8", "ee7ac315-0e8b-4a5f-88d4-15c1f7a44a0a", "a4e72cfc-2347-4b56-802e-fe11f24e9546",
             "0b524cc5-edb7-45d1-ba3b-675e15079137", "63179ad0-1e84-4a40-adfc-0f7deedbf2fe", "0a6c811b-0d22-4601-ab24-837260afbace",

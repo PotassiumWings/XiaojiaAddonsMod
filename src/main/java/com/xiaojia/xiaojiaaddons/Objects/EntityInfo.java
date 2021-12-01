@@ -26,7 +26,7 @@ public class EntityInfo {
         this.b = (int) info.getOrDefault("b", 0);
         this.width = (float) info.getOrDefault("width", 0.5F);
         this.height = (float) info.getOrDefault("height", 1F);
-        this.yOffset = (float) info.getOrDefault("yOffset", 0);
+        this.yOffset = (float) info.getOrDefault("yOffset", 0F);
         this.drawString = (EnumDraw) info.getOrDefault("drawString", EnumDraw.DONT_DRAW_STRING);
         this.kind = (String) info.get("kind");
         this.fontColor = (int) info.get("fontColor");
@@ -85,6 +85,10 @@ public class EntityInfo {
 
     public boolean isESP() {
         return isESP;
+    }
+
+    public String toString() {
+        return entity.getName() + ": " + getKind();
     }
 
     public enum EnumDraw {

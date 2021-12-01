@@ -1,24 +1,34 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.OutlineUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.RenderCreeper;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.List;
 
-public class GhostQOL {
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
+
+public class GhostQOL extends RenderEntityESP {
+    public static final String GHOST_STRING = "Ghost";
+    private static final HashMap<String, Entity> runicGhostUUIDs = new HashMap<>();
     public static int OUTLINE_BOX = 1;
     public static int FILLED_OUTLINE_BOX = 2;
     public static int VANILLA_CREEPER = 3;
@@ -35,6 +45,52 @@ public class GhostQOL {
                 entity.setInvisible(false);
             }
         }
+    }
+
+    @SubscribeEvent
+    public void onTickRunicGhost(TickEvent.ClientTickEvent event) {
+        if (!Checker.enabled) return;
+        if (!SkyblockUtils.isInMist() || !Configs.ShowRunicGhost) return;
+
+        List<Entity> list = getWorld().loadedEntityList;
+        for (Entity entity : list) {
+            if (!(entity instanceof EntityCreeper)) continue;
+            String uuid = entity.getUniqueID().toString();
+            if (((EntityCreeper) entity).getHealth() > 1000000.1 && !runicGhostUUIDs.containsKey(uuid)) {
+                runicGhostUUIDs.put(uuid, entity);
+            }
+        }
+    }
+
+    @Override
+    public boolean shouldRenderESP(EntityInfo entityInfo) {
+        return true;
+    }
+
+    @Override
+    public boolean shouldDrawString(EntityInfo entityInfo) {
+        return true;
+    }
+
+    @Override
+    public EntityInfo getEntityInfo(Entity entity) {
+        if (!Checker.enabled || !SkyblockUtils.isInMist()) return null;
+        if (!(entity instanceof EntityCreeper) || !runicGhostUUIDs.containsKey(entity.getUniqueID().toString()))
+            return null;
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("entity", entity);
+        hashMap.put("drawString", EntityInfo.EnumDraw.DRAW_ENTITY_HP);
+        hashMap.put("width", 0.35F);
+        hashMap.put("height", 1.8F);
+        hashMap.put("fontColor", 0x33ff33);
+        hashMap.put("isFilled", true);
+        hashMap.put("kind", GHOST_STRING);
+        return new EntityInfo(hashMap);
+    }
+
+    @SubscribeEvent
+    public void onWorldLoad(WorldEvent.Load event) {
+        runicGhostUUIDs.clear();
     }
 
     private void render(EntityLivingBase entity, RendererLivingEntity<EntityLivingBase> renderer, double x, double y, double z) {

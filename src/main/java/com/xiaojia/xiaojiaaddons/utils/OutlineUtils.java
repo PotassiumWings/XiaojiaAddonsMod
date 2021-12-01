@@ -1,6 +1,5 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
-import com.xiaojia.xiaojiaaddons.Config.Configs;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -19,7 +18,7 @@ public class OutlineUtils {
         float gamma = mc.gameSettings.gammaSetting;
         mc.gameSettings.fancyGraphics = false;
         mc.gameSettings.gammaSetting = Float.MAX_VALUE;
-        
+
         GlStateManager.resetColor();
         setColor(color);
         renderOne(5);  // TODO: configs

@@ -1,0 +1,100 @@
+package com.xiaojia.xiaojiaaddons.Features;
+
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
+import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
+
+public abstract class RenderEntityESP {
+    private ArrayList<EntityInfo> renderEntities = new ArrayList<>();
+
+    @SubscribeEvent
+    public final void onTick(TickEvent.ClientTickEvent event) {
+        if (XiaojiaAddons.isDebug()) ChatLib.chat("RenderEntityESP");
+        if (!Checker.enabled) return;
+        try {
+            ArrayList<EntityInfo> newEntities = new ArrayList<>();
+            List<Entity> list = getWorld().loadedEntityList;
+            for (Entity entity : list) {
+                EntityInfo info = getEntityInfo(entity);
+                if (info == null) continue;
+                newEntities.add(info);
+                if (XiaojiaAddons.isDebug()) ChatLib.chat(info.toString());
+            }
+            renderEntities = newEntities;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SubscribeEvent
+    public final void onRenderWorld(RenderWorldLastEvent event) {
+        if (!Checker.enabled) return;
+        try {
+            for (EntityInfo entityInfo : renderEntities) {
+                EntityInfo.EnumDraw draw = entityInfo.getDrawString();
+                Entity entity = entityInfo.getEntity();
+                String kind = entityInfo.getKind();
+                String name = entity.getName();
+                String drawString = "";
+                boolean filled = entityInfo.isFilled();  // box filled / string
+
+                // string
+                if (draw == EntityInfo.EnumDraw.DRAW_KIND) drawString = entityInfo.getKind();
+                else if (draw == EntityInfo.EnumDraw.DRAW_ARMORSTAND_HP)
+                    drawString = DisplayUtils.getHPDisplayFromArmorStandName(name, kind);
+                else if (draw == EntityInfo.EnumDraw.DRAW_ENTITY_HP)
+                    drawString = DisplayUtils.hpToString(((EntityLivingBase) entity).getHealth());
+                if (shouldDrawString(entityInfo))
+                    GuiUtils.drawString(
+                            drawString, getX(entity), getY(entity), getZ(entity),
+                            entityInfo.getFontColor(),
+                            false,
+                            entityInfo.getScale(),
+                            true
+                    );
+                if (XiaojiaAddons.isDebug()) ChatLib.chat(filled + ", " + drawString);
+
+                // esp box
+                int r = entityInfo.getR(), g = entityInfo.getG(), b = entityInfo.getB();
+                float width = entityInfo.getWidth(), height = entityInfo.getHeight();
+                float yOffset = entityInfo.getyOffset();
+                if (shouldRenderESP(entityInfo)) {
+                    if (XiaojiaAddons.isDebug()) ChatLib.chat("drawing box");
+                    if (!filled) GuiUtils.drawBoxAtEntity(entity, r, g, b, 255, width, height, yOffset);
+                    else GuiUtils.drawFilledBoxAtEntity(entity, r, g, b, 100, width, height, yOffset);
+                }
+
+                dealWithEntityInfo(entityInfo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // other things to esp (titles, etc) in RENDER WORLD EVENT
+    public void dealWithEntityInfo(EntityInfo entityInfo) {
+    }
+
+    public abstract boolean shouldRenderESP(EntityInfo entityInfo);
+
+    public abstract boolean shouldDrawString(EntityInfo entityInfo);
+
+    // in TICK phase, return the entityInfo to be dealt with.
+    public abstract EntityInfo getEntityInfo(Entity entity);
+}

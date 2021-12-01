@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -20,6 +21,7 @@ public class SkyblockUtils {
     ));
     private static String currentMap = "";
     private static String currentServer = "";
+    private static boolean set = false;
 
     private static String updateCurrentMap() {
         ArrayList<String> lines = ScoreBoard.getLines();
@@ -51,6 +53,11 @@ public class SkyblockUtils {
         return currentMap;
     }
 
+    public static void setCurrentMap(String map) {
+        currentMap = map;
+        set = true;
+    }
+
     public static boolean isInSpiderDen() {
         return currentMap.equals("Spider's Den");
     }
@@ -76,7 +83,8 @@ public class SkyblockUtils {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        currentMap = updateCurrentMap();
+        if (!set || !XiaojiaAddons.isDebug())
+            currentMap = updateCurrentMap();
     }
 
     @SubscribeEvent
@@ -87,5 +95,6 @@ public class SkyblockUtils {
         if (matcher.find()) {
             currentServer = matcher.group(1);
         }
+        set = false;
     }
 }

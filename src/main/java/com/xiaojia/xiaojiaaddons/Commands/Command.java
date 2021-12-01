@@ -42,14 +42,15 @@ public class Command extends CommandBase {
             case "curmap":
                 ChatLib.chat(SkyblockUtils.getCurrentMap());
                 break;
-//            case "debug":
-//                XiaojiaAddons.setDebug();
-//                break;
+            case "debug":
+                XiaojiaAddons.setDebug();
+                break;
             case "s":
                 XiaojiaAddons.guiToOpen = new ConfigGui();
                 break;
             default:
-                ChatLib.chat(getUsage());
+                if (XiaojiaAddons.isDebug()) SkyblockUtils.setCurrentMap(String.join(" ", strings));
+                else ChatLib.chat(getUsage());
                 break;
         }
     }
