@@ -35,8 +35,18 @@ public class Configs {
     public static boolean ClickThroughPlayers = false;
 
     // GhostBlock
-    @Property(type = Property.Type.BOOLEAN, name = "Ghost Block", parent = "QOL")
+    @Property(type = Property.Type.FOLDER, name = "Ghost Block", parent = "QOL")
     public static boolean GhostBlock = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Ghost Block with Pickaxe", parent = "Ghost Block")
+    public static boolean GhostBlockWithPickaxe = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Ghost Block with KeyBind", parent = "Ghost Block")
+    public static boolean GhostBlockWithKeyBind = false;
+
+    // NoSlowdown
+    @Property(type = Property.Type.BOOLEAN, name = "No Slowdown", parent = "QOL")
+    public static boolean NoSlowdown = false;
 
     // SwordSwap
     @Property(type = Property.Type.BOOLEAN, name = "Sword Swap", parent = "QOL")

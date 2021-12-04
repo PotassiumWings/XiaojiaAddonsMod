@@ -12,6 +12,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostBlock;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostQOL;
+import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.Terminator;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
@@ -86,6 +87,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new Terminator());
         MinecraftForge.EVENT_BUS.register(new SwordSwap());
         MinecraftForge.EVENT_BUS.register(new GhostQOL());
+        MinecraftForge.EVENT_BUS.register(new NoSlowdown());
 
         MinecraftForge.EVENT_BUS.register(new Spider());
 
