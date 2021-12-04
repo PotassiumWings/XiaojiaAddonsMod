@@ -34,9 +34,6 @@ public class AutoShootCrystal {
     private final ArrayList<Vector3d> shootQueue = new ArrayList<>();
     private int shootQueueP = 0;
 
-    private static final int AUTOCRYSTAL_COUNTDOWN = 200; // 同一个地方要隔多久再打
-    private static final int PEACE_COUNTDOWN = 100; // 两个地方隔多久再打
-    private final HashMap<Vector3d, Long> positionHitTime = new HashMap<>();
     private long lastShootTime = 0;
     private boolean isShooting = false;
 
@@ -62,9 +59,8 @@ public class AutoShootCrystal {
             shootQueue.clear();
             shootQueueP = 0;
         } else {
-            if (TimeUtils.curTime() - lastShootTime <= AUTOCRYSTAL_COUNTDOWN) return;
+            if (TimeUtils.curTime() - lastShootTime <= Configs.AutoShootCrystalCD) return;
             Vector3d p = shootQueue.get(shootQueueP);
-            if (TimeUtils.curTime() - positionHitTime.getOrDefault(p, 0L) <= PEACE_COUNTDOWN) return;
             if (!ControlUtils.checkHotbarItem(HotbarUtils.terminatorSlot, "Terminator")) {
                 ChatLib.chat("Auto Crystal requires terminator in hotbar!");
                 return;
@@ -73,12 +69,11 @@ public class AutoShootCrystal {
             Vector2d res = calc(x, y, z);
             double yaw = res.x, pitch = res.y;
             lastShootTime = TimeUtils.curTime();
-            positionHitTime.put(p, TimeUtils.curTime());
             new Thread(() -> {
                 try {
                     isShooting = true;
                     ControlUtils.changeDirection((float) yaw, (float) pitch);
-                    Thread.sleep(20);
+                    Thread.sleep(40);
                     ControlUtils.changeDirection((float) yaw, (float) pitch);
                     rightClickTerminator();
                     Thread.sleep(20);
@@ -97,7 +92,6 @@ public class AutoShootCrystal {
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         lastShootTime = 0;
-        positionHitTime.clear();
         shootQueueP = 0;
         shootQueue.clear();
     }

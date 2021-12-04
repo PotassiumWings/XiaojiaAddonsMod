@@ -35,10 +35,16 @@ public class NumberInput extends Button {
 
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
         if (this.plusHovered(mouseX, mouseY) || this.minusHovered(mouseX, mouseY)) {
-            if (this.plusHovered(mouseX, mouseY))
-                this.setting.set(this.setting.get(Integer.class) + this.setting.step);
-            if (this.minusHovered(mouseX, mouseY))
-                this.setting.set(this.setting.get(Integer.class) - this.setting.step);
+            int min = setting.min, max = setting.max, step = setting.step;
+            int current = this.setting.get(Integer.class);
+            int next;
+
+            if (this.plusHovered(mouseX, mouseY)) next = current + step;
+            else next = current - step;
+            if (next <= min) next = min;
+            if (next >= max) next = max;
+
+            this.setting.set(next);
             updateText();
             gui.update();
             return true;

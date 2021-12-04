@@ -13,6 +13,10 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Shoot Crystal", parent = "Dragon", illegal = true)
     public static boolean AutoShootCrystal = false;
 
+    @Property(type = Property.Type.NUMBER, name = "CD between shootings (ms)", parent = "Dragon",
+            min = 100, max = 500, step = 50)
+    public static int AutoShootCrystalCD = 150;
+
 
     // QOL
     @Property(type = Property.Type.FOLDER, name = "QOL")
@@ -41,7 +45,8 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Hide Nearby Players", parent = "Summon/Player Features")
     public static boolean HidePlayers = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Hide Nearby Players radius", parent = "Summon/Player Features")
+    @Property(type = Property.Type.NUMBER, name = "Hide Nearby Players radius", parent = "Summon/Player Features",
+            min = 0, max = 30, step = 1)
     public static int HidePlayerRadius = 4;
 
     @Property(type = Property.Type.BOOLEAN, name = "Click Through Players", parent = "Summon/Player Features", illegal = true)
