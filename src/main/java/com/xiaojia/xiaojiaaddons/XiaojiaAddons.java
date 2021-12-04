@@ -5,6 +5,8 @@ import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.Spider;
+import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
+import com.xiaojia.xiaojiaaddons.Features.Dragons.EnderCrystalESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoCloseSecretChest;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
@@ -88,6 +90,8 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new SwordSwap());
         MinecraftForge.EVENT_BUS.register(new GhostQOL());
         MinecraftForge.EVENT_BUS.register(new NoSlowdown());
+        MinecraftForge.EVENT_BUS.register(new AutoShootCrystal());
+        MinecraftForge.EVENT_BUS.register(new EnderCrystalESP());
 
         MinecraftForge.EVENT_BUS.register(new Spider());
 

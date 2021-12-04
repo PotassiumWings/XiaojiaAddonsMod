@@ -1,6 +1,19 @@
 package com.xiaojia.xiaojiaaddons.Config;
 
 public class Configs {
+    // Dragons
+    @Property(type = Property.Type.FOLDER, name = "Dragon")
+    public static boolean DragonEnabled = false;
+
+    // EnderCrystalESP
+    @Property(type = Property.Type.BOOLEAN, name = "Ender Crystal ESP", parent = "Dragon")
+    public static boolean CrystalESP = false;
+
+    // AutoShootCrystal
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Shoot Crystal", parent = "Dragon", illegal = true)
+    public static boolean AutoShootCrystal = false;
+
+
     // QOL
     @Property(type = Property.Type.FOLDER, name = "QOL")
     public static boolean QOLEnabled = false;

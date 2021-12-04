@@ -70,6 +70,10 @@ public class SkyblockUtils {
         return currentMap.equals("The Mist");
     }
 
+    public static boolean isInDragon() {
+        return currentMap.equals("Dragon's Nest");
+    }
+
     public static String getCurrentServer() {
         return currentServer;
     }

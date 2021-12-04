@@ -74,9 +74,12 @@ public abstract class RenderEntityESP {
                 float width = entityInfo.getWidth(), height = entityInfo.getHeight();
                 float yOffset = entityInfo.getyOffset();
                 if (shouldRenderESP(entityInfo)) {
-                    if (XiaojiaAddons.isDebug()) ChatLib.chat("drawing box");
+                    boolean shouldESP = entityInfo.isESP();
+                    if (shouldESP) GuiUtils.enableESP();
+//                    if (XiaojiaAddons.isDebug()) ChatLib.chat("drawing box");
                     if (!filled) GuiUtils.drawBoxAtEntity(entity, r, g, b, 255, width, height, yOffset);
                     else GuiUtils.drawFilledBoxAtEntity(entity, r, g, b, 100, width, height, yOffset);
+                    if (shouldESP) GuiUtils.disableESP();
                 }
 
                 dealWithEntityInfo(entityInfo);
