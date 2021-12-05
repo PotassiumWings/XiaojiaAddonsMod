@@ -2,8 +2,6 @@ package com.xiaojia.xiaojiaaddons.Features;
 
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import net.minecraft.entity.Entity;
@@ -33,7 +31,7 @@ public abstract class RenderEntityESP {
                 EntityInfo info = getEntityInfo(entity);
                 if (info == null) continue;
                 newEntities.add(info);
-                if (XiaojiaAddons.isDebug()) ChatLib.chat(info.toString());
+//                if (XiaojiaAddons.isDebug()) ChatLib.chat(info.toString());
             }
             renderEntities = newEntities;
         } catch (Exception e) {
@@ -63,11 +61,10 @@ public abstract class RenderEntityESP {
                     GuiUtils.drawString(
                             drawString, getX(entity), getY(entity), getZ(entity),
                             entityInfo.getFontColor(),
-                            false,
                             entityInfo.getScale(),
                             true
                     );
-                if (XiaojiaAddons.isDebug()) ChatLib.chat(filled + ", " + drawString);
+//                if (XiaojiaAddons.isDebug()) ChatLib.chat(filled + ", " + drawString);
 
                 // esp box
                 int r = entityInfo.getR(), g = entityInfo.getG(), b = entityInfo.getB();
@@ -77,7 +74,7 @@ public abstract class RenderEntityESP {
                     boolean shouldESP = entityInfo.isESP();
                     if (shouldESP) GuiUtils.enableESP();
 //                    if (XiaojiaAddons.isDebug()) ChatLib.chat("drawing box");
-                    if (!filled) GuiUtils.drawBoxAtEntity(entity, r, g, b, 255, width, height, yOffset);
+                    if (!filled) GuiUtils.drawBoxAtEntity(entity, r, g, b, 100, width, height, yOffset);
                     else GuiUtils.drawFilledBoxAtEntity(entity, r, g, b, 100, width, height, yOffset);
                     if (shouldESP) GuiUtils.disableESP();
                 }

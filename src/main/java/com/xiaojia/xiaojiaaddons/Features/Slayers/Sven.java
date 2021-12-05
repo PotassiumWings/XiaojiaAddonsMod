@@ -37,13 +37,13 @@ public class Sven extends RenderEntityESP {
         for (Map.Entry<String, Integer> entry : kindColorMap.entrySet()) {
             String kind = entry.getKey();
             int fontColor = entry.getValue();
-            if (kind.equals(entity.getName())) {
+            if (entity.getName().contains(kind)) {
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("entity", entity);
-                hashMap.put("height", 0.7);
-                hashMap.put("yoffset", 1);
-                hashMap.put("draw_string", EntityInfo.EnumDraw.DRAW_ARMORSTAND_HP);
-                hashMap.put("scale", 2);
+                hashMap.put("height", 0.7F);
+                hashMap.put("yOffset", 1F);
+                hashMap.put("drawString", EntityInfo.EnumDraw.DRAW_ARMORSTAND_HP);
+                hashMap.put("scale", 2F);
                 hashMap.put("kind", kind);
                 hashMap.put("fontColor", fontColor);
                 return new EntityInfo(hashMap);

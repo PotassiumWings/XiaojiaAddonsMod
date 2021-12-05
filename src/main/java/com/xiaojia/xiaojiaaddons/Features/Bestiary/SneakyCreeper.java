@@ -29,8 +29,8 @@ public class SneakyCreeper extends RenderEntityESP {
         if (!(entity instanceof EntityCreeper)) return null;
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("entity", entity);
-        hashMap.put("width", 0.4);
-        hashMap.put("height", 0.85);
+        hashMap.put("width", 0.4F);
+        hashMap.put("height", 1.85F);
         hashMap.put("drawString", EntityInfo.EnumDraw.DRAW_KIND);
         hashMap.put("kind", SNEAKYCREEPER_STRING);
         hashMap.put("fontColor", 0x33ff33);

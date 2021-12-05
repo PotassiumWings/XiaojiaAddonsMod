@@ -43,7 +43,7 @@ public class GuiUtils {
         gui.displayTitle(null, null, fadeIn, time, fadeOut);
     }
 
-    public static void drawString(String text, float x, float y, float z, int color, boolean renderBlackBox, float scale, boolean increase) {
+    public static void drawString(String text, float x, float y, float z, int color, float scale, boolean increase) {
         float lScale = scale;
         RenderManager renderManager = mc.getRenderManager();
         FontRenderer fontRenderer = mc.fontRendererObj;
@@ -66,17 +66,6 @@ public class GuiUtils {
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 771);
         int textWidth = fontRenderer.getStringWidth(text);
-        if (renderBlackBox) {
-            int j = textWidth / 2;
-            GlStateManager.disableTexture2D();
-            worldRenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            worldRenderer.pos((-j - 1), -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            worldRenderer.pos((-j - 1), 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            worldRenderer.pos((j + 1), 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            worldRenderer.pos((j + 1), -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            tessellator.draw();
-            GlStateManager.enableTexture2D();
-        }
         fontRenderer.drawString(text, -textWidth / 2, 0, color);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDepthMask(true);
@@ -112,10 +101,11 @@ public class GuiUtils {
     }
 
     private static void drawFilledBoundingBoxRelative(float sx, float sy, float sz, float tx, float ty, float tz, int r, int g, int b, int a) {
+        GL11.glPushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.disableLighting();
         GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 
         GlStateManager.color(r / 255.F, g / 255.F, b / 255.F, a / 255.F);
 
@@ -170,6 +160,7 @@ public class GuiUtils {
 
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        GL11.glPopMatrix();
     }
 
     public static final Vector3f getRenderPos(float x, float y, float z) {
@@ -177,55 +168,39 @@ public class GuiUtils {
     }
 
     private static void drawBoxAt(float x, float y, float z, int r, int g, int b, int a, float width, float height) {
+//        ChatLib.chat(String.format("%.2f %.2f %.2f %.2f %.2f %d %d %d %d", x, y, z, width, height, r,g,b,a));
         GL11.glPushMatrix();
         GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         RenderManager renderManager = mc.getRenderManager();
         GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ);
-        worldRenderer.begin(3, DefaultVertexFormats.POSITION);
-        worldRenderer.color(r, g, b, a);
+        GlStateManager.color(r / 255.F, g / 255.F, b / 255.F, a / 255.F);
+        worldRenderer.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
 
         worldRenderer.pos(x + width, y + height, z + width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x + width, y + height, z - width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x - width, y + height, z - width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x - width, y + height, z + width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x + width, y + height, z + width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x + width, y, z + width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x + width, y, z - width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x - width, y, z - width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x - width, y, z + width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x - width, y, z - width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x - width, y + height, z - width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x - width, y, z - width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x + width, y, z - width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x + width, y + height, z - width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x + width, y, z - width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x + width, y, z + width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x - width, y, z + width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x - width, y + height, z + width).endVertex();
-        worldRenderer.tex(0, 0);
         worldRenderer.pos(x + width, y + height, z + width).endVertex();
-        worldRenderer.tex(0, 0);
 
         tessellator.draw();
         GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
         GL11.glPopMatrix();
     }
 

@@ -23,7 +23,7 @@ public class NoSlowdown {
                     itemStack != null &&
                     itemStack.getItem().getRegistryName().toLowerCase().contains("sword")) {
                 event.setCanceled(true);
-                if (mc.gameSettings.keyBindUseItem.isPressed()) {
+                if (mc.gameSettings.keyBindUseItem.isKeyDown()) {
                     NetUtils.sendPacket(new C08PacketPlayerBlockPlacement(
                             new BlockPos(-1, -1, -1),
                             255,
