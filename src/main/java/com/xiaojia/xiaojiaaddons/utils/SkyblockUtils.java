@@ -74,6 +74,26 @@ public class SkyblockUtils {
         return currentMap.equals("Dragon's Nest");
     }
 
+    public static boolean isInTheEnd() {
+        return currentMap.equals("The End");
+    }
+
+    public static boolean isInVoidSepulture() {
+        return currentMap.equals("Void Sepulture");
+    }
+
+    public static boolean isInEndIsland() {
+        return isInDragon() || isInTheEnd() || isInVoidSepulture();
+    }
+
+    public static boolean isInGunpowderMines() {
+        return currentMap.equals("Gunpowder Mines");
+    }
+
+    public static boolean isInHowlingCave() {
+        return currentMap.equals("Howling Cave");
+    }
+
     public static String getCurrentServer() {
         return currentServer;
     }

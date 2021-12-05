@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.Commands.Command;
 import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
+import com.xiaojia.xiaojiaaddons.Features.Bestiary.SneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.Spider;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.EnderCrystalESP;
@@ -72,6 +73,7 @@ public class XiaojiaAddons {
 
         MinecraftForge.EVENT_BUS.register(this);
 
+        // Utils
         MinecraftForge.EVENT_BUS.register(new MathUtils());
         MinecraftForge.EVENT_BUS.register(new HotbarUtils());
         MinecraftForge.EVENT_BUS.register(new ScoreBoard());
@@ -79,24 +81,34 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new CommandsUtils());
         MinecraftForge.EVENT_BUS.register(new GuiTest());
 
-        MinecraftForge.EVENT_BUS.register(new GhostBlock());
-        MinecraftForge.EVENT_BUS.register(new BlockAbility());
-        MinecraftForge.EVENT_BUS.register(new StonklessStonk());
-        MinecraftForge.EVENT_BUS.register(new MimicWarn());
-        MinecraftForge.EVENT_BUS.register(new AutoCloseSecretChest());
+        // Bestiary
+        MinecraftForge.EVENT_BUS.register(new Spider());
+        MinecraftForge.EVENT_BUS.register(new SneakyCreeper());
 
-        MinecraftForge.EVENT_BUS.register(new EntityQOL());
-        MinecraftForge.EVENT_BUS.register(new Terminator());
-        MinecraftForge.EVENT_BUS.register(new SwordSwap());
-        MinecraftForge.EVENT_BUS.register(new GhostQOL());
-        MinecraftForge.EVENT_BUS.register(new NoSlowdown());
+        // Dragons
         MinecraftForge.EVENT_BUS.register(new AutoShootCrystal());
         MinecraftForge.EVENT_BUS.register(new EnderCrystalESP());
 
-        MinecraftForge.EVENT_BUS.register(new Spider());
+        // Dungeons
+        MinecraftForge.EVENT_BUS.register(new AutoCloseSecretChest());
+        MinecraftForge.EVENT_BUS.register(new MimicWarn());
+        MinecraftForge.EVENT_BUS.register(new StonklessStonk());
 
-        MinecraftForge.EVENT_BUS.register(new Voidgloom());
+        // QOL
+        MinecraftForge.EVENT_BUS.register(new BlockAbility());
+        MinecraftForge.EVENT_BUS.register(new EntityQOL());
+        MinecraftForge.EVENT_BUS.register(new GhostBlock());
+        MinecraftForge.EVENT_BUS.register(new GhostQOL());
+        MinecraftForge.EVENT_BUS.register(new NoSlowdown());
+        MinecraftForge.EVENT_BUS.register(new SwordSwap());
+        MinecraftForge.EVENT_BUS.register(new Terminator());
+
+        // Skills
+
+        // Slayer
         MinecraftForge.EVENT_BUS.register(new Sven());
+        MinecraftForge.EVENT_BUS.register(new Voidgloom());
+
         for (KeyBind keyBind : KeyBindUtils.keyBinds) {
             ClientRegistry.registerKeyBinding(keyBind.mcKeyBinding());
         }

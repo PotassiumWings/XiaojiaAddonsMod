@@ -18,7 +18,6 @@ import org.lwjgl.input.Keyboard;
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.utils.ControlUtils.rightClick;
@@ -30,8 +29,8 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class AutoShootCrystal {
     private static final KeyBind autoShootCrystalKeybind = new KeyBind("Auto Crystal", Keyboard.KEY_NONE);
-    private boolean enabled = false;
     private final ArrayList<Vector3d> shootQueue = new ArrayList<>();
+    private boolean enabled = false;
     private int shootQueueP = 0;
 
     private long lastShootTime = 0;
@@ -43,7 +42,7 @@ public class AutoShootCrystal {
         if (!Configs.AutoShootCrystal) return;
         if (shootQueue.size() != 0) return;
         List<Entity> list = getWorld().loadedEntityList;
-        for (Entity entity: list) {
+        for (Entity entity : list) {
             if (entity instanceof EntityEnderCrystal) {
                 shootQueue.add(new Vector3d(entity.posX, entity.posY, entity.posZ));
             }
@@ -112,15 +111,15 @@ public class AutoShootCrystal {
     }
 
     private Vector2d calc(double tx, double ty, double tz) {
-        double x = getX(getPlayer()), y = getY(getPlayer()), z = getZ(getPlayer());
+        double x = getX(getPlayer()), y = getY(getPlayer()) + getPlayer().getEyeHeight(), z = getZ(getPlayer());
         return getDirection(x, y, z, tx, ty, tz);
     }
 
     private Vector2d getDirection(double x, double y, double z, double tx, double ty, double tz) {
-        double  PI = Math.PI;
-        double  dx = tx - x, dy = ty - y, dz = tz - z;
-        double  X = Math.sqrt((x - tx) * (x - tx) + (z - tz) * (z - tz));
-        double  v0 = 13.7, g = 1.0, k = 0.045;
+        double PI = Math.PI;
+        double dx = tx - x, dy = ty - y, dz = tz - z;
+        double X = Math.sqrt((x - tx) * (x - tx) + (z - tz) * (z - tz));
+        double v0 = 13.7, g = 1.0, k = 0.045;
         double MAX_ALPHA = Math.acos(k * X / v0);
         double L = -MAX_ALPHA, R = MAX_ALPHA;
         while (R - L > 0.01) {
@@ -133,7 +132,8 @@ public class AutoShootCrystal {
         }
         double max_pitch = (L + R) / 2;
         // [-PI/2, max_pitch]↑ [max_pitch, PI/2]↓
-        L = max_pitch; R = MAX_ALPHA;
+        L = max_pitch;
+        R = MAX_ALPHA;
         while (R - L > 0.01) {
             double M = (L + R) / 2;
             double Y = getProjectileFunction(X, M);
@@ -141,7 +141,8 @@ public class AutoShootCrystal {
             else L = M;
         }
         double pitch1 = (L + R) / 2;
-        L = -MAX_ALPHA; R = max_pitch;
+        L = -MAX_ALPHA;
+        R = max_pitch;
         while (R - L > 0.01) {
             double M = (L + R) / 2;
             double Y = getProjectileFunction(X, M);

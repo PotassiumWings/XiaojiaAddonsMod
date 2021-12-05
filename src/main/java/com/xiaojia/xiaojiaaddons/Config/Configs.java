@@ -115,6 +115,16 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Bestiary")
     public static boolean BestiaryEnabled = false;
 
+    // SneakyCreeper
+    @Property(type = Property.Type.FOLDER, name = "Gunpowder Mines", parent = "Bestiary")
+    public static boolean GunpowderMinesEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Sneaky Creeper Name", parent = "Gunpowder Mines")
+    public static boolean SneakyCreeperDisplayName = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Sneaky Creeper Box", parent = "Gunpowder Mines")
+    public static boolean SneakyCreeperDisplayBox = false;
+
     // Spider
     @Property(type = Property.Type.FOLDER, name = "Spider", parent = "Bestiary")
     public static boolean SpiderEnabled = false;
@@ -142,4 +152,29 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Best Shadow Fury Point", parent = "Spider")
     public static boolean SpiderDenShadowfuryPoint = false;
+
+
+    // Slayer
+    @Property(type = Property.Type.FOLDER, name = "Slayer")
+    public static boolean SlayerEnabled = false;
+
+    // Voidgloom
+    @Property(type = Property.Type.FOLDER, name = "Voidgloom", parent = "Slayer")
+    public static boolean EndermanEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Voidgloom miniboss ESP", parent = "Voidgloom")
+    public static boolean EndermanMiniESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Voidgloom miniboss HP", parent = "Voidgloom")
+    public static boolean ShowEndermanMiniHP = false;
+
+    // Sven
+    @Property(type = Property.Type.FOLDER, name = "Sven", parent = "Slayer")
+    public static boolean WolfEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Sven miniboss ESP", parent = "Sven")
+    public static boolean WolfMiniESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Sven miniboss HP", parent = "Sven")
+    public static boolean ShowWolfMiniHP = false;
 }

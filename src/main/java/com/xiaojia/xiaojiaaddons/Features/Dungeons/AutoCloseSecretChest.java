@@ -6,7 +6,6 @@ import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
