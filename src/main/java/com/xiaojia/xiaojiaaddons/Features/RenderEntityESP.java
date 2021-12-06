@@ -31,7 +31,6 @@ public abstract class RenderEntityESP {
                 EntityInfo info = getEntityInfo(entity);
                 if (info == null) continue;
                 newEntities.add(info);
-//                if (XiaojiaAddons.isDebug()) ChatLib.chat(info.toString());
             }
             renderEntities = newEntities;
         } catch (Exception e) {
@@ -64,7 +63,6 @@ public abstract class RenderEntityESP {
                             entityInfo.getScale(),
                             true
                     );
-//                if (XiaojiaAddons.isDebug()) ChatLib.chat(filled + ", " + drawString);
 
                 // esp box
                 int r = entityInfo.getR(), g = entityInfo.getG(), b = entityInfo.getB();
@@ -73,7 +71,6 @@ public abstract class RenderEntityESP {
                 if (shouldRenderESP(entityInfo)) {
                     boolean shouldESP = entityInfo.isESP();
                     if (shouldESP) GuiUtils.enableESP();
-//                    if (XiaojiaAddons.isDebug()) ChatLib.chat("drawing box");
                     if (!filled) GuiUtils.drawBoxAtEntity(entity, r, g, b, 100, width, height, yOffset);
                     else GuiUtils.drawFilledBoxAtEntity(entity, r, g, b, 100, width, height, yOffset);
                     if (shouldESP) GuiUtils.disableESP();

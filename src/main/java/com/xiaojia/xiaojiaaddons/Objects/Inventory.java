@@ -1,11 +1,16 @@
 package com.xiaojia.xiaojiaaddons.Objects;
 
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class Inventory {
     private final Container container;
@@ -40,5 +45,32 @@ public class Inventory {
             return ((ContainerChest) container).getLowerChestInventory().getName();
         }
         return "container";
+    }
+
+    public void click(int slot) {
+        click(slot, false, "LEFT");
+    }
+
+    public void click(int slot, boolean shift, String buttonString) {
+        int windowId = getWindowId();
+        int button;
+        switch (buttonString) {
+            case "MIDDLE":
+                button = 1;
+                break;
+            case "RIGHT":
+                button = 2;
+                break;
+            default:
+                button = 0;
+                break;
+        }
+        int mode = 0;
+        if (button == 1) mode = 3;
+        else if (shift) mode = 1;
+        mc.playerController.windowClick(
+                windowId, slot, button, mode, getPlayer()
+        );
+        if (XiaojiaAddons.isDebug()) ChatLib.chat(String.format("%d %d %d", slot, button, mode));
     }
 }
