@@ -20,6 +20,9 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class ControlUtils {
 
+    private static final KeyBind useKeyBind = new KeyBind(mc.gameSettings.keyBindUseItem);
+    private static final KeyBind attackKeyBind = new KeyBind(mc.gameSettings.keyBindAttack);
+
     public static void rightClick() {
         try {
             getPlayer().closeScreen();
@@ -124,7 +127,7 @@ public class ControlUtils {
     public static String getInventoryName() {
         Inventory inventory = getOpenedInventory();
         if (inventory == null || inventory.getName() == null) return "";
-        return  ChatLib.removeFormatting(inventory.getName());
+        return ChatLib.removeFormatting(inventory.getName());
     }
 
     public static boolean checkHotbarItem(int slot, List<String> names) {  // [0, 9)
@@ -144,7 +147,7 @@ public class ControlUtils {
         if (slot == -1 || inventory == null) return false;
         ItemStack item = getItemStackInSlot(slot + 36, true);
         if (item == null) return false;
-        String itemName = item.hasDisplayName()? item.getDisplayName(): item.getItem().getRegistryName();
+        String itemName = item.hasDisplayName() ? item.getDisplayName() : item.getItem().getRegistryName();
         return itemName.contains(name);
     }
 
@@ -161,9 +164,6 @@ public class ControlUtils {
         if (item == null) return false;
         return item.getItem().getRegistryName().toLowerCase().contains(name);
     }
-
-    private static final KeyBind useKeyBind = new KeyBind(mc.gameSettings.keyBindUseItem);
-    private static final KeyBind attackKeyBind = new KeyBind(mc.gameSettings.keyBindAttack);
 
     public static void holdLeftClick() {
         KeyBinding.setKeyBindState(attackKeyBind.mcKeyBinding().getKeyCode(), true);

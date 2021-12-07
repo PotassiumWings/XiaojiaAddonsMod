@@ -2,7 +2,6 @@ package com.xiaojia.xiaojiaaddons;
 
 import com.xiaojia.xiaojiaaddons.Commands.AutoForagingCommand;
 import com.xiaojia.xiaojiaaddons.Commands.Command;
-import com.xiaojia.xiaojiaaddons.Commands.TestGui;
 import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
@@ -22,11 +21,11 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.Terminator;
+import com.xiaojia.xiaojiaaddons.Features.Skills.Experimentation;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
-import com.xiaojia.xiaojiaaddons.Features.Tests.ClickTest;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
@@ -116,11 +115,12 @@ public class XiaojiaAddons {
         // Skills
         MinecraftForge.EVENT_BUS.register(new Foraging());
         MinecraftForge.EVENT_BUS.register(new Fishing());
+        MinecraftForge.EVENT_BUS.register(new Experimentation());
 
         // Slayer
         MinecraftForge.EVENT_BUS.register(new Sven());
         MinecraftForge.EVENT_BUS.register(new Voidgloom());
-        
+
 //        MinecraftForge.EVENT_BUS.register(new ClickTest());
 
         for (KeyBind keyBind : KeyBindUtils.keyBinds) {

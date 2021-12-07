@@ -241,4 +241,17 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Pulling Rod", parent = "Skills")
     public static boolean AutoPullRod = false;
 
+    // Experimentation
+    @Property(type = Property.Type.FOLDER, name = "Auto Experimentation Table", parent = "Skills")
+    public static boolean ExperimentationTable = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Experimentation Table CD", parent = "Auto Experimentation Table",
+            min = 50, max = 800, step = 50)
+    public static int ExperimentClickCoolDown = 300;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Chronomatron", parent = "Auto Experimentation Table")
+    public static boolean AutoChronomatron = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Ultrasequencer", parent = "Auto Experimentation Table")
+    public static boolean AutoUltrasequencer = false;
 }

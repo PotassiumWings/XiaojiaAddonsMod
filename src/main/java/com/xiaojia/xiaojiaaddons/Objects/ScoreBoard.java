@@ -13,8 +13,8 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class ScoreBoard {
     public static boolean update = true;
-    private static ArrayList<String> lines = new ArrayList<>();
     public static String title = "";
+    private static ArrayList<String> lines = new ArrayList<>();
 
     public static ArrayList<String> getLines() {
         if (update) {

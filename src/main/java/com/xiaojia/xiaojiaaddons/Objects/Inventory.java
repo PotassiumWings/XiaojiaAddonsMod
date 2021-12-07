@@ -1,5 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Objects;
 
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
@@ -69,6 +71,6 @@ public class Inventory {
         mc.playerController.windowClick(
                 windowId, slot, button, mode, getPlayer()
         );
-        System.out.printf("%d %d %d %d%n", windowId, slot, button, mode);
+        if (XiaojiaAddons.isDebug()) ChatLib.chat(String.format("%d %d %d %d", windowId, slot, button, mode));
     }
 }

@@ -6,7 +6,6 @@ import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
-import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
