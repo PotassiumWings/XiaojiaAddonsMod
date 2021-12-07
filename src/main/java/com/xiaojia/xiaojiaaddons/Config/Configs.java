@@ -237,4 +237,8 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Foraging", parent = "Skills")
     public static boolean AutoForaging = false;
 
+    // Fishing
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Pulling Rod", parent = "Skills")
+    public static boolean AutoPullRod = false;
+
 }

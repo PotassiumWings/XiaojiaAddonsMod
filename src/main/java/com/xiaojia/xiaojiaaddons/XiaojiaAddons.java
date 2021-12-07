@@ -22,6 +22,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.Terminator;
+import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
@@ -114,6 +115,7 @@ public class XiaojiaAddons {
 
         // Skills
         MinecraftForge.EVENT_BUS.register(new Foraging());
+        MinecraftForge.EVENT_BUS.register(new Fishing());
 
         // Slayer
         MinecraftForge.EVENT_BUS.register(new Sven());
