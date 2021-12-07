@@ -102,6 +102,11 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Click Through Players", parent = "Summon/Player Features", illegal = true)
     public static boolean ClickThroughPlayers = false;
 
+//    // FuckHarps
+//    @Property(type = Property.Type.BOOLEAN, name = "Bald Harps", parent = "QOL")
+//    public static boolean FuckHarps = false;
+
+
     // GhostBlock
     @Property(type = Property.Type.FOLDER, name = "Ghost Block", parent = "QOL")
     public static boolean GhostBlock = false;

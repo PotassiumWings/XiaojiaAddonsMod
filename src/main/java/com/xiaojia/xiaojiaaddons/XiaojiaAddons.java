@@ -15,6 +15,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
+import com.xiaojia.xiaojiaaddons.Features.QOL.FuckHarps;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostBlock;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
@@ -105,6 +106,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoCombine());
         MinecraftForge.EVENT_BUS.register(new BlockAbility());
         MinecraftForge.EVENT_BUS.register(new EntityQOL());
+//        MinecraftForge.EVENT_BUS.register(new FuckHarps());
         MinecraftForge.EVENT_BUS.register(new GhostBlock());
         MinecraftForge.EVENT_BUS.register(new GhostQOL());
         MinecraftForge.EVENT_BUS.register(new InCombatQOL());
