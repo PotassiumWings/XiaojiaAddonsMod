@@ -55,10 +55,10 @@ public class ControlUtils {
 
     public static void changeDirection(float yaw, float pitch) {
         if (pitch > 90 || pitch < -90 || yaw < -180 || yaw > 180) {
-            System.out.println("wrong dir! " + yaw + ", " + pitch);
+            System.err.println("wrong dir! " + yaw + ", " + pitch);
             return;
         }
-        System.out.println("changed dir! " + yaw + ", " + pitch);
+        System.err.println("changed dir! " + yaw + ", " + pitch);
         getPlayer().rotationYaw += MathHelper.wrapAngleTo180_float(yaw - getPlayer().rotationYaw);
         getPlayer().rotationPitch += MathHelper.wrapAngleTo180_float(pitch - getPlayer().rotationPitch);
     }
@@ -71,7 +71,7 @@ public class ControlUtils {
     }
 
     public static Tuple<Float, Float> getFaceYawAndPitch(float tx, float ty, float tz) {
-        System.out.printf("facing %.2f %.2f %.2f%n", tx, ty, tz);
+        System.err.printf("facing %.2f %.2f %.2f%n", tx, ty, tz);
         float PI = (float) Math.PI;
         float x = getX(getPlayer()), y = getY(getPlayer()) + 1.5F, z = getZ(getPlayer());
         float dx = tx - x, dy = ty - y, dz = tz - z;
@@ -103,7 +103,7 @@ public class ControlUtils {
 
     public static void setHeldItemIndex(int index) {
         if (index < 0 || index > 8) {
-            System.out.println("WTF? NO");
+            System.err.println("WTF? NO");
             return;
         }
         if (getPlayer() == null) return;

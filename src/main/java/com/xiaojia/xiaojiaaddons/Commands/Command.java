@@ -45,21 +45,21 @@ public class Command extends CommandBase {
             case "curmap":
                 ChatLib.chat(SkyblockUtils.getCurrentMap());
                 break;
-            case "debug":
-                XiaojiaAddons.setDebug();
-                break;
+//            case "debug":
+//                XiaojiaAddons.setDebug();
+//                break;
             case "s":
                 XiaojiaAddons.guiToOpen = new ConfigGui();
                 break;
-            case "shoot":
-                AutoShootCrystal.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
-                break;
-            case "click":
-                ClickTest.setEnabled();
-                break;
-            case "face":
-                ControlUtils.face(0, 65, 0);
-                break;
+//            case "shoot":
+//                AutoShootCrystal.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
+//                break;
+//            case "click":
+//                ClickTest.setEnabled();
+//                break;
+//            case "face":
+//                ControlUtils.face(0, 65, 0);
+//                break;
             default:
                 if (XiaojiaAddons.isDebug()) SkyblockUtils.setCurrentMap(String.join(" ", strings));
                 else ChatLib.chat(getUsage());
