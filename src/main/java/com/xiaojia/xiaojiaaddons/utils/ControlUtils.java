@@ -1,7 +1,9 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
+import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -65,7 +67,8 @@ public class ControlUtils {
         changeDirection(yaw, pitch);
     }
 
-    private static Tuple<Float, Float> getFaceYawAndPitch(float tx, float ty, float tz) {
+    public static Tuple<Float, Float> getFaceYawAndPitch(float tx, float ty, float tz) {
+        System.out.printf("facing %.2f %.2f %.2f%n", tx, ty, tz);
         float PI = (float) Math.PI;
         float x = getX(getPlayer()), y = getY(getPlayer()) + 1.5F, z = getZ(getPlayer());
         float dx = tx - x, dy = ty - y, dz = tz - z;
@@ -140,12 +143,33 @@ public class ControlUtils {
         Inventory inventory = getOpenedInventory();
         if (slot == -1 || inventory == null) return false;
         ItemStack item = getItemStackInSlot(slot + 36, true);
-        return item != null && item.getDisplayName().contains(name);
+        if (item == null) return false;
+        String itemName = item.hasDisplayName()? item.getDisplayName(): item.getItem().getRegistryName();
+        return itemName.contains(name);
     }
 
     public static ItemStack getItemStackInSlot(int slot, boolean requiresNoGui) {
         Inventory inventory = getOpenedInventory();
         if (inventory == null || (requiresNoGui && inventory.getSize() != 45)) return null;
         return inventory.getItemInSlot(slot);
+    }
+
+    public static boolean checkHotbarItemRegistryName(int slot, String name) {
+        Inventory inventory = getOpenedInventory();
+        if (slot == -1 || inventory == null) return false;
+        ItemStack item = getItemStackInSlot(slot + 36, true);
+        if (item == null) return false;
+        return item.getItem().getRegistryName().toLowerCase().contains(name);
+    }
+
+    private static final KeyBind useKeyBind = new KeyBind(mc.gameSettings.keyBindUseItem);
+    private static final KeyBind attackKeyBind = new KeyBind(mc.gameSettings.keyBindAttack);
+
+    public static void holdLeftClick() {
+        KeyBinding.setKeyBindState(attackKeyBind.mcKeyBinding().getKeyCode(), true);
+    }
+
+    public static void releaseLeftClick() {
+        KeyBinding.setKeyBindState(attackKeyBind.mcKeyBinding().getKeyCode(), false);
     }
 }

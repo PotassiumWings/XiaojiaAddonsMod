@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Features.Tests.ClickTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -55,6 +56,9 @@ public class Command extends CommandBase {
                 break;
             case "click":
                 ClickTest.setEnabled();
+                break;
+            case "face":
+                ControlUtils.face(0, 65, 0);
                 break;
             default:
                 if (XiaojiaAddons.isDebug()) SkyblockUtils.setCurrentMap(String.join(" ", strings));

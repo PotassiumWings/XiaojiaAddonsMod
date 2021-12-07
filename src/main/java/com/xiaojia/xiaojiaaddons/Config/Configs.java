@@ -227,4 +227,14 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Sven miniboss HP", parent = "Sven")
     public static boolean ShowWolfMiniHP = false;
+
+
+    // Skills
+    @Property(type = Property.Type.FOLDER, name = "Skills")
+    public static boolean SkillsEnabled = false;
+
+    // Foraging
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Foraging", parent = "Skills")
+    public static boolean AutoForaging = false;
+
 }

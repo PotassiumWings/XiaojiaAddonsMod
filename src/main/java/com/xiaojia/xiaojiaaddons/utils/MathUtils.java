@@ -64,6 +64,10 @@ public class MathUtils {
         return (int) Math.floor(x);
     }
 
+    public static int floor(double x) {
+        return (int) Math.floor(x);
+    }
+
     @SubscribeEvent
     public void onTick(RenderWorldLastEvent event) {
         partialTicks = event.partialTicks;

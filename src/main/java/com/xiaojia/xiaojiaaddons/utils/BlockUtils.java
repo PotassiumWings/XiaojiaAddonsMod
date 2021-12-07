@@ -27,7 +27,11 @@ public class BlockUtils {
     }
 
     public static Block getBlockAt(float x, float y, float z) {
-        return getBlockAt((int) x, (int) y, (int) z);
+        return getBlockAt(MathUtils.floor(x), MathUtils.floor(y), MathUtils.floor(z));
+    }
+
+    public static Block getBlockAt(double x, double y, double z) {
+        return getBlockAt(MathUtils.floor(x), MathUtils.floor(y), MathUtils.floor(z));
     }
 
     public static Block getBlockAt(BlockPos pos) {
@@ -54,5 +58,15 @@ public class BlockUtils {
             } else return "owo!";
         }
         return "owo?";
+    }
+
+    public static boolean isBlockAir(float x, float y, float z) {
+        Block block = getBlockAt(x, y, z);
+        return block.getUnlocalizedName().toLowerCase().contains("air");
+    }
+
+    public static boolean isBlockSapling(float x, float y, float z) {
+        Block block = getBlockAt(x, y, z);
+        return block.getRegistryName().toLowerCase().contains("sapling");
     }
 }

@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons;
 
+import com.xiaojia.xiaojiaaddons.Commands.AutoForagingCommand;
 import com.xiaojia.xiaojiaaddons.Commands.Command;
 import com.xiaojia.xiaojiaaddons.Commands.TestGui;
 import com.xiaojia.xiaojiaaddons.Config.Config;
@@ -21,6 +22,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.Terminator;
+import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
 import com.xiaojia.xiaojiaaddons.Features.Tests.ClickTest;
@@ -70,6 +72,7 @@ public class XiaojiaAddons {
         Config.load();
 
         ClientCommandHandler.instance.registerCommand(new Command());
+        ClientCommandHandler.instance.registerCommand(new AutoForagingCommand());
 //        ClientCommandHandler.instance.registerCommand(new TestGui());
 //        ClientCommandHandler.instance.registerCommand(new TestControl());
 
@@ -110,6 +113,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new Terminator());
 
         // Skills
+        MinecraftForge.EVENT_BUS.register(new Foraging());
 
         // Slayer
         MinecraftForge.EVENT_BUS.register(new Sven());
