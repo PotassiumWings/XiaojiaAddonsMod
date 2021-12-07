@@ -116,7 +116,7 @@ public class Experimentation {
         }
         for (int i = 9; i < 45; i++) {
             ItemStack item = inventory.getItemInSlot(i);
-            if (item != null && item.getItem().getRegistryName().contains("glass_pane")) {
+            if (item != null && !item.getItem().getRegistryName().contains("glass_pane")) {
                 ultrasequenceList.set(item.stackSize, i);
             }
         }
