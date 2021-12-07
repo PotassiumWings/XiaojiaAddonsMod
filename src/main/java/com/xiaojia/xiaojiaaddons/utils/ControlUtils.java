@@ -118,11 +118,17 @@ public class ControlUtils {
         return new Inventory(player.openContainer);
     }
 
+    public static String getInventoryName() {
+        Inventory inventory = getOpenedInventory();
+        if (inventory == null || inventory.getName() == null) return "";
+        return  ChatLib.removeFormatting(inventory.getName());
+    }
+
     public static boolean checkHotbarItem(int slot, List<String> names) {  // [0, 9)
         Inventory inventory = getOpenedInventory();
         if (slot == -1 || inventory == null) return false;
         for (String name : names) {
-            ItemStack item = getItemStackInSlot(slot + 36);
+            ItemStack item = getItemStackInSlot(slot + 36, true);
             if (item != null && item.getDisplayName().contains(name)) {
                 return true;
             }
@@ -133,13 +139,13 @@ public class ControlUtils {
     public static boolean checkHotbarItem(int slot, String name) {  // [0, 9)
         Inventory inventory = getOpenedInventory();
         if (slot == -1 || inventory == null) return false;
-        ItemStack item = getItemStackInSlot(slot + 36);
+        ItemStack item = getItemStackInSlot(slot + 36, true);
         return item != null && item.getDisplayName().contains(name);
     }
 
-    public static ItemStack getItemStackInSlot(int slot) {
+    public static ItemStack getItemStackInSlot(int slot, boolean requiresNoGui) {
         Inventory inventory = getOpenedInventory();
-        if (inventory == null || inventory.getSize() != 45) return null;
+        if (inventory == null || (requiresNoGui && inventory.getSize() != 45)) return null;
         return inventory.getItemInSlot(slot);
     }
 }

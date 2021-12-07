@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Objects;
 
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -22,7 +23,7 @@ public class Checker {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         try {
-            enabled = pool.contains(getPlayer().getUniqueID().toString());
+            enabled = pool.contains(getPlayer().getUniqueID().toString());  // && SkyblockUtils.isInSkyblock();
         } catch (Exception e) {
             enabled = false;
         }

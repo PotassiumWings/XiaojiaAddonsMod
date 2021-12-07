@@ -14,6 +14,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 public class ScoreBoard {
     public static boolean update = true;
     private static ArrayList<String> lines = new ArrayList<>();
+    public static String title = "";
 
     public static ArrayList<String> getLines() {
         if (update) {
@@ -28,6 +29,7 @@ public class ScoreBoard {
         ArrayList<String> newLines = new ArrayList<>();
         try {
             Scoreboard scoreBoard = getPlayer().getWorldScoreboard();
+            title = scoreBoard.getObjectiveInDisplaySlot(1).getDisplayName();
             ArrayList<Score> list = new ArrayList<>(
                     scoreBoard.getSortedScores(scoreBoard.getObjectiveInDisplaySlot(1))
             );

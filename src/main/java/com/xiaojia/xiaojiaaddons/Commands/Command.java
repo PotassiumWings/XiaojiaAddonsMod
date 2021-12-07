@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
+import com.xiaojia.xiaojiaaddons.Features.Tests.ClickTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -51,6 +52,10 @@ public class Command extends CommandBase {
                 break;
             case "shoot":
                 AutoShootCrystal.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
+                break;
+            case "click":
+                ClickTest.setEnabled();
+                break;
             default:
                 if (XiaojiaAddons.isDebug()) SkyblockUtils.setCurrentMap(String.join(" ", strings));
                 else ChatLib.chat(getUsage());

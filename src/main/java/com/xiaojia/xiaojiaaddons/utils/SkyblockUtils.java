@@ -105,6 +105,10 @@ public class SkyblockUtils {
         return "";
     }
 
+    public static boolean isInSkyblock() {
+        return ChatLib.removeFormatting(ScoreBoard.title).contains("SKYBLOCK");
+    }
+
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (!set || !XiaojiaAddons.isDebug())

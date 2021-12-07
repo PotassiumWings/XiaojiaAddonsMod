@@ -56,10 +56,10 @@ public class Inventory {
         int button;
         switch (buttonString) {
             case "MIDDLE":
-                button = 1;
+                button = 2;
                 break;
             case "RIGHT":
-                button = 2;
+                button = 1;
                 break;
             default:
                 button = 0;
@@ -71,6 +71,6 @@ public class Inventory {
         mc.playerController.windowClick(
                 windowId, slot, button, mode, getPlayer()
         );
-        if (XiaojiaAddons.isDebug()) ChatLib.chat(String.format("%d %d %d", slot, button, mode));
+        System.out.printf("%d %d %d %d%n", windowId, slot, button, mode);
     }
 }

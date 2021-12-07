@@ -12,6 +12,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dragons.EnderCrystalESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoCloseSecretChest;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
+import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostBlock;
@@ -22,6 +23,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.Terminator;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
+import com.xiaojia.xiaojiaaddons.Features.Tests.ClickTest;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
@@ -68,7 +70,7 @@ public class XiaojiaAddons {
         Config.load();
 
         ClientCommandHandler.instance.registerCommand(new Command());
-        ClientCommandHandler.instance.registerCommand(new TestGui());
+//        ClientCommandHandler.instance.registerCommand(new TestGui());
 //        ClientCommandHandler.instance.registerCommand(new TestControl());
 
         MinecraftForge.EVENT_BUS.register(new Checker());
@@ -97,6 +99,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new StonklessStonk());
 
         // QOL
+        MinecraftForge.EVENT_BUS.register(new AutoCombine());
         MinecraftForge.EVENT_BUS.register(new BlockAbility());
         MinecraftForge.EVENT_BUS.register(new EntityQOL());
         MinecraftForge.EVENT_BUS.register(new GhostBlock());
@@ -111,6 +114,8 @@ public class XiaojiaAddons {
         // Slayer
         MinecraftForge.EVENT_BUS.register(new Sven());
         MinecraftForge.EVENT_BUS.register(new Voidgloom());
+        
+//        MinecraftForge.EVENT_BUS.register(new ClickTest());
 
         for (KeyBind keyBind : KeyBindUtils.keyBinds) {
             ClientRegistry.registerKeyBinding(keyBind.mcKeyBinding());

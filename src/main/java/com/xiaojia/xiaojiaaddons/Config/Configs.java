@@ -22,6 +22,56 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "QOL")
     public static boolean QOLEnabled = false;
 
+    // AutoCombine
+    @Property(type = Property.Type.FOLDER, name = "Auto Combine", parent = "QOL")
+    public static boolean AutoCombine = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Feather Falling", parent = "Auto Combine")
+    public static boolean CombineFeatherFalling = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Infinite Quiver", parent = "Auto Combine")
+    public static boolean CombineInfiniteQuiver = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Rejuvenate", parent = "Auto Combine")
+    public static boolean CombineRejuvenate = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Ultimate Wise", parent = "Auto Combine")
+    public static boolean CombineUltimateWise = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Wisdom", parent = "Auto Combine")
+    public static boolean CombineWisdom = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Last Stand", parent = "Auto Combine")
+    public static boolean CombineLastStand = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Combo", parent = "Auto Combine")
+    public static boolean CombineCombo = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Legion", parent = "Auto Combine")
+    public static boolean CombineLegion = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Overload", parent = "Auto Combine")
+    public static boolean CombineOverload = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Soul Eater", parent = "Auto Combine")
+    public static boolean CombineSoulEater = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Ultimate Jerry", parent = "Auto Combine")
+    public static boolean CombineUltimateJerry = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Bank", parent = "Auto Combine")
+    public static boolean CombineBank = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine No Pain No Gain", parent = "Auto Combine")
+    public static boolean CombineNoPainNoGain = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Mana Steal", parent = "Auto Combine")
+    public static boolean CombineManaSteal = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Smarty Pants", parent = "Auto Combine")
+    public static boolean CombineSmartyPants = false;
+
+
     // BlockAbility
     @Property(type = Property.Type.FOLDER, name = "Block Abilities", parent = "QOL")
     public static boolean BlockAbility = false;
