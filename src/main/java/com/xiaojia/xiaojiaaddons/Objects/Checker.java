@@ -15,7 +15,7 @@ public class Checker {
             "0b524cc5-edb7-45d1-ba3b-675e15079137", "63179ad0-1e84-4a40-adfc-0f7deedbf2fe", "0a6c811b-0d22-4601-ab24-837260afbace",
             "b8c75c35-d9ce-4b2b-b132-eada4f62ee83", "685b13b0-842f-4fb4-abc0-479da40e6f4b", "56f0a325-2201-495f-a472-cb3a4ba2c16b",
             "7d4b729c-d267-49da-8cd3-4ad9dc8aedd6", "b770c257-0a35-4eff-92fe-4edaec09b129", "d71bd4bf-50ef-49aa-a443-aa346b37059a",
-            "a4c2ecd3-c4ec-41c5-b9cd-177cdd568962"
+            "a4c2ecd3-c4ec-41c5-b9cd-177cdd568962", "1f18edc8-4f79-435e-bd8b-9391ad765d9f", "94ddeb98-d8ca-47ba-8809-9adad50cd3fd"
     ));
     public static boolean enabled;
 
