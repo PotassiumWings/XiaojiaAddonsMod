@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.Skills;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
@@ -11,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.Objects;
 public class Experimentation {
     private static final ArrayList<Integer> chronomatronPatterns = new ArrayList<>();
     private static final ArrayList<Integer> ultrasequenceList = new ArrayList<Integer>() {{
-        for (int i = 0; i < 45; i++) add(-1);
+        for (int i = 0; i < 45; i++) add(0);
     }};
     private int chronomatronLastRound = 0;
     private int chronomatronCnt = 0;
@@ -27,6 +29,19 @@ public class Experimentation {
     private int ultrasequenceCnt = 0;
     private int ultrasequenceTot = 0;
     private boolean ultrasequenceLastRender = false;
+
+    @SubscribeEvent
+    public void onTickCheck(TickEvent.ClientTickEvent event) {
+        Inventory inventory = ControlUtils.getOpenedInventory();
+        if (inventory == null) return;
+        if (inventory.getName().startsWith("Chronomatron")) return;
+        if (inventory.getName().startsWith("Ultrasequencer")) return;
+        chronomatronPatterns.clear();
+        chronomatronLastRound = chronomatronCnt = 0;
+        lastExperimentationTime = 0;
+        ultrasequenceCnt = ultrasequenceTot = 0;
+        ultrasequenceLastRender = false;
+    }
 
     @SubscribeEvent
     public void onGuiRender(GuiScreenEvent.BackgroundDrawnEvent event) {
@@ -96,6 +111,7 @@ public class Experimentation {
             if (items.get(i) != null &&
                     items.get(i).getItem() == Item.getItemFromBlock(Blocks.stained_hardened_clay)) {
                 chronomatronPatterns.add(i);
+                if (XiaojiaAddons.isDebug()) ChatLib.chat("added " + i);
                 return;
             }
         }
@@ -118,6 +134,7 @@ public class Experimentation {
             ItemStack item = inventory.getItemInSlot(i);
             if (item != null && !item.getItem().getRegistryName().contains("glass_pane")) {
                 ultrasequenceList.set(item.stackSize, i);
+                if (XiaojiaAddons.isDebug()) ChatLib.chat(item.stackSize + " " + i);
             }
         }
     }
