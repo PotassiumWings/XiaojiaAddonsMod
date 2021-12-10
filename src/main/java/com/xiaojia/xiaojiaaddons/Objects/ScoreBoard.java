@@ -1,11 +1,11 @@
 package com.xiaojia.xiaojiaaddons.Objects;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 
@@ -59,7 +59,7 @@ public class ScoreBoard {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    public void onTick(TickEndEvent event) {
         update = true;
     }
 }

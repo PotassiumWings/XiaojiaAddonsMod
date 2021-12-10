@@ -7,7 +7,6 @@ import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
@@ -27,7 +26,7 @@ public class Inventory {
         return container.inventoryItemStacks.size();
     }
 
-    public final List<ItemStack> getItemStacks() {
+    public final ArrayList<ItemStack> getItemStacks() {
         ArrayList<ItemStack> res = new ArrayList<>();
         for (int i = 0; i < getSize(); i++) {
             res.add(getItemInSlot(i));

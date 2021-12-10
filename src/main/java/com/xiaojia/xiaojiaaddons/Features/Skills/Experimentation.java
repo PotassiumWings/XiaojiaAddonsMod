@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Skills;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
@@ -12,7 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class Experimentation {
     private boolean ultrasequenceLastRender = false;
 
     @SubscribeEvent
-    public void onTickCheck(TickEvent.ClientTickEvent event) {
+    public void onTickCheck(TickEndEvent event) {
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null) return;
         if (inventory.getName().startsWith("Chronomatron")) return;
@@ -51,6 +51,7 @@ public class Experimentation {
         if (inventory == null) return;
         try {
             String invName = inventory.getName();
+//            if (XiaojiaAddons.isDebug()) ChatLib.chat(invName);
             if (invName.startsWith("Chronomatron")) {
                 if (!Configs.AutoChronomatron) return;
                 ItemStack roundStack = ControlUtils.getItemStackInSlot(4, false);
@@ -59,6 +60,7 @@ public class Experimentation {
                 int round = roundStack.stackSize;
                 int time = timeStack.stackSize;
                 String type = timeStack.getDisplayName();
+                if (XiaojiaAddons.isDebug()) ChatLib.chat(type);
                 if (type.contains("Timer:")) {
                     if (round != chronomatronLastRound) {
                         if (time == chronomatronLastRound + 3) {
@@ -79,6 +81,7 @@ public class Experimentation {
                 ItemStack timeStack = ControlUtils.getItemStackInSlot(49, false);
                 if (timeStack == null) return;
                 String type = timeStack.getDisplayName();
+                if (XiaojiaAddons.isDebug()) ChatLib.chat(type);
                 if (type.contains("Remember the pattern!")) {
                     getUltraSequence();
                     ultrasequenceCnt = 0;

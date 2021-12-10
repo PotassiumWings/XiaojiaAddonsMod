@@ -1,20 +1,26 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Tuple;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getPitch;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getYaw;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
@@ -22,6 +28,8 @@ public class ControlUtils {
 
     private static final KeyBind useKeyBind = new KeyBind(mc.gameSettings.keyBindUseItem);
     private static final KeyBind attackKeyBind = new KeyBind(mc.gameSettings.keyBindAttack);
+
+    private static Inventory openedInventory = null;
 
     public static void rightClick() {
         try {
@@ -68,6 +76,38 @@ public class ControlUtils {
         Tuple<Float, Float> res = getFaceYawAndPitch(tx, ty, tz);
         float yaw = res.getFirst(), pitch = res.getSecond();
         changeDirection(yaw, pitch);
+    }
+
+    public static void face(BlockPos pos) {
+        face(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    public static void faceSlowly(float tx, float ty, float tz) throws InterruptedException {
+        Tuple<Float, Float> res = getFaceYawAndPitch(tx, ty, tz);
+        float yaw = res.getFirst(), pitch = res.getSecond();
+        float curyaw = MathUtils.getYaw(), curpitch = MathUtils.getPitch();
+        if (curyaw < 0) curyaw += 360;
+        if (yaw < 0) yaw += 360;
+        if (yaw - curyaw > 180) yaw -= 360;
+        if (curyaw - yaw > 180) curyaw -= 360;
+        int rotate_times = (int) Math.floor(2 + Math.random() * 6);
+        for (int j = 1; j <= rotate_times; j++) {
+            float toturn_yaw = curyaw + (yaw - curyaw) / rotate_times * j;
+            while (toturn_yaw > 180) toturn_yaw -= 360;
+            while (toturn_yaw < -180) toturn_yaw += 360;
+            float toturn_pitch = curpitch + (pitch - curpitch) / rotate_times * j;
+            ControlUtils.changeDirection(toturn_yaw, toturn_pitch);
+            Thread.sleep((long) (10 + Math.random() * 20));
+            if ((Math.abs(getYaw() - toturn_yaw) > 1e-5 && Math.abs(getYaw() - toturn_yaw) < 360 - 1e-5) ||
+                    Math.abs(getPitch() - toturn_pitch) > 1e-5) {
+                ChatLib.chat("Detected yaw/pitch move, interrupted.");
+                throw new InterruptedException();
+            }
+        }
+    }
+
+    public static void faceSlowly(BlockPos pos) throws InterruptedException {
+        faceSlowly(pos.getX(), pos.getY(), pos.getZ());
     }
 
     public static Tuple<Float, Float> getFaceYawAndPitch(float tx, float ty, float tz) {
@@ -119,9 +159,10 @@ public class ControlUtils {
     }
 
     public static Inventory getOpenedInventory() {
-        EntityPlayerSP player = getPlayer();
-        if (player == null || player.openContainer == null) return null;
-        return new Inventory(player.openContainer);
+        return openedInventory;
+//        EntityPlayerSP player = getPlayer();
+//        if (player == null || player.openContainer == null) return null;
+//        return new Inventory(player.openContainer);
     }
 
     public static String getInventoryName() {
@@ -171,5 +212,14 @@ public class ControlUtils {
 
     public static void releaseLeftClick() {
         KeyBinding.setKeyBindState(attackKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
+    @SubscribeEvent
+    public void onTickUpdateInventory(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (!Checker.enabled) return;
+        EntityPlayerSP player = getPlayer();
+        if (player == null || player.openContainer == null) openedInventory = null;
+        else openedInventory = new Inventory(player.openContainer);
     }
 }

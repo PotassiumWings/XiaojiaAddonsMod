@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
@@ -14,7 +15,6 @@ import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import scala.Tuple3;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class Spider extends RenderEntityESP {
     private boolean shadowFuryWarnedInThisLobby = false;
 
     @SubscribeEvent
-    public void onTickShadowFury(TickEvent.ClientTickEvent event) {
+    public void onTickShadowFury(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!SkyblockUtils.isInSpiderDen() || !Configs.SpiderDenShadowfuryPoint) return;
 

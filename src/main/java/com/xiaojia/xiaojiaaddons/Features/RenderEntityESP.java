@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Features;
 
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
@@ -8,7 +9,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public abstract class RenderEntityESP {
     private ArrayList<EntityInfo> renderEntities = new ArrayList<>();
 
     @SubscribeEvent
-    public final void onTick(TickEvent.ClientTickEvent event) {
+    public final void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
         try {
             ArrayList<EntityInfo> newEntities = new ArrayList<>();

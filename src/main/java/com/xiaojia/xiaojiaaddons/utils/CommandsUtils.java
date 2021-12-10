@@ -1,7 +1,8 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -15,8 +16,8 @@ public class CommandsUtils {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
-        if (false) return;
+    public void onTick(TickEndEvent event) {
+        if (!Checker.enabled) return;
         if (TimeUtils.curTime() - lastSent > 70) {
             if (commandsQueue.size() > 0) {
                 String command = commandsQueue.pollFirst();

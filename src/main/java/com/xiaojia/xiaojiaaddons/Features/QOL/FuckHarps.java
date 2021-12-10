@@ -1,6 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
-import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -8,7 +8,6 @@ import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +15,7 @@ import java.util.HashMap;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class FuckHarps {
-    public HashMap<String, ArrayList<Tuple<Integer, Integer>>> notesOf = new HashMap<String, ArrayList<Tuple<Integer, Integer>>>(){{
+    public HashMap<String, ArrayList<Tuple<Integer, Integer>>> notesOf = new HashMap<String, ArrayList<Tuple<Integer, Integer>>>() {{
         put("Hymn to the Joy", getHymn());
         put("Through the Campfire", getCamp());
     }};
@@ -31,7 +30,7 @@ public class FuckHarps {
     private String currentSong = "";
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
 //        if (!Configs.FuckHarps) return;
         Inventory inventory = ControlUtils.getOpenedInventory();
@@ -71,7 +70,7 @@ public class FuckHarps {
     }
 
     @SubscribeEvent
-    public void onTickCheckStop(TickEvent.ClientTickEvent event) {
+    public void onTickCheckStop(TickEndEvent event) {
         if (!isThreadRunning) return;
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null || !inventory.getName().contains(currentSong)) {

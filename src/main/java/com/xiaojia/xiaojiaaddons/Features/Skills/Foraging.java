@@ -1,17 +1,15 @@
 package com.xiaojia.xiaojiaaddons.Features.Skills;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
-import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 import javax.vecmath.Vector3f;
@@ -51,7 +49,7 @@ public class Foraging {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (keyBind.isPressed()) {
             isAutoForaging = !isAutoForaging;
@@ -98,23 +96,11 @@ public class Foraging {
                         Vector3f p = foragingBlocks.get(i);
                         float x = p.x, y = p.y, z = p.z;
                         float epsilon = 0.1F;
-                        Tuple<Float, Float> res = ControlUtils.getFaceYawAndPitch(
+                        ControlUtils.faceSlowly(
                                 (float) (x + Math.random() * 2 * epsilon - epsilon),
                                 y,
                                 (float) (z + Math.random() * 2 * epsilon - epsilon)
                         );
-                        float yaw = res.getFirst(), pitch = res.getSecond();
-                        float curyaw = MathUtils.getYaw(), curpitch = MathUtils.getPitch();
-                        if (curyaw < 0) curyaw += 360;
-                        if (yaw < 0) yaw += 360;
-                        int rotate_times = (int) Math.floor(2 + Math.random() * 6);
-                        for (int j = 1; j <= rotate_times; j++) {
-                            float toturn_yaw = curyaw + (yaw - curyaw) / rotate_times * j;
-                            if (toturn_yaw > 180) toturn_yaw -= 360;
-                            float toturn_pitch = curpitch + (pitch - curpitch) / rotate_times * j;
-                            ControlUtils.changeDirection(toturn_yaw, toturn_pitch);
-                            Thread.sleep((long) (10 + Math.random() * 20));
-                        }
                         while (BlockUtils.isBlockAir(x, y, z)) {
                             Thread.sleep((long) (20 + Math.random() * 40));
                             if (!isAutoForaging) return;
@@ -153,6 +139,7 @@ public class Foraging {
                     Thread.sleep(500);
                 }
             } catch (Exception e) {
+                stopAutoForaging();
                 e.printStackTrace();
             } finally {
                 autoForagingThreadLock = false;

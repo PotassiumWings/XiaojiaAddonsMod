@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
@@ -18,7 +19,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -48,7 +48,7 @@ public class GhostQOL extends RenderEntityESP {
     }
 
     @SubscribeEvent
-    public void onTickRunicGhost(TickEvent.ClientTickEvent event) {
+    public void onTickRunicGhost(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!SkyblockUtils.isInMist() || !Configs.ShowRunicGhost) return;
 

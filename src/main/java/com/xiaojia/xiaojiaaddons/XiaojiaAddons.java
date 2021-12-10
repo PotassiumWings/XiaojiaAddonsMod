@@ -5,23 +5,25 @@ import com.xiaojia.xiaojiaaddons.Commands.Command;
 import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.SneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.Spider;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.EnderCrystalESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoCloseSecretChest;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoTerminal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
-import com.xiaojia.xiaojiaaddons.Features.QOL.FuckHarps;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostBlock;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.Terminator;
+import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowder;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Experimentation;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
@@ -33,6 +35,7 @@ import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
+import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.KeyBindUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
@@ -46,7 +49,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 
@@ -78,10 +80,12 @@ public class XiaojiaAddons {
 //        ClientCommandHandler.instance.registerCommand(new TestControl());
 
         MinecraftForge.EVENT_BUS.register(new Checker());
+        MinecraftForge.EVENT_BUS.register(new TickEndEvent());
 
         MinecraftForge.EVENT_BUS.register(this);
 
         // Utils
+        MinecraftForge.EVENT_BUS.register(new ControlUtils());
         MinecraftForge.EVENT_BUS.register(new MathUtils());
         MinecraftForge.EVENT_BUS.register(new HotbarUtils());
         MinecraftForge.EVENT_BUS.register(new ScoreBoard());
@@ -99,6 +103,7 @@ public class XiaojiaAddons {
 
         // Dungeons
         MinecraftForge.EVENT_BUS.register(new AutoCloseSecretChest());
+        MinecraftForge.EVENT_BUS.register(new AutoTerminal());
         MinecraftForge.EVENT_BUS.register(new MimicWarn());
         MinecraftForge.EVENT_BUS.register(new StonklessStonk());
 
@@ -115,6 +120,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new Terminator());
 
         // Skills
+        MinecraftForge.EVENT_BUS.register(new AutoPowder());
         MinecraftForge.EVENT_BUS.register(new Foraging());
         MinecraftForge.EVENT_BUS.register(new Fishing());
         MinecraftForge.EVENT_BUS.register(new Experimentation());
@@ -131,7 +137,7 @@ public class XiaojiaAddons {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    public void onTick(TickEndEvent event) {
         if (guiToOpen != null) {
             mc.displayGuiScreen(guiToOpen);
             guiToOpen = null;

@@ -1,8 +1,8 @@
 package com.xiaojia.xiaojiaaddons.Features.Tests;
 
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class ClickTest {
     private static boolean enabled = false;
@@ -12,7 +12,7 @@ public class ClickTest {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    public void onTick(TickEndEvent event) {
         if (enabled) {
             enabled = false;
             new Thread(() -> {

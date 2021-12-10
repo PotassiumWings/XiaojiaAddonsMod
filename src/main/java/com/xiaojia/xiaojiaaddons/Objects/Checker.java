@@ -1,7 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Objects;
 
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -20,7 +20,7 @@ public class Checker {
     public static boolean enabled;
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    public void onTick(TickEndEvent event) {
         try {
             enabled = pool.contains(getPlayer().getUniqueID().toString());  // && SkyblockUtils.isInSkyblock();
         } catch (Exception e) {

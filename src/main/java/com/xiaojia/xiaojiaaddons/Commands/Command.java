@@ -1,12 +1,9 @@
 package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
-import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
-import com.xiaojia.xiaojiaaddons.Features.Tests.ClickTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

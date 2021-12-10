@@ -1,9 +1,9 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class HotbarUtils {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    public void onTick(TickEndEvent event) {
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null || inventory.getSize() != 45) return;
         List<ItemStack> items = inventory.getItemStacks().subList(36, 45);

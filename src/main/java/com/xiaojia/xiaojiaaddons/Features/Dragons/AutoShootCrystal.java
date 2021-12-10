@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Dragons;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -12,7 +13,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 import javax.vecmath.Vector2d;
@@ -102,7 +102,7 @@ public class AutoShootCrystal {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    public void onTick(TickEndEvent event) {
         if (!Checker.enabled || !SkyblockUtils.isInDragon()) return;
         if (!Configs.AutoShootCrystal) return;
         if (shootQueue.size() != 0) return;
@@ -115,7 +115,7 @@ public class AutoShootCrystal {
     }
 
     @SubscribeEvent
-    public void onTickShoot(TickEvent.ClientTickEvent event) {
+    public void onTickShoot(TickEndEvent event) {
         if (!Checker.enabled || !SkyblockUtils.isInDragon()) return;
         if (!Configs.AutoShootCrystal) return;
         if (isShooting || !enabled) return;
@@ -161,7 +161,7 @@ public class AutoShootCrystal {
     }
 
     @SubscribeEvent
-    public void onTickKeyBind(TickEvent.ClientTickEvent event) {
+    public void onTickKeyBind(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (autoShootCrystalKeybind.isPressed()) {
             enabled = !enabled;

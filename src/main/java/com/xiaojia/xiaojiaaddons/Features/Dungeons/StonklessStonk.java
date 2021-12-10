@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
@@ -24,7 +25,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class StonklessStonk {
     private BlockPos lastPlayerPos;
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    public void onTick(TickEndEvent event) {
         facingPos = null;
         if (!Checker.enabled) return;
         if (keyBind.isPressed()) {
@@ -113,7 +113,7 @@ public class StonklessStonk {
     }
 
     @SubscribeEvent
-    public void getSecretsOnTick(TickEvent.ClientTickEvent event) {
+    public void getSecretsOnTick(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.StonklessStonkEnable) return;
         if (!SkyblockUtils.isInDungeon()) return;

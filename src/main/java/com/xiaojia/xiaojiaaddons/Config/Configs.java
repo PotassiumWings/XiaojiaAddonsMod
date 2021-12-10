@@ -148,6 +148,17 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Mimic Warn", parent = "Dungeons")
     public static boolean MimicWarn = false;
 
+    // AutoTerminal
+    @Property(type = Property.Type.FOLDER, name = "Terminals", parent = "Dungeons")
+    public static boolean TerminalsEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Terminal", parent = "Terminals")
+    public static boolean AutoTerminal = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Terminal CD", parent = "Terminals",
+            min = 30, max = 500, step = 10)
+    public static int AutoTerminalCD = 150;
+
     // StonklessStonk
     @Property(type = Property.Type.FOLDER, name = "Stonkless Stonk", parent = "Dungeons")
     public static boolean StonklessStonk = false;
@@ -237,6 +248,10 @@ public class Configs {
     // Skills
     @Property(type = Property.Type.FOLDER, name = "Skills")
     public static boolean SkillsEnabled = false;
+
+    // AutoPowder
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Powder (not available)", parent = "Skills")
+    public static boolean AutoPowder = false;
 
     // Foraging
     @Property(type = Property.Type.BOOLEAN, name = "Auto Foraging", parent = "Skills")
