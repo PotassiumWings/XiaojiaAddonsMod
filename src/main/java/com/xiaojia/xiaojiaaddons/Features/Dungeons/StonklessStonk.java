@@ -138,7 +138,7 @@ public class StonklessStonk {
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
         if (!Checker.enabled) return;
-        if (!Configs.StonklessStonkEnable) return;
+        if (!Configs.StonklessStonkEnable || !should) return;
         if (!SkyblockUtils.isInDungeon()) return;
         for (Map.Entry<BlockPos, Block> entry : blockHashMap.entrySet()) {
             BlockPos pos = entry.getKey();

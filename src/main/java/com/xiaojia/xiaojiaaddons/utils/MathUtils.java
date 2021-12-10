@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -8,6 +9,15 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class MathUtils {
     public static float partialTicks = 0;
+
+    public static double yawPitchSquareFromPlayer(float x, float y, float z) {
+        float yaw = getYaw(), pitch = getPitch();
+        Tuple<Float, Float> res = ControlUtils.getFaceYawAndPitch(x, y, z);
+        float toYaw = res.getFirst(), toPitch = res.getSecond();
+        float deltaYaw = Math.abs(yaw - toYaw), deltaPitch = Math.abs(pitch - toPitch);
+        deltaYaw = Math.min(deltaYaw, 360 - deltaYaw);
+        return deltaYaw * deltaYaw + deltaPitch * deltaPitch;
+    }
 
     public static double distanceSquaredFromPoints(double x, double y, double z, double tx, double ty, double tz) {
         return (tx - x) * (tx - x) + (ty - y) * (ty - y) + (tz - z) * (tz - z);

@@ -82,7 +82,7 @@ public class ControlUtils {
         face(pos.getX(), pos.getY(), pos.getZ());
     }
 
-    public static void faceSlowly(float tx, float ty, float tz) throws InterruptedException {
+    public synchronized static void faceSlowly(float tx, float ty, float tz) throws InterruptedException {
         Tuple<Float, Float> res = getFaceYawAndPitch(tx, ty, tz);
         float yaw = res.getFirst(), pitch = res.getSecond();
         float curyaw = MathUtils.getYaw(), curpitch = MathUtils.getPitch();
@@ -160,9 +160,6 @@ public class ControlUtils {
 
     public static Inventory getOpenedInventory() {
         return openedInventory;
-//        EntityPlayerSP player = getPlayer();
-//        if (player == null || player.openContainer == null) return null;
-//        return new Inventory(player.openContainer);
     }
 
     public static String getInventoryName() {
@@ -216,7 +213,6 @@ public class ControlUtils {
 
     @SubscribeEvent
     public void onTickUpdateInventory(TickEndEvent event) {
-        if (!Checker.enabled) return;
         if (!Checker.enabled) return;
         EntityPlayerSP player = getPlayer();
         if (player == null || player.openContainer == null) openedInventory = null;
