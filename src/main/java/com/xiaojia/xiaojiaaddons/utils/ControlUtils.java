@@ -29,6 +29,11 @@ public class ControlUtils {
     private static final KeyBind useKeyBind = new KeyBind(mc.gameSettings.keyBindUseItem);
     private static final KeyBind attackKeyBind = new KeyBind(mc.gameSettings.keyBindAttack);
 
+    private static final KeyBind moveForwardKeyBind = new KeyBind(mc.gameSettings.keyBindForward);
+    private static final KeyBind moveBackwardKeyBind = new KeyBind(mc.gameSettings.keyBindBack);
+    private static final KeyBind moveLeftKeyBind = new KeyBind(mc.gameSettings.keyBindLeft);
+    private static final KeyBind moveRightKeyBind = new KeyBind(mc.gameSettings.keyBindRight);
+
     private static Inventory openedInventory = null;
 
     public static void rightClick() {
@@ -209,6 +214,47 @@ public class ControlUtils {
 
     public static void releaseLeftClick() {
         KeyBinding.setKeyBindState(attackKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
+    public static void moveRandomly(long delta) throws InterruptedException {
+        int choose = (int) (Math.random() * 4);
+        switch (choose) {
+            case 0:
+            case 1:
+                moveForward(delta);
+                break;
+            case 2:
+                moveLeft(delta);
+                break;
+            case 3:
+                moveRight(delta);
+                break;
+            default:
+        }
+    }
+
+    public static void moveForward(long delta) throws InterruptedException {
+        KeyBinding.setKeyBindState(moveForwardKeyBind.mcKeyBinding().getKeyCode(), true);
+        Thread.sleep(delta);
+        KeyBinding.setKeyBindState(moveForwardKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
+    public static void moveBackward(long delta) throws InterruptedException {
+        KeyBinding.setKeyBindState(moveBackwardKeyBind.mcKeyBinding().getKeyCode(), true);
+        Thread.sleep(delta);
+        KeyBinding.setKeyBindState(moveBackwardKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
+    public static void moveLeft(long delta) throws InterruptedException {
+        KeyBinding.setKeyBindState(moveLeftKeyBind.mcKeyBinding().getKeyCode(), true);
+        Thread.sleep(delta);
+        KeyBinding.setKeyBindState(moveLeftKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
+    public static void moveRight(long delta) throws InterruptedException {
+        KeyBinding.setKeyBindState(moveRightKeyBind.mcKeyBinding().getKeyCode(), true);
+        Thread.sleep(delta);
+        KeyBinding.setKeyBindState(moveRightKeyBind.mcKeyBinding().getKeyCode(), false);
     }
 
     @SubscribeEvent

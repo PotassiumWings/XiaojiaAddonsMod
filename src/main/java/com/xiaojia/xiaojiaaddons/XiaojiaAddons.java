@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons;
 
 import com.xiaojia.xiaojiaaddons.Commands.AutoForagingCommand;
 import com.xiaojia.xiaojiaaddons.Commands.Command;
+import com.xiaojia.xiaojiaaddons.Commands.TransferBackCommand;
 import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
@@ -23,6 +24,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.Terminator;
+import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowder;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Experimentation;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
@@ -76,6 +78,7 @@ public class XiaojiaAddons {
 
         ClientCommandHandler.instance.registerCommand(new Command());
         ClientCommandHandler.instance.registerCommand(new AutoForagingCommand());
+        ClientCommandHandler.instance.registerCommand(new TransferBackCommand());
 //        ClientCommandHandler.instance.registerCommand(new TestGui());
 //        ClientCommandHandler.instance.registerCommand(new TestControl());
 
@@ -118,6 +121,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new NoSlowdown());
         MinecraftForge.EVENT_BUS.register(new SwordSwap());
         MinecraftForge.EVENT_BUS.register(new Terminator());
+        MinecraftForge.EVENT_BUS.register(new TransferBack());
 
         // Skills
         MinecraftForge.EVENT_BUS.register(new AutoPowder());

@@ -1,11 +1,15 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class MathUtils {
     public static float partialTicks = 0;
@@ -17,6 +21,29 @@ public class MathUtils {
         float deltaYaw = Math.abs(yaw - toYaw), deltaPitch = Math.abs(pitch - toPitch);
         deltaYaw = Math.min(deltaYaw, 360 - deltaYaw);
         return deltaYaw * deltaYaw + deltaPitch * deltaPitch;
+    }
+
+    public static boolean checkBlocksBetween(int x, int y, int z) {
+        float px = getX(getPlayer()), py = getY(getPlayer()) + 1.5F, pz = getZ(getPlayer());
+        float tx = x + 0.5F, ty = y + 0.5F, tz = z + 0.5F;
+        float dx = tx - px, dy = ty - py, dz = tz - pz;
+        int times = 20;
+        for (int i = 0; i < times; i++) {
+            float qx = px + dx * i / times;
+            float qy = py + dy * i / times;
+            float qz = pz + dz * i / times;
+            if (!isBlockMinableOrAir(qx, qy, qz)) return false;
+        }
+        return true;
+    }
+
+    private static boolean isBlockMinableOrAir(float qx, float qy, float qz) {
+        Block block = getWorld().getBlockState(new BlockPos(qx, qy, qz)).getBlock();
+        boolean res = block == Blocks.air || block == Blocks.stone || block == Blocks.coal_ore ||
+                block == Blocks.diamond_ore || block == Blocks.emerald_ore ||
+                block == Blocks.gold_ore || block == Blocks.iron_ore ||
+                block == Blocks.lapis_ore || block == Blocks.redstone_ore;
+        return res;
     }
 
     public static double distanceSquaredFromPoints(double x, double y, double z, double tx, double ty, double tz) {

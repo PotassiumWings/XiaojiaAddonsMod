@@ -23,7 +23,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
-import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -39,10 +39,13 @@ public class AutoPowder {
     private BlockPos closestStone = null;
     private BlockPos closestChest = null;
     private boolean isOpeningChest = false;
-    private boolean isMiningStone = false;
 
     private boolean isMiningThreadRunning = false;
     private boolean isOpeningChestThreadRunning = false;
+    private boolean isMovingThreadRunning = false;
+    private Vector3f particalPos = null;
+
+    private boolean shouldMove = false;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -53,51 +56,101 @@ public class AutoPowder {
             ChatLib.chat(enabled ? "Auto Powder &aactivated" : "Auto Powder &cdeactivated");
         }
         if (!enabled) return;
-        if (!isMiningThreadRunning) closestStone = getClosest(0, 4, 0, 4, -4, 4, Blocks.stone, new HashSet<>());
-        if (!isOpeningChestThreadRunning) closestChest = getClosest(-4, 4, -1, 2, -4, 4, Blocks.chest, solved);
-        if (closestChest == null) isOpeningChest = false;
 
-        if ((closestChest == null || isMiningStone) && !isOpeningChest) {
-            if (isMiningThreadRunning) return;
-            isMiningThreadRunning = true;
+        if (isMiningThreadRunning || isOpeningChestThreadRunning || isMovingThreadRunning) return;
+
+        // chest disappears
+        if (isOpeningChest && getWorld().getBlockState(closestChest).getBlock() != Blocks.chest) {
+            isOpeningChest = false;
+        }
+        closestStone = getClosest(-4, 4, 0, 2, -4, 4, Blocks.stone, new HashSet<>(), true);
+        closestChest = getClosest(-4, 4, -1, 3, -4, 4, Blocks.chest, solved, false);
+
+        if (particalPos != null) {
+            isOpeningChest = true;
+            isOpeningChestThreadRunning = true;
+
+            ControlUtils.releaseLeftClick();
+            System.err.println("Force Release");
+
             new Thread(() -> {
+                Vector3f temp = (Vector3f) particalPos.clone();
                 try {
-                    if (closestStone != null) {
-                        isMiningStone = true;
-                        ControlUtils.faceSlowly(closestStone.getX() + 0.5F, closestStone.getY() + 0.5F, closestStone.getZ() + 0.5F);
-                    }
-                    MovingObjectPosition objectPosition = mc.objectMouseOver;
-                    if (objectPosition != null && objectPosition.typeOfHit.toString().equals("BLOCK")) {
-                        BlockPos pos = objectPosition.getBlockPos();
-                        Block block = getWorld().getBlockState(pos).getBlock();
-                        if ((block == Blocks.stone || block == Blocks.coal_ore ||
-                                block == Blocks.diamond_ore || block == Blocks.emerald_ore ||
-                                block == Blocks.gold_ore || block == Blocks.iron_ore ||
-                                block == Blocks.lapis_ore || block == Blocks.redstone_ore) &&
-                                pos.getY() >= getBlockY(getPlayer()) &&
-                                MathUtils.distanceSquareFromPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <=
-                                        Math.pow(mc.playerController.getBlockReachDistance(), 2)
-                        ) {
-                            ControlUtils.holdLeftClick();
-                            long cur = TimeUtils.curTime();
-                            while (getWorld().getBlockState(pos).getBlock() != Blocks.air && TimeUtils.curTime() - cur < 400) {
-                                Thread.sleep(100);
-                            }
-                        }
-                    }
-                    isMiningStone = false;
-                    ControlUtils.releaseLeftClick();
+                    ControlUtils.faceSlowly(particalPos.x, particalPos.y, particalPos.z);
                 } catch (Exception e) {
-                    stop();
                     e.printStackTrace();
                 } finally {
-                    isMiningThreadRunning = false;
+                    isOpeningChestThreadRunning = false;
+                    if (particalPos.equals(temp)) particalPos = null;
                 }
             }).start();
+        } else if (!isOpeningChest) {
+            if (shouldMove) {
+                if (isMovingThreadRunning) return;
+                isMovingThreadRunning = true;
+                new Thread(() -> {
+                    try {
+                        long time = TimeUtils.curTime();
+                        while (shouldMove) {
+                            ControlUtils.moveForward((long) (300 + Math.random() * 500));
+                            if (TimeUtils.curTime() - time > 1600) {
+                                stop();
+                                return;
+                            }
+                            closestStone = getClosest(-4, 4, 0, 2, -4, 4, Blocks.stone, new HashSet<>(), true);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        isMovingThreadRunning = false;
+                    }
+                }).start();
+            } else if (Math.random() < 0.05) {
+                new Thread(() -> {
+                    try {
+                        ControlUtils.moveRandomly(400);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            } else if (closestStone != null) {
+                if (isMiningThreadRunning) return;
+                isMiningThreadRunning = true;
+                new Thread(() -> {
+                    try {
+                        System.err.println("Start thread! " + closestStone);
+                        ControlUtils.faceSlowly(closestStone.getX() + 0.5F, closestStone.getY() + 0.5F, closestStone.getZ() + 0.5F);
+                        MovingObjectPosition objectPosition = mc.objectMouseOver;
+                        if (objectPosition != null && objectPosition.typeOfHit.toString().equals("BLOCK")) {
+                            BlockPos pos = objectPosition.getBlockPos();
+                            if (pos.getY() >= getBlockY(getPlayer()) &&
+                                    MathUtils.distanceSquareFromPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <=
+                                            Math.pow(mc.playerController.getBlockReachDistance(), 2)
+                            ) {
+                                ControlUtils.holdLeftClick();
+                                long cur = TimeUtils.curTime();
+                                while (getWorld().getBlockState(pos).getBlock() != Blocks.air && TimeUtils.curTime() - cur < 200) {
+                                    Thread.sleep(50);
+                                }
+                                ControlUtils.releaseLeftClick();
+                                Thread.sleep(20);
+                            }
+                        }
+                        ControlUtils.releaseLeftClick();
+                    } catch (Exception e) {
+                        stop();
+                        e.printStackTrace();
+                    } finally {
+                        isMiningThreadRunning = false;
+                        System.err.println("End thread! " + closestStone);
+                    }
+                }).start();
+            }
         }
     }
 
-    private BlockPos getClosest(int x1, int x2, int y1, int y2, int z1, int z2, Block block, HashSet<BlockPos> illegal) {
+    private BlockPos getClosest(int x1, int x2, int y1, int y2, int z1, int z2,
+                                Block block, HashSet<BlockPos> illegal, boolean isStone) {
         BlockPos pos = getPlayer().getPosition();
         ArrayList<BlockPos> blocks = new ArrayList<>();
         for (int x = pos.getX() + x1; x <= pos.getX() + x2; x++) {
@@ -108,10 +161,15 @@ public class AutoPowder {
                             MathUtils.distanceSquareFromPlayer(blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F) <=
                                     Math.pow(mc.playerController.getBlockReachDistance(), 2)
                     ) {
+                        if (isStone && !MathUtils.checkBlocksBetween(x, y, z)) continue;
                         blocks.add(blockPos);
                     }
                 }
             }
+        }
+        // stone number not enough, move!
+        if (isStone) {
+            shouldMove = blocks.size() < 10;
         }
         blocks.sort((BlockPos a, BlockPos b) -> MathUtils.yawPitchSquareFromPlayer(a.getX() + 0.5F, a.getY() + 0.5F, a.getZ() + 0.5F) >
                 MathUtils.yawPitchSquareFromPlayer(b.getX() + 0.5F, b.getY() + 0.5F, b.getZ() + 0.5F) ? 1 : -1);
@@ -129,30 +187,12 @@ public class AutoPowder {
         if (event.packet instanceof S2APacketParticles) {
             S2APacketParticles packet = (S2APacketParticles) event.packet;
             if (packet.getParticleType() == EnumParticleTypes.CRIT) {
-                Vector3d pos = new Vector3d(packet.getXCoordinate(), packet.getYCoordinate() - 0.1, packet.getZCoordinate());
+                Vector3f pos = new Vector3f((float) packet.getXCoordinate(), (float) packet.getYCoordinate() - 0.1F, (float) packet.getZCoordinate());
                 if (closestChest != null && MathUtils.distanceSquaredFromPoints(
                         pos.x, pos.y, pos.z,
-                        closestChest.getX(), closestChest.getY(), closestChest.getZ()
-                ) < 5) {
-                    isOpeningChest = true;
-
-                    // stop mining hardstones
-                    ControlUtils.releaseLeftClick();
-                    isMiningStone = false;
-                    System.err.println("Force Release");
-
-                    if (isOpeningChestThreadRunning) return;
-                    isOpeningChestThreadRunning = true;
-                    ControlUtils.releaseLeftClick();
-                    new Thread(() -> {
-                        try {
-                            ControlUtils.faceSlowly((float) pos.x, (float) pos.y, (float) pos.z);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        } finally {
-                            isOpeningChestThreadRunning = false;
-                        }
-                    }).start();
+                        closestChest.getX() + 0.5, closestChest.getY() + 0.5, closestChest.getZ() + 0.5
+                ) < 1) {
+                    particalPos = pos;
                 }
             }
         }
@@ -191,6 +231,7 @@ public class AutoPowder {
         if (inventory == null || !inventory.getName().contains("Treasure")) return;
         ControlUtils.releaseLeftClick();
         getPlayer().closeScreen();
+        if (closestChest != null) solved.add(closestChest);
         isOpeningChest = false;
         System.err.println("Closing chest, stop opening chest");
     }
@@ -198,8 +239,10 @@ public class AutoPowder {
     private void stop() {
         if (enabled) {
             enabled = false;
-            isMiningStone = isMiningThreadRunning = false;
-            isOpeningChest = false;
+            isMiningThreadRunning = false;
+            isOpeningChest = isOpeningChestThreadRunning = false;
+            isMovingThreadRunning = false;
+            getPlayer().playSound("random.successful_hit", 1000, 1);
             ControlUtils.releaseLeftClick();
             ChatLib.chat("Auto Powder &cdeactivated");
         }

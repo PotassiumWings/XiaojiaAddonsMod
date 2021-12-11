@@ -28,23 +28,66 @@ public class Foraging {
     private boolean haveEnchantedBoneMeal = false;
     private boolean autoForagingThreadLock = false;
 
-    public static void setForagingPoint() {
+    public static void setForagingPoint(int mode) {
         float x = getX(getPlayer());
         float y = getY(getPlayer());
         float z = getZ(getPlayer());
         foragingBlocks.clear();
-        foragingBlocks.add(new Vector3f(x, y, z - 3));
-        foragingBlocks.add(new Vector3f(x + 1, y, z - 3));
-        foragingBlocks.add(new Vector3f(x + 1, y, z - 2));
-        foragingBlocks.add(new Vector3f(x, y, z - 2));
-
         clearBlocks.clear();
-        clearBlocks.add(new Vector3f(x, y, z - 1));
-        clearBlocks.add(new Vector3f(x + 1, y, z - 1));
-        clearBlocks.add(new Vector3f(x, y, z - 2));
-        clearBlocks.add(new Vector3f(x + 1, y, z - 2));
-        clearBlocks.add(new Vector3f(x, y, z - 3));
-        clearBlocks.add(new Vector3f(x + 1, y, z - 3));
+
+        if (mode == 0) { // north
+            foragingBlocks.add(new Vector3f(x, y, z - 3));
+            foragingBlocks.add(new Vector3f(x + 1, y, z - 3));
+            foragingBlocks.add(new Vector3f(x + 1, y, z - 2));
+            foragingBlocks.add(new Vector3f(x, y, z - 2));
+
+            clearBlocks.add(new Vector3f(x, y, z - 1));
+            clearBlocks.add(new Vector3f(x + 1, y, z - 1));
+            clearBlocks.add(new Vector3f(x, y, z - 2));
+            clearBlocks.add(new Vector3f(x + 1, y, z - 2));
+            clearBlocks.add(new Vector3f(x, y, z - 3));
+            clearBlocks.add(new Vector3f(x + 1, y, z - 3));
+            ChatLib.chat("Direction: north");
+        } else if (mode == 1) { // south
+            foragingBlocks.add(new Vector3f(x, y, z + 3));
+            foragingBlocks.add(new Vector3f(x - 1, y, z + 3));
+            foragingBlocks.add(new Vector3f(x - 1, y, z + 2));
+            foragingBlocks.add(new Vector3f(x, y, z + 2));
+
+            clearBlocks.add(new Vector3f(x, y, z + 1));
+            clearBlocks.add(new Vector3f(x + 1, y, z + 1));
+            clearBlocks.add(new Vector3f(x, y, z + 2));
+            clearBlocks.add(new Vector3f(x + 1, y, z + 2));
+            clearBlocks.add(new Vector3f(x, y, z + 3));
+            clearBlocks.add(new Vector3f(x + 1, y, z + 3));
+            ChatLib.chat("Direction: south");
+        } else if (mode == 2) { // west
+            foragingBlocks.add(new Vector3f(x - 3, y, z));
+            foragingBlocks.add(new Vector3f(x - 3, y, z - 1));
+            foragingBlocks.add(new Vector3f(x - 2, y, z - 1));
+            foragingBlocks.add(new Vector3f(x - 2, y, z));
+
+            clearBlocks.add(new Vector3f(x - 1, y, z));
+            clearBlocks.add(new Vector3f(x - 1, y, z - 1));
+            clearBlocks.add(new Vector3f(x - 2, y, z));
+            clearBlocks.add(new Vector3f(x - 2, y, z - 1));
+            clearBlocks.add(new Vector3f(x - 3, y, z));
+            clearBlocks.add(new Vector3f(x - 3, y, z - 1));
+            ChatLib.chat("Direction: west");
+        } else {
+            foragingBlocks.add(new Vector3f(x + 3, y, z));
+            foragingBlocks.add(new Vector3f(x + 3, y, z + 1));
+            foragingBlocks.add(new Vector3f(x + 2, y, z + 1));
+            foragingBlocks.add(new Vector3f(x + 2, y, z));
+
+            clearBlocks.add(new Vector3f(x + 1, y, z));
+            clearBlocks.add(new Vector3f(x + 1, y, z - 1));
+            clearBlocks.add(new Vector3f(x + 2, y, z));
+            clearBlocks.add(new Vector3f(x + 2, y, z - 1));
+            clearBlocks.add(new Vector3f(x + 3, y, z));
+            clearBlocks.add(new Vector3f(x + 3, y, z - 1));
+            ChatLib.chat("Direction: east");
+        }
         ChatLib.chat(String.format("Successfully set foraging point at (%.2f %.2f %.2f)", x, y, z));
     }
 
