@@ -122,7 +122,7 @@ public class Configs {
     public static boolean NoSlowdown = false;
 
     // SwordSwap
-    @Property(type = Property.Type.BOOLEAN, name = "Sword Swap", parent = "QOL")
+    @Property(type = Property.Type.BOOLEAN, name = "Sword Swap", parent = "QOL", illegal = true)
     public static boolean GhostSwordSwap = false;
 
     // Terminator
@@ -159,7 +159,7 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Terminals", parent = "Dungeons")
     public static boolean TerminalsEnabled = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Terminal", parent = "Terminals")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Terminal", parent = "Terminals", illegal = true)
     public static boolean AutoTerminal = false;
 
     @Property(type = Property.Type.NUMBER, name = "Auto Terminal CD", parent = "Terminals",
@@ -257,15 +257,21 @@ public class Configs {
     public static boolean SkillsEnabled = false;
 
     // AutoPowder
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Powder (not available)", parent = "Skills")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Powder", parent = "Skills")
+    public static boolean AutoPowderEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Powder (BAD!)", parent = "Skills", illegal = true)
     public static boolean AutoPowder = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Crystal Hollows Chest", parent = "Skills", illegal = true)
+    public static boolean AutoPowderChest = false;
+
     // Foraging
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Foraging", parent = "Skills")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Foraging", parent = "Skills", illegal = true)
     public static boolean AutoForaging = false;
 
     // Fishing
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Pulling Rod", parent = "Skills")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Pulling Rod", parent = "Skills", illegal = true)
     public static boolean AutoPullRod = false;
 
     // Experimentation
@@ -276,9 +282,12 @@ public class Configs {
             min = 50, max = 800, step = 50)
     public static int ExperimentClickCoolDown = 300;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Chronomatron", parent = "Auto Experimentation Table")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Chronomatron", parent = "Auto Experimentation Table", illegal = true)
     public static boolean AutoChronomatron = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Ultrasequencer", parent = "Auto Experimentation Table")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Ultrasequencer", parent = "Auto Experimentation Table", illegal = true)
     public static boolean AutoUltrasequencer = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Superpairs Solver", parent = "Auto Experimentation Table")
+    public static boolean SuperpairsSolver = false;
 }

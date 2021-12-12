@@ -42,10 +42,7 @@ public class AutoPowder {
 
     private boolean isMiningThreadRunning = false;
     private boolean isOpeningChestThreadRunning = false;
-    private boolean isMovingThreadRunning = false;
     private Vector3f particalPos = null;
-
-    private boolean shouldMove = false;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -57,7 +54,7 @@ public class AutoPowder {
         }
         if (!enabled) return;
 
-        if (isMiningThreadRunning || isOpeningChestThreadRunning || isMovingThreadRunning) return;
+        if (isMiningThreadRunning || isOpeningChestThreadRunning) return;
 
         // chest disappears
         if (isOpeningChest && getWorld().getBlockState(closestChest).getBlock() != Blocks.chest) {
@@ -85,27 +82,7 @@ public class AutoPowder {
                 }
             }).start();
         } else if (!isOpeningChest) {
-            if (shouldMove) {
-                if (isMovingThreadRunning) return;
-                isMovingThreadRunning = true;
-                new Thread(() -> {
-                    try {
-                        long time = TimeUtils.curTime();
-                        while (shouldMove) {
-                            ControlUtils.moveForward((long) (300 + Math.random() * 500));
-                            if (TimeUtils.curTime() - time > 1600) {
-                                stop();
-                                return;
-                            }
-                            closestStone = getClosest(-4, 4, 0, 2, -4, 4, Blocks.stone, new HashSet<>(), true);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        isMovingThreadRunning = false;
-                    }
-                }).start();
-            } else if (Math.random() < 0.05) {
+            if (Math.random() < 0.05) {
                 new Thread(() -> {
                     try {
                         ControlUtils.moveRandomly(400);
@@ -166,10 +143,6 @@ public class AutoPowder {
                     }
                 }
             }
-        }
-        // stone number not enough, move!
-        if (isStone) {
-            shouldMove = blocks.size() < 10;
         }
         blocks.sort((BlockPos a, BlockPos b) -> MathUtils.yawPitchSquareFromPlayer(a.getX() + 0.5F, a.getY() + 0.5F, a.getZ() + 0.5F) >
                 MathUtils.yawPitchSquareFromPlayer(b.getX() + 0.5F, b.getY() + 0.5F, b.getZ() + 0.5F) ? 1 : -1);
@@ -241,7 +214,6 @@ public class AutoPowder {
             enabled = false;
             isMiningThreadRunning = false;
             isOpeningChest = isOpeningChestThreadRunning = false;
-            isMovingThreadRunning = false;
             getPlayer().playSound("random.successful_hit", 1000, 1);
             ControlUtils.releaseLeftClick();
             ChatLib.chat("Auto Powder &cdeactivated");

@@ -6,6 +6,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -34,6 +35,20 @@ public class GuiUtils {
     public static void disableESP() {
         GlStateManager.enableCull();
         GlStateManager.enableDepth();
+    }
+
+    public static void drawOnSlot(int size, int xSlotPos, int ySlotPos, int colour) {
+        ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+        int guiLeft = (sr.getScaledWidth() - 176) / 2;
+        int guiTop = (sr.getScaledHeight() - 222) / 2;
+        int x = guiLeft + xSlotPos;
+        int y = guiTop + ySlotPos;
+        // Move down when chest isn't 6 rows
+        if (size != 90) y += (6 - (size - 36) / 9) * 9;
+
+        GL11.glTranslated(0, 0, 1);
+        Gui.drawRect(x, y, x + 16, y + 16, colour);
+        GL11.glTranslated(0, 0, -1);
     }
 
     public static void showTitle(String title, String subtitle, int fadeIn, int time, int fadeOut) {

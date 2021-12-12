@@ -4,9 +4,11 @@ import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
@@ -32,6 +34,10 @@ public class Inventory {
             res.add(getItemInSlot(i));
         }
         return res;
+    }
+
+    public List<Slot> getSlots() {
+        return container.inventorySlots;
     }
 
     public final ItemStack getItemInSlot(int slot) {
