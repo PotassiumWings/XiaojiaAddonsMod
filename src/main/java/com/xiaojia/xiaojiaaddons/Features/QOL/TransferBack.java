@@ -11,6 +11,7 @@ public class TransferBack {
     private static final String rankPattern = "(?:\\[VIP\\+*] |\\[MVP\\+*] |)";
     private static final String namePattern = "[a-zA-Z0-9_]+";
     private static final String transferPattern = "^The party was transferred to " + rankPattern + namePattern + " by " + rankPattern + "(?<name>" + namePattern + ")";
+    private static final String promotePattern = "";
     private static String fromPerson = null;
 
     public static void transferBack() {

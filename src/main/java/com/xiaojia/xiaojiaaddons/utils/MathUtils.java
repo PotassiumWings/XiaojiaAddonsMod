@@ -60,6 +60,11 @@ public class MathUtils {
         return distanceSquareFromPlayer(tx, ty, tz);
     }
 
+    public static double distanceSquareFromPlayer(BlockPos pos) {
+        double tx = pos.getX(), ty = pos.getY(), tz = pos.getZ();
+        return distanceSquareFromPlayer(tx, ty, tz);
+    }
+
     public static float getX(Entity entity) {
         if (entity == null) return -10000;
         return (float) (entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks);

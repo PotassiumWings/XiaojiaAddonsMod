@@ -260,7 +260,7 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Auto Powder", parent = "Skills")
     public static boolean AutoPowderEnabled = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Powder", parent = "Auto Powder", illegal = true,
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Powder Enabled", parent = "Auto Powder", illegal = true,
             description = "AFK but low efficiency!")
     public static boolean AutoPowder = false;
 

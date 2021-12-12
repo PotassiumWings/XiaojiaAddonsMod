@@ -72,7 +72,6 @@ public class AutoPowderChest {
         if (!Checker.enabled) return;
         if (!Configs.AutoPowderChest) return;
         if (Configs.AutoPowder) return;
-        closestChest = getClosestChest();
         if (closestChest != null) {
             GuiUtils.enableESP();
             GuiUtils.drawBoxAtBlock(
@@ -95,8 +94,7 @@ public class AutoPowderChest {
                         blocks.add(blockPos);
                 }
         blocks.sort((BlockPos a, BlockPos b) ->
-                MathUtils.yawPitchSquareFromPlayer(a.getX() + 0.5F, a.getY() + 0.5F, a.getZ() + 0.5F) >
-                        MathUtils.yawPitchSquareFromPlayer(b.getX() + 0.5F, b.getY() + 0.5F, b.getZ() + 0.5F) ? 1 : -1
+                MathUtils.distanceSquareFromPlayer(a) > MathUtils.distanceSquareFromPlayer(b) ? 1 : -1
         );
         if (blocks.isEmpty()) return null;
         return blocks.get(0);
@@ -113,15 +111,25 @@ public class AutoPowderChest {
             S2APacketParticles packet = (S2APacketParticles) event.packet;
             if (packet.getParticleType() == EnumParticleTypes.CRIT) {
                 Vector3f pos = new Vector3f((float) packet.getXCoordinate(), (float) packet.getYCoordinate() - 0.1F, (float) packet.getZCoordinate());
-                ChatLib.chat(pos.toString() + ", " + closestChest.toString());
-                if (closestChest != null && MathUtils.distanceSquaredFromPoints(
-                        pos.x, pos.y, pos.z,
-                        closestChest.getX() + 0.5, closestChest.getY() + 0.5, closestChest.getZ() + 0.5
-                ) < 1) {
+                closestChest = getClosestChest();
+                if (closestChest != null && isChestsParticle(pos, closestChest)) {
                     particalPos = pos;
+                    ChatLib.chat(pos.toString() + ", " + closestChest.toString());
                 }
             }
         }
+    }
+
+    private static boolean isChestsParticle(Vector3f pos, BlockPos block) {
+        if (pos.x < block.getX())
+            return (int) (pos.x * 10) + 1 == block.getX() * 10 && pos.y >= block.getY() && pos.z >= block.getZ();
+        if (pos.x > block.getX() + 1)
+            return (int) (pos.x * 10) - 1 == block.getX() * 10 + 10 && pos.y >= block.getY() && pos.z >= block.getZ();
+        if (pos.z < block.getZ())
+            return (int) (pos.z * 10) + 1 == block.getZ() * 10 && pos.y >= block.getY() && pos.x >= block.getX();
+        if (pos.z > block.getZ() + 1)
+            return (int) (pos.z * 10) - 1 == block.getZ() * 10 + 10 && pos.y >= block.getY() && pos.x >= block.getX();
+        return false;
     }
 
     @SubscribeEvent
