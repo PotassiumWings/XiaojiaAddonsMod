@@ -7,22 +7,29 @@ import com.xiaojia.xiaojiaaddons.Objects.StepEvent;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
-public class Terminator extends StepEvent {
+public class Terminator {
+    private long systemTime;
     private static final ArrayList<String> terminatorNames = new ArrayList<String>() {{
         add("Terminator");
     }};
     private static final KeyBind useKeyBind = new KeyBind(mc.gameSettings.keyBindUseItem);
 
-    public Terminator() {
-        super(100);
+    @SubscribeEvent
+    public void onRenderTick(TickEvent.RenderTickEvent event) {
+        while (systemTime < Minecraft.getSystemTime() + 1000 / Configs.TerminatorCPS) {
+            systemTime += 1000 / Configs.TerminatorCPS;
+            execute();
+        }
     }
 
-    @Override
     public void execute() {
         if (!Checker.enabled) return;
         if (!Configs.TerminatorAutoRightClick) return;

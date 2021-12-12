@@ -126,8 +126,15 @@ public class Configs {
     public static boolean GhostSwordSwap = false;
 
     // Terminator
-    @Property(type = Property.Type.BOOLEAN, name = "Terminator rightclick=100cps", illegal = true, parent = "QOL")
+    @Property(type = Property.Type.FOLDER, name = "Terminator rightclick", parent = "QOL")
+    public static boolean TerminatorAutoRightClickEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Terminator rightclick enable", illegal = true, parent = "Terminator rightclick")
     public static boolean TerminatorAutoRightClick = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Terminator rightclick CPS", parent = "Terminator rightclick",
+            min = 10, max = 100, step = 5)
+    public static int TerminatorCPS = 40;
 
     // GhostQOL
     @Property(type = Property.Type.FOLDER, name = "Ghost QOL", parent = "QOL")
