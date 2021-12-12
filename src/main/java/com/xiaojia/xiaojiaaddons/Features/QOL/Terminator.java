@@ -3,7 +3,6 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
-import com.xiaojia.xiaojiaaddons.Objects.StepEvent;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
@@ -16,11 +15,11 @@ import java.util.ArrayList;
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class Terminator {
-    private long systemTime;
     private static final ArrayList<String> terminatorNames = new ArrayList<String>() {{
         add("Terminator");
     }};
     private static final KeyBind useKeyBind = new KeyBind(mc.gameSettings.keyBindUseItem);
+    private long systemTime;
 
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event) {

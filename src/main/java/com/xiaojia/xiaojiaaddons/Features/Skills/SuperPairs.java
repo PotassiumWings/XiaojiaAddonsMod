@@ -66,7 +66,7 @@ public class SuperPairs {
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
         Inventory inventory = ControlUtils.getOpenedInventory();
-        if (inventory == null || !Configs.SuperpairsSolver) return;
+        if (inventory == null || !Configs.SuperpairsSolver || !(mc.currentScreen instanceof GuiChest)) return;
         String invName = inventory.getName();
         List<Slot> invSlots = ((GuiChest) mc.currentScreen).inventorySlots.inventorySlots;
         if (invName.startsWith("Superpairs ("))
@@ -79,7 +79,8 @@ public class SuperPairs {
                         !itemName.contains("Instant Find") && !itemName.contains("Gained +")) {
                     if (itemName.contains("Enchanted Book")) itemName = itemStack.getTooltip(getPlayer(), false).get(3);
                     if (itemStack.stackSize > 1) itemName = itemStack.stackSize + " " + itemName;
-                    if (experimentTableSlots[i] == null) experimentTableSlots[i] = itemStack.copy().setStackDisplayName(itemName);
+                    if (experimentTableSlots[i] == null)
+                        experimentTableSlots[i] = itemStack.copy().setStackDisplayName(itemName);
                 }
             }
     }
@@ -87,7 +88,7 @@ public class SuperPairs {
     @SubscribeEvent
     public void onGuiRender(GuiScreenEvent.BackgroundDrawnEvent event) {
         Inventory inventory = ControlUtils.getOpenedInventory();
-        if (!Checker.enabled ||inventory == null || !Configs.SuperpairsSolver) return;
+        if (!Checker.enabled || inventory == null || !Configs.SuperpairsSolver) return;
         String invName = inventory.getName();
         List<Slot> invSlots = inventory.getSlots();
         if (invName.contains("Superpairs (")) {

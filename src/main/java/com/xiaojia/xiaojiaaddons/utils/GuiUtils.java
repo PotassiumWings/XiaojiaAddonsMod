@@ -17,6 +17,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
+import java.awt.Color;
+
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
@@ -35,6 +37,22 @@ public class GuiUtils {
     public static void disableESP() {
         GlStateManager.enableCull();
         GlStateManager.enableDepth();
+    }
+
+    public static void drawScaledString(String string, float scale, int x, int y, boolean shadow) {
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(scale, scale, scale);
+        drawString(string, (int) (x / scale), (int) (y / scale), shadow);
+        GlStateManager.popMatrix();
+    }
+
+    // drawString in Gui
+    public static void drawString(String text, int x, int y, boolean shadow) {
+        String[] lines = text.split("\n");
+        for (String line : lines) {
+            mc.fontRendererObj.drawString(line, x, y, Color.WHITE.getRGB(), shadow);
+            y += mc.fontRendererObj.FONT_HEIGHT + 1;
+        }
     }
 
     public static void drawOnSlot(int size, int xSlotPos, int ySlotPos, int colour) {
@@ -58,6 +76,7 @@ public class GuiUtils {
         gui.displayTitle(null, null, fadeIn, time, fadeOut);
     }
 
+    // drawString in 3D
     public static void drawString(String text, float x, float y, float z, int color, float scale, boolean increase) {
         float lScale = scale;
         RenderManager renderManager = mc.getRenderManager();

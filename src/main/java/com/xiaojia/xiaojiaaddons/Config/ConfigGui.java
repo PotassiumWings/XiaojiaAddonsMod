@@ -68,12 +68,12 @@ public class ConfigGui extends GuiScreen {
             if (setting instanceof BooleanSetting && setting.get(Boolean.class))
                 color = 'a';
             mc.fontRendererObj.drawString("\u00a7" + color + setting.name, x, y + 1, -1);
-//            if (setting.note != null) {
-//                int settingNameWidth = Shady.mc.field_71466_p.func_78256_a(setting.name + " ");
-//                GlStateManager.func_179137_b(0.0D, 1.8D, 0.0D);
-//                FontUtils.drawScaledString("+ setting.note, 0.8F, x + settingNameWidth, y + 1, false);
-//                        GlStateManager.func_179137_b(0.0D, -1.8D, 0.0D);
-//            }
+
+            int settingNameWidth = mc.fontRendererObj.getStringWidth(setting.name + " ");
+            GlStateManager.translate(0.0D, 1.8D, 0.0D);
+            GuiUtils.drawScaledString("\u00a77" + setting.description, 0.8F,
+                    x + settingNameWidth, y + 1, false);
+            GlStateManager.translate(0.0D, -1.8D, 0.0D);
         }
         if ((this.prevWidth != this.width || this.prevHeight != this.height))
             mc.displayGuiScreen(new ConfigGui());

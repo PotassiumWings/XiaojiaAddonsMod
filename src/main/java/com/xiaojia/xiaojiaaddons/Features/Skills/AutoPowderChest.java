@@ -52,6 +52,19 @@ public class AutoPowderChest {
             enabled = !enabled;
             ChatLib.chat(enabled ? "Auto Crystal Hollows Chest &aactivated" : "Auto Crystal Hollows Chest &cdeactivated");
         }
+        if (!enabled) return;
+        if (particalPos != null) {
+            new Thread(() -> {
+                Vector3f temp = (Vector3f) particalPos.clone();
+                try {
+                    ControlUtils.faceSlowly(particalPos.x, particalPos.y, particalPos.z);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (particalPos.equals(temp)) particalPos = null;
+                }
+            }).start();
+        }
     }
 
     @SubscribeEvent

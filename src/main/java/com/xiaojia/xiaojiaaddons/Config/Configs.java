@@ -257,13 +257,15 @@ public class Configs {
     public static boolean SkillsEnabled = false;
 
     // AutoPowder
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Powder", parent = "Skills")
+    @Property(type = Property.Type.FOLDER, name = "Auto Powder", parent = "Skills")
     public static boolean AutoPowderEnabled = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Powder (BAD!)", parent = "Skills", illegal = true)
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Powder", parent = "Auto Powder", illegal = true,
+            description = "AFK but low efficiency!")
     public static boolean AutoPowder = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Crystal Hollows Chest", parent = "Skills", illegal = true)
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Crystal Hollows Chest", parent = "Auto Powder", illegal = true,
+            description = "Chests Only!")
     public static boolean AutoPowderChest = false;
 
     // Foraging

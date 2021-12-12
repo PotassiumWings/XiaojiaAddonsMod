@@ -26,9 +26,11 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.Terminator;
 import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowder;
+import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowderChest;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Experimentation;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
+import com.xiaojia.xiaojiaaddons.Features.Skills.SuperPairs;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
@@ -125,9 +127,11 @@ public class XiaojiaAddons {
 
         // Skills
         MinecraftForge.EVENT_BUS.register(new AutoPowder());
+        MinecraftForge.EVENT_BUS.register(new AutoPowderChest());
         MinecraftForge.EVENT_BUS.register(new Foraging());
         MinecraftForge.EVENT_BUS.register(new Fishing());
         MinecraftForge.EVENT_BUS.register(new Experimentation());
+        MinecraftForge.EVENT_BUS.register(new SuperPairs());
 
         // Slayer
         MinecraftForge.EVENT_BUS.register(new Sven());
