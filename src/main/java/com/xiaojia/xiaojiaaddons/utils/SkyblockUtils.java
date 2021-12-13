@@ -60,10 +60,6 @@ public class SkyblockUtils {
         if (result.equals("Others")) {
             for (String map : crystalHollowsMaps) {
                 if (line.contains(map)) {
-                    if (!result.equals("Others")) {
-                        ChatLib.chat("Undefined Behavior in currentmap()");
-                        ChatLib.chat(line);
-                    }
                     result = map;
                     isInCrystalHollows = true;
                 }

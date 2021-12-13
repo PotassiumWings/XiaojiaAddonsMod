@@ -30,8 +30,8 @@ public class JadeCrystalHelper {
     private final HashMap<Vector3d, Double> distanceMap = new HashMap<>();
     private long lastPositionTime = 0;
     private Vector3d playerPos = null;
+    private Vector3d lastPlayerPos = null;
     private final ArrayList<BlockPos> result = new ArrayList<>();
-    private double lastDistance = 0;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -44,30 +44,6 @@ public class JadeCrystalHelper {
             lastPositionTime = TimeUtils.curTime();
         }
         playerPos = pos;
-        if (TimeUtils.curTime() - lastPositionTime >= Configs.JadeCrystalCD && !distanceMap.containsKey(playerPos)) {
-            distanceMap.put(playerPos, lastDistance);
-            if (XiaojiaAddons.isDebug()) ChatLib.chat("put " + playerPos.toString() + ", dis: " + lastDistance);
-            // TODO: GUI
-            ChatLib.chat(String.format("Finished (%d / 3) points", distanceMap.size()));
-            if (distanceMap.size() == 3) {
-                try {
-                    calculate();
-                    if (result.get(0).equals(new BlockPos(0, 0, 0))) {
-                        distanceMap.remove(playerPos);
-                        result.clear();
-                        ChatLib.chat("Invalid! Try another position.");
-                        return;
-                    }
-                    ChatLib.chat("Chest Found.");
-                    for (BlockPos blockPos: result) {
-                        ChatLib.chat(blockPos.toString());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ChatLib.chat("error calculating");
-                }
-            }
-        }
     }
 
     @SubscribeEvent
@@ -101,7 +77,31 @@ public class JadeCrystalHelper {
         if (matcher.find()) {
             double distance = Double.parseDouble(matcher.group(1));
             if (XiaojiaAddons.isDebug()) ChatLib.chat(distance + "");
-            lastDistance = distance;
+            if (TimeUtils.curTime() - lastPositionTime > Configs.JadeCrystalCD &&
+                    !distanceMap.containsKey(playerPos)) {
+                distanceMap.put(playerPos, distance);
+                if (XiaojiaAddons.isDebug()) ChatLib.chat("put " + playerPos.toString() + ", dis: " + distance);
+                // TODO: GUI
+                ChatLib.chat(String.format("Finished (%d / 3) points", distanceMap.size()));
+                if (distanceMap.size() == 3) {
+                    try {
+                        calculate();
+                        if (result.get(0).equals(new BlockPos(0, 0, 0))) {
+                            distanceMap.remove(playerPos);
+                            result.clear();
+                            ChatLib.chat("Invalid! Try another position.");
+                            return;
+                        }
+                        ChatLib.chat("Chest Found.");
+                        for (BlockPos pos: result) {
+                            ChatLib.chat(pos.toString());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ChatLib.chat("error calculating");
+                    }
+                }
+            }
         }
     }
 
