@@ -13,7 +13,7 @@ public class ChatLib {
 
     public static String removeFormatting(String text) {
         if (text == null) return null;
-        Pattern pattern = Pattern.compile("[\\u00a7&][0-9a-fklmnor]");
+        Pattern pattern = Pattern.compile("[\\u00a7&][0-9a-zA-Z]");
         Matcher matcher = pattern.matcher(text);
         return matcher.replaceAll("");
     }

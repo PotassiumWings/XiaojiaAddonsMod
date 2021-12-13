@@ -10,6 +10,7 @@ import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -48,6 +49,7 @@ public class AutoPowder {
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.AutoPowder) return;
+        if (!SkyblockUtils.isInCrystalHollows()) return;
         if (keyBind.isPressed()) {
             enabled = !enabled;
             ChatLib.chat(enabled ? "Auto Powder &aactivated" : "Auto Powder &cdeactivated");
@@ -156,6 +158,7 @@ public class AutoPowder {
     @SubscribeEvent
     public void receivePacket(PacketReceivedEvent event) {
         if (!Configs.AutoPowder || !enabled) return;
+        if (!SkyblockUtils.isInCrystalHollows()) return;
         // TODO: CH CHECK
         if (event.packet instanceof S2APacketParticles) {
             S2APacketParticles packet = (S2APacketParticles) event.packet;
@@ -174,6 +177,7 @@ public class AutoPowder {
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event) {
         if (!Configs.AutoPowder || !enabled) return;
+        if (!SkyblockUtils.isInCrystalHollows()) return;
         if (closestStone != null) {
             GuiUtils.enableESP();
             GuiUtils.drawBoxAtBlock(
@@ -200,6 +204,7 @@ public class AutoPowder {
     @SubscribeEvent
     public void onGuiDraw(GuiScreenEvent.BackgroundDrawnEvent event) {
         if (!Configs.AutoPowder || !enabled) return;
+        if (!SkyblockUtils.isInCrystalHollows()) return;
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null || !inventory.getName().contains("Treasure")) return;
         ControlUtils.releaseLeftClick();

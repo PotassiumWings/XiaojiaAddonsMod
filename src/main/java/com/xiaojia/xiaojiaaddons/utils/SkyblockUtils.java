@@ -19,9 +19,19 @@ public class SkyblockUtils {
             "The End", "The Mist", "Blazing Fortress", "The Catacombs", "Howling Cave",
             "Your Island", "None"
     ));
+    private static final ArrayList<String> crystalHollowsMaps = new ArrayList<>(Arrays.asList(
+            "Fairy Grotto",
+            "Goblin Holdout", "Goblin Queen's Den",
+            "Jungle", "Jungle Temple",
+            "Mines of Divan", "Mithril Deposits",
+            "Lost Precursor City", "Precursor Remnants",
+            "Magma Fields", "Crystal Nucleus",
+            "Khazad-dûm", "Dragon's Lair"
+    ));
     private static String currentMap = "";
     private static String currentServer = "";
     private static boolean set = false;
+    private static boolean isInCrystalHollows = false;
 
     private static String updateCurrentMap() {
         ArrayList<String> lines = ScoreBoard.getLines();
@@ -44,6 +54,19 @@ public class SkyblockUtils {
                     ChatLib.chat(line);
                 }
                 result = map;
+            }
+        }
+        isInCrystalHollows = false;
+        if (result.equals("Others")) {
+            for (String map : crystalHollowsMaps) {
+                if (line.contains(map)) {
+                    if (!result.equals("Others")) {
+                        ChatLib.chat("Undefined Behavior in currentmap()");
+                        ChatLib.chat(line);
+                    }
+                    result = map;
+                    isInCrystalHollows = true;
+                }
             }
         }
         return result;
@@ -92,6 +115,10 @@ public class SkyblockUtils {
 
     public static boolean isInHowlingCave() {
         return currentMap.equals("Howling Cave");
+    }
+
+    public static boolean isInCrystalHollows() {
+        return isInCrystalHollows;
     }
 
     public static String getCurrentServer() {

@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.BlockChangeEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class StonklessStonk {
     private static final KeyBind keyBind = new KeyBind("Stonkless Stonk", Keyboard.KEY_NONE);
@@ -177,6 +179,15 @@ public class StonklessStonk {
             );
         }
         doneSecretsPos.put(facingPos, TimeUtils.curTime());
+    }
+
+    @SubscribeEvent
+    public void onBlockChange(BlockChangeEvent event) {
+        if (getPlayer() == null || getWorld() == null) return;
+        if (event.position.distanceSq(getPlayer().getPosition()) > 5.0) return;
+        if (doneSecretsPos.containsKey(event.position)) return;
+        if (!isSecret(event.newBlock.getBlock(), event.position)) return;
+        blockHashMap.put(event.position, event.newBlock.getBlock());
     }
 
     private boolean isSecret(Block block, BlockPos pos) {

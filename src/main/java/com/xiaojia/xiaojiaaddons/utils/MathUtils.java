@@ -8,11 +8,18 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.vecmath.Vector3d;
+
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class MathUtils {
     public static float partialTicks = 0;
+
+    public static boolean equal(Vector3d a, Vector3d b) {
+        double delta = distanceSquaredFromPoints(a.x, a.y, a.z, b.x, b.y, b.z);
+        return (delta < 1e-5);
+    }
 
     public static double yawPitchSquareFromPlayer(float x, float y, float z) {
         float yaw = getYaw(), pitch = getPitch();

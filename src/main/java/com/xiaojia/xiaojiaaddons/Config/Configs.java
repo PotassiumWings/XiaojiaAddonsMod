@@ -117,6 +117,13 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Ghost Block with KeyBind", parent = "Ghost Block")
     public static boolean GhostBlockWithKeyBind = false;
 
+    // NearbyChestESP
+    @Property(type = Property.Type.FOLDER, name = "Nearby Chest ESP", parent = "QOL", description = "Radius = 10 * 10 * 10")
+    public static boolean ChestESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Enable in Crystal Hollows", parent = "Nearby Chest ESP")
+    public static boolean ChestESPCrystalHollows = false;
+
     // NoSlowdown
     @Property(type = Property.Type.BOOLEAN, name = "No Slowdown", parent = "QOL")
     public static boolean NoSlowdown = false;
@@ -256,6 +263,9 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Skills")
     public static boolean SkillsEnabled = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Close Loot Chests in Crystal Hollows", parent = "Skills")
+    public static boolean AutoCloseCrystalHollowsChest = false;
+
     // AutoPowder
     @Property(type = Property.Type.FOLDER, name = "Auto Powder", parent = "Skills")
     public static boolean AutoPowderEnabled = false;
@@ -264,17 +274,31 @@ public class Configs {
             description = "AFK but low efficiency!")
     public static boolean AutoPowder = false;
 
+    // AutoPowderChest
     @Property(type = Property.Type.BOOLEAN, name = "Auto Crystal Hollows Chest", parent = "Auto Powder", illegal = true,
             description = "Chests Only!")
     public static boolean AutoPowderChest = false;
+
+    // Fishing
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Pulling Rod", parent = "Skills", illegal = true)
+    public static boolean AutoPullRod = false;
 
     // Foraging
     @Property(type = Property.Type.BOOLEAN, name = "Auto Foraging", parent = "Skills", illegal = true)
     public static boolean AutoForaging = false;
 
-    // Fishing
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Pulling Rod", parent = "Skills", illegal = true)
-    public static boolean AutoPullRod = false;
+    // Jade Crystal Helper
+    @Property(type = Property.Type.FOLDER, name = "Jade Crystal Helper", parent = "Skills")
+    public static boolean JadeCrystalHelper = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Jade Crystal Helper Enable", parent = "Jade Crystal Helper",
+            description = "Turn on Nearby Chest ESP!")
+    public static boolean JadeCrystal = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Treasure CD", parent = "Jade Crystal Helper",
+            description = "Countdown to ensure your position corresponds with the distance",
+            min = 200, max = 600, step = 20)
+    public static int JadeCrystalCD = 400;
 
     // Experimentation
     @Property(type = Property.Type.FOLDER, name = "Auto Experimentation Table", parent = "Skills")

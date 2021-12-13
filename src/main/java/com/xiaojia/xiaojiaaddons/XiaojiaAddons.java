@@ -21,15 +21,18 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostBlock;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
+import com.xiaojia.xiaojiaaddons.Features.QOL.NearbyChestESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.Terminator;
 import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
+import com.xiaojia.xiaojiaaddons.Features.Skills.AutoCloseCrystalHollowsChest;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowder;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowderChest;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Experimentation;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
+import com.xiaojia.xiaojiaaddons.Features.Skills.JadeCrystalHelper;
 import com.xiaojia.xiaojiaaddons.Features.Skills.SuperPairs;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
@@ -119,6 +122,7 @@ public class XiaojiaAddons {
 //        MinecraftForge.EVENT_BUS.register(new FuckHarps());
         MinecraftForge.EVENT_BUS.register(new GhostBlock());
         MinecraftForge.EVENT_BUS.register(new GhostQOL());
+        MinecraftForge.EVENT_BUS.register(new NearbyChestESP());
         MinecraftForge.EVENT_BUS.register(new InCombatQOL());
         MinecraftForge.EVENT_BUS.register(new NoSlowdown());
         MinecraftForge.EVENT_BUS.register(new SwordSwap());
@@ -126,10 +130,12 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new TransferBack());
 
         // Skills
+        MinecraftForge.EVENT_BUS.register(new AutoCloseCrystalHollowsChest());
         MinecraftForge.EVENT_BUS.register(new AutoPowder());
         MinecraftForge.EVENT_BUS.register(new AutoPowderChest());
         MinecraftForge.EVENT_BUS.register(new Foraging());
         MinecraftForge.EVENT_BUS.register(new Fishing());
+        MinecraftForge.EVENT_BUS.register(new JadeCrystalHelper());
         MinecraftForge.EVENT_BUS.register(new Experimentation());
         MinecraftForge.EVENT_BUS.register(new SuperPairs());
 

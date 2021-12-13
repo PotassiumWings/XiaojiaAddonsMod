@@ -87,7 +87,7 @@ public class ControlUtils {
         face(pos.getX(), pos.getY(), pos.getZ());
     }
 
-    public synchronized static void faceSlowly(float tx, float ty, float tz) throws InterruptedException {
+    public synchronized static void faceSlowly(float tx, float ty, float tz, boolean shouldThrow) throws InterruptedException {
         Tuple<Float, Float> res = getFaceYawAndPitch(tx, ty, tz);
         float yaw = res.getFirst(), pitch = res.getSecond();
         float curyaw = MathUtils.getYaw(), curpitch = MathUtils.getPitch();
@@ -104,11 +104,15 @@ public class ControlUtils {
             ControlUtils.changeDirection(toturn_yaw, toturn_pitch);
             Thread.sleep((long) (10 + Math.random() * 20));
             if ((Math.abs(getYaw() - toturn_yaw) > 1e-5 && Math.abs(getYaw() - toturn_yaw) < 360 - 1e-5) ||
-                    Math.abs(getPitch() - toturn_pitch) > 1e-5) {
+                    Math.abs(getPitch() - toturn_pitch) > 1e-5 && shouldThrow) {
                 ChatLib.chat("Detected yaw/pitch move, interrupted.");
                 throw new InterruptedException();
             }
         }
+    }
+
+    public static void faceSlowly(float tx, float ty, float tz) throws InterruptedException {
+        faceSlowly(tx, ty, tz, true);
     }
 
     public static void faceSlowly(BlockPos pos) throws InterruptedException {
