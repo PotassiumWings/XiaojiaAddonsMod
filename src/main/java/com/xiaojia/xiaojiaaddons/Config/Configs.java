@@ -288,15 +288,16 @@ public class Configs {
     public static boolean AutoForaging = false;
 
     // Jade Crystal Helper
-    @Property(type = Property.Type.FOLDER, name = "Jade Crystal Helper", parent = "Skills")
+    @Property(type = Property.Type.FOLDER, name = "Jade Crystal Helper", parent = "Skills",
+            description = "Explore yourself and have fun!")
     public static boolean JadeCrystalHelper = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Jade Crystal Helper Enable", parent = "Jade Crystal Helper",
+    @Property(type = Property.Type.BOOLEAN, name = "Enable Helper", parent = "Jade Crystal Helper",
             description = "Turn on Nearby Chest ESP!")
     public static boolean JadeCrystal = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Treasure CD", parent = "Jade Crystal Helper",
-            description = "Countdown to ensure your position corresponds with the distance",
+    @Property(type = Property.Type.NUMBER, name = "Treasure CD", parent = "Jade Crystal Helper",
+            description = "To ensure position corresponds with distance",
             min = 200, max = 600, step = 20)
     public static int JadeCrystalCD = 400;
 
