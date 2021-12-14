@@ -25,7 +25,7 @@ public class NearbyChestESP {
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
-        if (!Configs.ChestESP || !isEnabled()) return;
+        if (!isEnabled()) return;
         BlockPos pos = getPlayer().getPosition();
         for (int x = pos.getX() - 10; x <= pos.getX() + 10; x++) {
             for (int y = pos.getY() - 10; y <= pos.getY() + 10; y++) {
@@ -45,7 +45,7 @@ public class NearbyChestESP {
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
         if (!Checker.enabled) return;
-        if (!Configs.ChestESP || !isEnabled()) return;
+        if (!isEnabled()) return;
         chests.removeIf(pos -> getWorld().getBlockState(pos).getBlock() != Blocks.chest);
         for (BlockPos pos : chests) {
             if (MathUtils.distanceSquareFromPlayer(pos) > 1000) continue;
@@ -61,7 +61,7 @@ public class NearbyChestESP {
     @SubscribeEvent
     public void onBlockChange(BlockChangeEvent event) {
         if (!Checker.enabled) return;
-        if (!Configs.ChestESP || !isEnabled()) return;
+        if (!isEnabled()) return;
         if (event.oldBlock.getBlock() == Blocks.chest && event.newBlock.getBlock() == Blocks.air) {
             chests.remove(event.position);
         }

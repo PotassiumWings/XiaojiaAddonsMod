@@ -76,7 +76,7 @@ public class AutoPowderChest {
         if (!Configs.AutoPowderChest) return;
         if (!SkyblockUtils.isInCrystalHollows()) return;
         if (Configs.AutoPowder) return;
-        if (closestChest != null && !Configs.ChestESPCrystalHollows) {
+        if (closestChest != null) {
             GuiUtils.enableESP();
             GuiUtils.drawBoxAtBlock(
                     closestChest.getX(), closestChest.getY(), closestChest.getZ(),

@@ -89,13 +89,13 @@ public class JadeCrystalHelper {
                         if (result.get(0).equals(new BlockPos(0, 0, 0))) {
                             distanceMap.remove(playerPos);
                             result.clear();
-                            ChatLib.chat("Invalid! Try another position.");
+                            ChatLib.chat("Invalid! Try another position.\n3 Points should not be in the same line.\nIt's better to get Y difference among them.");
                             return;
                         }
                         ChatLib.chat("Chest Found.");
-                        for (BlockPos pos: result) {
-                            ChatLib.chat(pos.toString());
-                        }
+                        if (XiaojiaAddons.isDebug())
+                            for (BlockPos pos: result)
+                                ChatLib.chat(pos.toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                         ChatLib.chat("error calculating");
