@@ -52,7 +52,7 @@ public class NearbyChestESP {
             GuiUtils.enableESP();
             GuiUtils.drawBoxAtBlock(
                     pos.getX(), pos.getY(), pos.getZ(),
-                    65, 185, 65, 100, 1, 1, 0F
+                    185, 65, 65, 100, 1, 1, 0F
             );
             GuiUtils.disableESP();
         }
