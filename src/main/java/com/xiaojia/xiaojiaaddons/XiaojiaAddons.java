@@ -15,6 +15,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoBlood;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoCloseSecretChest;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoTerminal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
@@ -115,6 +116,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoCloseSecretChest());
         MinecraftForge.EVENT_BUS.register(new AutoTerminal());
         MinecraftForge.EVENT_BUS.register(new MimicWarn());
+        MinecraftForge.EVENT_BUS.register(new StarredMobESP());
         MinecraftForge.EVENT_BUS.register(new StonklessStonk());
 
         // QOL

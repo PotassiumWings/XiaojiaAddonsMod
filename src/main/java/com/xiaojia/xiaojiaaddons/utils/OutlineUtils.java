@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.Events.RenderEntityModelEvent;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -39,9 +40,9 @@ public class OutlineUtils {
         mc.gameSettings.gammaSetting = gamma;
     }
 
-//    public static void outlineEntity(RenderEntityModelEvent event, Color color) {
-//        outlineEntity(event.model, (Entity)event.entity, event.limbSwing, event.limbSwingAmount, event.ageInTicks, event.headYaw, event.headPitch, event.scaleFactor, color);
-//    }
+    public static void outlineEntity(RenderEntityModelEvent event, Color color) {
+        outlineEntity(event.model, (Entity)event.entity, event.limbSwing, event.limbSwingAmount, event.ageInTicks, event.headYaw, event.headPitch, event.scaleFactor, color);
+    }
 
     private static void renderOne(float lineWidth) {
         checkSetupFBO();

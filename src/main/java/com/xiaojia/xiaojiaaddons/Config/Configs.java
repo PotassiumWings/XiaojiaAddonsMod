@@ -158,6 +158,10 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Dungeons")
     public static boolean DungeonEnabled = false;
 
+    // StarredMobESP
+    @Property(type = Property.Type.BOOLEAN, name = "Starred Mob ESP", parent = "Dungeons")
+    public static boolean StarredMobESP = false;
+
     // MimicWarn
     @Property(type = Property.Type.BOOLEAN, name = "Mimic Warn", parent = "Dungeons")
     public static boolean MimicWarn = false;
