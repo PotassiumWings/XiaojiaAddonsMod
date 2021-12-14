@@ -32,19 +32,7 @@ public class JadeCrystalHelper {
     private Vector3d playerPos = null;
     private Vector3d lastPlayerPos = null;
     private final ArrayList<BlockPos> result = new ArrayList<>();
-
-    @SubscribeEvent
-    public void onTick(TickEndEvent event) {
-        if (!Checker.enabled) return;
-        if (!Configs.JadeCrystal) return;
-        if (!SkyblockUtils.isInCrystalHollows()) return;
-        if (getPlayer() == null || getPlayer().getPosition() == null) return;
-        Vector3d pos = new Vector3d(getX(getPlayer()), getY(getPlayer()), getZ(getPlayer()));
-        if (playerPos != null && !MathUtils.equal(pos, playerPos)) { // TODO
-            lastPositionTime = TimeUtils.curTime();
-        }
-        playerPos = pos;
-    }
+    private double lastDistance = 0;
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
@@ -76,12 +64,14 @@ public class JadeCrystalHelper {
         Matcher matcher = pattern.matcher(message);
         if (matcher.find()) {
             double distance = Double.parseDouble(matcher.group(1));
-            if (XiaojiaAddons.isDebug()) ChatLib.chat(distance + "");
-            if (TimeUtils.curTime() - lastPositionTime > Configs.JadeCrystalCD &&
-                    !distanceMap.containsKey(playerPos)) {
+            playerPos = lastPlayerPos;
+            lastPlayerPos = new Vector3d(getX(getPlayer()), getY(getPlayer()), getZ(getPlayer()));
+            if (distance == lastDistance) return;
+            lastDistance = distance;
+
+            if (playerPos != null && !distanceMap.containsKey(playerPos)) {
                 distanceMap.put(playerPos, distance);
-                if (XiaojiaAddons.isDebug()) ChatLib.chat("put " + playerPos.toString() + ", dis: " + distance);
-                // TODO: GUI
+                ChatLib.chat("put " + playerPos.toString() + ", " + distance);
                 ChatLib.chat(String.format("Finished (%d / 3) points", distanceMap.size()));
                 if (distanceMap.size() == 3) {
                     try {
@@ -144,6 +134,7 @@ public class JadeCrystalHelper {
         Pattern pattern = Pattern.compile("You found .* with your Metal Detector!");
         Matcher matcher = pattern.matcher(message);
         if (matcher.find()) {
+            lastPlayerPos = null;
             distanceMap.clear();
             lastPositionTime = TimeUtils.curTime();
             result.clear();
