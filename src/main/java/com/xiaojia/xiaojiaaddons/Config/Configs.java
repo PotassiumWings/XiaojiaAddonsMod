@@ -173,6 +173,18 @@ public class Configs {
             min = 30, max = 500, step = 10)
     public static int AutoTerminalCD = 150;
 
+    // AutoBlood
+    @Property(type = Property.Type.FOLDER, name = "Auto Blood", parent = "Dungeons")
+    public static boolean AutoBloodEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Blood Enable", parent = "Auto Blood", illegal = true)
+    public static boolean AutoBlood = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Blood CD", parent = "Auto Blood", illegal = true,
+    min = 40, max = 200, step = 10)
+    public static int AutoBloodCD = 60;
+
+
     // StonklessStonk
     @Property(type = Property.Type.FOLDER, name = "Stonkless Stonk", parent = "Dungeons")
     public static boolean StonklessStonk = false;

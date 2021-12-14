@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -85,6 +86,10 @@ public class ControlUtils {
 
     public static void face(BlockPos pos) {
         face(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    public static void face(Entity entity) {
+        face((float) entity.posX, (float) entity.posY, (float) entity.posZ);
     }
 
     public synchronized static void faceSlowly(float tx, float ty, float tz, boolean shouldThrow) throws InterruptedException {
