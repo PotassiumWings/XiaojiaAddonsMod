@@ -28,10 +28,10 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class JadeCrystalHelper {
     private final HashMap<Vector3d, Double> distanceMap = new HashMap<>();
+    private final ArrayList<BlockPos> result = new ArrayList<>();
     private long lastPositionTime = 0;
     private Vector3d playerPos = null;
-    private Vector3d lastPlayerPos = null;
-    private final ArrayList<BlockPos> result = new ArrayList<>();
+    private final Vector3d lastPlayerPos = null;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -52,7 +52,7 @@ public class JadeCrystalHelper {
         if (!Configs.JadeCrystal) return;
         if (!SkyblockUtils.isInCrystalHollows()) return;
         if (!result.isEmpty()) {
-            for (BlockPos pos: result){
+            for (BlockPos pos : result) {
                 GuiUtils.enableESP();
                 GuiUtils.drawBoxAtBlock(
                         pos.getX(), pos.getY(), pos.getZ(),
@@ -94,7 +94,7 @@ public class JadeCrystalHelper {
                         }
                         ChatLib.chat("Chest Found.");
                         if (XiaojiaAddons.isDebug())
-                            for (BlockPos pos: result)
+                            for (BlockPos pos : result)
                                 ChatLib.chat(pos.toString());
                     } catch (Exception e) {
                         e.printStackTrace();

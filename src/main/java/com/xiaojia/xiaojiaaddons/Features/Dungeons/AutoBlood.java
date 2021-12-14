@@ -25,7 +25,7 @@ public class AutoBlood {
             "Bonzo", "Scarf", "Livid"
     };
     private Entity target;
-    private ArrayList<Entity> killed = new ArrayList<>();
+    private final ArrayList<Entity> killed = new ArrayList<>();
     private long lastHitTime = 0;
 
     @SubscribeEvent
@@ -35,10 +35,10 @@ public class AutoBlood {
         if (target == null || killed.contains(target) || target.getDistanceToEntity(getPlayer()) > 20.0F) {
             target = null;
             // recalculate target
-            for (Entity entity: getWorld().loadedEntityList) {
+            for (Entity entity : getWorld().loadedEntityList) {
                 if (!(entity instanceof EntityPlayer) || entity.isDead || killed.contains(entity)) continue;
                 if (entity.getDistanceToEntity(getPlayer()) > 20.0F) continue;
-                for (String name: bloodMobs)
+                for (String name : bloodMobs)
                     if (entity.getName().contains(name))
                         target = entity;
             }

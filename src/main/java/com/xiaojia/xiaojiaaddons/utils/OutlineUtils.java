@@ -41,7 +41,7 @@ public class OutlineUtils {
     }
 
     public static void outlineEntity(RenderEntityModelEvent event, Color color) {
-        outlineEntity(event.model, (Entity)event.entity, event.limbSwing, event.limbSwingAmount, event.ageInTicks, event.headYaw, event.headPitch, event.scaleFactor, color);
+        outlineEntity(event.model, event.entity, event.limbSwing, event.limbSwingAmount, event.ageInTicks, event.headYaw, event.headPitch, event.scaleFactor, color);
     }
 
     private static void renderOne(float lineWidth) {

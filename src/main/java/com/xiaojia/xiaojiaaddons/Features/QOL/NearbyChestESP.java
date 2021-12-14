@@ -77,7 +77,6 @@ public class NearbyChestESP {
     }
 
     private boolean isEnabled() {
-        if (SkyblockUtils.isInCrystalHollows() && Configs.ChestESPCrystalHollows) return true;
-        return false;
+        return SkyblockUtils.isInCrystalHollows() && Configs.ChestESPCrystalHollows;
     }
 }

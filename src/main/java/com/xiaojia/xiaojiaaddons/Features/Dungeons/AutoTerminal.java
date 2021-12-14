@@ -7,6 +7,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
@@ -54,8 +55,7 @@ public class AutoTerminal {
     @SubscribeEvent
     public void onGuiRender(GuiScreenEvent.BackgroundDrawnEvent event) {
         if (!Checker.enabled) return;
-//        if (!Configs.AutoTerminal || !SkyblockUtils.isInDungeon()) return;
-        if (!Configs.AutoTerminal) return; // TODO: 测试卡顿情况，测试完了换回去
+        if (!SkyblockUtils.isInDungeon()) return;
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null) return;
 
@@ -73,6 +73,7 @@ public class AutoTerminal {
             if (matcher.find()) color = matcher.group(1).toUpperCase();
         }
         if (enumTerminal == EnumTerminal.NONE) return;
+        if (!Configs.AutoTerminal) return;
 
         try {
             if (clickQueue.size() == 0 || recalculate) {
@@ -86,12 +87,19 @@ public class AutoTerminal {
             if (!clickQueue.isEmpty()) {
                 if (TimeUtils.curTime() - lastClickTime > Configs.AutoTerminalCD) {
                     lastClickTime = TimeUtils.curTime();
-                    int slot = clickQueue.pollFirst();
-                    if (windowClicks == 0) windowID = inventory.getWindowId();
+                    int slot = clickQueue.getFirst();
+                    if (windowClicks == 0 || windowID + windowClicks < inventory.getWindowId()) {
+                        windowID = inventory.getWindowId();
+                        windowClicks = 0;
+                    }
+                    if (windowID + windowClicks > inventory.getWindowId() + Configs.TerminalClicksInAdvance) return;
                     mc.playerController.windowClick(
                             windowID + windowClicks, slot, 2, 0, getPlayer()
                     );
-                    windowClicks++;
+                    if (Configs.ZeroPingTerminal) {
+                        windowClicks++;
+                        clickQueue.pollFirst();
+                    }
                     if (XiaojiaAddons.isDebug())
                         ChatLib.chat(String.format("(%d %d), %d", windowID, windowClicks, slot));
                 }
@@ -126,6 +134,7 @@ public class AutoTerminal {
                 while (!queue.isEmpty()) {
                     Tuple<Integer, Integer> p = queue.pollFirst();
                     int i = p.getFirst(), j = p.getSecond();
+                    if (visited.get(i * 9 + j) || i < 0 || j < 0 || i >= 6 || j >= 9) return true;
                     visited.set(i * 9 + j, true);
                     for (int k = 0; k < 4; k++) {
                         int ti = i + dx[k], tj = j + dy[k];

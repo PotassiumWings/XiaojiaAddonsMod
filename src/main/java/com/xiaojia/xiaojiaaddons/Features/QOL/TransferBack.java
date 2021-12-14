@@ -10,8 +10,9 @@ import java.util.regex.Pattern;
 public class TransferBack {
     private static final String rankPattern = "(?:\\[VIP\\+*] |\\[MVP\\+*] |)";
     private static final String namePattern = "[a-zA-Z0-9_]+";
-    private static final String transferPattern = "^The party was transferred to " + rankPattern + namePattern + " by " + rankPattern + "(?<name>" + namePattern + ")";
-    private static final String promotePattern = "";
+    private static final String transferPattern = "^The party was transferred to " + rankPattern + namePattern + " by " +
+            rankPattern + "(?<name>" + namePattern + ")";
+    private static final String promotePattern = "^" + rankPattern + "(?<name>" + namePattern + ") has promoted";
     private static String fromPerson = null;
 
     public static void transferBack() {
@@ -24,8 +25,10 @@ public class TransferBack {
         String message = event.message.getUnformattedText();
         Pattern pattern = Pattern.compile(transferPattern);
         Matcher matcher = pattern.matcher(message);
-        if (matcher.find()) {
-            fromPerson = matcher.group("name");
-        }
+        if (matcher.find()) fromPerson = matcher.group("name");
+
+        pattern = Pattern.compile(promotePattern);
+        matcher = pattern.matcher(message);
+        if (matcher.find()) fromPerson = matcher.group("name");
     }
 }

@@ -37,6 +37,18 @@ public class AutoPowderChest {
 
     private long lastWarnTime = 0;
 
+    private static boolean isChestsParticle(Vector3f pos, BlockPos block) {
+        if (pos.x < block.getX())
+            return (int) (pos.x * 10) + 1 == block.getX() * 10 && pos.y >= block.getY() && pos.z >= block.getZ();
+        if (pos.x > block.getX() + 1)
+            return (int) (pos.x * 10) - 1 == block.getX() * 10 + 10 && pos.y >= block.getY() && pos.z >= block.getZ();
+        if (pos.z < block.getZ())
+            return (int) (pos.z * 10) + 1 == block.getZ() * 10 && pos.y >= block.getY() && pos.x >= block.getX();
+        if (pos.z > block.getZ() + 1)
+            return (int) (pos.z * 10) - 1 == block.getZ() * 10 + 10 && pos.y >= block.getY() && pos.x >= block.getX();
+        return false;
+    }
+
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
@@ -86,7 +98,6 @@ public class AutoPowderChest {
         }
     }
 
-
     private BlockPos getClosestChest() {
         BlockPos pos = getPlayer().getPosition();
         ArrayList<BlockPos> blocks = new ArrayList<>();
@@ -120,18 +131,6 @@ public class AutoPowderChest {
                 }
             }
         }
-    }
-
-    private static boolean isChestsParticle(Vector3f pos, BlockPos block) {
-        if (pos.x < block.getX())
-            return (int) (pos.x * 10) + 1 == block.getX() * 10 && pos.y >= block.getY() && pos.z >= block.getZ();
-        if (pos.x > block.getX() + 1)
-            return (int) (pos.x * 10) - 1 == block.getX() * 10 + 10 && pos.y >= block.getY() && pos.z >= block.getZ();
-        if (pos.z < block.getZ())
-            return (int) (pos.z * 10) + 1 == block.getZ() * 10 && pos.y >= block.getY() && pos.x >= block.getX();
-        if (pos.z > block.getZ() + 1)
-            return (int) (pos.z * 10) - 1 == block.getZ() * 10 + 10 && pos.y >= block.getY() && pos.x >= block.getX();
-        return false;
     }
 
     @SubscribeEvent

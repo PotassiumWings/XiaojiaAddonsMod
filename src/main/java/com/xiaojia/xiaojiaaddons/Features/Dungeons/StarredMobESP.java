@@ -17,8 +17,8 @@ import java.util.List;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class StarredMobESP {
-    private HashSet<Entity> checkedEntities = new HashSet<>();
-    private static HashMap<Entity, Color> highlightedEntities = new HashMap<>();
+    private static final HashMap<Entity, Color> highlightedEntities = new HashMap<>();
+    private final HashSet<Entity> checkedEntities = new HashSet<>();
 
     private static void highlightEntity(Entity entity, Color c) {
         highlightedEntities.put(entity, c);
@@ -29,7 +29,7 @@ public class StarredMobESP {
         if (!Configs.StarredMobESP) return;
         if (!SkyblockUtils.isInDungeon()) return;
         Entity entity = event.entity;
-        if (checkedEntities.contains(entity))return;
+        if (checkedEntities.contains(entity)) return;
         if (event.entity instanceof EntityArmorStand && entity.hasCustomName() &&
                 entity.getName().contains("✯")) {
             checkedEntities.add(entity);

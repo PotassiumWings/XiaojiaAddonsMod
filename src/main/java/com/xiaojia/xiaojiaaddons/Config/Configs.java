@@ -22,6 +22,25 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "QOL")
     public static boolean QOLEnabled = false;
 
+    // AutoUseItem
+    @Property(type = Property.Type.FOLDER, name = "Auto Use Item", description = "CD=0 <=> disable")
+    public static boolean AutoUseItem = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Plasmaflux CD (s)", parent = "Auto Use Item",
+            min = 0, max = 120, step = 10)
+    public static int PlasmaFluxCD = 0;
+
+    @Property(type = Property.Type.NUMBER, name = "Healing Wand CD (s)", parent = "Auto Use Item",
+            min = 0, max = 30, step = 1)
+    public static int HealingWandCD = 0;
+
+    @Property(type = Property.Type.NUMBER, name = "Gyrokinetic Wand CD (s)", parent = "Auto Use Item",
+            min = 0, max = 120, step = 1)
+    public static int GyroCD = 0;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Legit Use Item", parent = "Auto Use Item")
+    public static boolean LegitAutoItem = false;
+
     // AutoCombine
     @Property(type = Property.Type.FOLDER, name = "Auto Combine", parent = "QOL")
     public static boolean AutoCombine = false;
@@ -170,11 +189,19 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Terminals", parent = "Dungeons")
     public static boolean TerminalsEnabled = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Terminal", parent = "Terminals", illegal = true)
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Terminal", parent = "Terminals",
+            description = "Auto Click, not detectable")
     public static boolean AutoTerminal = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "0 ping for Auto Terminal", parent = "Terminals", illegal = true,
+            description = "Click in Advance, detectable")
+    public static boolean ZeroPingTerminal = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Clicks in Advance", parent = "Terminals", min = 1, max = 40)
+    public static int TerminalClicksInAdvance = 10;
+
     @Property(type = Property.Type.NUMBER, name = "Auto Terminal CD", parent = "Terminals",
-            min = 30, max = 500, step = 10)
+            min = 80, max = 500, step = 10)
     public static int AutoTerminalCD = 150;
 
     // AutoBlood
@@ -185,7 +212,7 @@ public class Configs {
     public static boolean AutoBlood = false;
 
     @Property(type = Property.Type.NUMBER, name = "Auto Blood CD", parent = "Auto Blood", illegal = true,
-    min = 40, max = 200, step = 10)
+            min = 40, max = 200, step = 10)
     public static int AutoBloodCD = 60;
 
 
