@@ -3,11 +3,13 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.RenderEntityModelEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.OutlineUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -24,6 +26,7 @@ public class StarredMobESP {
         highlightedEntities.put(entity, c);
     }
 
+    @SubscribeEvent
     public void onRenderEntityModel(RenderEntityModelEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.StarredMobESP) return;
@@ -34,16 +37,38 @@ public class StarredMobESP {
                 entity.getName().contains("✯")) {
             checkedEntities.add(entity);
             List<Entity> possibleEntities = getWorld().getEntitiesInAABBexcluding(
-                    entity, entity.getEntityBoundingBox().expand(0.0D, 3.0D, 0.0D),
+                    entity, entity.getEntityBoundingBox().expand(0.1D, 3.0D, 0.1D),
                     e -> !(e instanceof EntityArmorStand)
             );
-            if (!possibleEntities.isEmpty())
-                highlightEntity(possibleEntities.get(0), Color.ORANGE);
+            if (!possibleEntities.isEmpty()) {
+                Color color;
+                switch (Configs.StarredMobESPOutlineColor) {
+                    case 0:
+                        color = Color.ORANGE;
+                        break;
+                    case 1:
+                        color = Color.BLUE;
+                        break;
+                    case 2:
+                        color = Color.GREEN;
+                        break;
+                    case 3:
+                        color = Color.RED;
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + Configs.StarredMobESPOutlineColor);
+                }
+                highlightEntity(possibleEntities.get(0), color);
+            }
         }
-        if (highlightedEntities.containsKey(entity))
-            OutlineUtils.outlineEntity(event, highlightedEntities.get(event.entity));
+        if (highlightedEntities.containsKey(entity)) {
+            GuiUtils.enableESP();
+            OutlineUtils.outlineEntity(event, highlightedEntities.get(event.entity), Configs.StarredMobESPOutlineLength);
+            GuiUtils.disableESP();
+        }
     }
 
+    @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         checkedEntities.clear();
         highlightedEntities.clear();

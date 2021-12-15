@@ -39,13 +39,21 @@ public class AutoPowderChest {
 
     private static boolean isChestsParticle(Vector3f pos, BlockPos block) {
         if (pos.x < block.getX())
-            return (int) (pos.x * 10) + 1 == block.getX() * 10 && pos.y >= block.getY() && pos.z >= block.getZ();
+            return (int) (pos.x * 10) + 1 == block.getX() * 10 &&
+                    pos.y >= block.getY() && pos.y <= block.getY() + 1 &&
+                    pos.z >= block.getZ() && pos.z <= block.getZ() + 1;
         if (pos.x > block.getX() + 1)
-            return (int) (pos.x * 10) - 1 == block.getX() * 10 + 10 && pos.y >= block.getY() && pos.z >= block.getZ();
+            return (int) (pos.x * 10) - 1 == block.getX() * 10 + 10 &&
+                    pos.y >= block.getY() && pos.y <= block.getY() + 1 &&
+                    pos.z >= block.getZ() && pos.z <= block.getZ() + 1;
         if (pos.z < block.getZ())
-            return (int) (pos.z * 10) + 1 == block.getZ() * 10 && pos.y >= block.getY() && pos.x >= block.getX();
+            return (int) (pos.z * 10) + 1 == block.getZ() * 10 &&
+                    pos.y >= block.getY() && pos.y <= block.getY() + 1 &&
+                    pos.x >= block.getX() && pos.x <= block.getX() + 1;
         if (pos.z > block.getZ() + 1)
-            return (int) (pos.z * 10) - 1 == block.getZ() * 10 + 10 && pos.y >= block.getY() && pos.x >= block.getX();
+            return (int) (pos.z * 10) - 1 == block.getZ() * 10 + 10 &&
+                    pos.y >= block.getY() && pos.y <= block.getY() + 1 &&
+                    pos.x >= block.getX() && pos.x <= block.getX() + 1;
         return false;
     }
 

@@ -16,7 +16,7 @@ public abstract class MixinRenderLivingEntity {
     @Shadow
     protected ModelBase mainModel;
 
-    @Inject(method = {"renderModel"}, at = {@At("HEAD")}, cancellable = true)
+    @Inject(method = "renderModel", at = @At("HEAD"), cancellable = true)
     private void renderModel(EntityLivingBase entity,
                              float limbSwing, float limbSwingAmount,
                              float ageInTicks, float netHeadYaw,

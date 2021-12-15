@@ -24,9 +24,9 @@ public class AutoBlood {
             "Vader", "Frost", "Walker", "WanderingSoul",
             "Bonzo", "Scarf", "Livid"
     };
-    private Entity target;
     private final ArrayList<Entity> killed = new ArrayList<>();
-    private long lastHitTime = 0;
+    private Entity target;
+    private long faceTime = 0;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -34,6 +34,7 @@ public class AutoBlood {
         if (!Configs.AutoBlood || !SkyblockUtils.isInDungeon()) return;
         if (target == null || killed.contains(target) || target.getDistanceToEntity(getPlayer()) > 20.0F) {
             target = null;
+            faceTime = 0;
             // recalculate target
             for (Entity entity : getWorld().loadedEntityList) {
                 if (!(entity instanceof EntityPlayer) || entity.isDead || killed.contains(entity)) continue;
@@ -45,11 +46,12 @@ public class AutoBlood {
         }
         if (target != null) {
             getPlayer().closeScreen();
-            ControlUtils.face(target);
-            killed.add(target);
-            if (TimeUtils.curTime() - lastHitTime > Configs.AutoBloodCD) {
-                lastHitTime = TimeUtils.curTime();
+            ControlUtils.face(target.posX, target.posY - Configs.AutoBloodYoffset * 0.1F, target.posZ);
+            if (faceTime == 0) faceTime = TimeUtils.curTime();
+            if (TimeUtils.curTime() - faceTime > Configs.AutoBloodCD) {
+                faceTime = TimeUtils.curTime();
                 ControlUtils.leftClick();
+                killed.add(target);
             }
         }
     }

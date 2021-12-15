@@ -84,6 +84,10 @@ public class ControlUtils {
         changeDirection(yaw, pitch);
     }
 
+    public static void face(double tx, double ty, double tz) {
+        face((float) tx, (float) ty, (float) tz);
+    }
+
     public static void face(BlockPos pos) {
         face(pos.getX(), pos.getY(), pos.getZ());
     }

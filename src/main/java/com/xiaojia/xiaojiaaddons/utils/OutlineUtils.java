@@ -14,7 +14,10 @@ import java.awt.Color;
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class OutlineUtils {
-    public static void outlineEntity(ModelBase model, Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float headYaw, float headPitch, float scaleFactor, Color color) {
+    public static void outlineEntity(ModelBase model,
+                                     Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks,
+                                     float headYaw, float headPitch, float scaleFactor,
+                                     Color color, int lineWidth) {
         boolean fancyGraphics = mc.gameSettings.fancyGraphics;
         float gamma = mc.gameSettings.gammaSetting;
         mc.gameSettings.fancyGraphics = false;
@@ -22,7 +25,7 @@ public class OutlineUtils {
 
         GlStateManager.resetColor();
         setColor(color);
-        renderOne(5);  // TODO: configs
+        renderOne(lineWidth);
         model.render(entity, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch, scaleFactor);
         setColor(color);
         renderTwo();
@@ -40,8 +43,9 @@ public class OutlineUtils {
         mc.gameSettings.gammaSetting = gamma;
     }
 
-    public static void outlineEntity(RenderEntityModelEvent event, Color color) {
-        outlineEntity(event.model, event.entity, event.limbSwing, event.limbSwingAmount, event.ageInTicks, event.headYaw, event.headPitch, event.scaleFactor, color);
+    public static void outlineEntity(RenderEntityModelEvent event, Color color, int lineWidth) {
+        outlineEntity(event.model, event.entity, event.limbSwing, event.limbSwingAmount,
+                event.ageInTicks, event.headYaw, event.headPitch, event.scaleFactor, color, lineWidth);
     }
 
     private static void renderOne(float lineWidth) {

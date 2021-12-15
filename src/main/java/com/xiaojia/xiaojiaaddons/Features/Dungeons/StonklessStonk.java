@@ -184,10 +184,14 @@ public class StonklessStonk {
     @SubscribeEvent
     public void onBlockChange(BlockChangeEvent event) {
         if (getPlayer() == null || getWorld() == null) return;
-        if (event.position.distanceSq(getPlayer().getPosition()) > 5.0) return;
+        if (event.position.distanceSq(getPlayer().getPosition()) > 20.0) return;
         if (doneSecretsPos.containsKey(event.position)) return;
-        if (!isSecret(event.newBlock.getBlock(), event.position)) return;
-        blockHashMap.put(event.position, event.newBlock.getBlock());
+        if (XiaojiaAddons.isDebug()) ChatLib.chat("Block change in Stonkless stonk! From "
+                + event.oldBlock.getBlock().toString() + " to " + event.newBlock.getBlock().toString());
+        if (!isSecret(event.oldBlock.getBlock(), event.position) && isSecret(event.newBlock.getBlock(), event.position))
+            blockHashMap.put(event.position, event.newBlock.getBlock());
+        if (isSecret(event.oldBlock.getBlock(), event.position) && !isSecret(event.newBlock.getBlock(), event.position))
+            blockHashMap.remove(event.position);
     }
 
     private boolean isSecret(Block block, BlockPos pos) {

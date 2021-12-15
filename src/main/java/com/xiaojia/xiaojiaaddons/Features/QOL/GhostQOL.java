@@ -123,7 +123,7 @@ public class GhostQOL extends RenderEntityESP {
             mainModel.setLivingAnimations(entity, f6, f5, partialTicks);
             mainModel.setRotationAngles(f6, f5, f8, f2, f7, 0.0625F, entity);
 
-            OutlineUtils.outlineEntity(mainModel, entity, f6, f5, f8, f2, f7, 0.0625F, new Color(85, 255, 85, 150));
+            OutlineUtils.outlineEntity(mainModel, entity, f6, f5, f8, f2, f7, 0.0625F, new Color(85, 255, 85, 150), 7);
             GlStateManager.disableRescaleNormal();
         } catch (Exception e) {
             e.printStackTrace();

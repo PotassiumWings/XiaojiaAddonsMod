@@ -29,9 +29,9 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 public class JadeCrystalHelper {
     private final HashMap<Vector3d, Double> distanceMap = new HashMap<>();
     private final ArrayList<BlockPos> result = new ArrayList<>();
+    private final Vector3d lastPlayerPos = null;
     private long lastPositionTime = 0;
     private Vector3d playerPos = null;
-    private final Vector3d lastPlayerPos = null;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {

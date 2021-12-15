@@ -23,7 +23,7 @@ public class Configs {
     public static boolean QOLEnabled = false;
 
     // AutoUseItem
-    @Property(type = Property.Type.FOLDER, name = "Auto Use Item", description = "CD=0 <=> disable")
+    @Property(type = Property.Type.FOLDER, name = "Auto Use Item", description = "CD=0 <=> disable", parent = "QOL")
     public static boolean AutoUseItem = false;
 
     @Property(type = Property.Type.NUMBER, name = "Plasmaflux CD (s)", parent = "Auto Use Item",
@@ -178,8 +178,19 @@ public class Configs {
     public static boolean DungeonEnabled = false;
 
     // StarredMobESP
-    @Property(type = Property.Type.BOOLEAN, name = "Starred Mob ESP", parent = "Dungeons")
+    @Property(type = Property.Type.FOLDER, name = "Starred Mob ESP", parent = "Dungeons")
+    public static boolean StarredMobESPEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Starred Mob ESP Enable", parent = "Starred Mob ESP")
     public static boolean StarredMobESP = false;
+
+    @Property(type = Property.Type.NUMBER, name = "ESP Outline Length", parent = "Starred Mob ESP",
+            min = 1, max = 10, step = 1)
+    public static int StarredMobESPOutlineLength = 6;
+
+    @Property(type = Property.Type.SELECT, name = "ESP Outline Color", parent = "Starred Mob ESP",
+            options = {"Orange", "Blue", "Green", "Red"})
+    public static int StarredMobESPOutlineColor = 0;
 
     // MimicWarn
     @Property(type = Property.Type.BOOLEAN, name = "Mimic Warn", parent = "Dungeons")
@@ -211,7 +222,11 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Blood Enable", parent = "Auto Blood", illegal = true)
     public static boolean AutoBlood = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Blood CD", parent = "Auto Blood", illegal = true,
+    @Property(type = Property.Type.NUMBER, name = "Auto Blood Yoffset (0.1x block)", parent = "Auto Blood",
+            min = 0, max = 20, description = "Higher ping, higher offset!")
+    public static int AutoBloodYoffset = 0;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Blood CD (ms)", parent = "Auto Blood", illegal = true,
             min = 40, max = 200, step = 10)
     public static int AutoBloodCD = 60;
 
