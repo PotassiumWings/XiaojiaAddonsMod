@@ -16,12 +16,20 @@ public class NoSlowdown {
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!Checker.enabled) return;
-        if (!Configs.NoSlowdown) return;
         try {
             ItemStack itemStack = ControlUtils.getHeldItemStack();
             if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR &&
                     itemStack != null &&
                     itemStack.getItem().getRegistryName().toLowerCase().contains("sword")) {
+                String name = itemStack.getDisplayName();
+                if (!Configs.NoSlowdownAll) {
+                    boolean canCancel = false;
+                    if (Configs.NoSlowdownRogue && name.contains("Rogue")) canCancel = true;
+                    if (Configs.NoSlowdownWitherBlade && (name.contains("Hyperion") || name.contains("Astraea") ||
+                            name.contains("Scylla") || name.contains("Valkyrie"))) canCancel = true;
+                    if (Configs.NoSlowdownKatana && name.contains("Katana")) canCancel = true;
+                    if (!canCancel) return;
+                }
                 event.setCanceled(true);
                 if (mc.gameSettings.keyBindUseItem.isKeyDown()) {
                     NetUtils.sendPacket(new C08PacketPlayerBlockPlacement(

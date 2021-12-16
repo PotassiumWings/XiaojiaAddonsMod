@@ -144,23 +144,46 @@ public class Configs {
     public static boolean ChestESPCrystalHollows = false;
 
     // NoSlowdown
-    @Property(type = Property.Type.BOOLEAN, name = "No Slowdown", parent = "QOL")
-    public static boolean NoSlowdown = false;
+    @Property(type = Property.Type.FOLDER, name = "No Slowdown", parent = "QOL")
+    public static boolean NoSlowdownEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "No Slowdown for Rogue Sword", parent = "No Slowdown")
+    public static boolean NoSlowdownRogue = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "No Slowdown for Wither Blades", parent = "No Slowdown")
+    public static boolean NoSlowdownWitherBlade = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "No Slowdown for Katanas", parent = "No Slowdown")
+    public static boolean NoSlowdownKatana = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "No Slowdown for All Swords", parent = "No Slowdown")
+    public static boolean NoSlowdownAll = false;
 
     // SwordSwap
     @Property(type = Property.Type.BOOLEAN, name = "Sword Swap", parent = "QOL", illegal = true)
     public static boolean GhostSwordSwap = false;
 
-    // Terminator
-    @Property(type = Property.Type.FOLDER, name = "Terminator rightclick", parent = "QOL")
-    public static boolean TerminatorAutoRightClickEnable = false;
+    // HoldRightClick
+    @Property(type = Property.Type.FOLDER, name = "Hold Right Click", parent = "QOL")
+    public static boolean HoldRightClick = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Terminator rightclick enable", illegal = true, parent = "Terminator rightclick")
+    @Property(type = Property.Type.BOOLEAN, name = "Terminator rightclick enable", illegal = true, parent = "Hold Right Click")
     public static boolean TerminatorAutoRightClick = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Terminator rightclick CPS", parent = "Terminator rightclick",
+    @Property(type = Property.Type.NUMBER, name = "Terminator rightclick CPS", parent = "Hold Right Click",
             min = 10, max = 100, step = 5)
     public static int TerminatorCPS = 40;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Rogue Sword rightclick enable", illegal = true, parent = "Hold Right Click")
+    public static boolean RogueAutoRightClick = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Rogue Sword rightclick CPS", parent = "Hold Right Click",
+            min = 1, max = 50, step = 1)
+    public static int RogueCPS = 10;
+
+    @Property(type = Property.Type.NUMBER, name = "Max Speed for Rogue", parent = "Hold Right Click",
+            min = 200, max = 500, step = 10)
+    public static int MaxSpeed = 400;
 
     // GhostQOL
     @Property(type = Property.Type.FOLDER, name = "Ghost QOL", parent = "QOL")
