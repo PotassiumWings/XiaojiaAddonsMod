@@ -36,12 +36,12 @@ public class AutoBlood {
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
-        if (!Configs.AutoBlood || !SkyblockUtils.isInDungeon()) return;
         if (keyBind.isPressed()) {
             enabled = !enabled;
             ChatLib.chat(enabled ? "Auto Blood &aactivated" : "Auto Blood &cdeactivated");
         }
         if (!enabled) return;
+        if (!Configs.AutoBlood || !SkyblockUtils.isInDungeon()) return;
         if (target == null || killed.contains(target) || target.getDistanceToEntity(getPlayer()) > 20.0F) {
             target = null;
             faceTime = 0;

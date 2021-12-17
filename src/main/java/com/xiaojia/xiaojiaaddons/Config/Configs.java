@@ -398,4 +398,84 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Superpairs Solver", parent = "Auto Experimentation Table")
     public static boolean SuperpairsSolver = false;
+
+
+    // Maps
+    @Property(type = Property.Type.FOLDER, name = "Illegal map", parent = "Dungeons",
+            description = "Based on UnclaimedBloom6's dmap", illegal = true)
+    public static boolean DmapEnabled = false;
+
+    // Map
+    @Property(type = Property.Type.FOLDER, name = "Map", parent = "Illegal Map")
+    public static boolean MapPart = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Map Enabled", parent = "Map")
+    public static boolean MapEnabled = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Scan", parent = "Map")
+    public static boolean AutoScan = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Chat Info", parent = "Map",
+            description = "Send chat when fully scanned")
+    public static boolean ChatInfo = true;
+
+    @Property(type = Property.Type.NUMBER, name = "Map Scale", parent = "Map", min = 1, max = 10)
+    public static int MapScale = 5;
+
+    @Property(type = Property.Type.NUMBER, name = "Player Head Scale (%)", parent = "Map",
+            min = 1, max = 100)
+    public static int HeadScale = 50;
+
+    @Property(type = Property.Type.NUMBER, name = "Player Head Scale (%)", parent = "Map",
+            min = 0, max = 1000, step = 5)
+    public static int MapX = 0;
+
+    @Property(type = Property.Type.NUMBER, name = "Player Head Scale (%)", parent = "Map",
+            min = 0, max = 1000, step = 5)
+    public static int MapY = 0;
+
+    // Rooms
+    @Property(type = Property.Type.FOLDER, name = "Rooms", parent = "Illegal Map")
+    public static boolean RoomPart = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Mimic Room", parent = "Rooms")
+    public static boolean ShowMimicRoom = true;
+
+    @Property(type = Property.Type.SELECT, name = "Room Name Color", parent = "Rooms",
+            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
+                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
+                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
+                    "§8Dark Gray", "§9Blue"})
+    public static int RoomNameColor = 5;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Darken Unexplored", parent = "Rooms")
+    public static boolean DarkenUnexplored = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Room Names", parent = "Rooms")
+    public static boolean ShowRoomNames = true;
+
+//    @Property(type = Property.Type.SELECT, name = "Show Secrets", parent = "Rooms",
+//            options = {"Off", "Small", "Large", "Replace Checkmarks"})
+//    public static int ShowSecrets = 0;
+    @Property(type = Property.Type.SELECT, name = "Show Secrets", parent = "Rooms",
+            options = {"Off", "Small"})
+    public static int ShowSecrets = 0;
+
+    // TODO: Secrets replacing checkmarks
+
+    // Score Calculation
+    @Property(type = Property.Type.FOLDER, name = "Score", parent = "Illegal Map")
+    public static boolean ScorePart = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Mimic Room", parent = "Score")
+    public static boolean ScoreCalculation = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Announce 300", parent = "Score")
+    public static boolean Announce300 = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Assume Spirit", parent = "Score")
+    public static boolean AssumeSpirit = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Assume Paul", parent = "Score")
+    public static boolean AssumePaul = false;
 }
