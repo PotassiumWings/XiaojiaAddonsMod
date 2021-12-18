@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import com.xiaojia.xiaojiaaddons.utils.TabUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -47,6 +48,9 @@ public class Command extends CommandBase {
                 break;
             case "s":
                 XiaojiaAddons.guiToOpen = new ConfigGui();
+                break;
+            case "tab":
+                TabUtils.printTab();
                 break;
 //            case "shoot":
 //                AutoShootCrystal.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
