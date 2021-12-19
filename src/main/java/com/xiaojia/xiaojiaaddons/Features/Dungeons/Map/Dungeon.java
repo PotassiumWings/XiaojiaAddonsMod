@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
@@ -57,8 +58,9 @@ public class Dungeon {
     };
     // scan
     private static boolean isScanning = false;
-    private static boolean isFullyScanned = false;
+    public static boolean isFullyScanned = false;
     private static long lastScan = 0;
+    private HashSet<String> scannedPuzzles = new HashSet<>();
     // map
     private static BufferedImage map = null;
     private static Vector2i mapSize = new Vector2i(0, 0);
@@ -102,6 +104,8 @@ public class Dungeon {
     public static int totalSecrets = 0;
     public static int overflowSecrets = 0;
     public static int calculatedTotalSecrets = 0;
+    public static double secretsPercent = 0;
+    public static double secretsNeeded = 1;
     public static int secretsFound = 0;
     public static int secretsForMax = 0;
     public static boolean isMimicDead = false;
@@ -135,16 +139,34 @@ public class Dungeon {
             lastScan = TimeUtils.curTime();
             new Thread(this::scan).start();
         }
+        if (isFullyScanned && !Map.calibrated) {
+            Map.calibrate();
+            if (Configs.ChatInfo) {
+                ChatLib.chat("&aCurrent Dungeon:\n" +
+                        String.format("&aPuzzles &c%d&a: \n &b- &d%s\n", puzzles.size(), String.join("\n &b- &d", scannedPuzzles)) +
+                        String.format("&6Trap: &a%s\n", trapType) +
+                        String.format("&8Wither Doors: &7%d\n", witherDoors - 1) +
+                        String.format("&7Total Secrets: &b%s\n", totalSecrets)
+                );
+            }
+        }
     }
 
     @SubscribeEvent
     public void onRenderMap(RenderGameOverlayEvent.Pre event) {
         if (!isInDungeon || !Configs.MapEnabled) return;
         drawBackground();
-        if (map != null) renderMap();
+        if (map != null) {
+            renderMap();
+        }
         renderCheckmarks();
         // render rooms
-        for (Room room : rooms) {
+        HashSet<String> nameRendered = new HashSet<>();
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
+            if (nameRendered.contains(room.name)) continue;
+            nameRendered.add(room.name);
+
             if (Configs.ShowRoomNames) {
                 room.renderName();
             }
@@ -154,7 +176,8 @@ public class Dungeon {
             }
         }
         // render players
-        for (Player player : players) {
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
             if (player.isDead) continue;
             player.render();
             ItemStack heldItem = ControlUtils.getHeldItemStack();
@@ -185,7 +208,8 @@ public class Dungeon {
     @SubscribeEvent
     public void onTickUpdatePlayerIcon(TickEndEvent event) {
         if (isInDungeon) {
-            for (Player player : players) {
+            for (int i = 0; i < players.size(); i++) {
+                Player player = players.get(i);
                 EntityPlayer entityPlayer = getWorld().getPlayerEntityByName(player.name);
                 if (entityPlayer == null) {
                     player.inRender = false;
@@ -194,9 +218,11 @@ public class Dungeon {
                 if (MapUtils.isBetween((int) entityPlayer.posX, 0, 190) &&
                         MapUtils.isBetween((int) entityPlayer.posZ, 0, 190)) {
                     player.inRender = true;
-                    player.yaw = entityPlayer.rotationYaw + 180;
                     player.realX = entityPlayer.posX;
                     player.realZ = entityPlayer.posZ;
+                    player.iconX = (player.realX * (0.1225 * 5) - 2) * 0.2 * Configs.MapScale + Configs.MapScale / 2f;
+                    player.iconY = (player.realZ * (0.1225 * 5) - 2) * 0.2 * Configs.MapScale + Configs.MapScale / 2f;
+                    player.yaw = entityPlayer.rotationYaw + 180;
                 }
             }
         }
@@ -211,16 +237,17 @@ public class Dungeon {
     public void onDeath(ClientChatReceivedEvent event) {
         String message = ChatLib.removeFormatting(event.message.getUnformattedText());
         if (message.startsWith(" ☠ ")) {
-            deaths++;
             CommandsUtils.addCommand("/pc 有笨比");
         }
     }
 
     @SubscribeEvent
     public void onTickUpdateDungeon(TickEndEvent event) {
-        if (!Configs.MapEnabled) return;
+        if (!Configs.MapEnabled || !SkyblockUtils.isInDungeon()) return;
         String dungeon = SkyblockUtils.getDungeon();
-        floorInt = Integer.parseInt(dungeon.substring(1));
+        if (!isInDungeon) floorInt = Integer.parseInt(dungeon.substring(1));
+        isInDungeon = true;
+        if (XiaojiaAddons.isDebug()) ChatLib.chat("Floor int: " + floorInt);
         if (floorInt == 1 || floorInt == 2 || floorInt == 3) {
             endX = endZ = 158;
         } else if (floorInt == 4) {
@@ -230,7 +257,7 @@ public class Dungeon {
             endX = endZ = 190;
         }
         ArrayList<String> tab = TabUtils.getNames();
-        if (!isInDungeon || tab.get(0) == null || !tab.get(0).contains("Party (")) return;
+        if (!isInDungeon || tab.isEmpty() || !tab.get(0).contains("Party (")) return;
         try {
             puzzles = new ArrayList<>(
                     Arrays.asList(Arrays.stream(new int[]{48, 49, 50, 51, 52})
@@ -242,20 +269,20 @@ public class Dungeon {
             for (int i = 0; i < 5; i++)
                 if (tab.get(47 + i).contains("✔"))
                     puzzleDone++;
-            secretsFound = getInt(tab.get(31), Pattern.compile(" Secrets Found: (\\d+)"));
-            float secretsPercent = getFloat(tab.get(44), Pattern.compile("Secrets Found: (.+)%"));
-            double secretsNeeded = floorSecrets.containsKey(dungeon) ? floorSecrets.get(dungeon) : 1;
+            secretsFound = getInt(tab.get(31), Pattern.compile("Secrets Found: (\\d+)"));
+            secretsPercent = getFloat(tab.get(44), Pattern.compile("Secrets Found: (.+)%"));
+            secretsNeeded = floorSecrets.containsKey(dungeon) ? floorSecrets.get(dungeon) : 1;
             // Total secrets in the dungeon based off of the percentage found
             calculatedTotalSecrets = 0;
             if (secretsFound > 0) {
-                calculatedTotalSecrets = MathUtils.floor(100 / secretsPercent * secretsFound + 0.5);
+                calculatedTotalSecrets = MathUtils.floor(100F / secretsPercent * secretsFound + 0.5);
             }
             // If a secret has been found then use the percentage on the tablist to calculate exactly how many are in the run. Makes it so that if the scan fails to detect a room
             // it will still be accurate after a secret has been found.
             secretsForMax = (int) (calculatedTotalSecrets > 0 ? calculatedTotalSecrets * secretsNeeded : totalSecrets * secretsNeeded);
             overflowSecrets = secretsFound > secretsForMax ? secretsFound - secretsForMax : 0;
             crypts = getInt(tab.get(32), Pattern.compile("Crypts: (\\d+)"));
-            deaths = getInt(tab.get(25), Pattern.compile("Deaths: (\\d+)"));
+            deaths = getInt(tab.get(25), Pattern.compile("Deaths: \\((\\d+)\\)"));
             openedRooms = getInt(tab.get(42), Pattern.compile("Opened Rooms: (\\d+)"));
             completedRooms = getInt(tab.get(43), Pattern.compile("Completed Rooms: (\\d+)"));
         } catch (Exception e) {
@@ -266,7 +293,9 @@ public class Dungeon {
     private int getInt(String s, Pattern pattern) {
         Matcher matcher = pattern.matcher(s);
         if (matcher.find()) {
-            return Integer.parseInt(matcher.group(1));
+            int res = Integer.parseInt(matcher.group(1));
+            if (XiaojiaAddons.isDebug()) ChatLib.chat(pattern + ", " + s + ", " + res);
+            return res;
         }
         System.err.println("error getting int: " + s + ", " + pattern);
         return 0;
@@ -275,7 +304,9 @@ public class Dungeon {
     private float getFloat(String s, Pattern pattern) {
         Matcher matcher = pattern.matcher(s);
         if (matcher.find()) {
-            return Float.parseFloat(matcher.group(1));
+            float res = Float.parseFloat(matcher.group(1));
+            if (XiaojiaAddons.isDebug()) ChatLib.chat(pattern + ", " + s + ", " + res);
+            return res;
         }
         System.err.println("error getting float: " + s + ", " + pattern);
         return 0;
@@ -292,7 +323,7 @@ public class Dungeon {
 
         boolean allLoaded = true;
         HashSet<String> names = new HashSet<>();
-        HashSet<String> puzzles = new HashSet<>();
+        scannedPuzzles = new HashSet<>();
 
         for (int x = startX;
              x <= startX + (roomSize + 1) * (Math.floor((endX / 31F) - 1));
@@ -303,20 +334,24 @@ public class Dungeon {
                 // Center of where a room should be
                 if (x % (roomSize + 1) == Math.floor(roomSize / 2F) &&
                         z % (roomSize + 1) == Math.floor(roomSize / 2F)) {
-                    if (!MapUtils.chunkLoaded(new Vector3i(x, 100, z))) allLoaded = false;
+                    if (!MapUtils.chunkLoaded(new Vector3i(x, 100, z))) {
+                        allLoaded = false;
+                        if (XiaojiaAddons.isDebug()) ChatLib.chat("not loaded!");
+                    }
                     if (MapUtils.isColumnAir(x, z)) continue;
                     Room room = Lookup.getRoomFromCoords(new Vector2i(x, z));
                     if (room == null) continue;
 
                     if (!names.contains(room.name)) {
                         names.add(room.name);
+                        if (XiaojiaAddons.isDebug()) ChatLib.chat("add room: " + room.name);
                         totalSecrets += room.secrets;
                     }
                     totalRooms++;
                     rooms.add(room);
 
                     if (room.type.equals("trap")) trapType = room.name.split(" ")[0];
-                    if (room.type.equals("puzzle")) puzzles.add(room.name);
+                    if (room.type.equals("puzzle")) scannedPuzzles.add(room.name);
                 }
                 // Door or part of a larger room
                 else if (((x % (roomSize + 1) == roomSize && z % (roomSize + 1) == Math.floor(roomSize / 2F)) ||
@@ -340,7 +375,8 @@ public class Dungeon {
                     // Part of a larger room
                     else {
                         Room newRoom = new Room(x, z, Data.blankRoom);
-                        for (Room room : rooms) {
+                        for (int i = 0; i < rooms.size(); i++) {
+                            Room room = rooms.get(i);
                             if (room.x == newRoom.x - 16 && room.z == newRoom.z)
                                 newRoom = new Room(x, z, room.getJson());
                             if (room.x == newRoom.x && room.z == newRoom.z - 16)
@@ -358,45 +394,38 @@ public class Dungeon {
                         z % (roomSize + 1) == roomSize &&
                         !MapUtils.isColumnAir(x, z)) {
                     Room newRoom = new Room(x, z, Data.blankRoom);
-                    for (Room room : rooms)
+                    for (int i = 0; i < rooms.size(); i++) {
+                        Room room = rooms.get(i);
                         if (room.x == newRoom.x - 16 && room.z == newRoom.z - 16)
                             newRoom = new Room(x, z, room.getJson());
+                    }
                     rooms.add(newRoom);
                 }
             }
         }
         makeMap();
         isFullyScanned = allLoaded;
-        if (isFullyScanned) {
-            Map.calibrate();
-            if (Configs.ChatInfo) {
-                ChatLib.chat(
-                        String.format("&aDone! Took &b%d&ams!\n", TimeUtils.curTime() - scanStarted) +
-                                String.format("&aCurrent Dungeon:\n") +
-                                String.format("&aPuzzles &c%d&a: \n &b- &d%s\n", puzzles.size(), String.join("\n &b- &d", puzzles)) +
-                                String.format("&6Trap: &a%s\n", trapType) +
-                                String.format("&8Wither Doors: &7%d\n", witherDoors - 1) +
-                                String.format("&7Total Secrets: &b%s\n", totalSecrets)
-                );
-            }
-        }
+        if (XiaojiaAddons.isDebug()) ChatLib.chat("fully scanned: " + isFullyScanned + " !");
         isScanning = false;
     }
 
     public static void makeMap() {
         BufferedImage newMap = new BufferedImage(25, 25, BufferedImage.TYPE_4BYTE_ABGR);
-        for (Room room : rooms) {
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
             Color color = room.getColor();
             if (room.name.equals("Unknown")) color = new Color(255, 176, 31);
-            else if (!room.explored && Configs.DarkenUnexplored) color = color.darker().darker().darker();
+            else if (!room.explored && Configs.DarkenUnexplored) color = color.darker().darker();
             setPixels(newMap, MathUtils.floor(room.x / 16) * 2 + 1, MathUtils.floor(room.z / 16) * 2 + 1, 3, 3, color);
         }
-        for (Door door : doors) {
+        for (int i = 0; i < doors.size(); i++) {
+            Door door = doors.get(i);
             Color color = door.getColor();
-            if (!door.explored && Configs.DarkenUnexplored) color = color.darker().darker().darker();
+            if (!door.explored && Configs.DarkenUnexplored) color = color.darker().darker();
             setPixels(newMap, MathUtils.floor(door.x / 16) * 2 + 2, MathUtils.floor(door.z / 16) * 2 + 2, 1, 1, color);
         }
         map = newMap;
+        if (XiaojiaAddons.isDebug()) ChatLib.chat("map made!");
     }
 
     private static void setPixels(BufferedImage map, int x1, int y1, int wid, int height, Color color) {
@@ -408,23 +437,28 @@ public class Dungeon {
     }
 
     private void drawBackground() {
+        RenderUtils.start();
         mapSize = Configs.ScoreCalculation ? new Vector2i(25, 27) : new Vector2i(25, 25);
-        RenderUtils.drawRect(new Color(0, 0, 0, 0.4F).hashCode(),
+        RenderUtils.drawRect(new Color(0, 0, 0, 30).hashCode(),
                 Configs.MapX, Configs.MapY,
                 mapSize.x * Configs.MapScale, mapSize.y * Configs.MapScale);
+        RenderUtils.end();
     }
 
     private void renderMap() {
+        RenderUtils.start();
         RenderUtils.drawImage(new Image(map), Configs.MapX, Configs.MapY, 25 * Configs.MapScale, 25 * Configs.MapScale);
+        RenderUtils.end();
     }
 
     private void renderCheckmarks() {
         HashSet<String> names = new HashSet<>();
-        RenderUtils.retainTransforms(true);
+        RenderUtils.start();
         RenderUtils.translate(Configs.MapX, Configs.MapY);
         RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
         int checkSize = Configs.MapScale * 4;
-        for (Room room : rooms) {
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
             if (!names.contains(room.name) && !room.type.equals("entrance")) {
 
                 float x = room.x * 1.25F + Configs.MapScale * 1.25F - checkSize / 2F;
@@ -444,31 +478,36 @@ public class Dungeon {
                 }
             }
         }
-        RenderUtils.retainTransforms(false);
+        RenderUtils.end();
     }
 
     private void drawScoreCalc() {
         if (Configs.ScoreCalculation) {
-            Renderer.translate(Configs.MapX + (25 * Configs.MapScale) / 2F, Configs.MapY + 24.5F * Configs.MapScale);
-            Renderer.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
-            Renderer.drawStringWithShadow(scoreString1, -Renderer.getStringWidth(ChatLib.removeFormatting(scoreString1)) / 2F, 0);
+            RenderUtils.start();
+            RenderUtils.translate(Configs.MapX + (25 * Configs.MapScale) / 2F, Configs.MapY + 24.5F * Configs.MapScale);
+            RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
+            RenderUtils.drawStringWithShadow(scoreString1, -RenderUtils.getStringWidth(ChatLib.removeFormatting(scoreString1)) / 2F, 0);
+            RenderUtils.end();
 
-            Renderer.translate(Configs.MapX + (25 * Configs.MapScale) / 2F, Configs.MapY + 25.5F * Configs.MapScale);
-            Renderer.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
-            Renderer.drawStringWithShadow(scoreString2, -Renderer.getStringWidth(ChatLib.removeFormatting(scoreString2)) / 2F, 0);
+            RenderUtils.start();
+            RenderUtils.translate(Configs.MapX + (25 * Configs.MapScale) / 2F, Configs.MapY + 25.5F * Configs.MapScale);
+            RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
+            RenderUtils.drawStringWithShadow(scoreString2, -RenderUtils.getStringWidth(ChatLib.removeFormatting(scoreString2)) / 2F, 0);
+            RenderUtils.end();
         }
     }
 
     private void calcScore() {
         int deathPenalty = (deaths > 0 && Configs.AssumeSpirit) ? deaths * 2 - 1 : deaths * 2;
         int completedR = bloodDone ? completedRooms : completedRooms + 1;
+        completedR += (bossEntry > runStarted) ? 0 : 1;
 
-        skillScore = MathUtils.floor(20 + ((Math.min(completedR, totalRooms)) / totalRooms) * 80
+        skillScore = MathUtils.floor(20 + (1.0F * (Math.min(completedR, totalRooms)) / totalRooms) * 80
                 - (10 * puzzleCount) + (10 * puzzleDone) - deathPenalty);
         skillScore = Math.max(skillScore, 20);
 
-        exploreScore = MathUtils.floor(((60 * (completedR > totalRooms ? totalRooms : completedR)) / totalRooms) +
-                ((40 * (secretsFound - overflowSecrets)) / secretsForMax));
+        exploreScore = MathUtils.floor(((60F * (Math.min(completedR, totalRooms))) / totalRooms) +
+                ((40F * (secretsFound - overflowSecrets)) / secretsForMax));
         exploreScore = totalRooms == 0 || totalSecrets == 0 ? 0 : exploreScore;
 
         // Not worth calculating. If you can't get 100 speed score then you shouldn't be playing Dungeons.
@@ -478,8 +517,19 @@ public class Dungeon {
         score = skillScore + exploreScore + speedScore + bonusScore;
         score = trapDone ? score : score - 5;
         score = yellowDone ? score : score - 5;
-        int secrets = calculatedTotalSecrets > 0 ? calculatedTotalSecrets : totalSecrets;
 
+        if (XiaojiaAddons.isDebug()) {
+            ChatLib.chat("total rooms: " + totalRooms);
+            ChatLib.chat("secrets max: " + secretsForMax);
+            ChatLib.chat("total secrets: " + totalSecrets);
+            ChatLib.chat("found secrets: " + secretsFound);
+            ChatLib.chat("calculated secrets: " + calculatedTotalSecrets);
+            ChatLib.chat("secrets percent: " + secretsPercent);
+            ChatLib.chat("secrets needed: " + secretsNeeded);
+            ChatLib.chat("skill: " + skillScore + ", explore: " + exploreScore);
+        }
+
+        int secrets = calculatedTotalSecrets > 0 ? calculatedTotalSecrets : totalSecrets;
         // Line 1
         String scSecrets = "&7Secrets: &b" + secretsFound;
         String scSecretsExtra = calculatedTotalSecrets == 0 ? "" : "&8-&e" + (secrets - secretsFound) + "&8-&c" + secrets;
@@ -508,6 +558,7 @@ public class Dungeon {
         floorInt = 0;
         puzzles = new ArrayList<>();
         secretsFound = 0;
+        secretsNeeded = 1;
         secretsForMax = 0;
         crypts = 0;
         deaths = 0;
@@ -563,6 +614,7 @@ public class Dungeon {
         puzzleDone = 0;
         totalSecrets = 0;
         overflowSecrets = 0;
+        secretsPercent = 0;
 
         isMimicDead = false;
     }
@@ -578,7 +630,8 @@ public class Dungeon {
             String name = tabLine.split(" ")[0];
             if (name.length() == 0) continue;
             boolean found = false;
-            for (Player player : players) {
+            for (int i = 0; i < players.size(); i++) {
+                Player player = players.get(i);
                 if (player.name.equals(name)) {
                     found = true;
                     player.isDead = dead;
@@ -599,7 +652,8 @@ public class Dungeon {
             for (java.util.Map.Entry<String, Vec4b> entry : decor.entrySet()) {
                 String decorIcon = entry.getKey();
                 Vec4b vec = entry.getValue();
-                for (Player player : players) {
+                for (int i = 0; i < players.size(); i++) {
+                    Player player = players.get(i);
                     if (player.inRender) continue;
                     if (player.icon.equals(decorIcon) && !player.name.equals(getPlayer().getName())) {
                         player.iconX = (vec.func_176112_b() + 128 - Map.startCorner.x * 2.5) / 10 * Configs.MapScale;
@@ -660,29 +714,39 @@ public class Dungeon {
     }
 
     private static void checkRoom(String name, String mark) {
-        for (Room room : rooms)
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
             if (room.name.equals(name))
                 room.checkmark = mark;
+        }
     }
 
     private static void setExplored(String name, boolean explored) {
-        for (Room room : rooms)
+        if (XiaojiaAddons.isDebug()) {
+            ChatLib.chat("set " + name + " to " + explored);
+        }
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
             if (room.name.equals(name))
                 room.explored = explored;
+        }
     }
 
     public static Room getRoomAt(Vector2i coords) {
         coords = Lookup.getRoomCenterCoords(coords);
         if (coords == null) return null;
-        for (Room room : rooms)
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
             if (room.x == coords.x && room.z == coords.y)
                 return room;
+        }
         return null;
     }
 
     public static void updateDoors() {
         ArrayList<Door> toRemove = new ArrayList<>();
-        for (Door door : doors) {
+        for (int i = 0; i < doors.size(); i++) {
+            Door door = doors.get(i);
             if (door == null) continue;
             int id = Block.getIdFromBlock(BlockUtils.getBlockAt(door.x, 70, door.z));
             if (id == 0 || id == 166) door.type = "normal";

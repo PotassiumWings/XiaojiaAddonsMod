@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
@@ -27,18 +28,22 @@ public class Map {
         roomSize = 16;
     }
 
-
     public static void calibrate() {
+//        ChatLib.chat("in map: dungeon int " + Dungeon.floorInt);
         if (Dungeon.totalRooms > 29) startCorner = new Vector2i(5, 5);
         else if (Dungeon.totalRooms == 29) startCorner = new Vector2i(16, 5);
         else if (Dungeon.totalRooms == 24) startCorner = new Vector2i(11, 11);
 
         if (Dungeon.floorInt <= 3 || Dungeon.totalRooms == 24) roomSize = 18;
         else roomSize = 16;
+
         if (Dungeon.floorInt == 1) startCorner = new Vector2i(22, 11);
         else if (Dungeon.floorInt == 2 || Dungeon.floorInt == 3) startCorner = new Vector2i(11, 11);
         else if (Dungeon.floorInt == 4 && Dungeon.totalRooms > 24) startCorner = new Vector2i(5, 16);
 
+//        ChatLib.chat("start corner: " + startCorner.x + ", " + startCorner.y);
+//        ChatLib.chat("roomsize: " + roomSize);
+//        ChatLib.chat("dungeon floor int: " + Dungeon.floorInt);
         calibrated = true;
     }
 

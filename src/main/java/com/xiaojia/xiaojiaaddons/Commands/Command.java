@@ -1,6 +1,8 @@
 package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Map;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -51,6 +53,25 @@ public class Command extends CommandBase {
                 break;
             case "tab":
                 TabUtils.printTab();
+                break;
+            case "map":
+                byte[] colors = Map.getMapColors();
+                if (colors == null) return;
+                for (int y = 0; y < 128; y++) {
+                    StringBuilder res = new StringBuilder();
+                    for (int x = 0; x < 128; x++) {
+                        res.append(String.format("%3d", colors[x + y * 128])).append(" ");
+                    }
+                    ChatLib.chat(res.toString());
+                }
+
+                for (int i = Map.startCorner.x + (Map.roomSize / 2); i < 128; i += Map.roomSize / 2 + 2) {
+                    for (int j = Map.startCorner.y + (Map.roomSize / 2); j < 128; j += Map.roomSize / 2 + 2) {
+                        byte color = colors[i + j * 128];
+                        byte secondColor = colors[(i - 3) + j * 128];
+                        ChatLib.chat(i + ", " + j + ", " + color + ", " + secondColor);
+                    }
+                }
                 break;
 //            case "shoot":
 //                AutoShootCrystal.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));

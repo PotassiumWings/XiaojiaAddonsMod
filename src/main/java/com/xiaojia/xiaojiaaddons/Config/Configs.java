@@ -401,7 +401,7 @@ public class Configs {
 
 
     // Maps
-    @Property(type = Property.Type.FOLDER, name = "Illegal map", parent = "Dungeons",
+    @Property(type = Property.Type.FOLDER, name = "Illegal Map", parent = "Dungeons",
             description = "Based on UnclaimedBloom6's dmap", illegal = true)
     public static boolean DmapEnabled = false;
 
@@ -426,11 +426,11 @@ public class Configs {
             min = 1, max = 100)
     public static int HeadScale = 50;
 
-    @Property(type = Property.Type.NUMBER, name = "Player Head Scale (%)", parent = "Map",
+    @Property(type = Property.Type.NUMBER, name = "Map X", parent = "Map",
             min = 0, max = 1000, step = 5)
     public static int MapX = 0;
 
-    @Property(type = Property.Type.NUMBER, name = "Player Head Scale (%)", parent = "Map",
+    @Property(type = Property.Type.NUMBER, name = "Map Y", parent = "Map",
             min = 0, max = 1000, step = 5)
     public static int MapY = 0;
 

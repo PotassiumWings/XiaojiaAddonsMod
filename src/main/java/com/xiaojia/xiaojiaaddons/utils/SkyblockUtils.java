@@ -32,7 +32,7 @@ public class SkyblockUtils {
     private static String currentServer = "";
     private static boolean set = false;
     private static boolean isInCrystalHollows = false;
-    private static String dungeon;
+    private static String dungeon = "F6";
 
     private static String updateCurrentMap() {
         ArrayList<String> lines = ScoreBoard.getLines();
@@ -42,7 +42,8 @@ public class SkyblockUtils {
         line = ChatLib.removeFormatting(line);
         for (int i = 0; i < line.length(); i++) {
             char c = line.charAt(i);
-            if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '\'' || c == ' ')
+            if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '\'' || c == ' '
+                    || c == '(' || c == ')')
                 removeSkippingChar.append(c);
         }
         line = removeSkippingChar.toString();

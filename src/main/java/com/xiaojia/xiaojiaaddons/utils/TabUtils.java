@@ -32,7 +32,7 @@ public class TabUtils {
         Collection<NetworkPlayerInfo> list = getPlayer().sendQueue.getPlayerInfoMap();
         List<NetworkPlayerInfo> sortedList = playerComparator.sortedCopy(list);
         for (NetworkPlayerInfo info : sortedList) {
-            res.add(tabGui.getPlayerName(info));
+            res.add(ChatLib.removeFormatting(tabGui.getPlayerName(info)));
         }
         return res;
     }

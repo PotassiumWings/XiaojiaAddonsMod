@@ -13,8 +13,7 @@ public class RenderUtils {
     private static Long colorized = null;
     private static final Tessellator tessellator = Tessellator.getInstance();
     private static final WorldRenderer worldRenderer = tessellator.getWorldRenderer();
-    private static boolean retainTransforms;
-    private static Integer drawMode;
+    private static Integer drawMode = null;
 
     public static void drawRect(long color, float x, float y, float width, float height) {
         GlStateManager.enableBlend();
@@ -33,7 +32,6 @@ public class RenderUtils {
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
-        finishDraw();
     }
 
     public static void drawImage(Image image, double x, double y, double width, double height) {
@@ -44,19 +42,13 @@ public class RenderUtils {
         GlStateManager.bindTexture(image.getTexture().getGlTextureId());
         GlStateManager.enableTexture2D();
 
-        worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldRenderer.begin(drawMode == null ? 7 : drawMode, DefaultVertexFormats.POSITION_TEX);
 
         worldRenderer.pos(x, y + height, 0.0).tex(0.0, 1.0).endVertex();
         worldRenderer.pos(x + width, y + height, 0.0).tex(1.0, 1.0).endVertex();
         worldRenderer.pos(x + width, y, 0.0).tex(1.0, 0.0).endVertex();
         worldRenderer.pos(x, y, 0.0).tex(0.0, 0.0).endVertex();
         tessellator.draw();
-        finishDraw();
-    }
-
-    public static void retainTransforms(boolean retain) {
-        retainTransforms = retain;
-        finishDraw();
     }
 
     private static void doColor(long longColor) {
@@ -78,17 +70,8 @@ public class RenderUtils {
         GlStateManager.translate(x, y, 0);
     }
 
-    public static void scale(float x,float y) {
+    public static void scale(float x, float y) {
         GlStateManager.scale(x, y, 1F);
-    }
-
-    public static void finishDraw() {
-        if (!retainTransforms) {
-            colorized = null;
-            drawMode = null;
-            GL11.glPopMatrix();
-            GL11.glPushMatrix();
-        }
     }
 
     public static void translate(double x, double y) {
@@ -101,6 +84,17 @@ public class RenderUtils {
 
     public static void drawStringWithShadow(String text, float x, float y) {
         mc.fontRendererObj.drawString(ChatLib.addColor(text), x, y, colorized == null ? -1 : colorized.intValue(), true);
-        finishDraw();
+    }
+
+    public static void start() {
+        GlStateManager.pushMatrix();
+    }
+
+    public static void end() {
+        GlStateManager.popMatrix();
+    }
+
+    public static int getStringWidth(String str) {
+        return mc.fontRendererObj.getStringWidth(str);
     }
 }

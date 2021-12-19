@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
+import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import net.minecraft.block.Block;
 
 import java.awt.Color;
@@ -66,40 +67,40 @@ public class Room {
     }
 
     public void renderName() {
-        Renderer.retainTransforms(true);
         String[] split = this.name.split(" ");
-        Renderer.translate(Configs.MapX, Configs.MapY, 0);
-        Renderer.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
+        RenderUtils.start();
+        RenderUtils.translate(Configs.MapX, Configs.MapY, 0);
+        RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
         for (int i = 0; i < split.length; i++) {
-            Renderer.drawStringWithShadow(
+            RenderUtils.drawStringWithShadow(
                     MapUtils.colors[Configs.RoomNameColor] + split[i],
-                    this.x * 1.25F + Configs.MapScale - (Renderer.getStringWidth(split[i]) / 2F),
+                    this.x * 1.25F + Configs.MapScale - (RenderUtils.getStringWidth(split[i]) / 2F),
                     this.z * 1.25F - Math.abs(split.length - 1) * 3 + (i * 8)
             );
         }
-        Renderer.retainTransforms(false);
+        RenderUtils.end();
     }
 
     public void renderSecrets() {
-        Renderer.retainTransforms(true);
-        Renderer.translate(Configs.MapX, Configs.MapY, 0);
+        RenderUtils.start();
+        RenderUtils.translate(Configs.MapX, Configs.MapY, 0);
         if (Configs.ShowSecrets == 0 || Configs.ShowSecrets == 1) {
-            Renderer.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
-            Renderer.drawStringWithShadow(
+            RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
+            RenderUtils.drawStringWithShadow(
                     "&7" + this.secrets,
                     this.x * 1.25F - Configs.MapScale * 1.25F,
                     this.z * 1.25F - Configs.MapScale * 1.25F
             );
         } else {
-//            Renderer.scale(0.2F * Configs.MapScale, 0.2F * Configs.MapScale);
+//            RenderUtils.scale(0.2F * Configs.MapScale, 0.2F * Configs.MapScale);
 //            String color = this.checkmark.equals("green") ?
 //                    MapUtils.colors[Configs.GreenCheckSecrets] :
 //                    this.checkmark.equals("white") ?
 //                            MapUtils.colors[Configs.WhiteCheckSecrets] :
 //                            MapUtils.colors[Configs.UnexploredSecrets];
-//            Renderer.drawStringWithShadow(color + this.secrets, (this.x * 1.25F) / 2, (this.z * 1.25F) / 2);
+//            RenderUtils.drawStringWithShadow(color + this.secrets, (this.x * 1.25F) / 2, (this.z * 1.25F) / 2);
         }
-        Renderer.retainTransforms(false);
+        RenderUtils.end();
     }
 
     public Data getJson() {
