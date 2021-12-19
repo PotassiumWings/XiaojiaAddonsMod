@@ -25,9 +25,9 @@ public class TabUtils {
         return null;
     }
 
-    public static List<String> getNames() {
+    public static ArrayList<String> getNames() {
         GuiPlayerTabOverlay tabGui = getTabGui();
-        List<String> res = new ArrayList<>();
+        ArrayList<String> res = new ArrayList<>();
         if (getPlayer() == null || tabGui == null) return res;
         Collection<NetworkPlayerInfo> list = getPlayer().sendQueue.getPlayerInfoMap();
         List<NetworkPlayerInfo> sortedList = playerComparator.sortedCopy(list);
@@ -57,7 +57,7 @@ public class TabUtils {
     }
 
     public static void printTab() {
-        List<String> tabs = getNames();
+        ArrayList<String> tabs = getNames();
         for (int i = 0; i < tabs.size(); i++) {
             ChatLib.chat(i + ": " + tabs.get(i));
         }

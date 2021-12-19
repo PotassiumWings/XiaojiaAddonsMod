@@ -434,6 +434,10 @@ public class Configs {
             min = 0, max = 1000, step = 5)
     public static int MapY = 0;
 
+    @Property(type = Property.Type.SELECT, name = "Show Player Names", parent = "Map",
+            options = {"Off", "Holding Leaps", "Always"})
+    public static int ShowPlayerNames = 0;
+
     // Rooms
     @Property(type = Property.Type.FOLDER, name = "Rooms", parent = "Illegal Map")
     public static boolean RoomPart = false;
@@ -467,7 +471,7 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Score", parent = "Illegal Map")
     public static boolean ScorePart = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Show Mimic Room", parent = "Score")
+    @Property(type = Property.Type.BOOLEAN, name = "Score Calculation", parent = "Score")
     public static boolean ScoreCalculation = true;
 
     @Property(type = Property.Type.BOOLEAN, name = "Announce 300", parent = "Score")

@@ -8,7 +8,8 @@ public class Data {
     public int secrets;
     public ArrayList<Integer> cores;
 
-    public Data(){}
+    public Data() {
+    }
 
     public Data(String name, String type, int secrets, ArrayList<Integer> cores) {
         this.name = name;
@@ -16,4 +17,6 @@ public class Data {
         this.secrets = secrets;
         this.cores = cores;
     }
+
+    public static Data blankRoom = new Data("Unknown", "normal", 0, new ArrayList<>());
 }

@@ -14,6 +14,9 @@ import com.xiaojia.xiaojiaaddons.Features.Dragons.EnderCrystalESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoBlood;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoCloseSecretChest;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoTerminal;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Map;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.MapUpdater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.RoomLoader;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
@@ -121,6 +124,10 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new MimicWarn());
         MinecraftForge.EVENT_BUS.register(new StarredMobESP());
         MinecraftForge.EVENT_BUS.register(new StonklessStonk());
+        // map
+        MinecraftForge.EVENT_BUS.register(new Dungeon());
+        MinecraftForge.EVENT_BUS.register(new MapUpdater());
+        MinecraftForge.EVENT_BUS.register(new Map());
 
         // QOL
         MinecraftForge.EVENT_BUS.register(new AutoCombine());

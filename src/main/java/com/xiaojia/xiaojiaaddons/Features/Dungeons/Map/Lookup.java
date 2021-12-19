@@ -17,13 +17,13 @@ public class Lookup {
         return null;
     }
 
-    public Room getRoomFromCoords(Coords coords, Dungeon dungeon) {
-        Coords newCoords = this.getRoomCenterCoords(coords, dungeon);
-        if (newCoords.x == -1) {
+    public static Room getRoomFromCoords(Vector2i coords) {
+        Vector2i newCoords = getRoomCenterCoords(coords);
+        if (newCoords==null) {
             ChatLib.chat("Non");
             return null;
         }
-        Room room = new Room(newCoords.x, newCoords.z,
+        Room room = new Room(newCoords.x, newCoords.y,
                 new Data("Unknown", "normal", 0, new ArrayList<>()));
         Room foundRoom = getRoomDataFromHash(room.core);
         if (foundRoom != null) {
@@ -34,17 +34,17 @@ public class Lookup {
         return room;
     }
 
-    public Coords getRoomCenterCoords(Coords coords, Dungeon dungeon) {
-        for (int x = dungeon.startX; x <= dungeon.startX + (dungeon.roomSize + 1) * 5; x += 16) {
-            for (int z = dungeon.startZ; z <= dungeon.startZ + (dungeon.roomSize + 1) * 5; z += 16) {
-                if (x % (dungeon.roomSize + 1) == 15 && z % (dungeon.roomSize + 1) == 15) {
+    public static Vector2i getRoomCenterCoords(Vector2i coords) {
+        for (int x = Dungeon.startX; x <= Dungeon.startX + (Dungeon.roomSize + 1) * 5; x += 16) {
+            for (int z = Dungeon.startZ; z <= Dungeon.startZ + (Dungeon.roomSize + 1) * 5; z += 16) {
+                if (x % (Dungeon.roomSize + 1) == 15 && z % (Dungeon.roomSize + 1) == 15) {
                     if (MapUtils.isBetween(coords.x, x + 16, x - 16) &&
-                            MapUtils.isBetween(coords.z, z + 16, z - 16)) {
-                        return new Coords(x, z);
+                            MapUtils.isBetween(coords.y, z + 16, z - 16)) {
+                        return new Vector2i(x, z);
                     }
                 }
             }
         }
-        return new Coords(-1, -1);
+        return null;
     }
 }

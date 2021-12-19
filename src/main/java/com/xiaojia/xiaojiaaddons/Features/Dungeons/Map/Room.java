@@ -19,7 +19,6 @@ public class Room {
     public boolean hasMimic;
     public int[] size;
     public boolean explored;
-    public boolean normallyVisible;
 
     public Room(int x, int z, Data data) {
         this.x = x;
@@ -32,7 +31,6 @@ public class Room {
         this.size = new int[]{3, 3};
         this.checkmark = "";
         this.explored = true;
-        this.normallyVisible = true;
         this.hasMimic = false;
     }
 

@@ -26,6 +26,9 @@ public class Renderer {
     public static final void translate(float x, float y, float z) {
         GL11.glTranslated(x, y, z);
     }
+    public static final void translate(float x, float y) {
+        GL11.glTranslated(x, y, 0);
+    }
 
     public static final void scale(float scaleX, float scaleY) {
         GL11.glScalef(scaleX, scaleY, 1.0F);

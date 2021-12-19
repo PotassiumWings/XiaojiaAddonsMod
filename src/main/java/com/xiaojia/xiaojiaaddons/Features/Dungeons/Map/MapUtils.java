@@ -2,8 +2,11 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
+
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class MapUtils {
     public static final String[] colors = new String[]{
@@ -28,6 +31,12 @@ public class MapUtils {
 
     public static boolean isBetween(int a, int b, int c) {
         return (a - b) * (a - c) <= 0;
+    }
+
+    public static boolean chunkLoaded(Vector3i coords) {
+        return getWorld().getChunkFromBlockCoords(
+                new BlockPos(coords.x, coords.y, coords.z)
+        ).isLoaded();
     }
 
     public static boolean includes(ArrayList<Integer> arr, int x) {

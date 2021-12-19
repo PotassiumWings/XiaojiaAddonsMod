@@ -32,6 +32,7 @@ public class SkyblockUtils {
     private static String currentServer = "";
     private static boolean set = false;
     private static boolean isInCrystalHollows = false;
+    private static String dungeon;
 
     private static String updateCurrentMap() {
         ArrayList<String> lines = ScoreBoard.getLines();
@@ -65,7 +66,19 @@ public class SkyblockUtils {
                 }
             }
         }
+
+        if (result.equals("The Catacombs")) {
+            Pattern pattern = Pattern.compile("The Catacombs \\((.*)\\)");
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.find()) {
+                dungeon = matcher.group(1);
+            }
+        }
         return result;
+    }
+
+    public static String getDungeon() {
+        return dungeon;
     }
 
     public static String getCurrentMap() {
