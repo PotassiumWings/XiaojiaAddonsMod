@@ -29,7 +29,7 @@ public class StarredMobESP {
     @SubscribeEvent
     public void onRenderEntityModel(RenderEntityModelEvent event) {
         if (!Checker.enabled) return;
-        if (!Configs.StarredMobESP) return;
+        if (Configs.StarredMobESP != 1) return;
         if (!SkyblockUtils.isInDungeon()) return;
         Entity entity = event.entity;
         if (checkedEntities.contains(entity)) return;

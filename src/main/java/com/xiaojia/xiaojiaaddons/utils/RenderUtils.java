@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Objects.Image;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -20,11 +21,13 @@ public class RenderUtils {
     public static void drawRect(Color color, float x, float y, float width, float height) {
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
+        GlStateManager.enableAlpha();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        doColor(color);
+
+        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+
         float[] pos = new float[]{x, y, x + width, y + height};
         worldRenderer.begin(7, DefaultVertexFormats.POSITION);
-
         worldRenderer.pos(pos[0], pos[3], 0.0).endVertex();
         worldRenderer.pos(pos[2], pos[3], 0.0).endVertex();
         worldRenderer.pos(pos[2], pos[1], 0.0).endVertex();
@@ -61,12 +64,6 @@ public class RenderUtils {
             float g = (color >> 8 & 0xFF) / 255.0F;
             float b = (color & 0xFF) / 255.0F;
             GlStateManager.color(r, g, b, a);
-        }
-    }
-
-    private static void doColor(Color color) {
-        if (colorized == null) {
-            GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         }
     }
 

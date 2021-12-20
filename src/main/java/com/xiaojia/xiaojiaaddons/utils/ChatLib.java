@@ -22,7 +22,7 @@ public class ChatLib {
         if (chatMessage == null) chatMessage = "null";
         String[] texts = chatMessage.split("\n");
         for (String text : texts) {
-            text = "&9[XiaojiaAddonsMod] > &b" + text;
+            text = "&9[XJA] > &b" + text;
             text = addColor(text);
             System.out.println(text);
             EntityPlayerSP player = getPlayer();

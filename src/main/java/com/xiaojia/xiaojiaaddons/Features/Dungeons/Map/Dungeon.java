@@ -152,6 +152,7 @@ public class Dungeon {
     public static void updatePlayers() {
         if (!isInDungeon) return;
         ArrayList<String> tab = TabUtils.getNames();
+        if (tab.size() < 10) return;
         int iconNum = 0;
         for (int line : new int[]{5, 9, 13, 17, 1}) {
             String tabLine = ChatLib.removeFormatting(tab.get(line)).trim();
@@ -346,7 +347,7 @@ public class Dungeon {
     }
 
     @SubscribeEvent
-    public void onRenderMap(RenderGameOverlayEvent.Pre event) {
+    public void onRenderMap(RenderGameOverlayEvent.Post event) {
         if (!isInDungeon || !Configs.MapEnabled) return;
         drawBackground();
         if (map != null) {
@@ -446,9 +447,9 @@ public class Dungeon {
         if (!isInDungeon || !isFullyScanned) return;
         Room room = Lookup.getRoomFromCoords(new Vector2i(MathUtils.floor(getX(getPlayer())), MathUtils.floor(getZ(getPlayer()))));
         if (room != null) {
-            ChatLib.chat(room.name);
-            if (room.type.equals("puzzle")) StonklessStonk.setInPuzzle(true);
-            else StonklessStonk.setInPuzzle(false);
+            if (XiaojiaAddons.isDebug()) ChatLib.chat(room.name);
+            StonklessStonk.setInPuzzle(room.type.equals("puzzle") &&
+                    (room.name.equals("Water Board") || room.name.equals("Three Weirdos")));
         }
     }
 
@@ -621,9 +622,10 @@ public class Dungeon {
     }
 
     private void drawBackground() {
-        RenderUtils.start();
         mapSize = Configs.ScoreCalculation ? new Vector2i(25, 27) : new Vector2i(25, 25);
-        RenderUtils.drawRect(new Color(0, 0, 0, Configs.BackgroundAlpha),
+        RenderUtils.start();
+        RenderUtils.translate(0, 0, -1F);
+        RenderUtils.drawRect(new Color(0F, 0F, 0F, Configs.BackgroundAlpha/255F),
                 Configs.MapX, Configs.MapY,
                 mapSize.x * Configs.MapScale, mapSize.y * Configs.MapScale);
         RenderUtils.end();

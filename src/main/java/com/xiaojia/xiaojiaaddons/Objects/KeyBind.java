@@ -7,7 +7,7 @@ public class KeyBind {
     private final KeyBinding keyBinding;
 
     public KeyBind(String description, int key) {
-        keyBinding = new KeyBinding(description, key, "Addons - XiaojiaAddonsMod");
+        keyBinding = new KeyBinding(description, key, "Addons - Xiaojia Addons");
         KeyBindUtils.addKeyBind(this);
     }
 

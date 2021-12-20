@@ -20,6 +20,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.MapUpdater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.RoomLoader;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESPBox;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoUseItem;
@@ -123,6 +124,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoTerminal());
         MinecraftForge.EVENT_BUS.register(new MimicWarn());
         MinecraftForge.EVENT_BUS.register(new StarredMobESP());
+        MinecraftForge.EVENT_BUS.register(new StarredMobESPBox());
         MinecraftForge.EVENT_BUS.register(new StonklessStonk());
         // map
         MinecraftForge.EVENT_BUS.register(new Dungeon());

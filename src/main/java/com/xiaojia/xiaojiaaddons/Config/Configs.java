@@ -208,8 +208,9 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Starred Mob ESP", parent = "Dungeons")
     public static boolean StarredMobESPEnable = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Starred Mob ESP Enable", parent = "Starred Mob ESP")
-    public static boolean StarredMobESP = false;
+    @Property(type = Property.Type.SELECT, name = "Starred Mob ESP Kind", parent = "Starred Mob ESP",
+            options = {"Off", "Outline", "Box"})
+    public static int StarredMobESP = 0;
 
     @Property(type = Property.Type.NUMBER, name = "ESP Outline Length", parent = "Starred Mob ESP",
             min = 1, max = 10, step = 1)
