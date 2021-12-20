@@ -23,7 +23,7 @@ public class Door {
     public Color getColor() {
         switch (this.type) {
             case "wither":
-                return new Color(13, 13, 13, 255);
+                return new Color(0, 155, 135, 255);
             case "blood":
                 return new Color(231, 0, 0, 255);
             case "entrance":

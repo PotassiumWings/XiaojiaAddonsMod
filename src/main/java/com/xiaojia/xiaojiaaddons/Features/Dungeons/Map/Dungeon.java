@@ -117,7 +117,7 @@ public class Dungeon {
     // score str
     private static String scoreString1;
     private static String scoreString2;
-
+    public static String message300 = "8173c4nh29384tcn28734mco8haeuyfgblcaii34icy5jmo8137gbqglgieaw83m7yrho8yahblgwtmp0983q1hc9liuba,wkhznf";
 
     @SubscribeEvent
     public void onChatReceived(ClientChatReceivedEvent event) {
@@ -237,7 +237,7 @@ public class Dungeon {
     public void onDeath(ClientChatReceivedEvent event) {
         String message = ChatLib.removeFormatting(event.message.getUnformattedText());
         if (message.startsWith(" ☠ ")) {
-            CommandsUtils.addCommand("/pc 有笨比");
+//            CommandsUtils.addCommand("/pc " + deathMessage);
         }
     }
 
@@ -548,7 +548,7 @@ public class Dungeon {
         // Announce 300
         if (Configs.Announce300 && !said300 && score >= 300) {
             said300 = true;
-            CommandsUtils.addCommand("/pc 8173c4nh29384tcn28734mco8haeuyfgblcaii34icy5jmo8137gbqglgieaw83m7yrho8yahblgwtmp0983q1hc9liuba,wkhznf");
+            CommandsUtils.addCommand("/pc " + message300);
         }
     }
 

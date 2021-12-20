@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Map;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
@@ -13,6 +14,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Command extends CommandBase {
     @Override
@@ -50,6 +52,13 @@ public class Command extends CommandBase {
                 break;
             case "s":
                 XiaojiaAddons.guiToOpen = new ConfigGui();
+                break;
+            case "300":
+                if (strings.length == 1) ChatLib.chat("announce300: " + Dungeon.message300);
+                else {
+                    Dungeon.message300 = String.join(" ", Arrays.copyOfRange(strings, 1, strings.length));
+                    ChatLib.chat("Successfully set announce300 message to: " + Dungeon.message300);
+                }
                 break;
             case "tab":
                 TabUtils.printTab();
@@ -91,7 +100,7 @@ public class Command extends CommandBase {
 
     private String getUsage() {
 //        return "/xj curmap for current map information.\n/xj debug to debug.\n/xj s to open gui settings";
-        return "/xj curmap for current map information.\n/xj s to open gui settings";
+        return "/xj curmap for current map information.\n/xj s to open gui settings.\n/xj 300 to see, and /xj 300 message to set announce300 message.";
     }
 
     @Override

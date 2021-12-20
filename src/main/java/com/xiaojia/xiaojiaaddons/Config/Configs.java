@@ -442,7 +442,7 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Rooms", parent = "Illegal Map")
     public static boolean RoomPart = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Show Mimic Room", parent = "Rooms")
+    @Property(type = Property.Type.BOOLEAN, name = "Show Mimic Room", parent = "Rooms", description = "Currently useless")
     public static boolean ShowMimicRoom = true;
 
     @Property(type = Property.Type.SELECT, name = "Room Name Color", parent = "Rooms",
