@@ -7,6 +7,8 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.Color;
+
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class RenderUtils {
@@ -15,7 +17,7 @@ public class RenderUtils {
     private static final Long colorized = null;
     private static final Integer drawMode = null;
 
-    public static void drawRect(long color, float x, float y, float width, float height) {
+    public static void drawRect(Color color, float x, float y, float width, float height) {
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -59,6 +61,12 @@ public class RenderUtils {
             float g = (color >> 8 & 0xFF) / 255.0F;
             float b = (color & 0xFF) / 255.0F;
             GlStateManager.color(r, g, b, a);
+        }
+    }
+
+    private static void doColor(Color color) {
+        if (colorized == null) {
+            GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         }
     }
 

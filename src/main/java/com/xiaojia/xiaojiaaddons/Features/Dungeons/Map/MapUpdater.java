@@ -20,9 +20,13 @@ public class MapUpdater {
                 Dungeon.isInDungeon) {
             lastUpdate = TimeUtils.curTime();
             new Thread(() -> {
-                Dungeon.updatePlayers();
-                Dungeon.updateRooms();
-                Dungeon.updateDoors();
+                try {
+                    Dungeon.updatePlayers();
+                    Dungeon.updateRooms();
+                    Dungeon.updateDoors();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }).start();
         }
     }

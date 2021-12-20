@@ -46,6 +46,12 @@ public class StonklessStonk {
     private BlockPos facingPos;
     private BlockPos lastPlayerPos;
 
+    private static boolean isInPuzzle = false;
+
+    public static void setInPuzzle(boolean isIn) {
+        isInPuzzle = isIn;
+    }
+
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         facingPos = null;
@@ -57,6 +63,7 @@ public class StonklessStonk {
         if (!SkyblockUtils.isInDungeon()) return;
         if (!Configs.StonklessStonkEnable) return;
         if (!should) return;
+        if (isInPuzzle) return;
 
         float PI = (float) Math.PI;
         float px = MathUtils.getX(getPlayer()), py = MathUtils.getY(getPlayer()) + getPlayer().getEyeHeight(), pz = MathUtils.getZ(getPlayer());
@@ -119,6 +126,7 @@ public class StonklessStonk {
         if (!Checker.enabled) return;
         if (!Configs.StonklessStonkEnable) return;
         if (!SkyblockUtils.isInDungeon()) return;
+        if (isInPuzzle) return;
         int px = MathUtils.getBlockX(getPlayer()), py = MathUtils.getBlockY(getPlayer()), pz = MathUtils.getBlockZ(getPlayer());
         BlockPos playerPos = new BlockPos(MathUtils.floor(px), MathUtils.floor(py), MathUtils.floor(pz));
         if (playerPos.equals(lastPlayerPos)) return;
@@ -142,6 +150,7 @@ public class StonklessStonk {
         if (!Checker.enabled) return;
         if (!Configs.StonklessStonkEnable || !should) return;
         if (!SkyblockUtils.isInDungeon()) return;
+        if (isInPuzzle) return;
         for (Map.Entry<BlockPos, Block> entry : blockHashMap.entrySet()) {
             BlockPos pos = entry.getKey();
             if (doneSecretsPos.containsKey(pos)) continue;

@@ -1,5 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
@@ -24,6 +26,10 @@ public class Map {
 
     public static void calibrate() {
 //        ChatLib.chat("in map: dungeon int " + Dungeon.floorInt);
+        if (Dungeon.floorInt == -1) {
+            if (XiaojiaAddons.isDebug()) ChatLib.chat("failed!");
+            return;
+        }
         if (Dungeon.totalRooms > 29) startCorner = new Vector2i(5, 5);
         else if (Dungeon.totalRooms == 29) startCorner = new Vector2i(16, 5);
         else if (Dungeon.totalRooms == 24) startCorner = new Vector2i(11, 11);

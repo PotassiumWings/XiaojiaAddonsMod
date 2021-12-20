@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
@@ -32,6 +33,8 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
@@ -331,7 +334,7 @@ public class Dungeon {
         }
         if (isFullyScanned && !Map.calibrated) {
             Map.calibrate();
-            if (Configs.ChatInfo) {
+            if (Map.calibrated && Configs.ChatInfo) {
                 ChatLib.chat("&aCurrent Dungeon:\n" +
                         String.format("&aPuzzles &c%d&a: \n &b- &d%s\n", puzzles.size(), String.join("\n &b- &d", scannedPuzzles)) +
                         String.format("&6Trap: &a%s\n", trapType) +
@@ -357,9 +360,10 @@ public class Dungeon {
             if (nameRendered.contains(room.name)) continue;
             nameRendered.add(room.name);
 
-            if (Configs.ShowRoomNames) {
+            if (room.type.equals("puzzle") && Configs.ShowPuzzleName ||
+                    room.type.equals("trap") && Configs.ShowTrapName ||
+                    (room.type.equals("normal") || room.type.equals("rare")) && Configs.ShowNormalName)
                 room.renderName();
-            }
             if (Configs.ShowSecrets != 0 &&
                     (room.type.equals("normal") || room.type.equals("rare"))) {
                 room.renderSecrets();
@@ -424,10 +428,27 @@ public class Dungeon {
     }
 
     @SubscribeEvent
-    public void onDeath(ClientChatReceivedEvent event) {
+    public void onMessageReceived(ClientChatReceivedEvent event) {
+        if (!isInDungeon) return;
         String message = ChatLib.removeFormatting(event.message.getUnformattedText());
         if (message.startsWith(" ☠ ")) {
 //            CommandsUtils.addCommand("/pc " + deathMessage);
+        }
+        String upperMessage = message.toUpperCase();
+        if (upperMessage.contains("MIMIC DEAD!") || upperMessage.contains("MIMIC KILLED!") ||
+                upperMessage.contains("SKYTILS-DUNGEON-SCORE-MIMIC")) {
+            isMimicDead = true;
+        }
+    }
+
+    @SubscribeEvent
+    public void onTickCheckCurrentRoom(TickEndEvent event) {
+        if (!isInDungeon || !isFullyScanned) return;
+        Room room = Lookup.getRoomFromCoords(new Vector2i(MathUtils.floor(getX(getPlayer())), MathUtils.floor(getZ(getPlayer()))));
+        if (room != null) {
+            ChatLib.chat(room.name);
+            if (room.type.equals("puzzle")) StonklessStonk.setInPuzzle(true);
+            else StonklessStonk.setInPuzzle(false);
         }
     }
 
@@ -602,7 +623,7 @@ public class Dungeon {
     private void drawBackground() {
         RenderUtils.start();
         mapSize = Configs.ScoreCalculation ? new Vector2i(25, 27) : new Vector2i(25, 25);
-        RenderUtils.drawRect(new Color(0, 0, 0, 30).hashCode(),
+        RenderUtils.drawRect(new Color(0, 0, 0, Configs.BackgroundAlpha),
                 Configs.MapX, Configs.MapY,
                 mapSize.x * Configs.MapScale, mapSize.y * Configs.MapScale);
         RenderUtils.end();
@@ -718,7 +739,7 @@ public class Dungeon {
     private void reset() {
         // Stuff from the scoreboard and tablist
         isInDungeon = false;
-        floorInt = 0;
+        floorInt = -1;
         puzzles = new ArrayList<>();
         secretsFound = 0;
         secretsNeeded = 1;

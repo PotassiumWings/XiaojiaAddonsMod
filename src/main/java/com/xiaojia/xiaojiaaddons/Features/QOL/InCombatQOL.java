@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
@@ -7,6 +8,7 @@ import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
@@ -76,9 +78,25 @@ public class InCombatQOL {
             }
         } else if (invName.contains("Wardrobe")) {
             if (openWardrobe && currentStep == 2) {
-                inventory.click(wardrobeSlot + 36, false, "LEFT");
-                getPlayer().closeScreen();
-                openWardrobe = false;
+                new Thread(() -> {
+                    currentStep++;
+                    try {
+                        ItemStack itemStack = inventory.getItemInSlot(wardrobeSlot + 36);
+                        while (itemStack == null || itemStack.getItemDamage() != 9 && itemStack.getItemDamage() != 10) {
+                            Thread.sleep(20);
+                            itemStack = ControlUtils.getOpenedInventory().getItemInSlot(wardrobeSlot + 36);
+                        }
+                        if (itemStack.getItemDamage() == 10 && Configs.NakePrevention) {
+                            ChatLib.chat("Detected Taking off Armor, stopped.");
+                        } else {
+                            inventory.click(wardrobeSlot + 36, false, "LEFT");
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    getPlayer().closeScreen();
+                    openWardrobe = false;
+                }).start();
             }
         }
     }

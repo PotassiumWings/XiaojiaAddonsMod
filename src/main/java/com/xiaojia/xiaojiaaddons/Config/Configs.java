@@ -22,6 +22,10 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "QOL")
     public static boolean QOLEnabled = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Nake Prevention", parent = "QOL",
+            description = "When Auto-Swapping Armor")
+    public static boolean NakePrevention = true;
+
     // AutoUseItem
     @Property(type = Property.Type.FOLDER, name = "Auto Use Item", description = "CD=0 <=> disable", parent = "QOL")
     public static boolean AutoUseItem = false;
@@ -438,6 +442,10 @@ public class Configs {
             options = {"Off", "Holding Leaps", "Always"})
     public static int ShowPlayerNames = 0;
 
+    @Property(type = Property.Type.NUMBER, name = "Background Alpha", parent = "Map",
+            min = 0, max = 255, step = 5)
+    public static int BackgroundAlpha = 20;
+
     // Rooms
     @Property(type = Property.Type.FOLDER, name = "Rooms", parent = "Illegal Map")
     public static boolean RoomPart = false;
@@ -462,8 +470,17 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Darken Unexplored", parent = "Rooms")
     public static boolean DarkenUnexplored = true;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Show Room Names", parent = "Rooms")
-    public static boolean ShowRoomNames = true;
+    @Property(type = Property.Type.FOLDER, name = "Show Room Name", parent = "Rooms")
+    public static boolean RoomNamesEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Trap Room Name", parent = "Show Room Name")
+    public static boolean ShowTrapName = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Puzzle Room Name", parent = "Show Room Name")
+    public static boolean ShowPuzzleName = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Normal Room Name", parent = "Show Room Name")
+    public static boolean ShowNormalName = false;
 
     //    @Property(type = Property.Type.SELECT, name = "Show Secrets", parent = "Rooms",
 //            options = {"Off", "Small", "Large", "Replace Checkmarks"})
