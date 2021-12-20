@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 import java.util.ArrayList;
 
 public class Data {
+    public static Data blankRoom = new Data("Unknown", "normal", 0, new ArrayList<>());
     public String name;
     public String type;
     public int secrets;
@@ -17,6 +18,4 @@ public class Data {
         this.secrets = secrets;
         this.cores = cores;
     }
-
-    public static Data blankRoom = new Data("Unknown", "normal", 0, new ArrayList<>());
 }

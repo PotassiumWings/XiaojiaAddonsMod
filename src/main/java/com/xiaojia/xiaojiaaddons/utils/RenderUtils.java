@@ -10,10 +10,10 @@ import org.lwjgl.opengl.GL11;
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class RenderUtils {
-    private static Long colorized = null;
     private static final Tessellator tessellator = Tessellator.getInstance();
     private static final WorldRenderer worldRenderer = tessellator.getWorldRenderer();
-    private static Integer drawMode = null;
+    private static final Long colorized = null;
+    private static final Integer drawMode = null;
 
     public static void drawRect(long color, float x, float y, float width, float height) {
         GlStateManager.enableBlend();

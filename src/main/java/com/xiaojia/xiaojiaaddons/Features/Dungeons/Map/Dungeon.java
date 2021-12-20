@@ -36,15 +36,6 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Dungeon {
-    private static final String[] entryMessages = new String[]{
-            "[BOSS] Bonzo: Gratz for making it this far, but I’m basically unbeatable.",
-            "[BOSS] Scarf: This is where the journey ends for you, Adventurers.",
-            "[BOSS] The Professor: I was burdened with terrible news recently...",
-            "[BOSS] Thorn: Welcome Adventurers! I am Thorn, the Spirit! And host of the Vegan Trials!",
-            "[BOSS] Livid: Welcome, you arrive right on time. I am Livid, the Master of Shadows.",
-            "[BOSS] Sadan: So you made it all the way here...and you wish to defy me? Sadan?!",
-            "[BOSS] Necron: Finally, I heard so much about you. The Eye likes you very much."
-    };
     public static final HashMap<String, Double> floorSecrets = new HashMap<String, Double>() {
         {
             put("F1", 0.3);
@@ -56,16 +47,16 @@ public class Dungeon {
             put("F7", 1D);
         }
     };
-    // scan
-    private static boolean isScanning = false;
+    private static final String[] entryMessages = new String[]{
+            "[BOSS] Bonzo: Gratz for making it this far, but I’m basically unbeatable.",
+            "[BOSS] Scarf: This is where the journey ends for you, Adventurers.",
+            "[BOSS] The Professor: I was burdened with terrible news recently...",
+            "[BOSS] Thorn: Welcome Adventurers! I am Thorn, the Spirit! And host of the Vegan Trials!",
+            "[BOSS] Livid: Welcome, you arrive right on time. I am Livid, the Master of Shadows.",
+            "[BOSS] Sadan: So you made it all the way here...and you wish to defy me? Sadan?!",
+            "[BOSS] Necron: Finally, I heard so much about you. The Eye likes you very much."
+    };
     public static boolean isFullyScanned = false;
-    private static long lastScan = 0;
-    private HashSet<String> scannedPuzzles = new HashSet<>();
-    // map
-    private static BufferedImage map = null;
-    private static Vector2i mapSize = new Vector2i(0, 0);
-    // players
-    private static ArrayList<Player> players = new ArrayList<>();
     // states
     public static boolean isInDungeon = false;
     public static long runStarted = 0;
@@ -102,22 +93,221 @@ public class Dungeon {
     public static int puzzleCount = 0;
     public static int puzzleDone = 0;
     public static int totalSecrets = 0;
-    public static int overflowSecrets = 0;
+    public static double overflowSecrets = 0;
     public static int calculatedTotalSecrets = 0;
     public static double secretsPercent = 0;
     public static double secretsNeeded = 1;
     public static int secretsFound = 0;
-    public static int secretsForMax = 0;
+    public static double secretsForMax = 0;
     public static boolean isMimicDead = false;
     public static Image greenCheck = new Image("BloomMapGreenCheck.png");
     public static Image whiteCheck = new Image("BloomMapWhiteCheck.png");
     public static Image failedRoom = new Image("BloomMapFailedRoom.png");
     public static Image questionMark = new Image("BloomMapQuestionMark.png");
     public static int floorInt;
+    public static String message300 = "8173c4nh29384tcn28734mco8haeuyfgblcaii34icy5jmo8137gbqglgieaw83m7yrho8yahblgwtmp0983q1hc9liuba,wkhznf";
+    // scan
+    private static boolean isScanning = false;
+    private static long lastScan = 0;
+    // map
+    private static BufferedImage map = null;
+    private static Vector2i mapSize = new Vector2i(0, 0);
+    // players
+    private static ArrayList<Player> players = new ArrayList<>();
     // score str
     private static String scoreString1;
     private static String scoreString2;
-    public static String message300 = "8173c4nh29384tcn28734mco8haeuyfgblcaii34icy5jmo8137gbqglgieaw83m7yrho8yahblgwtmp0983q1hc9liuba,wkhznf";
+    private HashSet<String> scannedPuzzles = new HashSet<>();
+
+    public static void makeMap() {
+        BufferedImage newMap = new BufferedImage(25, 25, BufferedImage.TYPE_4BYTE_ABGR);
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
+            Color color = room.getColor();
+            if (room.name.equals("Unknown")) color = new Color(255, 176, 31);
+            else if (!room.explored && Configs.DarkenUnexplored) color = color.darker().darker().darker();
+            setPixels(newMap, MathUtils.floor(room.x / 16) * 2 + 1, MathUtils.floor(room.z / 16) * 2 + 1, 3, 3, color);
+        }
+        for (int i = 0; i < doors.size(); i++) {
+            Door door = doors.get(i);
+            Color color = door.getColor();
+            if (!door.explored && Configs.DarkenUnexplored) color = color.darker().darker().darker();
+            setPixels(newMap, MathUtils.floor(door.x / 16) * 2 + 2, MathUtils.floor(door.z / 16) * 2 + 2, 1, 1, color);
+        }
+        map = newMap;
+        if (XiaojiaAddons.isDebug()) ChatLib.chat("map made!");
+    }
+
+    private static void setPixels(BufferedImage map, int x1, int y1, int wid, int height, Color color) {
+        for (int x = x1; x < x1 + wid; x++) {
+            for (int y = y1; y < y1 + height; y++) {
+                map.setRGB(x, y, color.getRGB());
+            }
+        }
+    }
+
+    public static void updatePlayers() {
+        if (!isInDungeon) return;
+        ArrayList<String> tab = TabUtils.getNames();
+        int iconNum = 0;
+        for (int line : new int[]{5, 9, 13, 17, 1}) {
+            String tabLine = ChatLib.removeFormatting(tab.get(line)).trim();
+            boolean dead = tabLine.contains("(DEAD)");
+            if (!tabLine.contains(" ")) continue;
+            String name = tabLine.split(" ")[0];
+            if (name.length() == 0) continue;
+            boolean found = false;
+            for (int i = 0; i < players.size(); i++) {
+                Player player = players.get(i);
+                if (player.name.equals(name)) {
+                    found = true;
+                    player.isDead = dead;
+                    player.icon = dead ? null : "icon-" + iconNum;
+                }
+            }
+            if (!found) {
+                Player newPlayer = new Player();
+                newPlayer.name = name;
+                newPlayer.isDead = dead;
+                newPlayer.icon = dead ? null : "icon-" + iconNum;
+                players.add(newPlayer);
+            }
+            if (!dead) iconNum++;
+        }
+        java.util.Map<String, Vec4b> decor = Map.getMapDecorators();
+        if (decor != null) {
+            for (java.util.Map.Entry<String, Vec4b> entry : decor.entrySet()) {
+                String decorIcon = entry.getKey();
+                Vec4b vec = entry.getValue();
+                for (int i = 0; i < players.size(); i++) {
+                    Player player = players.get(i);
+                    if (player.inRender) continue;
+                    if (player.icon.equals(decorIcon) && !player.name.equals(getPlayer().getName())) {
+                        player.iconX = (vec.func_176112_b() + 128 - Map.startCorner.x * 2.5) / 10 * Configs.MapScale;
+                        player.iconY = (vec.func_176113_c() + 128 - Map.startCorner.y * 2.5) / 10 * Configs.MapScale;
+                        player.yaw = (vec.func_176111_d() * 360) / 16F + 180;
+
+                        player.realX = player.iconX * 1.64;
+                        player.realZ = player.iconY * 1.64;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void updateRooms() {
+        byte[] colors = Map.getMapColors();
+        if (colors == null) return;
+        int width = 0, height = 0;
+
+        for (int i = Map.startCorner.x + (Map.roomSize / 2); i < 128; i += Map.roomSize / 2 + 2) {
+            for (int j = Map.startCorner.y + (Map.roomSize / 2); j < 128; j += Map.roomSize / 2 + 2) {
+                Vector2i coords = Lookup.getRoomCenterCoords(
+                        new Vector2i(MathUtils.floor((i - Map.startCorner.x) * (190F / 128)),
+                                MathUtils.floor((j - Map.startCorner.y) * (190F / 128))));
+                if (coords == null) continue;
+                byte color = colors[i + j * 128];
+                byte secondColor = colors[(i - 3) + j * 128];
+                Room room = getRoomAt(coords);
+                if (room == null) continue;
+
+                // Middle of rooms
+                if (width % 2 == 0 && height % 2 == 0) {
+                    if (color == 30 && secondColor != 30) {
+                        checkRoom(room.name, "green");
+                    }
+                    if (color == 34) {
+                        checkRoom(room.name, "white");
+                    }
+                    if (color == 18 && secondColor != 18) {
+                        checkRoom(room.name, "failed");
+                    }
+
+                    // Check if trap, blood and yellow are done
+                    if (color == 30 || color == 34) {
+                        if (secondColor == 62) trapDone = true;
+                        if (secondColor == 18) bloodDone = true;
+                        if (secondColor == 74) yellowDone = true;
+                    }
+
+                    // Set room to explored = true so it isn't darkened on the map
+                    // Set room to explored = false so it gets darkened
+                    setExplored(room.name, color != 0 && color != 85 && color != 119);
+                }
+                height++;
+            }
+            width++;
+        }
+    }
+
+    private static void checkRoom(String name, String mark) {
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
+            if (room.name.equals(name))
+                room.checkmark = mark;
+        }
+    }
+
+    private static void setExplored(String name, boolean explored) {
+        if (XiaojiaAddons.isDebug()) {
+            ChatLib.chat("set " + name + " to " + explored);
+        }
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
+            if (room.name.equals(name))
+                room.explored = explored;
+        }
+    }
+
+    public static Room getRoomAt(Vector2i coords) {
+        coords = Lookup.getRoomCenterCoords(coords);
+        if (coords == null) return null;
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
+            if (room.x == coords.x && room.z == coords.y)
+                return room;
+        }
+        return null;
+    }
+
+    public static void updateDoors() {
+        ArrayList<Door> toRemove = new ArrayList<>();
+        for (int i = 0; i < doors.size(); i++) {
+            Door door = doors.get(i);
+            if (door == null) continue;
+            int id = Block.getIdFromBlock(BlockUtils.getBlockAt(door.x, 70, door.z));
+            if (id == 0 || id == 166) door.type = "normal";
+            // always light wither
+            if (Configs.AlwaysHighlightWitherDoor && door.type.equals("wither")) {
+                door.explored = true;
+                continue;
+            }
+            Room room1 = getRoomAt(Lookup.getRoomCenterCoords(new Vector2i(door.x + 4, door.z + 16)));
+            Room room2 = getRoomAt(Lookup.getRoomCenterCoords(new Vector2i(door.x - 4, door.z - 16)));
+            Room room3 = getRoomAt(Lookup.getRoomCenterCoords(new Vector2i(door.x + 16, door.z + 4)));
+            Room room4 = getRoomAt(Lookup.getRoomCenterCoords(new Vector2i(door.x - 16, door.z - 4)));
+            if (room1 != null && room2 != null && room1.x == room2.x) {
+                if (!room1.explored || !room2.explored) {
+                    door.explored = false;
+                    continue;
+                }
+            } else if (room3 != null && room4 != null && room3.z == room4.z) {
+                if (!room3.explored || !room4.explored) {
+                    door.explored = false;
+                    continue;
+                }
+            }
+            // Room has one or no connected sides, not actually a door or in wrong place
+            else if (door.type.equals("entrance")) {
+                // This is usally the extended part of the entrance room, so delete it.
+                toRemove.add(door);
+            }
+            door.explored = true;
+        }
+        for (Door door : toRemove) {
+            doors.remove(door);
+        }
+    }
 
     @SubscribeEvent
     public void onChatReceived(ClientChatReceivedEvent event) {
@@ -279,7 +469,7 @@ public class Dungeon {
             }
             // If a secret has been found then use the percentage on the tablist to calculate exactly how many are in the run. Makes it so that if the scan fails to detect a room
             // it will still be accurate after a secret has been found.
-            secretsForMax = (int) (calculatedTotalSecrets > 0 ? calculatedTotalSecrets * secretsNeeded : totalSecrets * secretsNeeded);
+            secretsForMax = (calculatedTotalSecrets > 0 ? calculatedTotalSecrets * secretsNeeded : totalSecrets * secretsNeeded);
             overflowSecrets = secretsFound > secretsForMax ? secretsFound - secretsForMax : 0;
             crypts = getInt(tab.get(32), Pattern.compile("Crypts: (\\d+)"));
             deaths = getInt(tab.get(25), Pattern.compile("Deaths: \\((\\d+)\\)"));
@@ -407,33 +597,6 @@ public class Dungeon {
         isFullyScanned = allLoaded;
         if (XiaojiaAddons.isDebug()) ChatLib.chat("fully scanned: " + isFullyScanned + " !");
         isScanning = false;
-    }
-
-    public static void makeMap() {
-        BufferedImage newMap = new BufferedImage(25, 25, BufferedImage.TYPE_4BYTE_ABGR);
-        for (int i = 0; i < rooms.size(); i++) {
-            Room room = rooms.get(i);
-            Color color = room.getColor();
-            if (room.name.equals("Unknown")) color = new Color(255, 176, 31);
-            else if (!room.explored && Configs.DarkenUnexplored) color = color.darker().darker();
-            setPixels(newMap, MathUtils.floor(room.x / 16) * 2 + 1, MathUtils.floor(room.z / 16) * 2 + 1, 3, 3, color);
-        }
-        for (int i = 0; i < doors.size(); i++) {
-            Door door = doors.get(i);
-            Color color = door.getColor();
-            if (!door.explored && Configs.DarkenUnexplored) color = color.darker().darker();
-            setPixels(newMap, MathUtils.floor(door.x / 16) * 2 + 2, MathUtils.floor(door.z / 16) * 2 + 2, 1, 1, color);
-        }
-        map = newMap;
-        if (XiaojiaAddons.isDebug()) ChatLib.chat("map made!");
-    }
-
-    private static void setPixels(BufferedImage map, int x1, int y1, int wid, int height, Color color) {
-        for (int x = x1; x < x1 + wid; x++) {
-            for (int y = y1; y < y1 + height; y++) {
-                map.setRGB(x, y, color.getRGB());
-            }
-        }
     }
 
     private void drawBackground() {
@@ -617,164 +780,6 @@ public class Dungeon {
         secretsPercent = 0;
 
         isMimicDead = false;
-    }
-
-    public static void updatePlayers() {
-        if (!isInDungeon) return;
-        ArrayList<String> tab = TabUtils.getNames();
-        int iconNum = 0;
-        for (int line : new int[]{5, 9, 13, 17, 1}) {
-            String tabLine = ChatLib.removeFormatting(tab.get(line)).trim();
-            boolean dead = tabLine.contains("(DEAD)");
-            if (!tabLine.contains(" ")) continue;
-            String name = tabLine.split(" ")[0];
-            if (name.length() == 0) continue;
-            boolean found = false;
-            for (int i = 0; i < players.size(); i++) {
-                Player player = players.get(i);
-                if (player.name.equals(name)) {
-                    found = true;
-                    player.isDead = dead;
-                    player.icon = dead ? null : "icon-" + iconNum;
-                }
-            }
-            if (!found) {
-                Player newPlayer = new Player();
-                newPlayer.name = name;
-                newPlayer.isDead = dead;
-                newPlayer.icon = dead ? null : "icon-" + iconNum;
-                players.add(newPlayer);
-            }
-            if (!dead) iconNum++;
-        }
-        java.util.Map<String, Vec4b> decor = Map.getMapDecorators();
-        if (decor != null) {
-            for (java.util.Map.Entry<String, Vec4b> entry : decor.entrySet()) {
-                String decorIcon = entry.getKey();
-                Vec4b vec = entry.getValue();
-                for (int i = 0; i < players.size(); i++) {
-                    Player player = players.get(i);
-                    if (player.inRender) continue;
-                    if (player.icon.equals(decorIcon) && !player.name.equals(getPlayer().getName())) {
-                        player.iconX = (vec.func_176112_b() + 128 - Map.startCorner.x * 2.5) / 10 * Configs.MapScale;
-                        player.iconY = (vec.func_176113_c() + 128 - Map.startCorner.y * 2.5) / 10 * Configs.MapScale;
-                        player.yaw = (vec.func_176111_d() * 360) / 16F + 180;
-
-                        player.realX = player.iconX * 1.64;
-                        player.realZ = player.iconY * 1.64;
-                    }
-                }
-            }
-        }
-    }
-
-    public static void updateRooms() {
-        byte[] colors = Map.getMapColors();
-        if (colors == null) return;
-        int width = 0, height = 0;
-
-        for (int i = Map.startCorner.x + (Map.roomSize / 2); i < 128; i += Map.roomSize / 2 + 2) {
-            for (int j = Map.startCorner.y + (Map.roomSize / 2); j < 128; j += Map.roomSize / 2 + 2) {
-                Vector2i coords = Lookup.getRoomCenterCoords(
-                        new Vector2i(MathUtils.floor((i - Map.startCorner.x) * (190F / 128)),
-                                MathUtils.floor((j - Map.startCorner.y) * (190F / 128))));
-                if (coords == null) continue;
-                byte color = colors[i + j * 128];
-                byte secondColor = colors[(i - 3) + j * 128];
-                Room room = getRoomAt(coords);
-                if (room == null) continue;
-
-                // Middle of rooms
-                if (width % 2 == 0 && height % 2 == 0) {
-                    if (color == 30 && secondColor != 30) {
-                        checkRoom(room.name, "green");
-                    }
-                    if (color == 34) {
-                        checkRoom(room.name, "white");
-                    }
-                    if (color == 18 && secondColor != 18) {
-                        checkRoom(room.name, "failed");
-                    }
-
-                    // Check if trap, blood and yellow are done
-                    if (color == 30 || color == 34) {
-                        if (secondColor == 62) trapDone = true;
-                        if (secondColor == 18) bloodDone = true;
-                        if (secondColor == 74) yellowDone = true;
-                    }
-
-                    // Set room to explored = true so it isn't darkened on the map
-                    // Set room to explored = false so it gets darkened
-                    setExplored(room.name, color != 0 && color != 85 && color != 119);
-                }
-                height++;
-            }
-            width++;
-        }
-    }
-
-    private static void checkRoom(String name, String mark) {
-        for (int i = 0; i < rooms.size(); i++) {
-            Room room = rooms.get(i);
-            if (room.name.equals(name))
-                room.checkmark = mark;
-        }
-    }
-
-    private static void setExplored(String name, boolean explored) {
-        if (XiaojiaAddons.isDebug()) {
-            ChatLib.chat("set " + name + " to " + explored);
-        }
-        for (int i = 0; i < rooms.size(); i++) {
-            Room room = rooms.get(i);
-            if (room.name.equals(name))
-                room.explored = explored;
-        }
-    }
-
-    public static Room getRoomAt(Vector2i coords) {
-        coords = Lookup.getRoomCenterCoords(coords);
-        if (coords == null) return null;
-        for (int i = 0; i < rooms.size(); i++) {
-            Room room = rooms.get(i);
-            if (room.x == coords.x && room.z == coords.y)
-                return room;
-        }
-        return null;
-    }
-
-    public static void updateDoors() {
-        ArrayList<Door> toRemove = new ArrayList<>();
-        for (int i = 0; i < doors.size(); i++) {
-            Door door = doors.get(i);
-            if (door == null) continue;
-            int id = Block.getIdFromBlock(BlockUtils.getBlockAt(door.x, 70, door.z));
-            if (id == 0 || id == 166) door.type = "normal";
-            Room room1 = getRoomAt(Lookup.getRoomCenterCoords(new Vector2i(door.x + 4, door.z + 16)));
-            Room room2 = getRoomAt(Lookup.getRoomCenterCoords(new Vector2i(door.x - 4, door.z - 16)));
-            Room room3 = getRoomAt(Lookup.getRoomCenterCoords(new Vector2i(door.x + 16, door.z + 4)));
-            Room room4 = getRoomAt(Lookup.getRoomCenterCoords(new Vector2i(door.x - 16, door.z - 4)));
-            if (room1 != null && room2 != null && room1.x == room2.x) {
-                if (!room1.explored || !room2.explored) {
-                    door.explored = false;
-                    continue;
-                }
-            } else if (room3 != null && room4 != null && room3.z == room4.z) {
-                if (!room3.explored || !room4.explored) {
-                    door.explored = false;
-                    continue;
-                }
-            }
-            // Room has one or no connected sides, not actually a door or in wrong place
-            else if (door.type.equals("entrance")) {
-                // This is usally the extended part of the entrance room, so delete it.
-                toRemove.add(door);
-            }
-            door.explored = true;
-        }
-        for (Door door : toRemove) {
-            doors.remove(door);
-        }
     }
 
 

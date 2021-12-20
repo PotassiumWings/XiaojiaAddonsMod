@@ -1,6 +1,5 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
@@ -16,11 +15,6 @@ public class Map {
     public static boolean calibrated = false;
     public static Vector2i startCorner = new Vector2i(5, 5);
     public static int roomSize = 16;
-
-    @SubscribeEvent
-    public void onWorldLoad(WorldEvent.Load event) {
-        reset();
-    }
 
     public static void reset() {
         calibrated = false;
@@ -72,5 +66,10 @@ public class Map {
         MapData mapData = getMapData();
         if (mapData == null) return null;
         return mapData.colors;
+    }
+
+    @SubscribeEvent
+    public void onWorldLoad(WorldEvent.Load event) {
+        reset();
     }
 }

@@ -452,18 +452,28 @@ public class Configs {
                     "§8Dark Gray", "§9Blue"})
     public static int RoomNameColor = 5;
 
+    @Property(type = Property.Type.SELECT, name = "Wither Door Color", parent = "Rooms",
+            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
+                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
+                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
+                    "§8Dark Gray", "§9Blue"})
+    public static int WitherDoorColor = 1;
+
     @Property(type = Property.Type.BOOLEAN, name = "Darken Unexplored", parent = "Rooms")
     public static boolean DarkenUnexplored = true;
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Room Names", parent = "Rooms")
     public static boolean ShowRoomNames = true;
 
-//    @Property(type = Property.Type.SELECT, name = "Show Secrets", parent = "Rooms",
+    //    @Property(type = Property.Type.SELECT, name = "Show Secrets", parent = "Rooms",
 //            options = {"Off", "Small", "Large", "Replace Checkmarks"})
 //    public static int ShowSecrets = 0;
     @Property(type = Property.Type.SELECT, name = "Show Secrets", parent = "Rooms",
             options = {"Off", "Small"})
     public static int ShowSecrets = 0;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Always Highlight Wither doors", parent = "Rooms")
+    public static boolean AlwaysHighlightWitherDoor = true;
 
     // TODO: Secrets replacing checkmarks
 

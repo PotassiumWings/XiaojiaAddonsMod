@@ -37,6 +37,13 @@ public class TabUtils {
         return res;
     }
 
+    public static void printTab() {
+        ArrayList<String> tabs = getNames();
+        for (int i = 0; i < tabs.size(); i++) {
+            ChatLib.chat(i + ": " + tabs.get(i));
+        }
+    }
+
     public static final class PlayerComparator implements Comparator<NetworkPlayerInfo> {
         public int compare(NetworkPlayerInfo playerOne, NetworkPlayerInfo playerTwo) {
             ScorePlayerTeam teamOne = playerOne.getPlayerTeam();
@@ -53,13 +60,6 @@ public class TabUtils {
                     playerOne.getGameProfile().getName(),
                     playerTwo.getGameProfile().getName()
             ).result();
-        }
-    }
-
-    public static void printTab() {
-        ArrayList<String> tabs = getNames();
-        for (int i = 0; i < tabs.size(); i++) {
-            ChatLib.chat(i + ": " + tabs.get(i));
         }
     }
 }

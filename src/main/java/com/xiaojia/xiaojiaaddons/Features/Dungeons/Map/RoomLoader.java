@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
+
 public class RoomLoader {
     public static ArrayList<Data> maps = new ArrayList<>();
 
@@ -24,7 +25,7 @@ public class RoomLoader {
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             JsonObject fullJson = parser.parse(reader).getAsJsonObject();
             JsonArray roomsArray = fullJson.getAsJsonArray("rooms");
-            for (JsonElement room: roomsArray) {
+            for (JsonElement room : roomsArray) {
                 Data data = new Data();
                 JsonObject roomObject = room.getAsJsonObject();
                 data.name = roomObject.get("name").getAsString();

@@ -19,7 +19,7 @@ public class Lookup {
 
     public static Room getRoomFromCoords(Vector2i coords) {
         Vector2i newCoords = getRoomCenterCoords(coords);
-        if (newCoords==null) {
+        if (newCoords == null) {
             ChatLib.chat("Non");
             return null;
         }

@@ -12,6 +12,7 @@ public class Door {
     public String type;
     public boolean explored;
     public boolean normallyVisible;
+
     public Door(int x, int z) {
         this.x = x;
         this.z = z;
@@ -23,7 +24,7 @@ public class Door {
     public Color getColor() {
         switch (this.type) {
             case "wither":
-                return new Color(0, 155, 135, 255);
+                return MapUtils.realColors[Configs.WitherDoorColor];
             case "blood":
                 return new Color(231, 0, 0, 255);
             case "entrance":

@@ -9,12 +9,12 @@ import javax.vecmath.Vector2f;
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class Player {
+    public static Image defaultIcon = new Image("defaultMapIcon.png");
     public String icon;
     public String name;
     public String uuid;
     public Vector2f size = new Vector2f(5, 5);
     public boolean inRender;
-    public static Image defaultIcon = new Image("defaultMapIcon.png");
     public Image head;
     public float yaw;
     public double iconX;
