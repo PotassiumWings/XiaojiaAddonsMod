@@ -443,9 +443,9 @@ public class Configs {
             options = {"Off", "Holding Leaps", "Always"})
     public static int ShowPlayerNames = 0;
 
-    @Property(type = Property.Type.NUMBER, name = "Background Alpha", parent = "Map",
-            min = 0, max = 255, step = 5)
-    public static int BackgroundAlpha = 20;
+    @Property(type = Property.Type.NUMBER, name = "Background Alpha", parent = "Map", description = "Currently only 0/1",
+            min = 0, max = 1, step = 1)
+    public static int BackgroundAlpha = 0;
 
     // Rooms
     @Property(type = Property.Type.FOLDER, name = "Rooms", parent = "Illegal Map")
