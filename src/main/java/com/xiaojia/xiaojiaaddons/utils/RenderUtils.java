@@ -1,7 +1,7 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Objects.Image;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -18,25 +18,10 @@ public class RenderUtils {
     private static final Long colorized = null;
     private static final Integer drawMode = null;
 
-    public static void drawRect(Color color, float x, float y, float width, float height) {
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableAlpha();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-
-        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-
-        float[] pos = new float[]{x, y, x + width, y + height};
-        worldRenderer.begin(7, DefaultVertexFormats.POSITION);
-        worldRenderer.pos(pos[0], pos[3], 0.0).endVertex();
-        worldRenderer.pos(pos[2], pos[3], 0.0).endVertex();
-        worldRenderer.pos(pos[2], pos[1], 0.0).endVertex();
-        worldRenderer.pos(pos[0], pos[1], 0.0).endVertex();
-        tessellator.draw();
-
-        GlStateManager.color(1F, 1F, 1F, 1F);
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
+    public static void drawRect(int color, int x, int y, int width, int height) {
+        GL11.glTranslated(0, 0, 1);
+        Gui.drawRect(x, y, x + width, y + height, color);
+        GL11.glTranslated(0, 0, -1);
     }
 
     public static void drawImage(Image image, double x, double y, double width, double height) {

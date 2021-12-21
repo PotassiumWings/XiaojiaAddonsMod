@@ -49,7 +49,7 @@ public class BlockUtils {
 
     public static String getTileProperty(BlockSkull block, BlockPos blockPos) {
         TileEntitySkull tile = (TileEntitySkull) getWorld().getTileEntity(blockPos);
-        if (tile.getSkullType() == 3) {
+        if (tile != null && tile.getSkullType() == 3) {
             Property property = Iterables.getFirst(tile.getPlayerProfile().getProperties().get("textures"), null);
             if (property != null) {
                 String result = property.getValue();

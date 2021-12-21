@@ -182,7 +182,7 @@ public class Configs {
     public static boolean RogueAutoRightClick = false;
 
     @Property(type = Property.Type.NUMBER, name = "Rogue Sword rightclick CPS", parent = "Hold Right Click",
-            min = 1, max = 50, step = 1)
+            min = 1, max = 250, step = 3)
     public static int RogueCPS = 10;
 
     @Property(type = Property.Type.NUMBER, name = "Max Speed for Rogue", parent = "Hold Right Click",
@@ -443,9 +443,9 @@ public class Configs {
             options = {"Off", "Holding Leaps", "Always"})
     public static int ShowPlayerNames = 0;
 
-    @Property(type = Property.Type.NUMBER, name = "Background Alpha", parent = "Map", description = "Currently only 0/1",
-            min = 0, max = 1, step = 1)
-    public static int BackgroundAlpha = 0;
+    @Property(type = Property.Type.NUMBER, name = "Background Alpha", parent = "Map",
+            min = 0, max = 25, step = 1)
+    public static int BackgroundAlpha = 15;
 
     // Rooms
     @Property(type = Property.Type.FOLDER, name = "Rooms", parent = "Illegal Map")

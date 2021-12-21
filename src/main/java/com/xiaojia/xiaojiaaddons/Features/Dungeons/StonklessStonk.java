@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.BlockChangeEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
@@ -207,7 +208,10 @@ public class StonklessStonk {
         if (block instanceof BlockChest || block instanceof BlockLever) return true;
         if (block instanceof BlockSkull) {
             String str = BlockUtils.getTileProperty((BlockSkull) block, pos);
-            return str.hashCode() == witherEssenceHash || str.hashCode() == redstoneKeyHash;
+            return str.hashCode() == witherEssenceHash ||
+                    (str.hashCode() == redstoneKeyHash &&
+                            (Dungeon.currentRoom.equals("Golden Oasis") ||
+                                    Dungeon.currentRoom.equals("Redstone Key")));
         }
         return false;
     }

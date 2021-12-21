@@ -84,6 +84,7 @@ public class Dungeon {
     public static boolean trapDone = false;
     public static boolean yellowDone = false;
     // calc
+    public static String currentRoom = "";
     public static int openedRooms;
     public static int completedRooms;
     public static int crypts;
@@ -349,43 +350,47 @@ public class Dungeon {
     @SubscribeEvent
     public void onRenderMap(RenderGameOverlayEvent.Post event) {
         if (!isInDungeon || !Configs.MapEnabled) return;
-        drawBackground();
-        if (map != null) {
-            renderMap();
-        }
-        renderCheckmarks();
-        // render rooms
-        HashSet<String> nameRendered = new HashSet<>();
-        for (int i = 0; i < rooms.size(); i++) {
-            Room room = rooms.get(i);
-            if (nameRendered.contains(room.name)) continue;
-            nameRendered.add(room.name);
-
-            if (room.type.equals("puzzle") && Configs.ShowPuzzleName ||
-                    room.type.equals("trap") && Configs.ShowTrapName ||
-                    (room.type.equals("normal") || room.type.equals("rare")) && Configs.ShowNormalName)
-                room.renderName();
-            if (Configs.ShowSecrets != 0 &&
-                    (room.type.equals("normal") || room.type.equals("rare"))) {
-                room.renderSecrets();
+        try {
+            drawBackground();
+            if (map != null) {
+                renderMap();
             }
-        }
-        // render players
-        for (int i = 0; i < players.size(); i++) {
-            Player player = players.get(i);
-            if (player.isDead) continue;
-            player.render();
-            ItemStack heldItem = ControlUtils.getHeldItemStack();
-            if ((heldItem != null && heldItem.getDisplayName().contains("Spirit Leap") &&
-                    Configs.ShowPlayerNames == 1) ||
-                    Configs.ShowPlayerNames == 2) {
-                if (!player.name.equals(getPlayer().getName())) {
-                    player.renderName();
+            renderCheckmarks();
+            // render rooms
+            HashSet<String> nameRendered = new HashSet<>();
+            for (int i = 0; i < rooms.size(); i++) {
+                Room room = rooms.get(i);
+                if (nameRendered.contains(room.name)) continue;
+                nameRendered.add(room.name);
+
+                if (room.type.equals("puzzle") && Configs.ShowPuzzleName ||
+                        room.type.equals("trap") && Configs.ShowTrapName ||
+                        (room.type.equals("normal") || room.type.equals("rare")) && Configs.ShowNormalName)
+                    room.renderName();
+                if (Configs.ShowSecrets != 0 &&
+                        (room.type.equals("normal") || room.type.equals("rare"))) {
+                    room.renderSecrets();
                 }
             }
+            // render players
+            for (int i = 0; i < players.size(); i++) {
+                Player player = players.get(i);
+                if (player.isDead) continue;
+                player.render();
+                ItemStack heldItem = ControlUtils.getHeldItemStack();
+                if ((heldItem != null && heldItem.getDisplayName().contains("Spirit Leap") &&
+                        Configs.ShowPlayerNames == 1) ||
+                        Configs.ShowPlayerNames == 2) {
+                    if (!player.name.equals(getPlayer().getName())) {
+                        player.renderName();
+                    }
+                }
+            }
+            // render score
+            if (Configs.ScoreCalculation) drawScoreCalc();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        // render score
-        if (Configs.ScoreCalculation) drawScoreCalc();
     }
 
     @SubscribeEvent
@@ -395,14 +400,19 @@ public class Dungeon {
                 scoreString1 = "&cDungeon has not been";
                 scoreString2 = "&cfully scanned.";
             } else {
-                calcScore();
+                try {
+                    calcScore();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     @SubscribeEvent
     public void onTickUpdatePlayerIcon(TickEndEvent event) {
-        if (isInDungeon) {
+        if (!isInDungeon) return;
+        try {
             for (int i = 0; i < players.size(); i++) {
                 Player player = players.get(i);
                 EntityPlayer entityPlayer = getWorld().getPlayerEntityByName(player.name);
@@ -420,6 +430,8 @@ public class Dungeon {
                     player.yaw = entityPlayer.rotationYaw + 180;
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -447,6 +459,7 @@ public class Dungeon {
         if (!isInDungeon || !isFullyScanned) return;
         Room room = Lookup.getRoomFromCoords(new Vector2i(MathUtils.floor(getX(getPlayer())), MathUtils.floor(getZ(getPlayer()))));
         if (room != null) {
+            currentRoom = room.name;
             if (XiaojiaAddons.isDebug()) ChatLib.chat(room.name);
             StonklessStonk.setInPuzzle(room.type.equals("puzzle") &&
                     (room.name.equals("Water Board") || room.name.equals("Three Weirdos")));
@@ -468,9 +481,9 @@ public class Dungeon {
         } else {
             endX = endZ = 190;
         }
-        ArrayList<String> tab = TabUtils.getNames();
-        if (!isInDungeon || tab.isEmpty() || !tab.get(0).contains("Party (")) return;
         try {
+            ArrayList<String> tab = TabUtils.getNames();
+            if (!isInDungeon || tab.isEmpty() || !tab.get(0).contains("Party (")) return;
             puzzles = new ArrayList<>(
                     Arrays.asList(Arrays.stream(new int[]{48, 49, 50, 51, 52})
                             .mapToObj(tab::get).filter(line -> !line.equals(""))
@@ -624,8 +637,7 @@ public class Dungeon {
     private void drawBackground() {
         mapSize = Configs.ScoreCalculation ? new Vector2i(25, 27) : new Vector2i(25, 25);
         RenderUtils.start();
-        RenderUtils.translate(0, 0, -1F);
-        RenderUtils.drawRect(new Color(0F, 0F, 0F, Configs.BackgroundAlpha/255F),
+        RenderUtils.drawRect(new Color(0F, 0F, 0F, Configs.BackgroundAlpha / 255F).getRGB(),
                 Configs.MapX, Configs.MapY,
                 mapSize.x * Configs.MapScale, mapSize.y * Configs.MapScale);
         RenderUtils.end();
@@ -739,6 +751,7 @@ public class Dungeon {
     }
 
     private void reset() {
+        currentRoom = "";
         // Stuff from the scoreboard and tablist
         isInDungeon = false;
         floorInt = -1;
