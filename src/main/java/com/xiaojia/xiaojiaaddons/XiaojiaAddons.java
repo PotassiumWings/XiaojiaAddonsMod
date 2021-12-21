@@ -13,6 +13,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.EnderCrystalESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoBlood;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoCloseSecretChest;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoTerminal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Map;
@@ -121,6 +122,7 @@ public class XiaojiaAddons {
         // Dungeons
         MinecraftForge.EVENT_BUS.register(new AutoBlood());
         MinecraftForge.EVENT_BUS.register(new AutoCloseSecretChest());
+        MinecraftForge.EVENT_BUS.register(new AutoItemFrame());
         MinecraftForge.EVENT_BUS.register(new AutoTerminal());
         MinecraftForge.EVENT_BUS.register(new MimicWarn());
         MinecraftForge.EVENT_BUS.register(new StarredMobESP());

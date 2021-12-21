@@ -243,6 +243,16 @@ public class Configs {
             min = 80, max = 500, step = 10)
     public static int AutoTerminalCD = 150;
 
+    // AutoItemFrame
+    @Property(type = Property.Type.FOLDER, name = "Auto Devices", parent = "Dungeons")
+    public static boolean AutoDevices = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto P3-3 Arrows", parent = "Auto Devices")
+    public static boolean AutoItemFrameArrows = false;
+
+    @Property(type = Property.Type.NUMBER, name = "P3 Arrows CD", parent = "Auto Devices", min = 20, max = 500, step = 10)
+    public static int ArrowCD = 100;
+
     // AutoBlood
     @Property(type = Property.Type.FOLDER, name = "Auto Blood", parent = "Dungeons")
     public static boolean AutoBloodEnabled = false;

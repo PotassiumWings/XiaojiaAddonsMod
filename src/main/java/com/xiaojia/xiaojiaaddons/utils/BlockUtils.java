@@ -35,7 +35,7 @@ public class BlockUtils {
     }
 
     public static Block getBlockAt(BlockPos pos) {
-        if (getWorld() == null) return null;
+        if (getWorld() == null || pos == null) return null;
         return getWorld().getBlockState(pos).getBlock();
     }
 
