@@ -216,9 +216,12 @@ public class Configs {
             min = 1, max = 10, step = 1)
     public static int StarredMobESPOutlineLength = 6;
 
-    @Property(type = Property.Type.SELECT, name = "ESP Outline Color", parent = "Starred Mob ESP",
-            options = {"Orange", "Blue", "Green", "Red"})
-    public static int StarredMobESPOutlineColor = 0;
+    @Property(type = Property.Type.SELECT, name = "ESP Color", parent = "Starred Mob ESP",
+            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
+                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
+                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
+                    "§8Dark Gray", "§9Blue"})
+    public static int StarredMobESPColor = 1;
 
     // MimicWarn
     @Property(type = Property.Type.BOOLEAN, name = "Mimic Warn", parent = "Dungeons")

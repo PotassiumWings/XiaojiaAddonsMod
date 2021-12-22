@@ -43,11 +43,10 @@ public class StonklessStonk {
     private static final HashMap<BlockPos, Long> doneSecretsPos = new HashMap<>();
     private static boolean should = true;
     private static long lastClickTime = 0;
+    private static boolean isInPuzzle = false;
     private final HashMap<BlockPos, Block> blockHashMap = new HashMap<>();
     private BlockPos facingPos;
     private BlockPos lastPlayerPos;
-
-    private static boolean isInPuzzle = false;
 
     public static void setInPuzzle(boolean isIn) {
         isInPuzzle = isIn;

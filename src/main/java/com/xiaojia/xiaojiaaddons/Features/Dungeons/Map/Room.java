@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
+import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import net.minecraft.block.Block;
 
@@ -73,7 +74,7 @@ public class Room {
         RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
         for (int i = 0; i < split.length; i++) {
             RenderUtils.drawStringWithShadow(
-                    MapUtils.colors[Configs.RoomNameColor] + split[i],
+                    ColorUtils.colors[Configs.RoomNameColor] + split[i],
                     this.x * 1.25F + Configs.MapScale - (RenderUtils.getStringWidth(split[i]) / 2F),
                     this.z * 1.25F - Math.abs(split.length - 1) * 3 + (i * 8)
             );

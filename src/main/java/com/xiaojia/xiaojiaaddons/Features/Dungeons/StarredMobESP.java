@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.RenderEntityModelEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.OutlineUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -41,23 +42,7 @@ public class StarredMobESP {
                     e -> !(e instanceof EntityArmorStand)
             );
             if (!possibleEntities.isEmpty()) {
-                Color color;
-                switch (Configs.StarredMobESPOutlineColor) {
-                    case 0:
-                        color = Color.ORANGE;
-                        break;
-                    case 1:
-                        color = Color.BLUE;
-                        break;
-                    case 2:
-                        color = Color.GREEN;
-                        break;
-                    case 3:
-                        color = Color.RED;
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + Configs.StarredMobESPOutlineColor);
-                }
+                Color color = ColorUtils.realColors[Configs.StarredMobESPColor];
                 highlightEntity(possibleEntities.get(0), color);
             }
         }

@@ -60,7 +60,7 @@ public class HoldRightClick {
             if (currentSpeed < Configs.MaxSpeed) {
                 ControlUtils.rightClick();
                 if (XiaojiaAddons.isDebug()) ChatLib.chat("rightClick!");
-                currentSpeed += 10;
+                currentSpeed += 6;
             }
         } else {
             isRightClicking = false;

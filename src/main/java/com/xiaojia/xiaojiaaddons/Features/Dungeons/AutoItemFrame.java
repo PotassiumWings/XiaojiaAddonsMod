@@ -27,6 +27,10 @@ import java.util.List;
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
+enum Type {
+    EMPTY, PATH, START, END
+}
+
 public class AutoItemFrame {
     private static final BlockPos topLeft = new BlockPos(197, 125, 278);
     private static final BlockPos bottomRight = new BlockPos(197, 121, 274);
@@ -153,11 +157,16 @@ public class AutoItemFrame {
     }
 }
 
-
 class MazeGrid {
     public BlockPos pos = null;
     public Type type;
     public Vector2i gridPos;
+
+    MazeGrid(BlockPos pos, Type type, Vector2i gridPos) {
+        this.pos = pos;
+        this.type = type;
+        this.gridPos = gridPos;
+    }
 
     public int hashCode() {
         return gridPos.hashCode();
@@ -167,14 +176,4 @@ class MazeGrid {
         if (!(o instanceof MazeGrid)) return false;
         return pos == ((MazeGrid) o).pos;
     }
-
-    MazeGrid(BlockPos pos, Type type, Vector2i gridPos) {
-        this.pos = pos;
-        this.type = type;
-        this.gridPos = gridPos;
-    }
-}
-
-enum Type {
-    EMPTY, PATH, START, END
 }

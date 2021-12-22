@@ -8,8 +8,6 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Color;
-
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class RenderUtils {

@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
+import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
 import net.minecraft.block.Block;
 
 import java.awt.Color;
@@ -24,7 +25,7 @@ public class Door {
     public Color getColor() {
         switch (this.type) {
             case "wither":
-                return MapUtils.realColors[Configs.WitherDoorColor];
+                return ColorUtils.realColors[Configs.WitherDoorColor];
             case "blood":
                 return new Color(231, 0, 0, 255);
             case "entrance":

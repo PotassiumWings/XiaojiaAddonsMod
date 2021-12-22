@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
+import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -23,6 +24,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -59,6 +61,7 @@ public class Dungeon {
             "[BOSS] Sadan: So you made it all the way here...and you wish to defy me? Sadan?!",
             "[BOSS] Necron: Finally, I heard so much about you. The Eye likes you very much."
     };
+    private static final KeyBind normalRoomNameKeyBind = new KeyBind("Display Normal Room Name Toggle", Keyboard.KEY_NONE);
     public static boolean isFullyScanned = false;
     // states
     public static boolean isInDungeon = false;
@@ -122,6 +125,7 @@ public class Dungeon {
     private static String scoreString1;
     private static String scoreString2;
     private HashSet<String> scannedPuzzles = new HashSet<>();
+    private boolean enableNormalRoomName = true;
 
     public static void makeMap() {
         BufferedImage newMap = new BufferedImage(25, 25, BufferedImage.TYPE_4BYTE_ABGR);
@@ -315,6 +319,14 @@ public class Dungeon {
     }
 
     @SubscribeEvent
+    public void onTickKeyBind(TickEndEvent event) {
+        if (normalRoomNameKeyBind.isPressed()) {
+            enableNormalRoomName = !enableNormalRoomName;
+            ChatLib.chat(enableNormalRoomName ? "Normal Room Name &aactivated" : "Normal Room Name &cdeactivated");
+        }
+    }
+
+    @SubscribeEvent
     public void onChatReceived(ClientChatReceivedEvent event) {
         String message = ChatLib.removeFormatting(event.message.getUnformattedText());
         if (message.equals("[NPC] Mort: Here, I found this map when I first entered the dungeon."))
@@ -366,7 +378,8 @@ public class Dungeon {
                 if (room.type.equals("puzzle") && Configs.ShowPuzzleName ||
                         room.type.equals("trap") && Configs.ShowTrapName ||
                         (room.type.equals("normal") || room.type.equals("rare")) && Configs.ShowNormalName)
-                    room.renderName();
+                    if (enableNormalRoomName)
+                        room.renderName();
                 if (Configs.ShowSecrets != 0 &&
                         (room.type.equals("normal") || room.type.equals("rare"))) {
                     room.renderSecrets();
