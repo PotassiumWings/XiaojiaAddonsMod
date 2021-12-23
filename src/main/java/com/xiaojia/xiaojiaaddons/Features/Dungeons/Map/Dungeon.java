@@ -110,6 +110,8 @@ public class Dungeon {
     public static Image greenCheck = new Image("BloomMapGreenCheck.png");
     public static Image whiteCheck = new Image("BloomMapWhiteCheck.png");
     public static Image failedRoom = new Image("BloomMapFailedRoom.png");
+    public static Image newGreenCheck = new Image("MapGreenCheck.png");
+    public static Image newWhiteCheck = new Image("MapWhiteCheck.png");
     public static Image questionMark = new Image("BloomMapQuestionMark.png");
     public static int floorInt;
     public static String message300 = "8173c4nh29384tcn28734mco8haeuyfgblcaii34icy5jmo8137gbqglgieaw83m7yrho8yahblgwtmp0983q1hc9liuba,wkhznf";
@@ -680,15 +682,17 @@ public class Dungeon {
                 float y = room.z * 1.25F - checkSize / 4F;
 
                 if (room.checkmark.equals("green")) {
-                    RenderUtils.drawImage(greenCheck, x, y, checkSize, checkSize);
+                    if (Configs.DrawCheckMode == 1) RenderUtils.drawImage(greenCheck, x, y, checkSize, checkSize);
+                    else if (Configs.DrawCheckMode == 2) RenderUtils.drawImage(newGreenCheck, x, y, checkSize, checkSize);
                     names.add(room.name);
                 }
                 if (room.checkmark.equals("white")) {
-                    RenderUtils.drawImage(whiteCheck, x, y, checkSize, checkSize);
+                    if (Configs.DrawCheckMode == 1) RenderUtils.drawImage(whiteCheck, x, y, checkSize, checkSize);
+                    else if (Configs.DrawCheckMode == 2) RenderUtils.drawImage(newWhiteCheck, x, y, checkSize, checkSize);
                     names.add(room.name);
                 }
                 if (room.checkmark.equals("failed")) {
-                    RenderUtils.drawImage(failedRoom, x, y, checkSize, checkSize);
+                    if (Configs.DrawCheckMode != 0) RenderUtils.drawImage(failedRoom, x, y, checkSize, checkSize);
                     names.add(room.name);
                 }
             }

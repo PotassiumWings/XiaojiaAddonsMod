@@ -460,6 +460,10 @@ public class Configs {
             min = 0, max = 255, step = 5)
     public static int BackgroundAlpha = 15;
 
+    @Property(type= Property.Type.SELECT, name = "Checkmark Image", parent = "Map",
+            options = {"Off", "Dmap Image", "New Image"})
+    public static int DrawCheckMode = 2;
+
     // Rooms
     @Property(type = Property.Type.FOLDER, name = "Rooms", parent = "Illegal Map")
     public static boolean RoomPart = false;
