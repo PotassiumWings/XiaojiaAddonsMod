@@ -181,7 +181,7 @@ public class AutoItemFrame {
                             ControlUtils.rightClick();
                             Thread.sleep(Configs.ArrowCD);
                         }
-                        Thread.sleep(400);
+                        Thread.sleep(Configs.ArrowCDBetween);
                     }
                 }
             } catch (Exception e) {

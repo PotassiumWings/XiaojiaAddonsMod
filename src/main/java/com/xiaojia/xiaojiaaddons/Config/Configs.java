@@ -256,6 +256,9 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "P3 Arrows CD", parent = "Auto Devices", min = 20, max = 500, step = 10)
     public static int ArrowCD = 100;
 
+    @Property(type = Property.Type.NUMBER, name = "P3 Arrows CD Between ItemFrames", parent = "Auto Devices", min = 100, max = 500, step = 10)
+    public static int ArrowCDBetween = 250;
+
     // AutoBlood
     @Property(type = Property.Type.FOLDER, name = "Auto Blood", parent = "Dungeons")
     public static boolean AutoBloodEnabled = false;
