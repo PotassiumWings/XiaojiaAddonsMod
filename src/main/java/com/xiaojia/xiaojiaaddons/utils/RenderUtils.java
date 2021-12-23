@@ -13,13 +13,18 @@ import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 public class RenderUtils {
     private static final Tessellator tessellator = Tessellator.getInstance();
     private static final WorldRenderer worldRenderer = tessellator.getWorldRenderer();
-    private static final Long colorized = null;
-    private static final Integer drawMode = null;
+    private static Long colorized = null;
+    private static Integer drawMode = null;
+    private static boolean retainTransforms = false;
+
+    public static void retainTransforms(boolean retain) {
+        retainTransforms = retain;
+        finishDraw();
+    }
 
     public static void drawRect(int color, int x, int y, int width, int height) {
-        GL11.glTranslated(0, 0, 1);
         Gui.drawRect(x, y, x + width, y + height, color);
-        GL11.glTranslated(0, 0, -1);
+        finishDraw();
     }
 
     public static void drawImage(Image image, double x, double y, double width, double height) {
@@ -37,6 +42,7 @@ public class RenderUtils {
         worldRenderer.pos(x + width, y, 0.0).tex(1.0, 0.0).endVertex();
         worldRenderer.pos(x, y, 0.0).tex(0.0, 0.0).endVertex();
         tessellator.draw();
+        finishDraw();
     }
 
     private static void doColor(long longColor) {
@@ -72,6 +78,16 @@ public class RenderUtils {
 
     public static void drawStringWithShadow(String text, float x, float y) {
         mc.fontRendererObj.drawString(ChatLib.addColor(text), x, y, colorized == null ? -1 : colorized.intValue(), true);
+        finishDraw();
+    }
+
+    public static void finishDraw() {
+        if (!retainTransforms) {
+            colorized = null;
+            drawMode = null;
+            GL11.glPopMatrix();
+            GL11.glPushMatrix();
+        }
     }
 
     public static void start() {

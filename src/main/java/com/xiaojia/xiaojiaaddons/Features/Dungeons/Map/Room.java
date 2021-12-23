@@ -69,7 +69,7 @@ public class Room {
 
     public void renderName() {
         String[] split = this.name.split(" ");
-        RenderUtils.start();
+        RenderUtils.retainTransforms(true);
         RenderUtils.translate(Configs.MapX, Configs.MapY, 0);
         RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
         for (int i = 0; i < split.length; i++) {
@@ -79,11 +79,11 @@ public class Room {
                     this.z * 1.25F - Math.abs(split.length - 1) * 3 + (i * 8)
             );
         }
-        RenderUtils.end();
+        RenderUtils.retainTransforms(false);
     }
 
     public void renderSecrets() {
-        RenderUtils.start();
+        RenderUtils.retainTransforms(true);
         RenderUtils.translate(Configs.MapX, Configs.MapY, 0);
         if (Configs.ShowSecrets == 0 || Configs.ShowSecrets == 1) {
             RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
@@ -101,7 +101,7 @@ public class Room {
 //                            MapUtils.colors[Configs.UnexploredSecrets];
 //            RenderUtils.drawStringWithShadow(color + this.secrets, (this.x * 1.25F) / 2, (this.z * 1.25F) / 2);
         }
-        RenderUtils.end();
+        RenderUtils.retainTransforms(false);
     }
 
     public Data getJson() {

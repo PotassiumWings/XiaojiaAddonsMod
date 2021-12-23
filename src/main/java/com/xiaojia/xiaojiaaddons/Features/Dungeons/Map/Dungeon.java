@@ -143,7 +143,7 @@ public class Dungeon {
             setPixels(newMap, MathUtils.floor(door.x / 16) * 2 + 2, MathUtils.floor(door.z / 16) * 2 + 2, 1, 1, color);
         }
         map = newMap;
-        if (XiaojiaAddons.isDebug()) ChatLib.chat("map made!");
+        System.err.println("map made!");
     }
 
     private static void setPixels(BufferedImage map, int x1, int y1, int wid, int height, Color color) {
@@ -360,8 +360,10 @@ public class Dungeon {
     }
 
     @SubscribeEvent
-    public void onRenderMap(RenderGameOverlayEvent.Post event) {
+    public void onRenderMap(RenderGameOverlayEvent.Pre event) {
+        if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
         if (!isInDungeon || !Configs.MapEnabled) return;
+        RenderUtils.start();
         try {
             drawBackground();
             if (map != null) {
@@ -376,10 +378,11 @@ public class Dungeon {
                 nameRendered.add(room.name);
 
                 if (room.type.equals("puzzle") && Configs.ShowPuzzleName ||
-                        room.type.equals("trap") && Configs.ShowTrapName ||
-                        (room.type.equals("normal") || room.type.equals("rare")) && Configs.ShowNormalName)
-                    if (enableNormalRoomName)
-                        room.renderName();
+                        room.type.equals("trap") && Configs.ShowTrapName)
+                    room.renderName();
+                else if ((room.type.equals("normal") || room.type.equals("rare")) &&
+                        Configs.ShowNormalName && enableNormalRoomName)
+                    room.renderName();
                 if (Configs.ShowSecrets != 0 &&
                         (room.type.equals("normal") || room.type.equals("rare"))) {
                     room.renderSecrets();
@@ -403,6 +406,8 @@ public class Dungeon {
             if (Configs.ScoreCalculation) drawScoreCalc();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            RenderUtils.end();
         }
     }
 
@@ -469,13 +474,19 @@ public class Dungeon {
 
     @SubscribeEvent
     public void onTickCheckCurrentRoom(TickEndEvent event) {
-        if (!isInDungeon || !isFullyScanned) return;
+        if (!isInDungeon || !isFullyScanned) {
+            currentRoom = "";
+            return;
+        }
         Room room = Lookup.getRoomFromCoords(new Vector2i(MathUtils.floor(getX(getPlayer())), MathUtils.floor(getZ(getPlayer()))));
         if (room != null) {
             currentRoom = room.name;
-            if (XiaojiaAddons.isDebug()) ChatLib.chat(room.name);
+            System.err.println(room.name);
             StonklessStonk.setInPuzzle(room.type.equals("puzzle") &&
-                    (room.name.equals("Water Board") || room.name.equals("Three Weirdos")));
+                    (room.name.equals("Water Board") || room.name.equals("Three Weirdos")) ||
+                    room.name.equals("Unknown"));
+        } else {
+            currentRoom = "";
         }
     }
 
@@ -485,7 +496,6 @@ public class Dungeon {
         String dungeon = SkyblockUtils.getDungeon();
         if (!isInDungeon) floorInt = Integer.parseInt(dungeon.substring(1));
         isInDungeon = true;
-        if (XiaojiaAddons.isDebug()) ChatLib.chat("Floor int: " + floorInt);
         if (floorInt == 1 || floorInt == 2 || floorInt == 3) {
             endX = endZ = 158;
         } else if (floorInt == 4) {
@@ -532,7 +542,7 @@ public class Dungeon {
         Matcher matcher = pattern.matcher(s);
         if (matcher.find()) {
             int res = Integer.parseInt(matcher.group(1));
-            if (XiaojiaAddons.isDebug()) ChatLib.chat(pattern + ", " + s + ", " + res);
+            System.err.println(pattern + ", " + s + ", " + res);
             return res;
         }
         System.err.println("error getting int: " + s + ", " + pattern);
@@ -543,7 +553,7 @@ public class Dungeon {
         Matcher matcher = pattern.matcher(s);
         if (matcher.find()) {
             float res = Float.parseFloat(matcher.group(1));
-            if (XiaojiaAddons.isDebug()) ChatLib.chat(pattern + ", " + s + ", " + res);
+            System.err.println(pattern + ", " + s + ", " + res);
             return res;
         }
         System.err.println("error getting float: " + s + ", " + pattern);
@@ -556,8 +566,6 @@ public class Dungeon {
         ArrayList<Player> curPlayers = players;
         reset();
         players = curPlayers;
-
-        long scanStarted = TimeUtils.curTime();
 
         boolean allLoaded = true;
         HashSet<String> names = new HashSet<>();
@@ -574,7 +582,7 @@ public class Dungeon {
                         z % (roomSize + 1) == Math.floor(roomSize / 2F)) {
                     if (!MapUtils.chunkLoaded(new Vector3i(x, 100, z))) {
                         allLoaded = false;
-                        if (XiaojiaAddons.isDebug()) ChatLib.chat("not loaded!");
+                        System.err.println("not loaded!");
                     }
                     if (MapUtils.isColumnAir(x, z)) continue;
                     Room room = Lookup.getRoomFromCoords(new Vector2i(x, z));
@@ -582,7 +590,7 @@ public class Dungeon {
 
                     if (!names.contains(room.name)) {
                         names.add(room.name);
-                        if (XiaojiaAddons.isDebug()) ChatLib.chat("add room: " + room.name);
+                        System.err.println("add room: " + room.name);
                         totalSecrets += room.secrets;
                     }
                     totalRooms++;
@@ -643,28 +651,24 @@ public class Dungeon {
         }
         makeMap();
         isFullyScanned = allLoaded;
-        if (XiaojiaAddons.isDebug()) ChatLib.chat("fully scanned: " + isFullyScanned + " !");
+        System.err.println("fully scanned: " + isFullyScanned + " !");
         isScanning = false;
     }
 
     private void drawBackground() {
         mapSize = Configs.ScoreCalculation ? new Vector2i(25, 27) : new Vector2i(25, 25);
-        RenderUtils.start();
         RenderUtils.drawRect(new Color(0F, 0F, 0F, Configs.BackgroundAlpha / 255F).getRGB(),
                 Configs.MapX, Configs.MapY,
                 mapSize.x * Configs.MapScale, mapSize.y * Configs.MapScale);
-        RenderUtils.end();
     }
 
     private void renderMap() {
-        RenderUtils.start();
         RenderUtils.drawImage(new Image(map), Configs.MapX, Configs.MapY, 25 * Configs.MapScale, 25 * Configs.MapScale);
-        RenderUtils.end();
     }
 
     private void renderCheckmarks() {
         HashSet<String> names = new HashSet<>();
-        RenderUtils.start();
+        RenderUtils.retainTransforms(true);
         RenderUtils.translate(Configs.MapX, Configs.MapY);
         RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
         int checkSize = Configs.MapScale * 4;
@@ -689,22 +693,18 @@ public class Dungeon {
                 }
             }
         }
-        RenderUtils.end();
+        RenderUtils.retainTransforms(false);
     }
 
     private void drawScoreCalc() {
         if (Configs.ScoreCalculation) {
-            RenderUtils.start();
             RenderUtils.translate(Configs.MapX + (25 * Configs.MapScale) / 2F, Configs.MapY + 24.5F * Configs.MapScale);
             RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
             RenderUtils.drawStringWithShadow(scoreString1, -RenderUtils.getStringWidth(ChatLib.removeFormatting(scoreString1)) / 2F, 0);
-            RenderUtils.end();
 
-            RenderUtils.start();
             RenderUtils.translate(Configs.MapX + (25 * Configs.MapScale) / 2F, Configs.MapY + 25.5F * Configs.MapScale);
             RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
             RenderUtils.drawStringWithShadow(scoreString2, -RenderUtils.getStringWidth(ChatLib.removeFormatting(scoreString2)) / 2F, 0);
-            RenderUtils.end();
         }
     }
 

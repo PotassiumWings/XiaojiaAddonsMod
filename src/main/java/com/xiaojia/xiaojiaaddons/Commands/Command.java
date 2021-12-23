@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Map;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
@@ -62,6 +63,9 @@ public class Command extends CommandBase {
             case "tab":
                 TabUtils.printTab();
                 break;
+            case "room":
+                ChatLib.chat("Current Room: " + Dungeon.currentRoom);
+                break;
             case "map":
                 byte[] colors = Map.getMapColors();
                 if (colors == null) return;
@@ -80,6 +84,12 @@ public class Command extends CommandBase {
                         ChatLib.chat(i + ", " + j + ", " + color + ", " + secondColor);
                     }
                 }
+                break;
+            case "p3":
+                int x = Integer.parseInt(strings[1]);
+                int y = Integer.parseInt(strings[2]);
+                int z = Integer.parseInt(strings[3]);
+                AutoItemFrame.setPosition(x, y, z);
                 break;
 //            case "shoot":
 //                AutoShootCrystal.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));

@@ -247,7 +247,7 @@ public class Configs {
     public static int AutoTerminalCD = 150;
 
     // AutoItemFrame
-    @Property(type = Property.Type.FOLDER, name = "Auto Devices", parent = "Dungeons")
+    @Property(type = Property.Type.FOLDER, name = "Auto Devices", parent = "Dungeons", description = "Not tested dont use!")
     public static boolean AutoDevices = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto P3-3 Arrows", parent = "Auto Devices")
@@ -457,7 +457,7 @@ public class Configs {
     public static int ShowPlayerNames = 0;
 
     @Property(type = Property.Type.NUMBER, name = "Background Alpha", parent = "Map",
-            min = 0, max = 25, step = 1)
+            min = 0, max = 255, step = 5)
     public static int BackgroundAlpha = 15;
 
     // Rooms

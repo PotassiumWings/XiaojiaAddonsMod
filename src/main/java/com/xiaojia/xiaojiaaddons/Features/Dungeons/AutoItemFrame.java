@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Vector2i;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -16,13 +17,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import scala.actors.threadpool.Arrays;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
@@ -32,17 +33,72 @@ enum Type {
 }
 
 public class AutoItemFrame {
-    private static final BlockPos topLeft = new BlockPos(197, 125, 278);
-    private static final BlockPos bottomRight = new BlockPos(197, 121, 274);
-    private static final Iterable<BlockPos> iterableBox = BlockPos.getAllInBox(topLeft, bottomRight);
-    private static final ArrayList<BlockPos> box = new ArrayList<BlockPos>() {{
+    private static final HashSet<MazeGrid> grid = new HashSet<>();
+    private static final HashMap<Vector2i, Integer> neededRotation = new HashMap<>();
+    private static BlockPos topLeft = new BlockPos(197, 125, 278);
+    private static BlockPos bottomRight = new BlockPos(197, 121, 274);
+    private static Iterable<BlockPos> iterableBox = BlockPos.getAllInBox(topLeft, bottomRight);
+    private static ArrayList<BlockPos> box = new ArrayList<BlockPos>() {{
         iterableBox.forEach(this::add);
         sort((a, b) -> a.getY() == b.getY() ? b.getZ() - a.getZ() : b.getY() - a.getY());
     }};
-    private static final HashSet<MazeGrid> grid = new HashSet<>();
-    private static final HashMap<Vector2i, Integer> neededRotation = new HashMap<>();
-
     private Thread thread = null;
+
+    public static void setPosition(int x, int y, int z) {
+        topLeft = new BlockPos(x, y, z);
+        bottomRight = new BlockPos(x, y - 4, z - 4);
+        iterableBox = BlockPos.getAllInBox(topLeft, bottomRight);
+        box = new ArrayList<BlockPos>() {{
+            iterableBox.forEach(this::add);
+            sort((a, b) -> a.getY() == b.getY() ? b.getZ() - a.getZ() : b.getY() - a.getY());
+        }};
+
+        grid.clear();
+        neededRotation.clear();
+    }
+
+    private static HashMap<Vector2i, Integer> getDis(MazeGrid start, MazeGrid end) {
+        // dijkstra
+        int[] dx = new int[]{0, 0, -1, 1};
+        int[] dy = new int[]{-1, 1, 0, 0};
+        int[] delta = new int[]{5, 1, 7, 3};
+        MazeGrid[][] maze = new MazeGrid[5][5];
+        int[][] dis = new int[5][5];
+        int[][] from = new int[5][5]; // from what i
+        for (int i = 0; i < 5; i++) for (int j = 0; j < 5; j++) dis[i][j] = 1000;
+        for (MazeGrid mazeGrid : grid) maze[mazeGrid.gridPos.x][mazeGrid.gridPos.y] = mazeGrid;
+        dis[start.gridPos.x][start.gridPos.y] = 0;
+        HashMap<MazeGrid, Integer> hashMap = new HashMap<>();
+        hashMap.put(start, 0);
+        PriorityQueue<MazeGrid> queue = new PriorityQueue<>(Comparator.comparingInt(hashMap::get));
+        queue.add(start);
+        while (!queue.isEmpty()) {
+            MazeGrid top = queue.poll();
+            int x = top.gridPos.x, y = top.gridPos.y;
+            for (int i = 0; i < 4; i++) {
+                int tx = x + dx[i], ty = y + dy[i];
+                if (tx >= 0 && tx < 5 && ty >= 0 && ty < 5 && maze[tx][ty].type != Type.EMPTY
+                        && dis[tx][ty] > dis[x][y] + 1) {
+                    dis[tx][ty] = dis[x][y] + 1;
+                    from[tx][ty] = i;
+                    if (tx == end.gridPos.x && ty == end.gridPos.y) {
+                        HashMap<Vector2i, Integer> res = new HashMap<>();
+                        Vector2i cur = new Vector2i(tx, ty);
+                        while (!(tx == start.gridPos.x && ty == start.gridPos.y)) {
+                            int pre = from[tx][ty];
+                            tx -= dx[pre];
+                            ty -= dy[pre];
+                            res.put(new Vector2i(tx, ty), delta[pre]);
+                        }
+                        return res;
+                    }
+                    hashMap.put(maze[tx][ty], dis[tx][ty]);
+                    queue.add(maze[tx][ty]);
+                }
+            }
+        }
+        return new HashMap<>();
+    }
 
     @SubscribeEvent
     public void onTickCheck(TickEndEvent event) {
@@ -84,13 +140,26 @@ public class AutoItemFrame {
                     }
                 } else if (neededRotation.isEmpty()) {
                     // solve
-                    ArrayList<MazeGrid> startPositions = new ArrayList<MazeGrid>(Arrays.asList(grid.stream().filter(e -> e.type == Type.START).toArray()));
-                    ArrayList<MazeGrid> endPositions = new ArrayList<MazeGrid>(Arrays.asList(grid.stream().filter(e -> e.type == Type.END).toArray()));
+                    ArrayList<MazeGrid> startPositions = new ArrayList<MazeGrid>();
+                    ArrayList<MazeGrid> endPositions = new ArrayList<MazeGrid>();
+                    grid.stream().filter(e -> e.type == Type.START).forEach(startPositions::add);
+                    grid.stream().filter(e -> e.type == Type.END).forEach(endPositions::add);
                     for (MazeGrid start : startPositions) {
+                        int minDis = 1000;
+                        MazeGrid correspondEnd = new MazeGrid(null, Type.EMPTY, new Vector2i(-1, -1));
+                        HashMap<Vector2i, Integer> correspondRotations = new HashMap<>();
                         for (MazeGrid end : endPositions) {
-                            HashMap<Vector2i, Integer> result = solve(start, end);
-                            result.forEach(neededRotation::put);
+                            HashMap<Vector2i, Integer> arr = getDis(start, end);
+                            int dis = arr.size();
+                            if (dis < minDis || dis == minDis && correspondEnd.compareTo(end) < 0) {
+                                ChatLib.chat("end: " + end.gridPos + ", corr: " + correspondEnd.gridPos);
+                                ChatLib.chat("dis: " + dis + ", minDis: " + minDis);
+                                minDis = dis;
+                                correspondEnd = end;
+                                correspondRotations = arr;
+                            }
                         }
+                        correspondRotations.forEach(neededRotation::put);
                     }
                 } else {
                     // calculated, work!
@@ -107,10 +176,12 @@ public class AutoItemFrame {
                         if (toClick < 0) toClick += 8;
                         for (int i = 0; i < toClick; i++) {
                             if (mc.objectMouseOver == null || mc.objectMouseOver.entityHit != entity) return;
+                            if (neededRotation.get(gridVec) == ((EntityItemFrame) mc.objectMouseOver.entityHit).getRotation())
+                                return;
                             ControlUtils.rightClick();
                             Thread.sleep(Configs.ArrowCD);
                         }
-                        Thread.sleep(100);
+                        Thread.sleep(400);
                     }
                 }
             } catch (Exception e) {
@@ -125,39 +196,9 @@ public class AutoItemFrame {
         grid.clear();
         neededRotation.clear();
     }
-
-    private HashMap<Vector2i, Integer> solve(MazeGrid start, MazeGrid end) {
-        // from end dfs
-        int[] dx = new int[]{0, 0, -1, 1};
-        int[] dy = new int[]{-1, 1, 0, 0};
-        int[] delta = new int[]{1, 5, 3, 7};
-        ArrayDeque<MazeGrid> queue = new ArrayDeque<>();
-        queue.add(end);
-        MazeGrid[][] maze = new MazeGrid[5][5];
-        boolean[][] vis = new boolean[5][5];
-        for (MazeGrid mazeGrid : grid) maze[mazeGrid.gridPos.x][mazeGrid.gridPos.y] = mazeGrid;
-        for (int i = 0; i < 5; i++) for (int j = 0; j < 5; j++) vis[i][j] = false;
-        HashMap<Vector2i, Integer> res = new HashMap<>();
-        while (!queue.isEmpty()) {
-            MazeGrid current = queue.pollFirst();
-            Vector2i mazePos = current.gridPos;
-            vis[mazePos.x][mazePos.y] = true;
-            for (int i = 0; i < 4; i++) {
-                int tx = mazePos.x + dx[i];
-                int ty = mazePos.y + dy[i];
-                if (tx >= 0 && tx < 5 && ty >= 0 && ty < 5 &&
-                        !vis[tx][ty] && maze[tx][ty] != null && maze[tx][ty].type == Type.PATH) {
-                    MazeGrid nextGrid = maze[tx][ty];
-                    res.put(nextGrid.gridPos, delta[i]);
-                    queue.add(nextGrid);
-                }
-            }
-        }
-        return res;
-    }
 }
 
-class MazeGrid {
+class MazeGrid implements Comparable {
     public BlockPos pos = null;
     public Type type;
     public Vector2i gridPos;
@@ -175,5 +216,13 @@ class MazeGrid {
     public boolean equals(Object o) {
         if (!(o instanceof MazeGrid)) return false;
         return pos == ((MazeGrid) o).pos;
+    }
+
+    public int compareTo(Object o) {
+        if (o instanceof MazeGrid) {
+            MazeGrid maze = (MazeGrid) o;
+            return maze.gridPos.x * 5 + maze.gridPos.y - (gridPos.x * 5 + gridPos.y);
+        }
+        return 0;
     }
 }
