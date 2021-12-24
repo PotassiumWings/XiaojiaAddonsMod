@@ -298,12 +298,12 @@ public class Dungeon {
             Room room3 = getRoomAt(Lookup.getRoomCenterCoords(new Vector2i(door.x + 16, door.z + 4)));
             Room room4 = getRoomAt(Lookup.getRoomCenterCoords(new Vector2i(door.x - 16, door.z - 4)));
             if (room1 != null && room2 != null && room1.x == room2.x) {
-                if (!room1.explored || !room2.explored) {
+                if (!room1.explored && !room2.explored) {
                     door.explored = false;
                     continue;
                 }
             } else if (room3 != null && room4 != null && room3.z == room4.z) {
-                if (!room3.explored || !room4.explored) {
+                if (!room3.explored && !room4.explored) {
                     door.explored = false;
                     continue;
                 }

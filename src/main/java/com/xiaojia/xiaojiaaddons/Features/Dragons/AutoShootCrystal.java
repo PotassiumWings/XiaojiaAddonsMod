@@ -105,6 +105,10 @@ public class AutoShootCrystal {
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled || !SkyblockUtils.isInDragon()) return;
         if (!Configs.AutoShootCrystal) return;
+        if (!enabled) {
+            shootQueue.clear();
+            return;
+        }
         if (shootQueue.size() != 0) return;
         List<Entity> list = getWorld().loadedEntityList;
         for (Entity entity : list) {

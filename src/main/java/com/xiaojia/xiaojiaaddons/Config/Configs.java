@@ -459,6 +459,17 @@ public class Configs {
             options = {"Off", "Holding Leaps", "Always"})
     public static int ShowPlayerNames = 0;
 
+    @Property(type = Property.Type.SELECT, name = "Player Name Color", parent = "Rooms",
+            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
+                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
+                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
+                    "§8Dark Gray", "§9Blue"})
+    public static int PlayerNameColor = 5;
+
+    @Property(type = Property.Type.SELECT, name = "Self Icon Color", parent = "Rooms",
+            options = {"Blue", "Green", "Red"})
+    public static int SelfIconColor = 2;
+
     @Property(type = Property.Type.NUMBER, name = "Background Alpha", parent = "Map",
             min = 0, max = 255, step = 5)
     public static int BackgroundAlpha = 15;
