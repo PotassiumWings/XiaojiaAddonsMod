@@ -36,6 +36,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
@@ -145,7 +146,6 @@ public class Dungeon {
             setPixels(newMap, MathUtils.floor(door.x / 16) * 2 + 2, MathUtils.floor(door.z / 16) * 2 + 2, 1, 1, color);
         }
         map = newMap;
-        System.err.println("map made!");
     }
 
     private static void setPixels(BufferedImage map, int x1, int y1, int wid, int height, Color color) {
@@ -477,19 +477,24 @@ public class Dungeon {
     @SubscribeEvent
     public void onTickCheckCurrentRoom(TickEndEvent event) {
         if (!isInDungeon || !isFullyScanned) {
+            StonklessStonk.setInPuzzle(false);
             currentRoom = "";
             return;
         }
-        Room room = Lookup.getRoomFromCoords(new Vector2i(MathUtils.floor(getX(getPlayer())), MathUtils.floor(getZ(getPlayer()))));
-        if (room != null) {
-            currentRoom = room.name;
-            System.err.println(room.name);
-            StonklessStonk.setInPuzzle(room.type.equals("puzzle") &&
-                    (room.name.equals("Water Board") || room.name.equals("Three Weirdos")) ||
-                    room.name.equals("Unknown"));
-        } else {
-            currentRoom = "";
+        int x = MathUtils.floor(getX(getPlayer())), z = MathUtils.floor(getZ(getPlayer()));
+        if (XiaojiaAddons.isDebug()) ChatLib.chat("x: " + x + ", z: " + z);
+        for (Room room: rooms) {
+            if (MapUtils.isBetween(x, room.x - 16, room.x + 16) &&
+                    MapUtils.isBetween(z, room.z - 16, room.z + 16)) {
+                currentRoom = room.name;
+                StonklessStonk.setInPuzzle(room.type.equals("puzzle") &&
+                        (room.name.equals("Water Board") || room.name.equals("Three Weirdos")) ||
+                        room.name.equals("Unknown"));
+                return;
+            }
         }
+        currentRoom = "";
+        StonklessStonk.setInPuzzle(false);
     }
 
     @SubscribeEvent
@@ -544,7 +549,6 @@ public class Dungeon {
         Matcher matcher = pattern.matcher(s);
         if (matcher.find()) {
             int res = Integer.parseInt(matcher.group(1));
-            System.err.println(pattern + ", " + s + ", " + res);
             return res;
         }
         System.err.println("error getting int: " + s + ", " + pattern);
@@ -555,11 +559,16 @@ public class Dungeon {
         Matcher matcher = pattern.matcher(s);
         if (matcher.find()) {
             float res = Float.parseFloat(matcher.group(1));
-            System.err.println(pattern + ", " + s + ", " + res);
             return res;
         }
         System.err.println("error getting float: " + s + ", " + pattern);
         return 0;
+    }
+
+    public static void showRooms() {
+        for (Room room: rooms) {
+            ChatLib.chat(room.name + " is at " + room.x + ", " + room.z);
+        }
     }
 
     private void scan() {
@@ -584,7 +593,6 @@ public class Dungeon {
                         z % (roomSize + 1) == Math.floor(roomSize / 2F)) {
                     if (!MapUtils.chunkLoaded(new Vector3i(x, 100, z))) {
                         allLoaded = false;
-                        System.err.println("not loaded!");
                     }
                     if (MapUtils.isColumnAir(x, z)) continue;
                     Room room = Lookup.getRoomFromCoords(new Vector2i(x, z));
@@ -592,7 +600,6 @@ public class Dungeon {
 
                     if (!names.contains(room.name)) {
                         names.add(room.name);
-                        System.err.println("add room: " + room.name);
                         totalSecrets += room.secrets;
                     }
                     totalRooms++;
@@ -653,7 +660,6 @@ public class Dungeon {
         }
         makeMap();
         isFullyScanned = allLoaded;
-        System.err.println("fully scanned: " + isFullyScanned + " !");
         isScanning = false;
     }
 

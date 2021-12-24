@@ -66,6 +66,9 @@ public class Command extends CommandBase {
             case "room":
                 ChatLib.chat("Current Room: " + Dungeon.currentRoom);
                 break;
+            case "rooms":
+                Dungeon.showRooms();
+                break;
             case "map":
                 byte[] colors = Map.getMapColors();
                 if (colors == null) return;
