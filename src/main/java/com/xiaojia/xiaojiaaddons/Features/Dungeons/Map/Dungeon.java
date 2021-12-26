@@ -159,7 +159,7 @@ public class Dungeon {
     public static void updatePlayers() {
         if (!isInDungeon) return;
         ArrayList<String> tab = TabUtils.getNames();
-        if (tab.size() < 10) return;
+        if (tab.size() < 18) return;
         int iconNum = 0;
         for (int line : new int[]{5, 9, 13, 17, 1}) {
             String tabLine = ChatLib.removeFormatting(tab.get(line)).trim();
@@ -521,7 +521,7 @@ public class Dungeon {
             );
             puzzleCount = getInt(tab.get(47), Pattern.compile("Puzzles: \\((\\d+)\\)"));
             puzzleDone = 0;
-            for (int i = 0; i < 5; i++)
+            for (int i = 1; i <= 5; i++)
                 if (tab.get(47 + i).contains("✔"))
                     puzzleDone++;
             secretsFound = getInt(tab.get(31), Pattern.compile("Secrets Found: (\\d+)"));

@@ -223,6 +223,29 @@ public class Configs {
                     "§8Dark Gray", "§9Blue"})
     public static int StarredMobESPColor = 1;
 
+    // ShowHiddenMobs
+    @Property(type = Property.Type.FOLDER, name = "Show Hidden Mobs", parent = "Dungeons")
+    public static boolean ShowHiddenMobsEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Shadow Assassin", parent = "Show Hidden Mobs")
+    public static boolean ShowShadowAssassin = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Stealthy Mobs", parent = "Show Hidden Mobs")
+    public static boolean ShowStealthy = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Fels", parent = "Show Hidden Mobs")
+    public static boolean ShowFels = false;
+
+    // BatESP
+    @Property(type = Property.Type.FOLDER, name = "Bat ESP", parent = "Dungeons")
+    public static boolean BatESPEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Bat ESP In Dungeons", parent = "Bat ESP")
+    public static boolean BatESPDungeons = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Bat ESP Outside Dungeons", parent = "Bat ESP")
+    public static boolean BatESPOutDungeons = false;
+
     // MimicWarn
     @Property(type = Property.Type.BOOLEAN, name = "Mimic Warn", parent = "Dungeons")
     public static boolean MimicWarn = false;
@@ -388,6 +411,40 @@ public class Configs {
     // Foraging
     @Property(type = Property.Type.BOOLEAN, name = "Auto Foraging", parent = "Skills", illegal = true)
     public static boolean AutoForaging = false;
+
+    // GemstoneESP
+    @Property(type = Property.Type.FOLDER, name = "Gemstone ESP", parent = "Skills")
+    public static boolean GemstoneESPEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Gemstone ESP Enable", parent = "Gemstone ESP")
+    public static boolean GemstoneESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Include Glass Panes", parent = "Gemstone ESP")
+    public static boolean IncludeGlassPanes = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Scan Radius", parent = "Gemstone ESP", suffix = " blocks", min = 5, max = 30)
+    public static int GemstoneRadius = 15;
+
+    @Property(type = Property.Type.CHECKBOX, name = "Ruby", parent = "Gemstone ESP")
+    public static boolean RubyEsp = false;
+
+    @Property(type = Property.Type.CHECKBOX, name = "Amber", parent = "Gemstone ESP")
+    public static boolean AmberEsp = false;
+
+    @Property(type = Property.Type.CHECKBOX, name = "Sapphire", parent = "Gemstone ESP")
+    public static boolean SapphireEsp = false;
+
+    @Property(type = Property.Type.CHECKBOX, name = "Jade", parent = "Gemstone ESP")
+    public static boolean JadeEsp = false;
+
+    @Property(type = Property.Type.CHECKBOX, name = "Amethyst", parent = "Gemstone ESP")
+    public static boolean AmethystEsp = false;
+
+    @Property(type = Property.Type.CHECKBOX, name = "Topaz", parent = "Gemstone ESP")
+    public static boolean TopazEsp = false;
+
+    @Property(type = Property.Type.CHECKBOX, name = "Jasper", parent = "Gemstone ESP")
+    public static boolean JasperEsp = false;
 
     // Jade Crystal Helper
     @Property(type = Property.Type.FOLDER, name = "Jade Crystal Helper", parent = "Skills",

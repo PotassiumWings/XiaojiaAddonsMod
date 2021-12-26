@@ -21,7 +21,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class AutoBlood {
     private static final KeyBind keyBind = new KeyBind("Auto Blood", Keyboard.KEY_NONE);
-    private static final String[] bloodMobs = new String[]{
+    public static final String[] bloodMobs = new String[]{
             "Revoker", "Psycho", "Reaper", "Cannibal", "Mute",
             "Ooze", "Putrid", "Freak", "Leech", "Tear",
             "Parasite", "Flamer", "Skull", "Mr. Dead",
