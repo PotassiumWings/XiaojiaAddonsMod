@@ -42,7 +42,7 @@ public class BatESP extends RenderEntityESP {
             hashMap.put("b", 65);
         }
         hashMap.put("width", 0.4F);
-        hashMap.put("height", 0.4F);
+        hashMap.put("height", 0.8F);
         hashMap.put("drawString", EntityInfo.EnumDraw.DRAW_KIND);
         hashMap.put("kind", "Bat");
         hashMap.put("fontColor", 0x33ff33);
