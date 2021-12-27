@@ -33,7 +33,7 @@ public class BatESP extends RenderEntityESP {
     @Override
     public EntityInfo getEntityInfo(Entity entity) {
         if (!Checker.enabled) return null;
-        if (!(entity instanceof EntityBat)) return null;
+        if (!(entity instanceof EntityBat) || entity.isInvisible()) return null;
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("entity", entity);
         if (MathUtils.distanceSquareFromPlayer(getX(entity), getY(entity), getZ(entity)) < 144) {
