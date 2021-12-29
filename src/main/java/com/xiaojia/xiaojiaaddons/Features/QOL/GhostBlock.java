@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
@@ -22,7 +23,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 public class GhostBlock {
     private static final KeyBind ghostBlockKeyBind = new KeyBind("Ghost Block", Keyboard.KEY_NONE);
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.GhostBlockWithPickaxe) return;

@@ -19,13 +19,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.BlockSkull;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
@@ -47,6 +47,7 @@ public class StonklessStonk {
     private final HashMap<BlockPos, Block> blockHashMap = new HashMap<>();
     private BlockPos facingPos;
     private BlockPos lastPlayerPos;
+    private HashMap<BlockPos, IBlockState> currentBlockMap = new HashMap<>();
 
     public static void setInPuzzle(boolean isIn) {
         isInPuzzle = isIn;
@@ -70,54 +71,71 @@ public class StonklessStonk {
         float yaw = MathUtils.getYaw() * PI / 180, pitch = MathUtils.getPitch() * PI / 180;
         float R = 5;
         int lastX = -1, lastY = -1, lastZ = -1;
-        for (int delta = 1; delta <= 300; delta++) {
-            float r = R * delta / 300;
-            float x = (float) (px - Math.sin(yaw) * Math.cos(pitch) * r);
-            float y = (float) (py - Math.sin(pitch) * r);
-            float z = (float) (pz + Math.cos(yaw) * Math.cos(pitch) * r);
-            int fx = MathUtils.floor(x), fy = MathUtils.floor(y), fz = MathUtils.floor(z);
-            if (fx == lastX && fy == lastY && fz == lastZ) continue;
-            lastX = fx;
-            lastY = fy;
-            lastZ = fz;
+        HashMap<BlockPos, IBlockState> blockMap = new HashMap<>();
+        try {
+            for (int delta = 1; delta <= 300; delta++) {
+                float r = R * delta / 300;
+                float x = (float) (px - Math.sin(yaw) * Math.cos(pitch) * r);
+                float y = (float) (py - Math.sin(pitch) * r);
+                float z = (float) (pz + Math.cos(yaw) * Math.cos(pitch) * r);
+                int fx = MathUtils.floor(x), fy = MathUtils.floor(y), fz = MathUtils.floor(z);
+                if (fx == lastX && fy == lastY && fz == lastZ) continue;
+                lastX = fx;
+                lastY = fy;
+                lastZ = fz;
 
-            BlockPos pos = new BlockPos(fx, fy, fz);
-            if (doneSecretsPos.containsKey(pos) && TimeUtils.curTime() - doneSecretsPos.get(pos) < 1000) continue;
+                BlockPos pos = new BlockPos(fx, fy, fz);
+                Block block = BlockUtils.getBlockAt(pos);
 
-            Block block = BlockUtils.getBlockAt(pos);
-            if (isSecret(block, pos)) {
-                if (Configs.StonklessStonkAutoClickSecret) {
-                    boolean canClick = TimeUtils.curTime() - lastClickTime > 200;
-                    // opened inv
-                    Inventory inventory = ControlUtils.getOpenedInventory();
-                    if (inventory == null || inventory.getSize() != 45) canClick = false;
+                blockMap.put(pos, BlockUtils.getBlockStateAt(pos));
 
-                    // held pickaxe!
-                    ItemStack heldItemStack = ControlUtils.getHeldItemStack();
-                    String heldItemName = "";
-                    if (heldItemStack != null && heldItemStack.hasDisplayName())
-                        heldItemName = ControlUtils.getHeldItemStack().getDisplayName();
-                    if (!Configs.StonklessStonkWithoutPickaxe && !heldItemName.contains("Stonk") && !heldItemName.contains("Pickaxe"))
-                        canClick = false;
+                if (doneSecretsPos.containsKey(pos) && TimeUtils.curTime() - doneSecretsPos.get(pos) < 1000) continue;
 
-                    if (canClick) {
-                        lastClickTime = TimeUtils.curTime();
-                        if (XiaojiaAddons.isDebug()) ChatLib.chat("click");
-                        mc.playerController.onPlayerRightClick(
-                                getPlayer(),
-                                mc.theWorld,
-                                getPlayer().inventory.getCurrentItem(),
-                                pos,
-                                EnumFacing.fromAngle(getPlayer().rotationYaw),
-                                new Vec3(Math.random(), Math.random(), Math.random())
-                        );
-                        doneSecretsPos.put(pos, TimeUtils.curTime());
-                        if (XiaojiaAddons.isDebug()) ChatLib.chat("stonkless stonk: (" + x + ", " + y + ", " + z + ")");
+                if (isSecret(block, pos)) {
+                    if (Configs.StonklessStonkAutoClickSecret) {
+                        boolean canClick = TimeUtils.curTime() - lastClickTime > 200;
+                        // opened inv
+                        Inventory inventory = ControlUtils.getOpenedInventory();
+                        if (inventory == null || inventory.getSize() != 45) canClick = false;
+
+                        // held pickaxe!
+                        ItemStack heldItemStack = ControlUtils.getHeldItemStack();
+                        String heldItemName = "";
+                        if (heldItemStack != null && heldItemStack.hasDisplayName())
+                            heldItemName = ControlUtils.getHeldItemStack().getDisplayName();
+                        if (!Configs.StonklessStonkWithoutPickaxe && !heldItemName.contains("Stonk") && !heldItemName.contains("Pickaxe"))
+                            canClick = false;
+
+                        if (canClick) {
+                            lastClickTime = TimeUtils.curTime();
+                            if (XiaojiaAddons.isDebug()) ChatLib.chat("click");
+                            for (BlockPos previousBlockPos : blockMap.keySet())
+                                if (!previousBlockPos.equals(pos)) getWorld().setBlockToAir(previousBlockPos);
+
+                            ControlUtils.rightClick();
+                            for (BlockPos previousBlockPos : blockMap.keySet())
+                                if (!previousBlockPos.equals(pos))
+                                    getWorld().setBlockState(previousBlockPos, blockMap.get(previousBlockPos));
+
+//                        mc.playerController.onPlayerRightClick(
+//                                getPlayer(),
+//                                mc.theWorld,
+//                                getPlayer().inventory.getCurrentItem(),
+//                                pos,
+//                                EnumFacing.fromAngle(getPlayer().rotationYaw),
+//                                new Vec3(Math.random(), Math.random(), Math.random())
+//                        );
+                            doneSecretsPos.put(pos, TimeUtils.curTime());
+                            if (XiaojiaAddons.isDebug())
+                                ChatLib.chat("stonkless stonk: (" + x + ", " + y + ", " + z + ")");
+                        }
                     }
+                    facingPos = pos;
+                    return;
                 }
-                facingPos = pos;
-                return;
             }
+        } finally {
+            currentBlockMap = blockMap;
         }
     }
 
@@ -171,21 +189,42 @@ public class StonklessStonk {
         lastPlayerPos = null;
     }
 
-    @SubscribeEvent
-    public void onRightClick(PlayerInteractEvent event) {
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onRightClick(PlayerInteractEvent event) throws Exception {
         if (!Checker.enabled) return;
         if (facingPos == null) return;
-        if (!(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK))
+        if (!(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK))
             return;
+//        if (!(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK))
+//            return;
+        ChatLib.chat("onrightclick!");
         if (!facingPos.equals(mc.objectMouseOver.getBlockPos())) {
+            event.setCanceled(true);
+
+            for (BlockPos previousBlockPos : currentBlockMap.keySet())
+                if (!isSecret(currentBlockMap.get(previousBlockPos).getBlock(), previousBlockPos))
+                    getWorld().setBlockToAir(previousBlockPos);
+
             mc.playerController.onPlayerRightClick(
                     getPlayer(),
                     mc.theWorld,
                     getPlayer().inventory.getCurrentItem(),
                     facingPos,
-                    EnumFacing.fromAngle(getPlayer().rotationYaw),
-                    new Vec3(Math.random(), Math.random(), Math.random())
+                    mc.objectMouseOver.sideHit,
+                    mc.objectMouseOver.hitVec
             );
+
+            for (BlockPos previousBlockPos : currentBlockMap.keySet())
+                if (!isSecret(currentBlockMap.get(previousBlockPos).getBlock(), previousBlockPos))
+                    getWorld().setBlockState(previousBlockPos, currentBlockMap.get(previousBlockPos));
+//            mc.playerController.onPlayerRightClick(
+//                    getPlayer(),
+//                    mc.theWorld,
+//                    getPlayer().inventory.getCurrentItem(),
+//                    facingPos,
+//                    EnumFacing.fromAngle(getPlayer().rotationYaw),
+//                    new Vec3(Math.random(), Math.random(), Math.random())
+//            );
         }
         doneSecretsPos.put(facingPos, TimeUtils.curTime());
     }

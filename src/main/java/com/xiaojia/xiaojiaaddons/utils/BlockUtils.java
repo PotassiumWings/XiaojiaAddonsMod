@@ -5,6 +5,8 @@ import com.mojang.authlib.properties.Property;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.BlockPos;
@@ -37,6 +39,11 @@ public class BlockUtils {
     public static Block getBlockAt(BlockPos pos) {
         if (getWorld() == null || pos == null) return null;
         return getWorld().getBlockState(pos).getBlock();
+    }
+
+    public static IBlockState getBlockStateAt(BlockPos pos) {
+        if (getWorld() == null || pos == null) return null;
+        return getWorld().getBlockState(pos);
     }
 
     public static void showBlockAt(int x, int y, int z) {
