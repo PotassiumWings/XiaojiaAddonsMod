@@ -109,21 +109,23 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Summon/Player Features", parent = "QOL")
     public static boolean EntityQOL = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Hide Summons", parent = "Summon/Player Features")
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Summons", parent = "Summon/Player Features", illegal = true,
+            description = "Act like the summons dont exist")
     public static boolean HideSummons = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Click Through Summons", parent = "Summon/Player Features", illegal = true)
-    public static boolean ClickThroughSummons = false;
+//    @Property(type = Property.Type.BOOLEAN, name = "Click Through Summons", parent = "Summon/Player Features", illegal = true)
+//    public static boolean ClickThroughSummons = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Hide Nearby Players", parent = "Summon/Player Features")
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Nearby Players", parent = "Summon/Player Features", illegal = true,
+            description = "Act like the players dont exist")
     public static boolean HidePlayers = false;
 
     @Property(type = Property.Type.NUMBER, name = "Hide Nearby Players radius", parent = "Summon/Player Features",
             min = 0, max = 30, step = 1)
     public static int HidePlayerRadius = 4;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Click Through Players", parent = "Summon/Player Features", illegal = true)
-    public static boolean ClickThroughPlayers = false;
+//    @Property(type = Property.Type.BOOLEAN, name = "Click Through Players", parent = "Summon/Player Features", illegal = true)
+//    public static boolean ClickThroughPlayers = false;
 
 //    // FuckHarps
 //    @Property(type = Property.Type.BOOLEAN, name = "Bald Harps", parent = "QOL")

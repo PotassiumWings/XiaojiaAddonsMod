@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -61,44 +62,56 @@ public class EntityQOL {
     }
 
     @SubscribeEvent
-    public void onRenderEntity(RenderLivingEvent.Pre<EntityLivingBase> event) {
+    public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
-        if (SkyblockUtils.isInDungeon()) return;
-        if (Configs.HideSummons && isSummon(event.entity)) {
-            event.setCanceled(true);
-        }
-        if (Configs.HidePlayers && isPlayer(event.entity) &&
-                MathUtils.distanceSquareFromPlayer(event.entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius) {
-            event.setCanceled(true);
+        List<Entity> allEntities = getWorld().loadedEntityList;
+        for (Entity entity : allEntities) {
+            if (Configs.HidePlayers && isPlayer(entity) && MathUtils.distanceSquareFromPlayer(entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius ||
+                    Configs.HideSummons && isSummon(entity)) {
+                entity.setDead();
+            }
         }
     }
 
     @SubscribeEvent
+    public void onRenderEntity(RenderLivingEvent.Pre<EntityLivingBase> event) {
+//        if (!Checker.enabled) return;
+//        if (SkyblockUtils.isInDungeon()) return;
+//        if (Configs.HideSummons && isSummon(event.entity)) {
+//            event.setCanceled(true);
+//        }
+//        if (Configs.HidePlayers && isPlayer(event.entity) &&
+//                MathUtils.distanceSquareFromPlayer(event.entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius) {
+//            event.setCanceled(true);
+//        }
+    }
+
+    @SubscribeEvent
     public void onAttackEntity(AttackEntityEvent event) {
-        if (!Checker.enabled) return;
-        Entity target = event.target;
-        if (Configs.ClickThroughSummons && isSummon(target) ||
-                Configs.ClickThroughPlayers && isPlayer(target)) {
-            float reach = mc.playerController.getBlockReachDistance();
-            Entity excludedEntity = mc.getRenderViewEntity();
-            Vec3 look = excludedEntity.getLook(0.0F);
-            AxisAlignedBB boundingBox = excludedEntity
-                    .getEntityBoundingBox()
-                    .addCoord(look.xCoord * reach, look.yCoord * reach, look.zCoord * reach)
-                    .expand(1.0D, 1.0D, 1.0D);
-            List<Entity> entitiesInRange = getWorld().getEntitiesWithinAABBExcludingEntity(excludedEntity, boundingBox);
-            if (XiaojiaAddons.isDebug()) for (Entity entity : entitiesInRange) ChatLib.chat(entity.getName());
-            entitiesInRange.removeIf(entity -> !entity.canBeCollidedWith());
-            if (Configs.ClickThroughSummons) entitiesInRange.removeIf(EntityQOL::isSummon);
-            if (Configs.ClickThroughPlayers) entitiesInRange.removeIf(EntityQOL::isPlayer);
-            entitiesInRange.sort((Entity a, Entity b) -> MathUtils.distanceSquareFromPlayer(a) >= MathUtils.distanceSquareFromPlayer(b) ? 1 : -1);
-            if (entitiesInRange.size() > 0) {
-                event.setCanceled(true);
-                getPlayer().swingItem();
-                if (XiaojiaAddons.isDebug()) ChatLib.chat(entitiesInRange.get(0).toString());
-                if (XiaojiaAddons.isDebug()) ChatLib.chat("Attacking through summon!");
-                mc.playerController.attackEntity(getPlayer(), entitiesInRange.get(0));
-            }
-        }
+//        if (!Checker.enabled) return;
+//        Entity target = event.target;
+//        if (Configs.ClickThroughSummons && isSummon(target) ||
+//                Configs.ClickThroughPlayers && isPlayer(target)) {
+//            float reach = mc.playerController.getBlockReachDistance();
+//            Entity excludedEntity = mc.getRenderViewEntity();
+//            Vec3 look = excludedEntity.getLook(0.0F);
+//            AxisAlignedBB boundingBox = excludedEntity
+//                    .getEntityBoundingBox()
+//                    .addCoord(look.xCoord * reach, look.yCoord * reach, look.zCoord * reach)
+//                    .expand(1.0D, 1.0D, 1.0D);
+//            List<Entity> entitiesInRange = getWorld().getEntitiesWithinAABBExcludingEntity(excludedEntity, boundingBox);
+//            if (XiaojiaAddons.isDebug()) for (Entity entity : entitiesInRange) ChatLib.chat(entity.getName());
+//            entitiesInRange.removeIf(entity -> !entity.canBeCollidedWith());
+//            if (Configs.ClickThroughSummons) entitiesInRange.removeIf(EntityQOL::isSummon);
+//            if (Configs.ClickThroughPlayers) entitiesInRange.removeIf(EntityQOL::isPlayer);
+//            entitiesInRange.sort((Entity a, Entity b) -> MathUtils.distanceSquareFromPlayer(a) >= MathUtils.distanceSquareFromPlayer(b) ? 1 : -1);
+//            if (entitiesInRange.size() > 0) {
+//                event.setCanceled(true);
+//                getPlayer().swingItem();
+//                if (XiaojiaAddons.isDebug()) ChatLib.chat(entitiesInRange.get(0).toString());
+//                if (XiaojiaAddons.isDebug()) ChatLib.chat("Attacking through summon!");
+//                mc.playerController.attackEntity(getPlayer(), entitiesInRange.get(0));
+//            }
+//        }
     }
 }
