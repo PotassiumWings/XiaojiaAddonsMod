@@ -109,13 +109,7 @@ public class StonklessStonk {
                         if (canClick) {
                             lastClickTime = TimeUtils.curTime();
                             if (XiaojiaAddons.isDebug()) ChatLib.chat("click");
-                            for (BlockPos previousBlockPos : blockMap.keySet())
-                                if (!previousBlockPos.equals(pos)) getWorld().setBlockToAir(previousBlockPos);
-
-                            ControlUtils.rightClick();
-                            for (BlockPos previousBlockPos : blockMap.keySet())
-                                if (!previousBlockPos.equals(pos))
-                                    getWorld().setBlockState(previousBlockPos, blockMap.get(previousBlockPos));
+                            clickSecret(pos);
 
 //                        mc.playerController.onPlayerRightClick(
 //                                getPlayer(),
@@ -197,26 +191,9 @@ public class StonklessStonk {
             return;
 //        if (!(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK))
 //            return;
-        ChatLib.chat("onrightclick!");
         if (!facingPos.equals(mc.objectMouseOver.getBlockPos())) {
             event.setCanceled(true);
-
-            for (BlockPos previousBlockPos : currentBlockMap.keySet())
-                if (!isSecret(currentBlockMap.get(previousBlockPos).getBlock(), previousBlockPos))
-                    getWorld().setBlockToAir(previousBlockPos);
-
-            mc.playerController.onPlayerRightClick(
-                    getPlayer(),
-                    mc.theWorld,
-                    getPlayer().inventory.getCurrentItem(),
-                    facingPos,
-                    mc.objectMouseOver.sideHit,
-                    mc.objectMouseOver.hitVec
-            );
-
-            for (BlockPos previousBlockPos : currentBlockMap.keySet())
-                if (!isSecret(currentBlockMap.get(previousBlockPos).getBlock(), previousBlockPos))
-                    getWorld().setBlockState(previousBlockPos, currentBlockMap.get(previousBlockPos));
+            clickSecret(facingPos);
 //            mc.playerController.onPlayerRightClick(
 //                    getPlayer(),
 //                    mc.theWorld,
@@ -227,6 +204,25 @@ public class StonklessStonk {
 //            );
         }
         doneSecretsPos.put(facingPos, TimeUtils.curTime());
+    }
+
+    private void clickSecret(BlockPos blockPos) {
+        for (BlockPos previousBlockPos : currentBlockMap.keySet())
+            if (!isSecret(currentBlockMap.get(previousBlockPos).getBlock(), previousBlockPos))
+                getWorld().setBlockToAir(previousBlockPos);
+
+        mc.playerController.onPlayerRightClick(
+                getPlayer(),
+                mc.theWorld,
+                getPlayer().inventory.getCurrentItem(),
+                facingPos,
+                mc.objectMouseOver.sideHit,
+                mc.objectMouseOver.hitVec
+        );
+
+        for (BlockPos previousBlockPos : currentBlockMap.keySet())
+            if (!isSecret(currentBlockMap.get(previousBlockPos).getBlock(), previousBlockPos))
+                getWorld().setBlockState(previousBlockPos, currentBlockMap.get(previousBlockPos));
     }
 
     @SubscribeEvent
