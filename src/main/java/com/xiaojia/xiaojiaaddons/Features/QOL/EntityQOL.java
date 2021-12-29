@@ -64,6 +64,7 @@ public class EntityQOL {
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
+        if (SkyblockUtils.isInDungeon()) return;
         List<Entity> allEntities = getWorld().loadedEntityList;
         for (Entity entity : allEntities) {
             if (Configs.HidePlayers && isPlayer(entity) && MathUtils.distanceSquareFromPlayer(entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius ||

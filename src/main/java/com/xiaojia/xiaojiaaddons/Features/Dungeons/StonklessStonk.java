@@ -72,6 +72,7 @@ public class StonklessStonk {
         float R = 5;
         int lastX = -1, lastY = -1, lastZ = -1;
         HashMap<BlockPos, IBlockState> blockMap = new HashMap<>();
+        boolean canClick = TimeUtils.curTime() - lastClickTime > 200 && Configs.StonklessStonkAutoClickSecret;
         try {
             for (int delta = 1; delta <= 300; delta++) {
                 float r = R * delta / 300;
@@ -92,44 +93,28 @@ public class StonklessStonk {
                 if (doneSecretsPos.containsKey(pos) && TimeUtils.curTime() - doneSecretsPos.get(pos) < 1000) continue;
 
                 if (isSecret(block, pos)) {
-                    if (Configs.StonklessStonkAutoClickSecret) {
-                        boolean canClick = TimeUtils.curTime() - lastClickTime > 200;
-                        // opened inv
-                        Inventory inventory = ControlUtils.getOpenedInventory();
-                        if (inventory == null || inventory.getSize() != 45) canClick = false;
+                    // opened inv
+                    Inventory inventory = ControlUtils.getOpenedInventory();
+                    if (inventory == null || inventory.getSize() != 45) canClick = false;
 
-                        // held pickaxe!
-                        ItemStack heldItemStack = ControlUtils.getHeldItemStack();
-                        String heldItemName = "";
-                        if (heldItemStack != null && heldItemStack.hasDisplayName())
-                            heldItemName = ControlUtils.getHeldItemStack().getDisplayName();
-                        if (!Configs.StonklessStonkWithoutPickaxe && !heldItemName.contains("Stonk") && !heldItemName.contains("Pickaxe"))
-                            canClick = false;
-
-                        if (canClick) {
-                            lastClickTime = TimeUtils.curTime();
-                            if (XiaojiaAddons.isDebug()) ChatLib.chat("click");
-                            clickSecret(pos);
-
-//                        mc.playerController.onPlayerRightClick(
-//                                getPlayer(),
-//                                mc.theWorld,
-//                                getPlayer().inventory.getCurrentItem(),
-//                                pos,
-//                                EnumFacing.fromAngle(getPlayer().rotationYaw),
-//                                new Vec3(Math.random(), Math.random(), Math.random())
-//                        );
-                            doneSecretsPos.put(pos, TimeUtils.curTime());
-                            if (XiaojiaAddons.isDebug())
-                                ChatLib.chat("stonkless stonk: (" + x + ", " + y + ", " + z + ")");
-                        }
-                    }
+                    // held pickaxe!
+                    ItemStack heldItemStack = ControlUtils.getHeldItemStack();
+                    String heldItemName = "";
+                    if (heldItemStack != null && heldItemStack.hasDisplayName())
+                        heldItemName = ControlUtils.getHeldItemStack().getDisplayName();
+                    if (!Configs.StonklessStonkWithoutPickaxe && !heldItemName.contains("Stonk") && !heldItemName.contains("Pickaxe"))
+                        canClick = false;
                     facingPos = pos;
                     return;
                 }
             }
         } finally {
             currentBlockMap = blockMap;
+            if (canClick) {
+                lastClickTime = TimeUtils.curTime();
+                clickSecret(facingPos);
+                doneSecretsPos.put(facingPos, TimeUtils.curTime());
+            }
         }
     }
 
@@ -187,42 +172,35 @@ public class StonklessStonk {
     public void onRightClick(PlayerInteractEvent event) throws Exception {
         if (!Checker.enabled) return;
         if (facingPos == null) return;
-        if (!(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK))
-            return;
-//        if (!(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK))
-//            return;
+        if (!(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)) return;
         if (!facingPos.equals(mc.objectMouseOver.getBlockPos())) {
             event.setCanceled(true);
             clickSecret(facingPos);
-//            mc.playerController.onPlayerRightClick(
-//                    getPlayer(),
-//                    mc.theWorld,
-//                    getPlayer().inventory.getCurrentItem(),
-//                    facingPos,
-//                    EnumFacing.fromAngle(getPlayer().rotationYaw),
-//                    new Vec3(Math.random(), Math.random(), Math.random())
-//            );
         }
         doneSecretsPos.put(facingPos, TimeUtils.curTime());
     }
 
     private void clickSecret(BlockPos blockPos) {
-        for (BlockPos previousBlockPos : currentBlockMap.keySet())
-            if (!isSecret(currentBlockMap.get(previousBlockPos).getBlock(), previousBlockPos))
-                getWorld().setBlockToAir(previousBlockPos);
+        if (blockPos == null) return;
+        try {
+            for (BlockPos previousBlockPos : currentBlockMap.keySet())
+                if (!isSecret(currentBlockMap.get(previousBlockPos).getBlock(), previousBlockPos))
+                    getWorld().setBlockToAir(previousBlockPos);
 
-        mc.playerController.onPlayerRightClick(
-                getPlayer(),
-                mc.theWorld,
-                getPlayer().inventory.getCurrentItem(),
-                facingPos,
-                mc.objectMouseOver.sideHit,
-                mc.objectMouseOver.hitVec
-        );
+            mc.playerController.onPlayerRightClick(
+                    getPlayer(),
+                    mc.theWorld,
+                    getPlayer().inventory.getCurrentItem(),
+                    facingPos,
+                    mc.objectMouseOver.sideHit,
+                    mc.objectMouseOver.hitVec
+            );
 
-        for (BlockPos previousBlockPos : currentBlockMap.keySet())
-            if (!isSecret(currentBlockMap.get(previousBlockPos).getBlock(), previousBlockPos))
-                getWorld().setBlockState(previousBlockPos, currentBlockMap.get(previousBlockPos));
+            for (BlockPos previousBlockPos : currentBlockMap.keySet())
+                if (!isSecret(currentBlockMap.get(previousBlockPos).getBlock(), previousBlockPos))
+                    getWorld().setBlockState(previousBlockPos, currentBlockMap.get(previousBlockPos));
+        } catch (Exception ignored) {
+        }
     }
 
     @SubscribeEvent

@@ -189,7 +189,6 @@ public class AutoTerminal {
                 if (itemStacks.size() < 54) return true;
                 for (int i = 0; i < 54; i++) {
                     if (itemStacks.get(i) == null) continue;
-                    ChatLib.chat(itemStacks.get(i).hasDisplayName() + "! " + itemStacks.get(i).getDisplayName());
                     String itemName = ChatLib.removeFormatting(itemStacks.get(i).getDisplayName()).toUpperCase();
                     if (XiaojiaAddons.isDebug()) ChatLib.chat(itemName + ", " + color);
                     if (itemName.contains(color) ||

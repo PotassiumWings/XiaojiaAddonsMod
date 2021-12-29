@@ -4,7 +4,6 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Vector2i;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -152,8 +151,6 @@ public class AutoItemFrame {
                             HashMap<Vector2i, Integer> arr = getDis(start, end);
                             int dis = arr.size();
                             if (dis < minDis || dis == minDis && correspondEnd.compareTo(end) < 0) {
-                                ChatLib.chat("end: " + end.gridPos + ", corr: " + correspondEnd.gridPos);
-                                ChatLib.chat("dis: " + dis + ", minDis: " + minDis);
                                 minDis = dis;
                                 correspondEnd = end;
                                 correspondRotations = arr;

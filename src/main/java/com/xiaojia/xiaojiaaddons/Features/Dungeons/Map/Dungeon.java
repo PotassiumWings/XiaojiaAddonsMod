@@ -481,6 +481,10 @@ public class Dungeon {
             currentRoom = "";
             return;
         }
+        if (bossEntry > runStarted) {
+            StonklessStonk.setInPuzzle(true);
+            return;
+        }
         int x = MathUtils.floor(getX(getPlayer())), z = MathUtils.floor(getZ(getPlayer()));
         if (XiaojiaAddons.isDebug()) ChatLib.chat("x: " + x + ", z: " + z);
         for (Room room: rooms) {
