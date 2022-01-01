@@ -37,7 +37,7 @@ public class SkyblockUtils {
     private static String updateCurrentMap() {
         ArrayList<String> lines = ScoreBoard.getLines();
         if (lines.size() < 5) return "";
-        String line = lines.get(lines.size() - 4) + lines.get(lines.size() - 5);
+        String line = lines.get(lines.size() - 3) + lines.get(lines.size() - 4) + lines.get(lines.size() - 5);
         StringBuilder removeSkippingChar = new StringBuilder();
         line = ChatLib.removeFormatting(line);
         for (int i = 0; i < line.length(); i++) {
