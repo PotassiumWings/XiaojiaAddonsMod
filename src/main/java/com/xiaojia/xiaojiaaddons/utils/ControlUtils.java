@@ -180,6 +180,12 @@ public class ControlUtils {
         return openedInventory;
     }
 
+    public static String getOpenedInventoryName() {
+        Inventory inventory = getOpenedInventory();
+        if (inventory != null) return inventory.getName();
+        return "";
+    }
+
     public static String getInventoryName() {
         Inventory inventory = getOpenedInventory();
         if (inventory == null || inventory.getName() == null) return "";

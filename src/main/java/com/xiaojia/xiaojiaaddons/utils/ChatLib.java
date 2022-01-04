@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
@@ -31,6 +32,10 @@ public class ChatLib {
                 player.addChatMessage(component);
             }
         }
+    }
+
+    public static void debug(String message) {
+        if (XiaojiaAddons.isDebug()) chat(message);
     }
 
     public static void say(String message) {

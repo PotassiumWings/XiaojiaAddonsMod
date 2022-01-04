@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
@@ -114,12 +115,27 @@ public class GuiUtils {
 
     public static void drawFilledBoxAtEntity(Entity entity, int r, int g, int b, int a, float width, float height, float yOffset) {
         float x = getX(entity), y = getY(entity) - yOffset * height, z = getZ(entity);
-        if (XiaojiaAddons.isDebug()) ChatLib.chat(x + ", " + y + ", " + z);
         drawFilledBoundingBoxAbsolute(x - width, y, z - width, x + width, y + height, z + width, r, g, b, a);
     }
 
     public static void drawBoxAtBlock(int x, int y, int z, int r, int g, int b, int a, int width, int height, float delta) {
         drawFilledBoundingBoxAbsolute(x - delta, y - delta, z - delta, x + width + delta, y + height + delta, z + width + delta, r, g, b, a);
+    }
+
+    public static void drawBoxAtBlock(BlockPos blockPos, Color color, int width, int height, float delta) {
+        drawBoxAtBlock(
+                blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
+                width, height, delta
+        );
+    }
+
+    public static void drawBoundingBoxAtBlock(BlockPos blockPos, Color color) {
+        drawBoxAt(
+                blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
+                0.5F, 0.5F
+        );
     }
 
     private static void drawFilledBoundingBoxAbsolute(float sx, float sy, float sz, float tx, float ty, float tz, int r, int g, int b, int a) {

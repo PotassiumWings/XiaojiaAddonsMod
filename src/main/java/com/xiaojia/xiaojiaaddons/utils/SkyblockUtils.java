@@ -43,7 +43,7 @@ public class SkyblockUtils {
         for (int i = 0; i < line.length(); i++) {
             char c = line.charAt(i);
             if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '\'' || c == ' '
-                    || c == '(' || c == ')')
+                    || c == '(' || c == ')' || c == 'û')
                 removeSkippingChar.append(c);
         }
         line = removeSkippingChar.toString();

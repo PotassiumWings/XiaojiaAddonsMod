@@ -26,6 +26,10 @@ public class Configs {
             description = "When Auto-Swapping Armor")
     public static boolean NakePrevention = true;
 
+    // AutoHarp
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Harp", parent = "QOL")
+    public static boolean AutoHarp = false;
+
     // AutoUseItem
     @Property(type = Property.Type.FOLDER, name = "Auto Use Item", description = "CD=0 <=> disable", parent = "QOL")
     public static boolean AutoUseItem = false;
@@ -205,6 +209,13 @@ public class Configs {
     // Dungeons
     @Property(type = Property.Type.FOLDER, name = "Dungeons")
     public static boolean DungeonEnabled = false;
+
+    // TeleportMaze
+    @Property(type = Property.Type.FOLDER, name = "Solvers", parent = "Dungeons")
+    public static boolean Solver = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Teleport Maze Solver", parent = "Solvers")
+    public static boolean TeleportMazeSolver = false;
 
     // StarredMobESP
     @Property(type = Property.Type.FOLDER, name = "Starred Mob ESP", parent = "Dungeons")

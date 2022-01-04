@@ -76,4 +76,9 @@ public class BlockUtils {
         Block block = getBlockAt(x, y, z);
         return block.getRegistryName().toLowerCase().contains("sapling");
     }
+
+    public static boolean isBlockTeleportPad(int x, int y, int z) {
+        Block block = getBlockAt(x,y,z);
+        return block != null && Block.getIdFromBlock(block) == 120;
+    }
 }
