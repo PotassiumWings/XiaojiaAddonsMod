@@ -215,8 +215,27 @@ public class Configs {
     public static boolean DungeonEnabled = false;
 
     // LividESP
-    @Property(type = Property.Type.BOOLEAN, name = "Show Correct Livid", parent = "Dungeons")
+    @Property(type = Property.Type.FOLDER, name = "Show Livid", parent = "Dungeons")
+    public static boolean ShowLivid = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Correct Livid", parent = "Show Livid")
     public static boolean ShowCorrectLivid = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Livid with ESP", parent = "Show Livid")
+    public static boolean ShowCorrectLividWithESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Livid with Filled Box", parent = "Show Livid")
+    public static boolean ShowCorrectLividWithFilledBox = false;
+
+    // AutoLeap
+    @Property(type = Property.Type.FOLDER, name = "Spirit Leap", parent = "Dungeons")
+    public static boolean SpiritLeap = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Player Name in Leaps", parent = "Spirit Leap")
+    public static boolean SpiritLeapName = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Click Mage When opening Leaps", parent = "Spirit Leap", description = "Requires dungeon map enabled!")
+    public static boolean AutoTpToMage = false;
 
     // TeleportMaze
     @Property(type = Property.Type.FOLDER, name = "Solvers", parent = "Dungeons")

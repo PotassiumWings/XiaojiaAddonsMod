@@ -26,6 +26,7 @@ public class Player {
     public double realX;
     public double realZ;
     public boolean isDead;
+    public String className;
 
     public Player() {
     }

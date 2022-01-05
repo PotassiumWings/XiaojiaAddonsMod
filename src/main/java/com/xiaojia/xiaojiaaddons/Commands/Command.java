@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Map;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Player;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
@@ -124,6 +125,10 @@ public class Command extends CommandBase {
                 for (Entity entity: list) {
                     ChatLib.chat(entity.getName() + ", " + MathUtils.getPosString(entity));
                 }
+                break;
+            case "players":
+                Dungeon.showPlayers();
+                break;
 //            case "shoot":
 //                AutoShootCrystal.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
 //                break;

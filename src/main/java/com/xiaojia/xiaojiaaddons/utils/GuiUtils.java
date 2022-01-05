@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Vector2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
@@ -63,17 +64,28 @@ public class GuiUtils {
         Gui.drawRect(x, y, x + width, y + height, color);
     }
 
-    public static void drawOnSlot(int size, int xSlotPos, int ySlotPos, int colour) {
+    private static Vector2i getXYForSlot(int size, int xSlotPos, int ySlotPos) {
         ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
         int guiLeft = (sr.getScaledWidth() - 176) / 2;
         int guiTop = (sr.getScaledHeight() - 222) / 2;
         int x = guiLeft + xSlotPos;
-        int y = guiTop + ySlotPos;
-        // Move down when chest isn't 6 rows
-        if (size != 90) y += (6 - (size - 36) / 9) * 9;
+        int y = guiTop + ySlotPos + (6 - (size - 36) / 9) * 9;
+        return new Vector2i(x, y);
+    }
 
+    public static void drawOnSlot(int size, int xSlotPos, int ySlotPos, int colour) {
+        Vector2i v = getXYForSlot(size, xSlotPos, ySlotPos);
+        int x = v.x, y = v.y;
         GL11.glTranslated(0, 0, 1);
         Gui.drawRect(x, y, x + 16, y + 16, colour);
+        GL11.glTranslated(0, 0, -1);
+    }
+
+    public static void drawStringOnSlot(String name, int size, int xSlotPos, int ySlotPos, Color color) {
+        Vector2i v = getXYForSlot(size, xSlotPos, ySlotPos);
+        int x = v.x + 8 - RenderUtils.getStringWidth(name) / 2, y = v.y + 4;  // height is 9
+        GL11.glTranslated(0, 0, 1);
+        drawString(name, x, y, false, color);
         GL11.glTranslated(0, 0, -1);
     }
 

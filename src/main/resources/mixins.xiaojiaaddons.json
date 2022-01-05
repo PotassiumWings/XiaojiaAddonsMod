@@ -9,6 +9,7 @@
         "MixinChunk",
         "MixinLayerCreeperCharge",
         "MixinWindowClick",
-        "MixinPacket"
+        "MixinPacket",
+        "MixinGuiContainer"
     ]
 }

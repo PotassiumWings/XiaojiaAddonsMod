@@ -156,6 +156,19 @@ public class Dungeon {
         }
     }
 
+    public static boolean isPlayerMage(String name) {
+        for (Player player: players)
+            if (player.name.equals(name))
+                return player.className.equals("MAGE");
+        return false;
+    }
+
+    public static void showPlayers() {
+        for (Player player: players) {
+            ChatLib.chat(player.name + ": " + player.className);
+        }
+    }
+
     public static void updatePlayers() {
         if (!isInDungeon) return;
         ArrayList<String> tab = TabUtils.getNames();
@@ -167,12 +180,20 @@ public class Dungeon {
             if (!tabLine.contains(" ")) continue;
             String name = tabLine.split(" ")[0];
             if (name.length() == 0) continue;
+            String className = "";
+            if (tabLine.toUpperCase().contains("(MAGE")) className = "MAGE";
+            else if (tabLine.toUpperCase().contains("(ARCHER")) className = "ARCHER";
+            else if (tabLine.toUpperCase().contains("(TANK")) className = "TANK";
+            else if (tabLine.toUpperCase().contains("(HEALER")) className = "HEALER";
+            else if (tabLine.toUpperCase().contains("(BERSERK")) className = "BERSERK";
+
             boolean found = false;
             for (int i = 0; i < players.size(); i++) {
                 Player player = players.get(i);
                 if (player.name.equals(name)) {
                     found = true;
                     player.isDead = dead;
+                    player.className = className;
                     player.icon = dead ? null : "icon-" + iconNum;
                 }
             }
@@ -181,6 +202,7 @@ public class Dungeon {
                 newPlayer.name = name;
                 newPlayer.isDead = dead;
                 newPlayer.icon = dead ? null : "icon-" + iconNum;
+                newPlayer.className = className;
                 players.add(newPlayer);
             }
             if (!dead) iconNum++;

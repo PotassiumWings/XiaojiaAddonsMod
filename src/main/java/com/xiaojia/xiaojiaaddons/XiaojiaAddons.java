@@ -15,6 +15,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dragons.EnderCrystalESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoBlood;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoCloseSecretChest;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoLeap;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoTerminal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BatESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.LividESP;
@@ -135,6 +136,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoBlood());
         MinecraftForge.EVENT_BUS.register(new AutoCloseSecretChest());
         MinecraftForge.EVENT_BUS.register(new AutoItemFrame());
+        MinecraftForge.EVENT_BUS.register(new AutoLeap());
         MinecraftForge.EVENT_BUS.register(new AutoTerminal());
         MinecraftForge.EVENT_BUS.register(new BatESP());
         MinecraftForge.EVENT_BUS.register(new LividESP());
@@ -156,7 +158,6 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoUseItem());
         MinecraftForge.EVENT_BUS.register(new BlockAbility());
         MinecraftForge.EVENT_BUS.register(new EntityQOL());
-//        MinecraftForge.EVENT_BUS.register(new FuckHarps());
         MinecraftForge.EVENT_BUS.register(new GhostBlock());
         MinecraftForge.EVENT_BUS.register(new GhostQOL());
         MinecraftForge.EVENT_BUS.register(new NearbyChestESP());

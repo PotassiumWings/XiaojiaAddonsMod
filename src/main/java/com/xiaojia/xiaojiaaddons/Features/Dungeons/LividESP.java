@@ -28,6 +28,7 @@ public class LividESP extends RenderEntityESP {
 
     @SubscribeEvent
     public void onTickCheck(TickEndEvent event) {
+        colorChat = null;
         if (!Checker.enabled) return;
         if (!Configs.ShowCorrectLivid) return;
         if (Dungeon.bossEntry <= Dungeon.runStarted) return;
@@ -37,7 +38,6 @@ public class LividESP extends RenderEntityESP {
         if (iBlockState.getBlock() != Blocks.stained_glass) return;
 //        int meta = iBlockState.getBlock().getMetaFromState(iBlockState);
         EnumDyeColor val = iBlockState.getValue(BlockStainedGlass.COLOR);
-        colorChat = null;
         if (val == EnumDyeColor.WHITE) colorChat = EnumChatFormatting.WHITE;
         else if (val == EnumDyeColor.MAGENTA) colorChat = EnumChatFormatting.LIGHT_PURPLE;
         else if (val == EnumDyeColor.RED) colorChat = EnumChatFormatting.RED;
@@ -72,7 +72,8 @@ public class LividESP extends RenderEntityESP {
         hashMap.put("width", 0.5F);
         hashMap.put("height", 2F);
         hashMap.put("fontColor", 0x33ff33);
-        hashMap.put("isFilled", false);
+        hashMap.put("isFilled", Configs.ShowCorrectLividWithFilledBox);
+        hashMap.put("isESP", Configs.ShowCorrectLividWithESP);
         hashMap.put("kind", "Livid");
         return new EntityInfo(hashMap);
     }

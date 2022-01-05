@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -63,14 +64,18 @@ public class EntityQOL {
         if (SkyblockUtils.isInDungeon()) return;
         List<Entity> allEntities = getWorld().loadedEntityList;
         for (Entity entity : allEntities) {
-            if (Configs.HidePlayers && isPlayer(entity) && MathUtils.distanceSquareFromPlayer(entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius)
-                entity.setDead();
-            else entity.isDead = false;
-
-            if (Configs.HideSummons && isSummon(entity)) entity.setDead();
-            else entity.isDead = false;
+            if (isPlayer(entity)) {
+                if (Configs.HidePlayers && MathUtils.distanceSquareFromPlayer(entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius) {
+                    entity.setDead();
+                }
+            } else if (isSummon(entity)) {
+                if (Configs.HideSummons) {
+                    entity.setDead();
+                }
+            }
         }
     }
+
 
     @SubscribeEvent
     public void onRenderEntity(RenderLivingEvent.Pre<EntityLivingBase> event) {
