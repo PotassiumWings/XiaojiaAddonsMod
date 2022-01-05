@@ -6,6 +6,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.vecmath.Vector3d;
@@ -87,6 +88,10 @@ public class MathUtils {
         return (float) (entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks);
     }
 
+    public static String getPosString(Entity entity) {
+        return String.format("(%.2f %.2f %.2f)", getX(entity), getY(entity), getZ(entity));
+    }
+
     public static int getBlockX(Entity entity) {
         return floor(getX(entity));
     }
@@ -117,7 +122,15 @@ public class MathUtils {
         return (int) Math.floor(x);
     }
 
-    @SubscribeEvent
+    public static int ceil(float x) {
+        return (int) Math.ceil(x);
+    }
+
+    public static int ceil(double x) {
+        return (int) Math.ceil(x);
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onTick(RenderWorldLastEvent event) {
         partialTicks = event.partialTicks;
     }

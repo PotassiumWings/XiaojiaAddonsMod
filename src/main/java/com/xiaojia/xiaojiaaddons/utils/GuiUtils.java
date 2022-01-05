@@ -1,6 +1,5 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
@@ -49,11 +48,19 @@ public class GuiUtils {
 
     // drawString in Gui
     public static void drawString(String text, int x, int y, boolean shadow) {
+        drawString(text, x, y, shadow, Color.WHITE);
+    }
+
+    public static void drawString(String text, int x, int y, boolean shadow, Color color) {
         String[] lines = text.split("\n");
         for (String line : lines) {
-            mc.fontRendererObj.drawString(line, x, y, Color.WHITE.getRGB(), shadow);
+            mc.fontRendererObj.drawString(line, x, y, color.getRGB(), shadow);
             y += mc.fontRendererObj.FONT_HEIGHT + 1;
         }
+    }
+
+    public static void drawRect(int color, int x, int y, int width, int height) {
+        Gui.drawRect(x, y, x + width, y + height, color);
     }
 
     public static void drawOnSlot(int size, int xSlotPos, int ySlotPos, int colour) {

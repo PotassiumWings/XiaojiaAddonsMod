@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -42,7 +43,8 @@ public class AutoBlood {
         }
         if (!enabled) return;
         if (!Configs.AutoBlood || !SkyblockUtils.isInDungeon()) return;
-        if (target == null || killed.contains(target) || target.getDistanceToEntity(getPlayer()) > 20.0F) {
+        if (Dungeon.bossEntry > Dungeon.runStarted) return;
+        if (target == null || killed.contains(target) || target.getDistanceToEntity(getPlayer()) > 20.0F || target.isDead) {
             target = null;
             faceTime = 0;
             // recalculate target

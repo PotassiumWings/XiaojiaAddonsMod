@@ -7,6 +7,7 @@ import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.SneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.Spider;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
@@ -16,6 +17,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoCloseSecretChest;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoTerminal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BatESP;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.LividESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Map;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.MapUpdater;
@@ -37,6 +39,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.HoldRightClick;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NearbyChestESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
+import com.xiaojia.xiaojiaaddons.Features.QOL.RemoveBlindness;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoCloseCrystalHollowsChest;
@@ -52,6 +55,7 @@ import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayHandler;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -76,7 +80,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.2.6";
+    public static final String VERSION = "2.2.7";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -107,6 +111,8 @@ public class XiaojiaAddons {
 
         MinecraftForge.EVENT_BUS.register(this);
 
+        MinecraftForge.EVENT_BUS.register(new DisplayHandler());
+
         // Utils
         MinecraftForge.EVENT_BUS.register(new ControlUtils());
         MinecraftForge.EVENT_BUS.register(new MathUtils());
@@ -119,6 +125,7 @@ public class XiaojiaAddons {
         // Bestiary
         MinecraftForge.EVENT_BUS.register(new Spider());
         MinecraftForge.EVENT_BUS.register(new SneakyCreeper());
+        MinecraftForge.EVENT_BUS.register(new GolemAlert());
 
         // Dragons
         MinecraftForge.EVENT_BUS.register(new AutoShootCrystal());
@@ -130,6 +137,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoItemFrame());
         MinecraftForge.EVENT_BUS.register(new AutoTerminal());
         MinecraftForge.EVENT_BUS.register(new BatESP());
+        MinecraftForge.EVENT_BUS.register(new LividESP());
         MinecraftForge.EVENT_BUS.register(new MimicWarn());
         MinecraftForge.EVENT_BUS.register(new ShowHiddenMobs());
         MinecraftForge.EVENT_BUS.register(new StarredMobESP());
@@ -155,6 +163,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new InCombatQOL());
         MinecraftForge.EVENT_BUS.register(new NoSlowdown());
         MinecraftForge.EVENT_BUS.register(new SwordSwap());
+        MinecraftForge.EVENT_BUS.register(new RemoveBlindness());
         MinecraftForge.EVENT_BUS.register(new HoldRightClick());
         MinecraftForge.EVENT_BUS.register(new TransferBack());
 

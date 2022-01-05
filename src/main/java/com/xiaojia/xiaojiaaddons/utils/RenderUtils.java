@@ -2,11 +2,14 @@ package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.Color;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
@@ -42,6 +45,14 @@ public class RenderUtils {
         worldRenderer.pos(x + width, y, 0.0).tex(1.0, 0.0).endVertex();
         worldRenderer.pos(x, y, 0.0).tex(0.0, 0.0).endVertex();
         tessellator.draw();
+        finishDraw();
+    }
+
+    public static void drawString(String str, float scale, int x, int y, Color color, boolean shadow) {
+        GlStateManager.enableBlend();
+        GlStateManager.scale(scale, scale, scale);
+        GuiUtils.drawString(str, MathUtils.ceil(x / scale), MathUtils.ceil(y / scale), shadow, color);
+        GlStateManager.disableBlend();
         finishDraw();
     }
 
@@ -100,5 +111,13 @@ public class RenderUtils {
 
     public static int getStringWidth(String str) {
         return mc.fontRendererObj.getStringWidth(str);
+    }
+
+    public static  int getScreenWidth() {
+        return new ScaledResolution(mc).getScaledWidth();
+    }
+
+    public static  int getScreenHeight() {
+        return new ScaledResolution(mc).getScaledHeight();
     }
 }

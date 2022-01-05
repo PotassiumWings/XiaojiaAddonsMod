@@ -26,6 +26,10 @@ public class Configs {
             description = "When Auto-Swapping Armor")
     public static boolean NakePrevention = true;
 
+    // RemoveBlindness
+    @Property(type = Property.Type.BOOLEAN, name = "Remove Blindness", parent = "QOL")
+    public static boolean RemoveBlindness = false;
+
     // AutoHarp
     @Property(type = Property.Type.BOOLEAN, name = "Auto Harp", parent = "QOL")
     public static boolean AutoHarp = false;
@@ -210,6 +214,10 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Dungeons")
     public static boolean DungeonEnabled = false;
 
+    // LividESP
+    @Property(type = Property.Type.BOOLEAN, name = "Show Correct Livid", parent = "Dungeons")
+    public static boolean ShowCorrectLivid = false;
+
     // TeleportMaze
     @Property(type = Property.Type.FOLDER, name = "Solvers", parent = "Dungeons")
     public static boolean Solver = false;
@@ -342,6 +350,10 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Sneaky Creeper Box", parent = "Gunpowder Mines")
     public static boolean SneakyCreeperDisplayBox = false;
+
+    // GolemAlert
+    @Property(type = Property.Type.BOOLEAN, name = "Golem Alert", parent = "Bestiary")
+    public static boolean GolemAlert = false;
 
     // Spider
     @Property(type = Property.Type.FOLDER, name = "Spider", parent = "Bestiary")

@@ -1,20 +1,33 @@
 package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
+import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Map;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TabUtils;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockColored;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Command extends CommandBase {
     @Override
@@ -94,6 +107,23 @@ public class Command extends CommandBase {
                 int z = Integer.parseInt(strings[3]);
                 AutoItemFrame.setPosition(x, y, z);
                 break;
+            case "golem":
+                GolemAlert.golemWarn();
+                break;
+            case "block":
+                x = Integer.parseInt(strings[1]);
+                y = Integer.parseInt(strings[2]);
+                z = Integer.parseInt(strings[3]);
+                IBlockState iBlockState = BlockUtils.getBlockStateAt(new BlockPos(x,y,z));
+                if (iBlockState == null) return;
+                int meta = iBlockState.getBlock().getMetaFromState(iBlockState);
+                ChatLib.chat( iBlockState.getBlock() + ", meta: " + meta);
+                break;
+            case "entities":
+                List<Entity> list = getWorld().loadedEntityList;
+                for (Entity entity: list) {
+                    ChatLib.chat(entity.getName() + ", " + MathUtils.getPosString(entity));
+                }
 //            case "shoot":
 //                AutoShootCrystal.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
 //                break;

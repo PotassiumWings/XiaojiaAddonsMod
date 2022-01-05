@@ -15,8 +15,6 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,8 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class EntityQOL {
@@ -67,10 +63,12 @@ public class EntityQOL {
         if (SkyblockUtils.isInDungeon()) return;
         List<Entity> allEntities = getWorld().loadedEntityList;
         for (Entity entity : allEntities) {
-            if (Configs.HidePlayers && isPlayer(entity) && MathUtils.distanceSquareFromPlayer(entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius ||
-                    Configs.HideSummons && isSummon(entity)) {
+            if (Configs.HidePlayers && isPlayer(entity) && MathUtils.distanceSquareFromPlayer(entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius)
                 entity.setDead();
-            }
+            else entity.isDead = false;
+
+            if (Configs.HideSummons && isSummon(entity)) entity.setDead();
+            else entity.isDead = false;
         }
     }
 
