@@ -36,7 +36,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
@@ -157,14 +156,14 @@ public class Dungeon {
     }
 
     public static boolean isPlayerMage(String name) {
-        for (Player player: players)
+        for (Player player : players)
             if (player.name.equals(name))
                 return player.className.equals("MAGE");
         return false;
     }
 
     public static void showPlayers() {
-        for (Player player: players) {
+        for (Player player : players) {
             ChatLib.chat(player.name + ": " + player.className);
         }
     }
@@ -179,6 +178,7 @@ public class Dungeon {
             boolean dead = tabLine.contains("(DEAD)");
             if (!tabLine.contains(" ")) continue;
             String name = tabLine.split(" ")[0];
+            if (name.contains("[")) name = tabLine.split(" ")[1];
             if (name.length() == 0) continue;
             String className = "";
             if (tabLine.toUpperCase().contains("(MAGE")) className = "MAGE";
@@ -215,7 +215,8 @@ public class Dungeon {
                 for (int i = 0; i < players.size(); i++) {
                     Player player = players.get(i);
                     if (player.inRender) continue;
-                    if (player.icon.equals(decorIcon) && !player.name.equals(getPlayer().getName())) {
+                    if (decorIcon.equals(player.icon) &&
+                            !getPlayer().getName().equals(player.name)) {
                         player.iconX = (vec.func_176112_b() + 128 - Map.startCorner.x * 2.5) / 10 * Configs.MapScale;
                         player.iconY = (vec.func_176113_c() + 128 - Map.startCorner.y * 2.5) / 10 * Configs.MapScale;
                         player.yaw = (vec.func_176111_d() * 360) / 16F + 180;
@@ -509,7 +510,7 @@ public class Dungeon {
         }
         int x = MathUtils.floor(getX(getPlayer())), z = MathUtils.floor(getZ(getPlayer()));
         if (XiaojiaAddons.isDebug()) ChatLib.chat("x: " + x + ", z: " + z);
-        for (Room room: rooms) {
+        for (Room room : rooms) {
             if (MapUtils.isBetween(x, room.x - 16, room.x + 16) &&
                     MapUtils.isBetween(z, room.z - 16, room.z + 16)) {
                 currentRoom = room.name;
@@ -592,7 +593,7 @@ public class Dungeon {
     }
 
     public static void showRooms() {
-        for (Room room: rooms) {
+        for (Room room : rooms) {
             ChatLib.chat(room.name + " is at " + room.x + ", " + room.z);
         }
     }
@@ -715,12 +716,14 @@ public class Dungeon {
 
                 if (room.checkmark.equals("green")) {
                     if (Configs.DrawCheckMode == 1) RenderUtils.drawImage(greenCheck, x, y, checkSize, checkSize);
-                    else if (Configs.DrawCheckMode == 2) RenderUtils.drawImage(newGreenCheck, x, y, checkSize, checkSize);
+                    else if (Configs.DrawCheckMode == 2)
+                        RenderUtils.drawImage(newGreenCheck, x, y, checkSize, checkSize);
                     names.add(room.name);
                 }
                 if (room.checkmark.equals("white")) {
                     if (Configs.DrawCheckMode == 1) RenderUtils.drawImage(whiteCheck, x, y, checkSize, checkSize);
-                    else if (Configs.DrawCheckMode == 2) RenderUtils.drawImage(newWhiteCheck, x, y, checkSize, checkSize);
+                    else if (Configs.DrawCheckMode == 2)
+                        RenderUtils.drawImage(newWhiteCheck, x, y, checkSize, checkSize);
                     names.add(room.name);
                 }
                 if (room.checkmark.equals("failed")) {
