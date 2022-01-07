@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.Entity;
@@ -39,7 +40,7 @@ public class EntityQOL {
                 entity instanceof EntitySkeleton)
             for (int i = 0; i < 5; i++) {
                 ItemStack item = ((EntityMob) entity).getEquipmentInSlot(i);
-                if (summonItemIDs.contains(SkyblockUtils.getSkyBlockID(item)))
+                if (summonItemIDs.contains(NBTUtils.getSkyBlockID(item)))
                     return true;
             }
         return false;

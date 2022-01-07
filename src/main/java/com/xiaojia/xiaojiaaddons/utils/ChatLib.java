@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.ChatComponentText;
@@ -20,6 +21,10 @@ public class ChatLib {
     }
 
     public static void chat(String chatMessage) {
+        if (!Configs.ShowXJAMessage) {
+            System.err.println("Chat: " + chatMessage);
+            return;
+        }
         if (chatMessage == null) chatMessage = "null";
         String[] texts = chatMessage.split("\n");
         for (String text : texts) {

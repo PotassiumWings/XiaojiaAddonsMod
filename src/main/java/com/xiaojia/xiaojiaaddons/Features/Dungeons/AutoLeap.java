@@ -32,7 +32,7 @@ public class AutoLeap {
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null || !inventory.getName().contains("Spirit Leap")) return;
         // TP to mage
-        if (Configs.AutoTpToMage && TimeUtils.curTime() - lastClick > 1000) {
+        if (Configs.AutoTpToMage && TimeUtils.curTime() - lastClick > 1000 && Dungeon.bloodOpen < Dungeon.runStarted) {
             for (int i = 9; i < 18; i++) {
                 ItemStack itemStack = ControlUtils.getItemStackInSlot(i, false);
                 if (itemStack == null || Item.getIdFromItem(itemStack.getItem()) == 160) continue;

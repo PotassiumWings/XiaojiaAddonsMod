@@ -135,13 +135,6 @@ public class SkyblockUtils {
         return currentServer;
     }
 
-    public static String getSkyBlockID(ItemStack itemStack) {
-        if (itemStack == null) return "";
-        NBTTagCompound extraAttributes = itemStack.getSubCompound("ExtraAttributes", false);
-        if (extraAttributes != null && extraAttributes.hasKey("id")) return extraAttributes.getString("id");
-        return "";
-    }
-
     public static boolean isInSkyblock() {
         return ChatLib.removeFormatting(ScoreBoard.title).contains("SKYBLOCK");
     }

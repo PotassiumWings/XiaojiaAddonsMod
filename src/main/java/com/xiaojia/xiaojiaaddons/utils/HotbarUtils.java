@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.utils;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class HotbarUtils {
     public static int gyroSlot = -1;
     public static int gloomlockSlot = -1;
     public static int zombieswordSlot = -1;
+    public static int aotsSlot = -1;
 
     // auto foraging
     public static int enchantedBoneMealSlot = -1;
@@ -34,11 +36,14 @@ public class HotbarUtils {
         return checkHotbarItem(emeraldBladeSlot, "Emerald Blade") || checkHotbarItem(emeraldBladeSlot, "Giant's Sword");
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onTick(TickEndEvent event) {
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null || inventory.getSize() != 45) return;
         List<ItemStack> items = inventory.getItemStacks().subList(36, 45);
+        terminatorSlot = emeraldBladeSlot = aotsSlot = soulwhipSlot = plasmaSlot =
+                healingwandSlot = gyroSlot = zombieswordSlot = gloomlockSlot =
+                        enchantedBoneMealSlot = boneMealSlot = treecapitatorSlot = saplingSlot = rodSlot = -1;
         for (int i = 0; i < 9; i++) {
             ItemStack item = items.get(i);
             if (item == null) continue;
@@ -47,6 +52,7 @@ public class HotbarUtils {
             if (name == null || name.toLowerCase().contains("air")) continue;
             if (name.contains("Terminator")) terminatorSlot = i;
             else if (name.contains("Giant's Sword") || name.contains("Emerald Blade")) emeraldBladeSlot = i;
+            else if (name.contains("Axe of the Shredded")) aotsSlot = i;
             else if (name.contains("Soul Whip")) soulwhipSlot = i;
             else if (name.contains("Plasmaflux")) plasmaSlot = i;
             else if (name.contains("Wand of")) healingwandSlot = i;

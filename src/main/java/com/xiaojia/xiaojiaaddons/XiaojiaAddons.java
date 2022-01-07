@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons;
 
 import com.xiaojia.xiaojiaaddons.Commands.AutoForagingCommand;
 import com.xiaojia.xiaojiaaddons.Commands.Command;
+import com.xiaojia.xiaojiaaddons.Commands.PP;
 import com.xiaojia.xiaojiaaddons.Commands.TransferBackCommand;
 import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
@@ -31,6 +32,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESPBox;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
+import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoUseItem;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
@@ -40,6 +42,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.HoldRightClick;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NearbyChestESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
+import com.xiaojia.xiaojiaaddons.Features.QOL.OneTick;
 import com.xiaojia.xiaojiaaddons.Features.QOL.RemoveBlindness;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
@@ -81,7 +84,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.2.7.1";
+    public static final String VERSION = "2.3";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -102,6 +105,7 @@ public class XiaojiaAddons {
         RoomLoader.load();
 
         ClientCommandHandler.instance.registerCommand(new Command());
+        ClientCommandHandler.instance.registerCommand(new PP());
         ClientCommandHandler.instance.registerCommand(new AutoForagingCommand());
         ClientCommandHandler.instance.registerCommand(new TransferBackCommand());
 //        ClientCommandHandler.instance.registerCommand(new TestGui());
@@ -155,6 +159,7 @@ public class XiaojiaAddons {
         // QOL
         MinecraftForge.EVENT_BUS.register(new AutoCombine());
         MinecraftForge.EVENT_BUS.register(new AutoHarp());
+        MinecraftForge.EVENT_BUS.register(new AutoIsland());
         MinecraftForge.EVENT_BUS.register(new AutoUseItem());
         MinecraftForge.EVENT_BUS.register(new BlockAbility());
         MinecraftForge.EVENT_BUS.register(new EntityQOL());
@@ -163,6 +168,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new NearbyChestESP());
         MinecraftForge.EVENT_BUS.register(new InCombatQOL());
         MinecraftForge.EVENT_BUS.register(new NoSlowdown());
+        MinecraftForge.EVENT_BUS.register(new OneTick());
         MinecraftForge.EVENT_BUS.register(new SwordSwap());
         MinecraftForge.EVENT_BUS.register(new RemoveBlindness());
         MinecraftForge.EVENT_BUS.register(new HoldRightClick());

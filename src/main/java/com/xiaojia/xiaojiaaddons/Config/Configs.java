@@ -1,6 +1,9 @@
 package com.xiaojia.xiaojiaaddons.Config;
 
 public class Configs {
+    @Property(type = Property.Type.BOOLEAN, name = "Show XJA Message")
+    public static boolean ShowXJAMessage = true;
+
     // Dragons
     @Property(type = Property.Type.FOLDER, name = "Dragon")
     public static boolean DragonEnabled = false;
@@ -25,6 +28,20 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Nake Prevention", parent = "QOL",
             description = "When Auto-Swapping Armor")
     public static boolean NakePrevention = true;
+
+    // OneTick
+    @Property(type = Property.Type.FOLDER, name = "One Tick", parent = "QOL")
+    public static boolean OneTick = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Aots With Anything (left click)", parent = "One Tick")
+    public static boolean AotsWithAnything = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Soul Whip With Anything (left click)", parent = "One Tick")
+    public static boolean SoulWhipWithAnything = false;
+
+    // AutoIsland
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Island", parent = "QOL", description = "/is when evacuating to hub")
+    public static boolean AutoIsland = false;
 
     // RemoveBlindness
     @Property(type = Property.Type.BOOLEAN, name = "Remove Blindness", parent = "QOL")
@@ -149,6 +166,46 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Ghost Block with KeyBind", parent = "Ghost Block")
     public static boolean GhostBlockWithKeyBind = false;
+
+    // InCombatQOL
+    @Property(type = Property.Type.FOLDER, name = "Auto Sell", parent = "QOL", description = "KeyBind")
+    public static boolean AutoSellEnable = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Sell CD", parent = "Auto Sell", suffix = "ms", min = 50, max = 500, step = 5)
+    public static int AutoSellCD = 200;
+
+    @Property(type = Property.Type.FOLDER, name = "Auto Sell Dungeon Armor", parent = "Auto Sell", description = "/xj show dungarmor to see list")
+    public static boolean AutoSellDungeonArmorEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Trash Dungeon Armor", parent = "Auto Sell Dungeon Armor")
+    public static boolean AutoSellDungeonArmor = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Can Sell Recomed Loots with Non-full Quality", parent = "Auto Sell Dungeon Armor")
+    public static boolean CanAutoSellRecomed = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Can Sell Starred Loots", parent = "Auto Sell Dungeon Armor")
+    public static boolean CanAutoSellStarred = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Can Sell Full Quality Loots with Non-recomed", parent = "Auto Sell Dungeon Armor")
+    public static boolean CanAutoSellFullQuality = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Can Sell Full Quality Recomed Loots", parent = "Auto Sell Dungeon Armor")
+    public static boolean CanAutoSellFullQualityRecomed = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Auto Sell Dungeon Trash", parent = "Auto Sell", description = "/xj show dungtrash to see list")
+    public static boolean AutoSellDungeonTrashEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Normal Dungeon Trash", parent = "Auto Sell Dungeon Trash")
+    public static boolean AutoSellDungeonTrash = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Can Sell Recomed Dungeon Trash", parent = "Auto Sell Dungeon Trash", description = "like Defuse Kit")
+    public static boolean CanSellRecomedDungeonTrash = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Can Sell Training Weight with >100 minutes held", parent = "Auto Sell Dungeon Trash")
+    public static boolean CanSellTrainingWeightLong = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Cheap Runes", parent = "Auto Sell", description = "/xj show runes to see list")
+    public static boolean AutoSellRunes = false;
 
     // NearbyChestESP
     @Property(type = Property.Type.FOLDER, name = "Nearby Chest ESP", parent = "QOL", description = "Radius = 10 * 10 * 10")
@@ -575,7 +632,7 @@ public class Configs {
             min = 0, max = 255, step = 5)
     public static int BackgroundAlpha = 15;
 
-    @Property(type= Property.Type.SELECT, name = "Checkmark Image", parent = "Map",
+    @Property(type = Property.Type.SELECT, name = "Checkmark Image", parent = "Map",
             options = {"Off", "Dmap Image", "New Image"})
     public static int DrawCheckMode = 2;
 
