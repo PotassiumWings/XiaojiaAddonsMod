@@ -15,6 +15,7 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
@@ -174,6 +175,12 @@ public class ControlUtils {
         // requires opened inventory, not open GUI
         if (getOpenedInventory() == null || getOpenedInventory().getSize() != 45) return false;
         return checkHotbarItem(getHeldItemIndex(), names);
+    }
+
+    public static boolean checkHoldingItem(String name) {
+        ArrayList<String> names = new ArrayList<>();
+        names.add(name);
+        return checkHoldingItem(names);
     }
 
     public static Inventory getOpenedInventory() {

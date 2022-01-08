@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Vector2i;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -135,24 +136,61 @@ public class AutoItemFrame {
                                 }
                             }
                         }
-                        grid.add(new MazeGrid(blockPos, type, mazePos));
+                        MazeGrid mazeGrid = new MazeGrid(blockPos, type, mazePos);
+                        grid.add(mazeGrid);
+                        ChatLib.debug(mazeGrid.toString());
                     }
                 } else if (neededRotation.isEmpty()) {
                     // solve
                     ArrayList<MazeGrid> startPositions = new ArrayList<MazeGrid>();
                     ArrayList<MazeGrid> endPositions = new ArrayList<MazeGrid>();
+                    ArrayList<Boolean> endPositionMatched = new ArrayList<>();
                     grid.stream().filter(e -> e.type == Type.START).forEach(startPositions::add);
-                    grid.stream().filter(e -> e.type == Type.END).forEach(endPositions::add);
+                    grid.stream().filter(e -> e.type == Type.END).forEach(e -> {
+                        endPositions.add(e);
+                        endPositionMatched.add(false);
+                    });
+                    ChatLib.debug("grid:");
+                    grid.forEach(e -> ChatLib.debug(e.toString()));
+                    ChatLib.debug("start:");
+                    startPositions.forEach(e -> ChatLib.debug(e.toString()));
+                    ChatLib.debug("end:");
+                    endPositions.forEach(e -> ChatLib.debug(e.toString()));
                     for (MazeGrid start : startPositions) {
                         int minDis = 1000;
                         MazeGrid correspondEnd = new MazeGrid(null, Type.EMPTY, new Vector2i(-1, -1));
                         HashMap<Vector2i, Integer> correspondRotations = new HashMap<>();
-                        for (MazeGrid end : endPositions) {
+                        int correspondEndIndex = -1;
+                        for (int i = 0; i < endPositions.size(); i++) {
+                            MazeGrid end = endPositions.get(i);
                             HashMap<Vector2i, Integer> arr = getDis(start, end);
                             int dis = arr.size();
                             if (dis < minDis || dis == minDis && correspondEnd.compareTo(end) < 0) {
+                                ChatLib.debug("end: " + end.gridPos + ", corr: " + correspondEnd.gridPos);
+                                ChatLib.debug("dis: " + dis + ", minDis: " + minDis);
                                 minDis = dis;
                                 correspondEnd = end;
+                                correspondEndIndex = i;
+                                correspondRotations = arr;
+                            }
+                        }
+                        if (!neededRotation.isEmpty()) endPositionMatched.set(correspondEndIndex, true);
+                        correspondRotations.forEach(neededRotation::put);
+                    }
+                    for (int i = 0; i < endPositions.size(); i++) {
+                        MazeGrid end = endPositions.get(i);
+                        if (endPositionMatched.get(i)) continue;
+                        int minDis = 1000;
+                        MazeGrid correspondStart = new MazeGrid(null, Type.EMPTY, new Vector2i(-1, -1));
+                        HashMap<Vector2i, Integer> correspondRotations = new HashMap<>();
+                        for (MazeGrid start : startPositions) {
+                            HashMap<Vector2i, Integer> arr = getDis(start, end);
+                            int dis = arr.size();
+                            if (dis < minDis || dis == minDis && correspondStart.compareTo(end) < 0) {
+                                ChatLib.debug("start: " + end.gridPos + ", corr: " + correspondStart.gridPos);
+                                ChatLib.debug("dis: " + dis + ", minDis: " + minDis);
+                                minDis = dis;
+                                correspondStart = end;
                                 correspondRotations = arr;
                             }
                         }
@@ -221,5 +259,9 @@ class MazeGrid implements Comparable {
             return maze.gridPos.x * 5 + maze.gridPos.y - (gridPos.x * 5 + gridPos.y);
         }
         return 0;
+    }
+
+    public String toString() {
+        return pos.toString() + ", " + type + ", " + gridPos;
     }
 }

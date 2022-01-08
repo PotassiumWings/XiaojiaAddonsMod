@@ -22,7 +22,15 @@ public class MapUpdater {
             new Thread(() -> {
                 try {
                     Dungeon.updatePlayers();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
                     Dungeon.updateRooms();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
                     Dungeon.updateDoors();
                 } catch (Exception e) {
                     e.printStackTrace();

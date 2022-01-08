@@ -8,6 +8,7 @@ import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
@@ -28,6 +29,9 @@ public class OneTick {
     public void onLeftClick(LeftClickEvent event) {
         if (!Checker.enabled) return;
         if (!should) return;
+        if (ControlUtils.checkHoldingItem("Gloomlock Grimoire")) return;
+        if (ControlUtils.checkHoldingItem("Gyrokinetic Wand")) return;
+
         int cur = ControlUtils.getHeldItemIndex();
         int whipSlot = HotbarUtils.soulwhipSlot;
         int aotsSlot = HotbarUtils.aotsSlot;

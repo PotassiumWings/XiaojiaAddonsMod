@@ -84,7 +84,7 @@ public class GemstoneESP {
         if (event.newBlock.getBlock() == Blocks.air)
             this.gemstones.remove(event.position);
         if (event.oldBlock.getBlock() == Blocks.air) {
-            Gemstone gemstone = getGemstone(getWorld().getBlockState(event.position));
+            Gemstone gemstone = getGemstone(event.newBlock);
             if (gemstone != null)
                 this.gemstones.put(event.position, gemstone);
         }

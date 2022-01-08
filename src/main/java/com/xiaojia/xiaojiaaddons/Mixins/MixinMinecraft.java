@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
 
-    @Inject(method = "clickMouse", at = @At("HEAD"))
+    @Inject(method = "clickMouse", at = @At("HEAD"), cancellable = true)
     private void clickMouse(CallbackInfo ci) {
-        MinecraftForge.EVENT_BUS.post(new LeftClickEvent());
+        if (MinecraftForge.EVENT_BUS.post(new LeftClickEvent())) ci.cancel();
     }
 }

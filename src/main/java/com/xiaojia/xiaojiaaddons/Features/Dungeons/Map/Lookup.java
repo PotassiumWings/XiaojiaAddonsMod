@@ -27,11 +27,10 @@ public class Lookup {
         Room room = new Room(newCoords.x, newCoords.y,
                 new Data("Unknown", "normal", 0, new ArrayList<>()));
         Room foundRoom = getRoomDataFromHash(room.core);
-        if (foundRoom != null) {
-            room.name = foundRoom.name;
-            room.type = foundRoom.type;
-            room.secrets = foundRoom.secrets;
-        }
+        if (foundRoom == null) return null;
+        room.name = foundRoom.name;
+        room.type = foundRoom.type;
+        room.secrets = foundRoom.secrets;
         return room;
     }
 

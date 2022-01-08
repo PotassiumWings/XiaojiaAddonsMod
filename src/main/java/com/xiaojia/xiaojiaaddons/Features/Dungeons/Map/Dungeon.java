@@ -598,6 +598,11 @@ public class Dungeon {
         }
     }
 
+    private static void addRoom(Room room) {
+        if (room.name.equals("Unknown")) return;
+        rooms.add(room);
+    }
+
     private void scan() {
         if (isScanning) return;
         isScanning = true;
@@ -630,7 +635,8 @@ public class Dungeon {
                         totalSecrets += room.secrets;
                     }
                     totalRooms++;
-                    rooms.add(room);
+                    addRoom(room);
+                    ChatLib.debug(room.name);
 
                     if (room.type.equals("trap")) trapType = room.name.split(" ")[0];
                     if (room.type.equals("puzzle")) scannedPuzzles.add(room.name);
@@ -668,7 +674,7 @@ public class Dungeon {
                             Door door = new Door(newRoom.x, newRoom.z);
                             door.type = "entrance";
                             doors.add(door);
-                        } else rooms.add(newRoom);
+                        } else addRoom(newRoom);
                     }
                 }
                 // Middle of a 2x2 room
@@ -681,7 +687,7 @@ public class Dungeon {
                         if (room.x == newRoom.x - 16 && room.z == newRoom.z - 16)
                             newRoom = new Room(x, z, room.getJson());
                     }
-                    rooms.add(newRoom);
+                    addRoom(newRoom);
                 }
             }
         }
@@ -752,12 +758,11 @@ public class Dungeon {
         int completedR = bloodDone ? completedRooms : completedRooms + 1;
         completedR += (bossEntry > runStarted) ? 0 : 1;
 
-        skillScore = MathUtils.floor(20 + (1.0F * (Math.min(completedR, totalRooms)) / totalRooms) * 80
-                - (10 * puzzleCount) + (10 * puzzleDone) - deathPenalty);
+        skillScore = MathUtils.floor(100 - (14 * puzzleCount) + (14 * puzzleDone) - deathPenalty);
         skillScore = Math.max(skillScore, 20);
 
-        exploreScore = MathUtils.floor(((60F * (Math.min(completedR, totalRooms))) / totalRooms) +
-                ((40F * (secretsFound - overflowSecrets)) / secretsForMax));
+        exploreScore = MathUtils.floor((60F * (Math.min(completedR, totalRooms))) / totalRooms) +
+                MathUtils.floor(((40F * (secretsFound - overflowSecrets)) / secretsForMax));
         exploreScore = totalRooms == 0 || totalSecrets == 0 ? 0 : exploreScore;
 
         // Not worth calculating. If you can't get 100 speed score then you shouldn't be playing Dungeons.
@@ -765,10 +770,11 @@ public class Dungeon {
 
         bonusScore = (Math.min(crypts, 5)) + (isMimicDead ? 2 : 0) + (Configs.AssumePaul ? 10 : 0);
         score = skillScore + exploreScore + speedScore + bonusScore;
-        score = trapDone ? score : score - 5;
+        score = floorInt < 3 || trapDone ? score : score - 5;
         score = yellowDone ? score : score - 5;
 
         if (XiaojiaAddons.isDebug()) {
+            ChatLib.chat("completedR: " + completedR);
             ChatLib.chat("total rooms: " + totalRooms);
             ChatLib.chat("secrets max: " + secretsForMax);
             ChatLib.chat("total secrets: " + totalSecrets);
@@ -839,7 +845,7 @@ public class Dungeon {
         // Dungeon itself
         rooms = new ArrayList<>();
         doors = new ArrayList<>();
-        totalRooms = -1;
+        totalRooms = 0;
         witherDoors = 0;
         trapType = "Unknown";
 
