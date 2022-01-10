@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.floor;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
@@ -166,6 +167,35 @@ public class Dungeon {
         for (Player player : players) {
             ChatLib.chat(player.name + ": " + player.className);
         }
+    }
+
+    public static void showMap() {
+        byte[] colors = Map.getMapColors();
+        if (colors == null) return;
+        for (int y = 0; y < 128; y++) {
+            StringBuilder res = new StringBuilder();
+            for (int x = 0; x < 128; x++) {
+                res.append(String.format("%3d", colors[x + y * 128])).append(" ");
+            }
+            ChatLib.chat(res.toString());
+        }
+
+        for (int i = Map.startCorner.x + (Map.roomSize / 2); i < 128; i += Map.roomSize / 2 + 2) {
+            for (int j = Map.startCorner.y + (Map.roomSize / 2); j < 128; j += Map.roomSize / 2 + 2) {
+                byte color = colors[i + j * 128];
+                byte secondColor = colors[(i - 3) + j * 128];
+                ChatLib.chat(i + ", " + j + ", " + color + ", " + secondColor);
+            }
+        }
+    }
+
+    public static void showDungeonInfo() {
+        if (!isInDungeon && isFullyScanned) return;
+        ChatLib.chat("Dungeon floor: " + floorInt);
+        ChatLib.chat("Total Rooms: " + totalRooms);
+        ChatLib.chat("Start Corner: " + Map.startCorner);
+        ChatLib.chat("Room Size: " + Map.roomSize);
+        showMap();
     }
 
     public static void updatePlayers() {
@@ -454,7 +484,7 @@ public class Dungeon {
 
     @SubscribeEvent
     public void onTickUpdatePlayerIcon(TickEndEvent event) {
-        if (!isInDungeon) return;
+        if (!isInDungeon || getWorld() == null) return;
         try {
             for (int i = 0; i < players.size(); i++) {
                 Player player = players.get(i);

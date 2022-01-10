@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -24,16 +25,19 @@ public class MapUpdater {
                     Dungeon.updatePlayers();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ChatLib.chat("error updatePlayers");
                 }
                 try {
                     Dungeon.updateRooms();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ChatLib.chat("error updateRooms");
                 }
                 try {
                     Dungeon.updateDoors();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ChatLib.chat("error updateDoors");
                 }
             }).start();
         }

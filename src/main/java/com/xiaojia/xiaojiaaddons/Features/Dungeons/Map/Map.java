@@ -25,25 +25,25 @@ public class Map {
     }
 
     public static void calibrate() {
-//        ChatLib.chat("in map: dungeon int " + Dungeon.floorInt);
+        ChatLib.debug("in map: dungeon int " + Dungeon.floorInt);
         if (Dungeon.floorInt == -1) {
             if (XiaojiaAddons.isDebug()) ChatLib.chat("failed!");
             return;
         }
-        if (Dungeon.totalRooms > 29) startCorner = new Vector2i(5, 5);
-        else if (Dungeon.totalRooms == 29) startCorner = new Vector2i(16, 5);
-        else if (Dungeon.totalRooms == 24) startCorner = new Vector2i(11, 11);
+        if (Dungeon.totalRooms > 30) startCorner = new Vector2i(5, 5);
+        else if (Dungeon.totalRooms == 30) startCorner = new Vector2i(16, 5);
+        else if (Dungeon.totalRooms == 25) startCorner = new Vector2i(11, 11);
 
-        if (Dungeon.floorInt <= 3 || Dungeon.totalRooms == 24) roomSize = 18;
+        if (Dungeon.floorInt <= 3 || Dungeon.totalRooms == 25) roomSize = 18;
         else roomSize = 16;
 
         if (Dungeon.floorInt == 1) startCorner = new Vector2i(22, 11);
         else if (Dungeon.floorInt == 2 || Dungeon.floorInt == 3) startCorner = new Vector2i(11, 11);
-        else if (Dungeon.floorInt == 4 && Dungeon.totalRooms > 24) startCorner = new Vector2i(5, 16);
+        else if (Dungeon.floorInt == 4 && Dungeon.totalRooms > 25) startCorner = new Vector2i(5, 16);
 
-//        ChatLib.chat("start corner: " + startCorner.x + ", " + startCorner.y);
-//        ChatLib.chat("roomsize: " + roomSize);
-//        ChatLib.chat("dungeon floor int: " + Dungeon.floorInt);
+        ChatLib.debug("start corner: " + startCorner.x + ", " + startCorner.y);
+        ChatLib.debug("roomsize: " + roomSize);
+        ChatLib.debug("dungeon floor int: " + Dungeon.floorInt);
         calibrated = true;
     }
 
