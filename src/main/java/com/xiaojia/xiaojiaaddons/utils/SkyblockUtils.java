@@ -26,7 +26,7 @@ public class SkyblockUtils {
             "Mines of Divan", "Mithril Deposits",
             "Lost Precursor City", "Precursor Remnants",
             "Magma Fields", "Crystal Nucleus",
-            "Khazad-dûm", "Dragon's Lair"
+            "Khazad", "Dragon's Lair"
     ));
     private static String currentMap = "";
     private static String currentServer = "";
@@ -46,7 +46,9 @@ public class SkyblockUtils {
                     || c == '(' || c == ')' || c == 'û')
                 removeSkippingChar.append(c);
         }
+        ChatLib.debug(line);
         line = removeSkippingChar.toString();
+        ChatLib.debug(line);
 
         String result = "Others";
         for (String map : maps) {

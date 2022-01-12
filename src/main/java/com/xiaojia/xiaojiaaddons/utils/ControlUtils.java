@@ -36,6 +36,8 @@ public class ControlUtils {
     private static final KeyBind moveLeftKeyBind = new KeyBind(mc.gameSettings.keyBindLeft);
     private static final KeyBind moveRightKeyBind = new KeyBind(mc.gameSettings.keyBindRight);
 
+    private static final KeyBind sneakKeyBind = new KeyBind(mc.gameSettings.keyBindSneak);
+
     private static Inventory openedInventory = null;
 
     public static void rightClick() {
@@ -97,15 +99,14 @@ public class ControlUtils {
         face((float) entity.posX, (float) entity.posY, (float) entity.posZ);
     }
 
-    public synchronized static void faceSlowly(float tx, float ty, float tz, boolean shouldThrow) throws InterruptedException {
-        Tuple<Float, Float> res = getFaceYawAndPitch(tx, ty, tz);
-        float yaw = res.getFirst(), pitch = res.getSecond();
+    public static void faceSlowly(float yaw, float pitch, boolean shouldThrow) throws InterruptedException {
         float curyaw = MathUtils.getYaw(), curpitch = MathUtils.getPitch();
-        if (curyaw < 0) curyaw += 360;
-        if (yaw < 0) yaw += 360;
-        if (yaw - curyaw > 180) yaw -= 360;
-        if (curyaw - yaw > 180) curyaw -= 360;
+        if (curyaw < 0) curyaw += 360;  // curyaw \in [0, 360]
+        if (yaw < 0) yaw += 360;  // yaw \in [0, 360]
+        if (yaw - curyaw > 180) yaw -= 360;  // yaw = 359, curyaw = 1 -> yaw = -1, curyaw = 1
+        if (curyaw - yaw > 180) curyaw -= 360;  // yaw = 1, curyaw = 359 -> yaw = 1, curyaw = -1
         int rotate_times = (int) Math.floor(2 + Math.random() * 6);
+        System.err.printf("curyaw %.2f, yaw %.2f%n", curyaw, yaw);
         for (int j = 1; j <= rotate_times; j++) {
             float toturn_yaw = curyaw + (yaw - curyaw) / rotate_times * j;
             while (toturn_yaw > 180) toturn_yaw -= 360;
@@ -119,6 +120,13 @@ public class ControlUtils {
                 throw new InterruptedException();
             }
         }
+    }
+
+    public synchronized static void faceSlowly(float tx, float ty, float tz, boolean shouldThrow) throws InterruptedException {
+        Tuple<Float, Float> res = getFaceYawAndPitch(tx, ty, tz);
+        System.err.printf("facing slowly to %.2f %.2f %.2f%n", tx, ty, tz);
+        float yaw = res.getFirst(), pitch = res.getSecond();
+        faceSlowly(yaw, pitch, shouldThrow);
     }
 
     public static void faceSlowly(float tx, float ty, float tz) throws InterruptedException {
@@ -240,6 +248,14 @@ public class ControlUtils {
 
     public static void releaseLeftClick() {
         KeyBinding.setKeyBindState(attackKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
+    public static void sneak() {
+        KeyBinding.setKeyBindState(sneakKeyBind.mcKeyBinding().getKeyCode(), true);
+    }
+
+    public static void unSneak() {
+        KeyBinding.setKeyBindState(sneakKeyBind.mcKeyBinding().getKeyCode(), false);
     }
 
     public static void moveRandomly(long delta) throws InterruptedException {

@@ -271,6 +271,10 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Dungeons")
     public static boolean DungeonEnabled = false;
 
+    // CoordsGB
+    @Property(type = Property.Type.BOOLEAN, name = "Coords Ghost Block", parent = "Dungeons")
+    public static boolean CoordsGB = false;
+
     // LividESP
     @Property(type = Property.Type.FOLDER, name = "Show Livid", parent = "Dungeons")
     public static boolean ShowLivid = false;
@@ -508,6 +512,9 @@ public class Configs {
     // Fishing
     @Property(type = Property.Type.BOOLEAN, name = "Auto Pulling Rod", parent = "Skills", illegal = true)
     public static boolean AutoPullRod = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Move Randomly", parent = "Skills", illegal = true)
+    public static boolean AutoMove = false;
 
     // Foraging
     @Property(type = Property.Type.BOOLEAN, name = "Auto Foraging", parent = "Skills", illegal = true)

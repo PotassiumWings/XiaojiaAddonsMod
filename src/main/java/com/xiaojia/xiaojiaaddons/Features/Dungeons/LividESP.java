@@ -48,6 +48,8 @@ public class LividESP extends RenderEntityESP {
         else if (val == EnumDyeColor.BLUE) colorChat = EnumChatFormatting.BLUE;
         else if (val == EnumDyeColor.PURPLE) colorChat = EnumChatFormatting.DARK_PURPLE;
         else if (val == EnumDyeColor.YELLOW) colorChat = EnumChatFormatting.YELLOW;
+        ChatLib.debug("val: " + val.getName());
+        ChatLib.debug("colorChat: " + colorChat.toString());
     }
 
     @Override
@@ -64,7 +66,7 @@ public class LividESP extends RenderEntityESP {
     public EntityInfo getEntityInfo(Entity entity) {
         if (!(entity instanceof EntityArmorStand) || colorChat == null ||
                 !entity.getName().contains("Livid") ||
-                !entity.getName().contains(colorChat.toString())) return null;
+                !entity.getName().contains(colorChat.toString() + "\u00a7lLivid")) return null;
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("entity", entity);
         hashMap.put("yOffset", 1.0F);

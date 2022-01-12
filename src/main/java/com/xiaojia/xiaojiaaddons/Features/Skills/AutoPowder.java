@@ -59,7 +59,7 @@ public class AutoPowder {
         if (isMiningThreadRunning || isOpeningChestThreadRunning) return;
 
         // chest disappears
-        if (isOpeningChest && getWorld().getBlockState(closestChest).getBlock() != Blocks.chest) {
+        if (isOpeningChest && (closestChest == null || getWorld().getBlockState(closestChest).getBlock() != Blocks.chest)) {
             isOpeningChest = false;
         }
         closestStone = getClosest(-4, 4, 0, 2, -4, 4, Blocks.stone, new HashSet<>(), true);

@@ -34,6 +34,7 @@ public class AutoPowderChest {
     private final HashSet<BlockPos> solved = new HashSet<>();
     private BlockPos closestChest = null;
     private Vector3f particalPos = null;
+    private Thread thread = null;
 
     private long lastWarnTime = 0;
 
@@ -76,17 +77,18 @@ public class AutoPowderChest {
         }
         if (!enabled) return;
         closestChest = getClosestChest();
-        if (particalPos != null) {
-            new Thread(() -> {
+        if (particalPos != null && (thread == null || !thread.isAlive())) {
+            thread = new Thread(() -> {
                 Vector3f temp = (Vector3f) particalPos.clone();
                 try {
-                    ControlUtils.faceSlowly(particalPos.x, particalPos.y, particalPos.z, false);
+                    ControlUtils.faceSlowly(temp.x, temp.y, temp.z, false);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
                     if (particalPos.equals(temp)) particalPos = null;
                 }
-            }).start();
+            });
+            thread.start();
         }
     }
 

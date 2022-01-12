@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Objects;
 
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Arrays;
@@ -21,6 +22,7 @@ public class Checker {
             "2bd10800-7bfb-40ef-8bf4-906004b5aec1", "5ec1ee03-4495-40f5-938d-220231dab730"
     ));
     public static boolean enabled;
+    private long lastCheck = 0;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -28,6 +30,19 @@ public class Checker {
             enabled = pool.contains(getPlayer().getUniqueID().toString());  // && SkyblockUtils.isInSkyblock();
         } catch (Exception e) {
             enabled = false;
+        }
+    }
+
+    @SubscribeEvent
+    public void onTickCheck(TickEndEvent event) {
+        long cur = TimeUtils.curTime();
+        if (cur - lastCheck > 100000) {
+            lastCheck = cur;
+            try {
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
