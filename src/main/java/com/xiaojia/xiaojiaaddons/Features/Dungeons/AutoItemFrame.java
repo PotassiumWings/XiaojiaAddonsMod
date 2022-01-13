@@ -165,6 +165,7 @@ public class AutoItemFrame {
                             MazeGrid end = endPositions.get(i);
                             HashMap<Vector2i, Integer> arr = getDis(start, end);
                             int dis = arr.size();
+                            if (dis == 0) continue;
                             if (dis < minDis || dis == minDis && correspondEnd.compareTo(end) < 0) {
                                 ChatLib.debug("end: " + end.gridPos + ", corr: " + correspondEnd.gridPos);
                                 ChatLib.debug("dis: " + dis + ", minDis: " + minDis);
@@ -186,6 +187,7 @@ public class AutoItemFrame {
                         for (MazeGrid start : startPositions) {
                             HashMap<Vector2i, Integer> arr = getDis(start, end);
                             int dis = arr.size();
+                            if (dis == 0) continue;
                             if (dis < minDis || dis == minDis && correspondStart.compareTo(end) < 0) {
                                 ChatLib.debug("start: " + end.gridPos + ", corr: " + correspondStart.gridPos);
                                 ChatLib.debug("dis: " + dis + ", minDis: " + minDis);
