@@ -11,6 +11,8 @@ public class CommandsUtils {
     private static final Deque<String> commandsQueue = new LinkedList<>();
     private static long lastSent = 0;
 
+    private static final Deque<Long> sentQueue = new LinkedList<>();
+
     public static void addCommand(String command) {
         commandsQueue.offerLast(command);
     }
@@ -18,9 +20,15 @@ public class CommandsUtils {
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
-        if (TimeUtils.curTime() - lastSent > 70) {
+        // < 3 commands in 3s
+        while (!sentQueue.isEmpty() && TimeUtils.curTime() - sentQueue.getFirst() > 3000)
+            sentQueue.pollFirst();
+        if (sentQueue.size() > 3) return;
+
+        if (TimeUtils.curTime() - lastSent > 200) {
             if (commandsQueue.size() > 0) {
                 String command = commandsQueue.pollFirst();
+                sentQueue.addLast(TimeUtils.curTime());
                 ChatLib.say(command);
                 lastSent = TimeUtils.curTime();
             }
