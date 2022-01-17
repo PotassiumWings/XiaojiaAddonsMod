@@ -149,6 +149,11 @@ public class Configs {
             min = 0, max = 30, step = 1)
     public static int HidePlayerRadius = 4;
 
+    // HideCreepers
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Creepers", parent = "QOL", illegal = true,
+            description = "Act like the creepers dont exist, mine through / hit through")
+    public static boolean HideCreepers = false;
+
 //    @Property(type = Property.Type.BOOLEAN, name = "Click Through Players", parent = "Summon/Player Features", illegal = true)
 //    public static boolean ClickThroughPlayers = false;
 
@@ -705,6 +710,9 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Announce 300", parent = "Score")
     public static boolean Announce300 = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Display Title for 300 announce", parent = "Score")
+    public static boolean DisplayAnnounce300 = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Assume Spirit", parent = "Score")
     public static boolean AssumeSpirit = true;

@@ -10,6 +10,7 @@ import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -22,6 +23,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec4b;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
@@ -835,6 +837,13 @@ public class Dungeon {
         if (Configs.Announce300 && !said300 && score >= 300) {
             said300 = true;
             CommandsUtils.addCommand("/pc " + message300);
+        }
+    }
+
+    @SubscribeEvent
+    public void onRenderWorld(RenderWorldLastEvent event) {
+        if (Configs.DisplayAnnounce300 && score >= 300 && bossEntry <= runStarted) {
+            GuiUtils.showTitle("&c&l300 Score!", "", 0, 5, 0);
         }
     }
 

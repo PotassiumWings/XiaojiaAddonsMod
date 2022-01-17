@@ -114,7 +114,7 @@ public class BloodAssist {
                     ySpeed = (float) ((skull.posY - info.startY) / delta);
                     zSpeed = (float) ((skull.posZ - info.startZ) / delta);
 
-                    long remainTime = (spawnId >= 4 ? 2900 : 4875) - delta;
+                    long remainTime = (spawnId >= 4 ? 2950 : 4875) - delta;
                     info.endX = (float) skull.posX + remainTime * xSpeed;
                     info.endY = (float) (skull.posY + remainTime * ySpeed);
                     info.endZ = (float) (skull.posZ + remainTime * zSpeed);
