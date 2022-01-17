@@ -399,6 +399,11 @@ public class Configs {
     public static int AutoBloodCD = 60;
 
 
+    // BloodAssist
+    @Property(type = Property.Type.BOOLEAN, name = "Blood Assist", parent = "Dungeons")
+    public static boolean BloodAssist = false;
+
+
     // StonklessStonk
     @Property(type = Property.Type.FOLDER, name = "Stonkless Stonk", parent = "Dungeons")
     public static boolean StonklessStonk = false;

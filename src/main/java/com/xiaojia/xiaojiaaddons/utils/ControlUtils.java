@@ -115,11 +115,15 @@ public class ControlUtils {
             float toturn_pitch = curpitch + (pitch - curpitch) / rotate_times * j;
             ControlUtils.changeDirection(toturn_yaw, toturn_pitch);
             Thread.sleep((long) (10 + Math.random() * 20));
-            if ((Math.abs(getYaw() - toturn_yaw) > 1e-5 && Math.abs(getYaw() - toturn_yaw) < 360 - 1e-5) ||
-                    Math.abs(getPitch() - toturn_pitch) > 1e-5 && shouldThrow) {
-                ChatLib.chat("Detected yaw/pitch move, interrupted.");
-                throw new InterruptedException();
-            }
+            checkDirection(toturn_yaw, toturn_pitch, shouldThrow);
+        }
+    }
+
+    public static void checkDirection(float yaw, float pitch, boolean shouldThrow) throws InterruptedException {
+        if ((Math.abs(getYaw() - yaw) > 1e-2 && Math.abs(getYaw() - yaw) < 360 - 1e-2) ||
+                Math.abs(getPitch() - pitch) > 1e-2 && shouldThrow) {
+            ChatLib.chat("Detected yaw/pitch move, interrupted.");
+            throw new InterruptedException();
         }
     }
 

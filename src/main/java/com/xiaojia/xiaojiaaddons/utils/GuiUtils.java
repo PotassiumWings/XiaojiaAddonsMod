@@ -157,6 +157,51 @@ public class GuiUtils {
         );
     }
 
+    public static void drawBoundingBoxAtPos(float x, float y, float z, Color color, float width, float height) {
+        drawBoxAt(
+                x, y, z,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
+                width, height
+        );
+    }
+
+    public static void drawLine(float sx, float sy, float sz, float tx, float ty, float tz, Color color, int lineWidth) {
+        drawLineWithDepthAbsolute(sx, sy, sz, tx, ty, tz, color, lineWidth);
+    }
+
+    private static void drawLineWithDepthAbsolute(float sx, float sy, float sz, float tx, float ty, float tz, Color color, int lineWidth) {
+        EntityPlayerSP player = getPlayer();
+        float px = getX(player), py = getY(player), pz = getZ(player);
+        sx -= px;
+        sy -= py;
+        sz -= pz;
+        tx -= px;
+        ty -= py;
+        tz -= pz;
+        drawLineWithDepthRelative(sx, sy, sz, tx, ty, tz, color, lineWidth);
+    }
+
+    private static void drawLineWithDepthRelative(float x, float y, float z, float tx, float ty, float tz, Color color, int lineWidth) {
+        GlStateManager.pushMatrix();
+        GL11.glBlendFunc(770, 771);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glLineWidth(lineWidth);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDepthMask(false);
+
+        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue());
+        worldRenderer.begin(3, DefaultVertexFormats.POSITION);
+        worldRenderer.pos(x, y, z).endVertex();
+        worldRenderer.pos(tx, ty, tz).endVertex();
+
+        tessellator.draw();
+
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDepthMask(true);
+        GL11.glDisable(GL11.GL_BLEND);
+        GlStateManager.popMatrix();
+    }
+
     private static void drawFilledBoundingBoxAbsolute(float sx, float sy, float sz, float tx, float ty, float tz, int r, int g, int b, int a) {
         EntityPlayerSP player = getPlayer();
         float px = getX(player), py = getY(player), pz = getZ(player);

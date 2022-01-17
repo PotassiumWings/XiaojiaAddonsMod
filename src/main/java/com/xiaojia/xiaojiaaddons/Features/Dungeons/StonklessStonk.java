@@ -72,7 +72,7 @@ public class StonklessStonk {
         float R = 5;
         int lastX = -1, lastY = -1, lastZ = -1;
         HashMap<BlockPos, IBlockState> blockMap = new HashMap<>();
-        boolean canClick = TimeUtils.curTime() - lastClickTime > 200 && Configs.StonklessStonkAutoClickSecret;
+        boolean canClick = TimeUtils.curTime() - lastClickTime > 200;
         try {
             for (int delta = 1; delta <= 300; delta++) {
                 float r = R * delta / 300;
@@ -104,7 +104,8 @@ public class StonklessStonk {
                         heldItemName = ControlUtils.getHeldItemStack().getDisplayName();
                     if (!Configs.StonklessStonkWithoutPickaxe && !heldItemName.contains("Stonk") && !heldItemName.contains("Pickaxe"))
                         canClick = false;
-                    facingPos = pos;
+                    if (canClick) facingPos = pos;
+                    canClick &= Configs.StonklessStonkAutoClickSecret;
                     return;
                 }
             }

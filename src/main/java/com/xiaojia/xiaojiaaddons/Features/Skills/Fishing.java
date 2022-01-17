@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.floor;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class Fishing {
@@ -81,41 +82,55 @@ public class Fishing {
             lastMove = cur;
             new Thread(() -> {
                 try {
-                    int choose = MathUtils.floor(Math.random() * 4);
-                    float yaw  = MathUtils.getYaw(), pitch = MathUtils.getPitch();
-                    float newYaw = (float) (yaw + Math.random() * 5);
-                    if (newYaw >= 180) newYaw -= 360;
+                    int choose = floor(Math.random() * 4);
                     ControlUtils.sneak();
+                    int moveTime = 100 + floor(Math.random() * 100);
                     switch (choose) {
                         case 0: {
-                            ControlUtils.moveLeft(100);
+                            ControlUtils.moveLeft(moveTime);
                             Thread.sleep(100);
-                            ControlUtils.moveRight(100);
+                            ControlUtils.moveRight(moveTime);
                             break;
                         }
                         case 1: {
-                            ControlUtils.moveRight(100);
+                            ControlUtils.moveRight(moveTime);
                             Thread.sleep(100);
-                            ControlUtils.moveLeft(100);
+                            ControlUtils.moveLeft(moveTime);
                             break;
                         }
                         case 2: {
-                            ControlUtils.moveForward(100);
+                            ControlUtils.moveForward(moveTime);
                             Thread.sleep(100);
-                            ControlUtils.moveBackward(100);
+                            ControlUtils.moveBackward(moveTime);
                             break;
                         }
                         case 3: {
-                            ControlUtils.moveBackward(100);
+                            ControlUtils.moveBackward(moveTime);
                             Thread.sleep(100);
-                            ControlUtils.moveForward(100);
+                            ControlUtils.moveForward(moveTime);
                             break;
                         }
                     }
                     Thread.sleep(100);
-                    ControlUtils.faceSlowly(newYaw, pitch, false);
-                    Thread.sleep(100);
-                    ControlUtils.faceSlowly(yaw, pitch, false);
+
+                    float theta = 0;
+                    float DELTAYAW = 0.1F;
+                    float DELTAPITCH = 0.2F;
+                    while (theta < 2 * Math.PI && shouldMove) {
+                        float yaw  = MathUtils.getYaw(), pitch = MathUtils.getPitch();
+                        yaw += Math.sin(theta) * DELTAYAW + (Math.random() * DELTAYAW * 2 - DELTAYAW) / 4;
+                        pitch += Math.cos(theta) * DELTAPITCH + (Math.random() * DELTAPITCH * 2 - DELTAPITCH) / 4;
+                        theta += Math.PI / (8 + Math.random() * 25);
+                        if (pitch > 90.0) pitch = 180 - pitch;
+                        if (pitch < -90.0) pitch = -180 - pitch;
+                        if (yaw >= 180.0) yaw -= 360;
+                        if (yaw <= -180) yaw += 360;
+
+                        ControlUtils.changeDirection(yaw, pitch);
+                        Thread.sleep(20);
+                        ControlUtils.checkDirection(yaw, pitch, true);
+                    }
+
                     ControlUtils.unSneak();
                 } catch (Exception e) {
                     e.printStackTrace();
