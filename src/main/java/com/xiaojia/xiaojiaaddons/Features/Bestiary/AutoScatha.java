@@ -72,7 +72,8 @@ public class AutoScatha {
                             if (blockPos != null && blockPos.getY() >= y) ControlUtils.holdLeftClick();
                             else ControlUtils.releaseLeftClick();
 
-                            if (block != null && block.getRegistryName().contains("bedrock")) {
+                            if (blockPos != null && block != null
+                                    && block.getRegistryName().contains("bedrock") && blockPos.getY() >= y) {
                                 ChatLib.chat("Detected bedrock, stopped.");
                                 stop();
                                 return;
