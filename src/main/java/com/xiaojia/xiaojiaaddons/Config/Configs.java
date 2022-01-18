@@ -445,6 +445,10 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Golem Alert", parent = "Bestiary")
     public static boolean GolemAlert = false;
 
+    // AutoScatha
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Scatha", parent = "Bestiary", description = "Keybind to start.")
+    public static boolean AutoScatha = false;
+
     // Spider
     @Property(type = Property.Type.FOLDER, name = "Spider", parent = "Bestiary")
     public static boolean SpiderEnabled = false;

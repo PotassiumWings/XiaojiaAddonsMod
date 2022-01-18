@@ -280,6 +280,14 @@ public class ControlUtils {
         }
     }
 
+    public static void holdForward() {
+        KeyBinding.setKeyBindState(moveForwardKeyBind.mcKeyBinding().getKeyCode(), true);
+    }
+
+    public static void releaseForward() {
+        KeyBinding.setKeyBindState(moveForwardKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
     public static void moveForward(long delta) throws InterruptedException {
         KeyBinding.setKeyBindState(moveForwardKeyBind.mcKeyBinding().getKeyCode(), true);
         Thread.sleep(delta);

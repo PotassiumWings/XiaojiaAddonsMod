@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Tuple;
@@ -111,7 +112,16 @@ public class MathUtils {
 
     public static float getYaw() {
         if (getPlayer() == null) return 0;
-        return getPlayer().rotationYaw;
+        float yaw = getPlayer().rotationYaw;
+        while (yaw < -180) yaw += 360;
+        while (yaw >= 180) yaw -= 360;
+        return yaw;
+    }
+
+    public static BlockPos getBlockPos() {
+        if (getPlayer() == null) return null;
+        EntityPlayer player = getPlayer();
+        return new BlockPos(player.posX, player.posY, player.posZ);
     }
 
     public static int floor(float x) {
