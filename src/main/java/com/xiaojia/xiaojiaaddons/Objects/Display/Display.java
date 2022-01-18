@@ -67,6 +67,10 @@ public class Display {
         setLine(lines.size(), line);
     }
 
+    public void addLine(DisplayLine line) {
+        setLine(lines.size(), line);
+    }
+
     public void render() {
         if (!shouldRender || lines.isEmpty()) return;
         int i = 0;

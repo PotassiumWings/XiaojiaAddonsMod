@@ -29,6 +29,25 @@ public class Configs {
             description = "When Auto-Swapping Armor")
     public static boolean NakePrevention = true;
 
+    // DisplayDayAndCoords
+    @Property(type = Property.Type.FOLDER, name = "Day and Coords Display", parent = "QOL")
+    public static boolean DisplayDayAndCoords = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Display Day", parent = "Day and Coords Display")
+    public static boolean DisplayDay = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Display Coords", parent = "Day and Coords Display")
+    public static boolean DisplayCoords = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Display X", parent = "Day and Coords Display", step=10)
+    public static int DisplayDayX = 5;
+
+    @Property(type = Property.Type.NUMBER, name = "Display Y", parent = "Day and Coords Display", step=10)
+    public static int DisplayDayY = 5;
+
+    @Property(type = Property.Type.NUMBER, name = "Display Scale", parent = "Day and Coords Display", min=5, max=100, step=5)
+    public static int DisplayScale = 20;
+
     // OneTick
     @Property(type = Property.Type.FOLDER, name = "One Tick", parent = "QOL")
     public static boolean OneTick = false;
@@ -275,6 +294,10 @@ public class Configs {
     // Dungeons
     @Property(type = Property.Type.FOLDER, name = "Dungeons")
     public static boolean DungeonEnabled = false;
+
+    // AutoSalvage
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Click Salvage", parent = "Dungeons", description = "Won't salvage starred items.")
+    public static boolean AutoClickSalvage = false;
 
     // CoordsGB
     @Property(type = Property.Type.BOOLEAN, name = "Coords Ghost Block", parent = "Dungeons")
