@@ -91,7 +91,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.3.3.2";
+    public static final String VERSION = "2.3.3.3";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -108,18 +108,21 @@ public class XiaojiaAddons {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        MinecraftForge.EVENT_BUS.register(new TickEndEvent());
+        MinecraftForge.EVENT_BUS.register(new Checker());
+
         Config.load();
         RoomLoader.load();
+        XiaojiaChat.init();
 
         ClientCommandHandler.instance.registerCommand(new Command());
         ClientCommandHandler.instance.registerCommand(new PP());
         ClientCommandHandler.instance.registerCommand(new AutoForagingCommand());
         ClientCommandHandler.instance.registerCommand(new TransferBackCommand());
+        ClientCommandHandler.instance.registerCommand(new com.xiaojia.xiaojiaaddons.Commands.XiaojiaChat());
 //        ClientCommandHandler.instance.registerCommand(new TestGui());
 //        ClientCommandHandler.instance.registerCommand(new TestControl());
 
-        MinecraftForge.EVENT_BUS.register(new Checker());
-        MinecraftForge.EVENT_BUS.register(new TickEndEvent());
         MinecraftForge.EVENT_BUS.register(new XiaojiaChat());
 
         MinecraftForge.EVENT_BUS.register(this);

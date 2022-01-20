@@ -14,8 +14,8 @@ public abstract class MixinModList {
     @Shadow
     private Map<String, String> modTags;
 
-    @Inject(method = "modList", at = @At("HEAD"), remap = false)
-    private void removeMod(CallbackInfoReturnable ci) {
-        this.modTags.remove("xiaojiaaddons");
-    }
+//    @Inject(method = "modList", at = @At("HEAD"), remap = false)
+//    private void removeMod(CallbackInfoReturnable ci) {
+//        this.modTags.remove("xiaojiaaddons");
+//    }
 }

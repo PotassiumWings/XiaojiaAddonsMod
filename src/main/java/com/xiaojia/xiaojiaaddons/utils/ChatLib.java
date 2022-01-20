@@ -39,6 +39,25 @@ public class ChatLib {
         }
     }
 
+    // type=0: chat
+    // type=1: yikes
+    public static void xjchat(int type, String name, String chatMessage) {
+        if (chatMessage == null) chatMessage = "null";
+        String[] texts = chatMessage.split("\n");
+        for (String text : texts) {
+            if (type == 2) text = " ☠ &7" + text;
+
+            text = "&bXJC > &r&8" + name + "&r&f: &r" + text;
+            text = addColor(text);
+            System.out.println(text);
+            EntityPlayerSP player = getPlayer();
+            if (player != null) {
+                IChatComponent component = new ChatComponentText(text);
+                player.addChatMessage(component);
+            }
+        }
+    }
+
     public static void debug(String message) {
         if (XiaojiaAddons.isDebug()) chat(message);
     }

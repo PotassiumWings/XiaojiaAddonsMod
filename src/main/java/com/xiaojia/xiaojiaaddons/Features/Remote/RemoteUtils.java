@@ -1,32 +1,63 @@
 package com.xiaojia.xiaojiaaddons.Features.Remote;
 
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import org.apache.http.Consts;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-public class RemoteUtils {
-    public static void post(String url) {
+import java.util.ArrayList;
+import java.util.List;
 
+public class RemoteUtils {
+    private static final String baseURL = "http://47.94.243.9:11050/";
+
+    public static void post(String url, String body) {
+        try {
+            HttpClient client = HttpClients.createDefault();
+            RequestConfig requestConfig = RequestConfig.custom()
+                    .setConnectTimeout(2000)
+                    .setConnectionRequestTimeout(2000)
+                    .setSocketTimeout(2000)
+                    .build();
+            HttpPost post = new HttpPost(baseURL + url);
+            post.setConfig(requestConfig);
+            post.setEntity(new StringEntity(body));
+            client.execute(post);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String get(String url, List<BasicNameValuePair> list) {
+        String response = null;
+        try {
+            HttpClientBuilder client = HttpClients.custom();
+            client.setUserAgent("XiaojiaAddons/" + XiaojiaAddons.VERSION);
+            RequestConfig requestConfig = RequestConfig.custom()
+                    .setConnectTimeout(2000)
+                    .setConnectionRequestTimeout(2000)
+                    .setSocketTimeout(2000)
+                    .build();
+            String params = EntityUtils.toString(new UrlEncodedFormEntity(list, Consts.UTF_8));
+            HttpGet request = new HttpGet(baseURL + url + "?" + params);
+            request.setConfig(requestConfig);
+            response = EntityUtils.toString(client.build().execute(request).getEntity(), "UTF-8");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return response;
     }
 
     public static String get(String url) {
-        String response = null;
-        HttpClientBuilder client = HttpClients.custom();
-//        client.addInterceptorFirst(
-//                (request, context) -> {
-//                    if (!request.containsHeader("Pragma"))
-//                        request.addHeader("Pragma", "no-cache");
-//                    if (!request.containsHeader("Cache-Control"))
-//                        request.addHeader("Cache-Control", "no-cache");
-//                });
-        client.setUserAgent("XiaojiaAddons/" + XiaojiaAddons.VERSION);
-        try {
-            HttpGet request = new HttpGet(url);
-            response = EntityUtils.toString(client.build().execute(request).getEntity(), "UTF-8");
-        } catch (Exception exception) {
-        }
-        return response;
+        return get(url, new ArrayList<>());
     }
 }
