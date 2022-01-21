@@ -12,6 +12,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +43,10 @@ public class XiaojiaChat {
 
 
     public static void chat(String message, int type) {
-        message = message.replace("\u00a7", "&");
-//        ChatLib.chat("msg: " + message + ", type: " + type + ".");
+//        message = message.replace("\u00a7", "&");
         String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"msg\": \"%s\", \"type\": \"%d\"}",
                 getUUID(),getPlayer().getName(), message, type);
+        ChatLib.debug("body: " + body + ", type: " + type + ".");
         new Thread(() -> RemoteUtils.post(POST_CHAT_URL, body)).start();
     }
 
@@ -54,6 +55,7 @@ public class XiaojiaChat {
     public void onTick(TickEndEvent event) {
 //        if (true) return;
         if (!Checker.enabled) return;
+        if (getPlayer() == null) return;
         if (getThread == null || !getThread.isAlive()) {
             getThread = new Thread(() -> {
                 try {
@@ -93,7 +95,8 @@ public class XiaojiaChat {
             chat(message, 1);
         }
         if (unformattedMessage.startsWith(" ☠ You") && unformattedMessage.endsWith("and became a ghost.")) {
-            chat(message.substring(11), 2);
+            chat(message, 2);
+//            chat(message.substring(11), 2);
         }
     }
 

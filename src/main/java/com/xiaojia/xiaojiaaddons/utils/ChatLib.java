@@ -45,7 +45,7 @@ public class ChatLib {
         if (chatMessage == null) chatMessage = "null";
         String[] texts = chatMessage.split("\n");
         for (String text : texts) {
-            if (type == 2) text = " ☠ &7" + text;
+//            if (type == 2) text = " ☠ &7" + text;
 
             text = "&bXJC > &r&8" + name + "&r&f: &r" + text;
             text = addColor(text);

@@ -63,6 +63,7 @@ public class EntityQOL {
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (SkyblockUtils.isInDungeon()) return;
+        if (getWorld() == null) return;
         List<Entity> allEntities = getWorld().loadedEntityList;
         for (Entity entity : allEntities) {
             if (isPlayer(entity)) {

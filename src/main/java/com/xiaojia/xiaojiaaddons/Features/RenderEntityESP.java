@@ -24,6 +24,7 @@ public abstract class RenderEntityESP {
     @SubscribeEvent
     public final void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
+        if (getWorld() == null) return;
         try {
             ArrayList<EntityInfo> newEntities = new ArrayList<>();
             List<Entity> list = getWorld().loadedEntityList;
