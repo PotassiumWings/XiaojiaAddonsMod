@@ -37,7 +37,6 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.floor;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
@@ -375,6 +374,17 @@ public class Dungeon {
         }
     }
 
+    public static void showRooms() {
+        for (Room room : rooms) {
+            ChatLib.chat(room.name + " is at " + room.x + ", " + room.z);
+        }
+    }
+
+    private static void addRoom(Room room) {
+        if (room.name.equals("Unknown")) return;
+        rooms.add(room);
+    }
+
     @SubscribeEvent
     public void onTickKeyBind(TickEndEvent event) {
         if (normalRoomNameKeyBind.isPressed()) {
@@ -622,17 +632,6 @@ public class Dungeon {
         }
         System.err.println("error getting float: " + s + ", " + pattern);
         return 0;
-    }
-
-    public static void showRooms() {
-        for (Room room : rooms) {
-            ChatLib.chat(room.name + " is at " + room.x + ", " + room.z);
-        }
-    }
-
-    private static void addRoom(Room room) {
-        if (room.name.equals("Unknown")) return;
-        rooms.add(room);
     }
 
     private void scan() {

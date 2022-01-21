@@ -21,7 +21,6 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class AutoBlood {
-    private static final KeyBind keyBind = new KeyBind("Auto Blood", Keyboard.KEY_NONE);
     public static final String[] bloodMobs = new String[]{
             "Revoker", "Psycho", "Reaper", "Cannibal", "Mute",
             "Ooze", "Putrid", "Freak", "Leech", "Tear",
@@ -29,6 +28,7 @@ public class AutoBlood {
             "Vader", "Frost", "Walker", "WanderingSoul",
             "Bonzo", "Scarf", "Livid"
     };
+    private static final KeyBind keyBind = new KeyBind("Auto Blood", Keyboard.KEY_NONE);
     private static boolean enabled = false;
     private final ArrayList<Entity> killed = new ArrayList<>();
     private Entity target;

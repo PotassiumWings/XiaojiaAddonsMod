@@ -17,11 +17,14 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.floor;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class Fishing {
+    private final KeyBind autoMoveKeyBind = new KeyBind("Auto Move", Keyboard.KEY_NONE);
     private long lastReeledIn = 0;
     private long lastBobberEnterLiquid = 0;
     private boolean oldBobberIsInLiquid = false;
     private boolean bobberInLava = false;
     private double oldBobberY = 0;
+    private boolean shouldMove = false;
+    private long lastMove = 0;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -63,10 +66,6 @@ public class Fishing {
             e.printStackTrace();
         }
     }
-
-    private boolean shouldMove = false;
-    private long lastMove = 0;
-    private final KeyBind autoMoveKeyBind = new KeyBind("Auto Move", Keyboard.KEY_NONE);
 
     @SubscribeEvent
     public void onTickMove(TickEndEvent event) {
@@ -117,7 +116,7 @@ public class Fishing {
                     float DELTAYAW = 0.1F;
                     float DELTAPITCH = 0.2F;
                     while (theta < 2 * Math.PI && shouldMove) {
-                        float yaw  = MathUtils.getYaw(), pitch = MathUtils.getPitch();
+                        float yaw = MathUtils.getYaw(), pitch = MathUtils.getPitch();
                         yaw += Math.sin(theta) * DELTAYAW + (Math.random() * DELTAYAW * 2 - DELTAYAW) / 4;
                         pitch += Math.cos(theta) * DELTAPITCH + (Math.random() * DELTAPITCH * 2 - DELTAPITCH) / 4;
                         theta += Math.PI / (8 + Math.random() * 25);

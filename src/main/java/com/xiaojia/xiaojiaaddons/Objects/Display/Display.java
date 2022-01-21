@@ -1,11 +1,21 @@
 package com.xiaojia.xiaojiaaddons.Objects.Display;
 
-import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
-
 import java.util.ArrayList;
 
+enum Background {
+    NONE, FULL, PER_LINE
+}
+
+enum Align {
+    LEFT, CENTER, RIGHT
+}
+
+enum Order {
+    UP, DOWN
+}
+
 public class Display {
-    private ArrayList<DisplayLine> lines = new ArrayList<>();
+    private final ArrayList<DisplayLine> lines = new ArrayList<>();
     private int renderX = 0;
     private int renderY = 0;
     private boolean shouldRender = true;
@@ -50,12 +60,12 @@ public class Display {
     }
 
     public void setLine(int index, String line) {
-        while(lines.size() <= index) lines.add(new DisplayLine(""));
+        while (lines.size() <= index) lines.add(new DisplayLine(""));
         lines.set(index, new DisplayLine(line));
     }
 
     public void setLine(int index, DisplayLine line) {
-        while(lines.size( ) <= index)lines.add(new DisplayLine(""));
+        while (lines.size() <= index) lines.add(new DisplayLine(""));
         lines.set(index, line);
     }
 
@@ -75,8 +85,8 @@ public class Display {
         if (!shouldRender || lines.isEmpty()) return;
         int i = 0;
         int width = 0;
-        for (DisplayLine line: lines) width = Math.max(width, line.getTextWidth());
-        for (DisplayLine line: lines) {
+        for (DisplayLine line : lines) width = Math.max(width, line.getTextWidth());
+        for (DisplayLine line : lines) {
             line.draw(renderX, renderY + i, width, background, backgroundColor, textColor, align);
             if (order == Order.UP) i -= line.getHeight();
             else i += line.getHeight();
@@ -86,16 +96,4 @@ public class Display {
 //        else if (background == Background.PER_LINE)
 //            GuiUtils.drawRect(backgroundColor, renderX - 1, renderY + i - 1, lines.get(0).getTextWidth() + 1, 1);
     }
-}
-
-enum Background {
-    NONE, FULL, PER_LINE
-}
-
-enum Align {
-    LEFT, CENTER, RIGHT
-}
-
-enum Order {
-    UP, DOWN
 }

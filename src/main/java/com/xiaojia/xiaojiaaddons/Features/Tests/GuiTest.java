@@ -2,13 +2,10 @@ package com.xiaojia.xiaojiaaddons.Features.Tests;
 
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
-import net.minecraft.entity.Entity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.Color;
-
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class GuiTest {
     private static boolean show = false;

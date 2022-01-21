@@ -11,7 +11,6 @@ import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,8 +21,8 @@ import java.awt.Color;
 import java.util.List;
 
 public class AutoLeap {
-    private long lastClick = 0;
     private final String[] names = new String[10];
+    private long lastClick = 0;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {

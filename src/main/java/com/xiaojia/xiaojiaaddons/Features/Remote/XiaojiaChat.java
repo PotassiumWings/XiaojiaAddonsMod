@@ -7,12 +7,10 @@ import com.google.gson.JsonParser;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +18,10 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class XiaojiaChat {
 
-    private static int currentChatId;
     private static final String GET_CHAT_ID_URL = "/xja/chatid";
     private static final String GET_CHAT_URL = "/xja/chat";
     private static final String POST_CHAT_URL = "/xja/chat";
+    private static int currentChatId;
     private static Thread getThread = null;
 
     public static void init() {
@@ -45,11 +43,14 @@ public class XiaojiaChat {
     public static void chat(String message, int type) {
 //        message = message.replace("\u00a7", "&");
         String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"msg\": \"%s\", \"type\": \"%d\"}",
-                getUUID(),getPlayer().getName(), message, type);
+                getUUID(), getPlayer().getName(), message, type);
         ChatLib.debug("body: " + body + ", type: " + type + ".");
         new Thread(() -> RemoteUtils.post(POST_CHAT_URL, body)).start();
     }
 
+    public static String getUUID() {
+        return getPlayer().getUniqueID().toString().replace("-", "");
+    }
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -98,9 +99,5 @@ public class XiaojiaChat {
             chat(message, 2);
 //            chat(message.substring(11), 2);
         }
-    }
-
-    public static String getUUID() {
-        return getPlayer().getUniqueID().toString().replace("-", "");
     }
 }

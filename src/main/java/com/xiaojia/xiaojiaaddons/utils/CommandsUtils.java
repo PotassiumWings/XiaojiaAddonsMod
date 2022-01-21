@@ -9,9 +9,8 @@ import java.util.LinkedList;
 
 public class CommandsUtils {
     private static final Deque<String> commandsQueue = new LinkedList<>();
-    private static long lastSent = 0;
-
     private static final Deque<Long> sentQueue = new LinkedList<>();
+    private static long lastSent = 0;
 
     public static void addCommand(String command) {
         commandsQueue.offerLast(command);

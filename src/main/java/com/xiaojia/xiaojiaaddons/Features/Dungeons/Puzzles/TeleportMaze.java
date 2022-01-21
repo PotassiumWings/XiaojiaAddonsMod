@@ -28,9 +28,9 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getYaw;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class TeleportMaze {
+    private final ArrayList<BlockPos> shouldNot = new ArrayList<>();
     private boolean justPassPad = false;
     private boolean shouldCheckPossible = true;
-    private final ArrayList<BlockPos> shouldNot = new ArrayList<>();
     private HashSet<BlockPos> possible = new HashSet<>();
 
     @SubscribeEvent

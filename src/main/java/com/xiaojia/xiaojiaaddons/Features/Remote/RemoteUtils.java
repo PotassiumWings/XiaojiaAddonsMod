@@ -1,7 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Features.Remote;
 
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import org.apache.http.Consts;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -14,7 +13,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +29,7 @@ public class RemoteUtils {
                     .setSocketTimeout(2000)
                     .build();
             HttpPost post = new HttpPost(baseURL + url);
-            post.addHeader("Content-type","application/json; charset=utf-8");
+            post.addHeader("Content-type", "application/json; charset=utf-8");
             post.setConfig(requestConfig);
             post.setEntity(new StringEntity(body, StandardCharsets.UTF_8));
             client.execute(post);

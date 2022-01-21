@@ -13,14 +13,19 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class GolemAlert {
-    private final Display display = new Display();
     private static long golemSpawnTime = 0;
+    private final Display display = new Display();
 
     public GolemAlert() {
         display.setShouldRender(false);
         display.setBackground("full");
         display.setBackgroundColor(0);
         display.setAlign("center");
+    }
+
+    public static void golemWarn() {
+        golemSpawnTime = TimeUtils.curTime() + 20000;
+        getPlayer().playSound("mob.irongolem.hit", 1000, 1);
     }
 
     @SubscribeEvent
@@ -50,11 +55,6 @@ public class GolemAlert {
         line2.setShadow(true);
         line2.setScale(1.50F);
         display.setLine(1, line2);
-    }
-
-    public static void golemWarn() {
-        golemSpawnTime = TimeUtils.curTime() + 20000;
-        getPlayer().playSound("mob.irongolem.hit", 1000, 1);
     }
 
     private String makeTimer(long ms) {

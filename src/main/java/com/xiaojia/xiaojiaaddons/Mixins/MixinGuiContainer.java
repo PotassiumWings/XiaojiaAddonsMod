@@ -1,7 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Mixins;
 
 import com.xiaojia.xiaojiaaddons.Events.GuiContainerEvent;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.common.MinecraftForge;

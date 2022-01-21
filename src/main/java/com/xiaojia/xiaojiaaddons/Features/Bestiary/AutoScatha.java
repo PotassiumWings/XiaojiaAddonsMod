@@ -42,7 +42,7 @@ public class AutoScatha {
                 yaw = fit(getYaw());
                 pitch = 45;
                 ChatLib.debug("getYaw: " + getYaw() + ", pitch: " + getPitch());
-                ChatLib.debug("yaw: " + yaw+ ", pitch: " + pitch);
+                ChatLib.debug("yaw: " + yaw + ", pitch: " + pitch);
                 ControlUtils.changeDirection(yaw, pitch);
                 thread = new Thread(() -> {
                     try {
@@ -50,7 +50,7 @@ public class AutoScatha {
                         long time = TimeUtils.curTime();
                         while (should) {
                             BlockPos cur = MathUtils.getBlockPos();
-                            if (!cur.equals(lastBlockPos))  {
+                            if (!cur.equals(lastBlockPos)) {
                                 lastBlockPos = cur;
                                 time = TimeUtils.curTime();
                             }

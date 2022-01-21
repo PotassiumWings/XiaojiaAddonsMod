@@ -20,8 +20,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.HashMap;
 
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
-
 public class LividESP extends RenderEntityESP {
     public BlockPos pos = new BlockPos(205, 109, 243);
     private EnumChatFormatting colorChat = null;

@@ -33,6 +33,23 @@ public class BloodAssist {
 
     private int spawnId = 0;
 
+    public static void showBloodMobs() {
+        ChatLib.chat("-------------------------------------------------------");
+        for (EntityArmorStand entity : skulls) {
+            ChatLib.chat("skulls: " + entity.getUniqueID().toString());
+            if (entity.getEquipmentInSlot(4) != null) ChatLib.chat(entity.getEquipmentInSlot(4).getDisplayName());
+        }
+        for (Entity entity : getWorld().loadedEntityList) {
+            if (entity instanceof EntityArmorStand) {
+                ChatLib.chat("entity: " + entity.getUniqueID().toString());
+                if (((EntityArmorStand) entity).getEquipmentInSlot(4) != null)
+                    ChatLib.chat(((EntityArmorStand) entity).getEquipmentInSlot(4).getDisplayName());
+                ChatLib.chat(String.format("pos: (%.2f %.2f %.2f)", entity.posX, entity.posY, entity.posZ));
+            }
+        }
+        ChatLib.chat("-------------------------------------------------------");
+    }
+
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
         if (!Checker.enabled) return;
@@ -126,7 +143,7 @@ public class BloodAssist {
         }
         skulls.removeIf(e -> e.isDead || (
                 infos.get(e.getUniqueID().toString()) != null &&
-                infos.get(e.getUniqueID().toString()).isDead
+                        infos.get(e.getUniqueID().toString()).isDead
         ));
         toRemove.forEach(infos::remove);
 
@@ -143,23 +160,6 @@ public class BloodAssist {
         info.isDead = true;
         spawnId++;
         ChatLib.debug("set dead: " + uuid + ", " + info + ", from: " + from);
-    }
-
-    public static void showBloodMobs() {
-        ChatLib.chat("-------------------------------------------------------");
-        for (EntityArmorStand entity: skulls) {
-            ChatLib.chat("skulls: " + entity.getUniqueID().toString());
-            if (entity.getEquipmentInSlot(4) != null) ChatLib.chat(entity.getEquipmentInSlot(4).getDisplayName());
-        }
-        for (Entity entity: getWorld().loadedEntityList) {
-            if (entity instanceof EntityArmorStand) {
-                ChatLib.chat("entity: " + entity.getUniqueID().toString());
-                if (((EntityArmorStand) entity).getEquipmentInSlot(4) != null)
-                    ChatLib.chat(((EntityArmorStand) entity).getEquipmentInSlot(4).getDisplayName());
-                ChatLib.chat(String.format("pos: (%.2f %.2f %.2f)", entity.posX, entity.posY, entity.posZ));
-            }
-        }
-        ChatLib.chat("-------------------------------------------------------");
     }
 
     @SubscribeEvent

@@ -39,13 +39,13 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Display Coords", parent = "Day and Coords Display")
     public static boolean DisplayCoords = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Display X", parent = "Day and Coords Display", step=10)
+    @Property(type = Property.Type.NUMBER, name = "Display X", parent = "Day and Coords Display", step = 10)
     public static int DisplayDayX = 5;
 
-    @Property(type = Property.Type.NUMBER, name = "Display Y", parent = "Day and Coords Display", step=10)
+    @Property(type = Property.Type.NUMBER, name = "Display Y", parent = "Day and Coords Display", step = 10)
     public static int DisplayDayY = 5;
 
-    @Property(type = Property.Type.NUMBER, name = "Display Scale", parent = "Day and Coords Display", min=5, max=100, step=5)
+    @Property(type = Property.Type.NUMBER, name = "Display Scale", parent = "Day and Coords Display", min = 5, max = 100, step = 5)
     public static int DisplayScale = 20;
 
     // OneTick

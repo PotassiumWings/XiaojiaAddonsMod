@@ -5,7 +5,6 @@ import com.mojang.authlib.properties.Property;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntitySkull;
@@ -78,7 +77,7 @@ public class BlockUtils {
     }
 
     public static boolean isBlockTeleportPad(int x, int y, int z) {
-        Block block = getBlockAt(x,y,z);
+        Block block = getBlockAt(x, y, z);
         return block != null && Block.getIdFromBlock(block) == 120;
     }
 }

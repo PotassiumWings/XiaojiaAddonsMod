@@ -4,7 +4,6 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.BlockChangeEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.block.BlockStainedGlass;
@@ -34,23 +33,45 @@ public class GemstoneESP {
     private BlockPos lastChecked = null;
     private boolean isScanning = false;
 
-    enum Gemstone {
-        RUBY(new Color(188, 3, 29), EnumDyeColor.RED),
-        AMETHYST(new Color(137, 0, 201), EnumDyeColor.PURPLE),
-        JADE(new Color(157, 249, 32), EnumDyeColor.LIME),
-        SAPPHIRE(new Color(60, 121, 224), EnumDyeColor.LIGHT_BLUE),
-        AMBER(new Color(237, 139, 35), EnumDyeColor.ORANGE),
-        TOPAZ(new Color(249, 215, 36), EnumDyeColor.YELLOW),
-        JASPER(new Color(214, 15, 150), EnumDyeColor.MAGENTA);
+    private static boolean isEnabled() {
+        return (Checker.enabled && getPlayer() != null && getWorld() != null &&
+                Configs.GemstoneESP && SkyblockUtils.isInCrystalHollows());
+    }
 
-        public Color color;
+    private static Gemstone getGemstone(IBlockState block) {
+        if (block.getBlock() != Blocks.stained_glass &&
+                !(Configs.IncludeGlassPanes && block.getBlock() == Blocks.stained_glass_pane))
+            return null;
+        EnumDyeColor color = block.getValue(BlockStainedGlass.COLOR);
+        if (color == null) color = block.getValue(BlockStainedGlassPane.COLOR);
+        if (color == Gemstone.RUBY.dyeColor) return Gemstone.RUBY;
+        if (color == Gemstone.AMETHYST.dyeColor) return Gemstone.AMETHYST;
+        if (color == Gemstone.JADE.dyeColor) return Gemstone.JADE;
+        if (color == Gemstone.SAPPHIRE.dyeColor) return Gemstone.SAPPHIRE;
+        if (color == Gemstone.AMBER.dyeColor) return Gemstone.AMBER;
+        if (color == Gemstone.TOPAZ.dyeColor) return Gemstone.TOPAZ;
+        if (color == Gemstone.JASPER.dyeColor) return Gemstone.JASPER;
+        return null;
+    }
 
-        public EnumDyeColor dyeColor;
-
-        Gemstone(Color color, EnumDyeColor dyeColor) {
-            this.color = color;
-            this.dyeColor = dyeColor;
+    private static boolean isGemstoneEnabled(Gemstone gemstone) {
+        switch (gemstone) {
+            case RUBY:
+                return Configs.RubyEsp;
+            case AMETHYST:
+                return Configs.AmethystEsp;
+            case JADE:
+                return Configs.JadeEsp;
+            case SAPPHIRE:
+                return Configs.SapphireEsp;
+            case AMBER:
+                return Configs.AmberEsp;
+            case TOPAZ:
+                return Configs.TopazEsp;
+            case JASPER:
+                return Configs.JasperEsp;
         }
+        return false;
     }
 
     @SubscribeEvent
@@ -112,51 +133,29 @@ public class GemstoneESP {
             }
     }
 
-    private static boolean isEnabled() {
-        return (Checker.enabled && getPlayer() != null && getWorld() != null &&
-                Configs.GemstoneESP && SkyblockUtils.isInCrystalHollows());
-    }
-
-    private static Gemstone getGemstone(IBlockState block) {
-        if (block.getBlock() != Blocks.stained_glass &&
-                !(Configs.IncludeGlassPanes && block.getBlock() == Blocks.stained_glass_pane))
-            return null;
-        EnumDyeColor color = block.getValue(BlockStainedGlass.COLOR);
-        if (color == null) color = block.getValue(BlockStainedGlassPane.COLOR);
-        if (color == Gemstone.RUBY.dyeColor) return Gemstone.RUBY;
-        if (color == Gemstone.AMETHYST.dyeColor) return Gemstone.AMETHYST;
-        if (color == Gemstone.JADE.dyeColor) return Gemstone.JADE;
-        if (color == Gemstone.SAPPHIRE.dyeColor) return Gemstone.SAPPHIRE;
-        if (color == Gemstone.AMBER.dyeColor) return Gemstone.AMBER;
-        if (color == Gemstone.TOPAZ.dyeColor) return Gemstone.TOPAZ;
-        if (color == Gemstone.JASPER.dyeColor) return Gemstone.JASPER;
-        return null;
-    }
-
-    private static boolean isGemstoneEnabled(Gemstone gemstone) {
-        switch (gemstone) {
-            case RUBY:
-                return Configs.RubyEsp;
-            case AMETHYST:
-                return Configs.AmethystEsp;
-            case JADE:
-                return Configs.JadeEsp;
-            case SAPPHIRE:
-                return Configs.SapphireEsp;
-            case AMBER:
-                return Configs.AmberEsp;
-            case TOPAZ:
-                return Configs.TopazEsp;
-            case JASPER:
-                return Configs.JasperEsp;
-        }
-        return false;
-    }
-
     @SubscribeEvent
     public void onWorldChange(WorldEvent.Load event) {
         this.gemstones.clear();
         this.checked.clear();
         this.lastChecked = null;
+    }
+
+    enum Gemstone {
+        RUBY(new Color(188, 3, 29), EnumDyeColor.RED),
+        AMETHYST(new Color(137, 0, 201), EnumDyeColor.PURPLE),
+        JADE(new Color(157, 249, 32), EnumDyeColor.LIME),
+        SAPPHIRE(new Color(60, 121, 224), EnumDyeColor.LIGHT_BLUE),
+        AMBER(new Color(237, 139, 35), EnumDyeColor.ORANGE),
+        TOPAZ(new Color(249, 215, 36), EnumDyeColor.YELLOW),
+        JASPER(new Color(214, 15, 150), EnumDyeColor.MAGENTA);
+
+        public Color color;
+
+        public EnumDyeColor dyeColor;
+
+        Gemstone(Color color, EnumDyeColor dyeColor) {
+            this.color = color;
+            this.dyeColor = dyeColor;
+        }
     }
 }

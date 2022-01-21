@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 
 public class DisplayHandler {
-    private static ArrayList<Display> displays = new ArrayList<>();
+    private static final ArrayList<Display> displays = new ArrayList<>();
 
     public static void registerDisplay(Display display) {
         displays.add(display);
@@ -16,7 +16,7 @@ public class DisplayHandler {
     @SubscribeEvent
     public void renderDisplays(RenderGameOverlayEvent.Text event) {
         GlStateManager.pushMatrix();
-        for (Display display:displays) {
+        for (Display display : displays) {
             display.render();
         }
         GlStateManager.popMatrix();

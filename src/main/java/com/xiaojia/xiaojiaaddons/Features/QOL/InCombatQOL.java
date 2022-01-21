@@ -10,7 +10,6 @@ import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
@@ -160,7 +159,7 @@ public class InCombatQOL {
                         if (Configs.AutoSellDungeonTrash) {
                             if (isRecomed && !Configs.CanSellRecomedDungeonTrash) continue;
                             if (heldTime > 10000 && !Configs.CanSellTrainingWeightLong) continue;
-                            for (String shit: dungTrash) {
+                            for (String shit : dungTrash) {
                                 if (name.toLowerCase().contains(shit.toLowerCase())) {
                                     canSell = true;
                                     break;
@@ -168,7 +167,7 @@ public class InCombatQOL {
                             }
                         }
                         if (Configs.AutoSellRunes) {
-                            for (String shit: runes) {
+                            for (String shit : runes) {
                                 if (name.toLowerCase().contains(shit.toLowerCase())) {
                                     canSell = true;
                                     break;
