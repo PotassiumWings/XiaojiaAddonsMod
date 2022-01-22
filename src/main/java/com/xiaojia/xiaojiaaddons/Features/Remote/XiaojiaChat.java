@@ -41,7 +41,6 @@ public class XiaojiaChat {
 
 
     public static void chat(String message, int type) {
-//        message = message.replace("\u00a7", "&");
         String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"msg\": \"%s\", \"type\": \"%d\"}",
                 getUUID(), getPlayer().getName(), message, type);
         ChatLib.debug("body: " + body + ", type: " + type + ".");
@@ -54,9 +53,7 @@ public class XiaojiaChat {
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
-//        if (true) return;
         if (!Checker.enabled) return;
-        if (getPlayer() == null) return;
         if (getThread == null || !getThread.isAlive()) {
             getThread = new Thread(() -> {
                 try {
@@ -76,7 +73,7 @@ public class XiaojiaChat {
                         ChatLib.xjchat(type, name, message);
                         currentChatId = Math.max(currentChatId, chatId);
                     }
-                    Thread.sleep(100);
+                    Thread.sleep(200);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -91,13 +88,11 @@ public class XiaojiaChat {
         if (!Checker.enabled) return;
         String message = event.message.getFormattedText();
         String unformattedMessage = ChatLib.removeFormatting(event.message.getUnformattedText());
-//        ChatLib.chat("message: " + message + ", unfor: " + unformattedMessage);
         if (unformattedMessage.startsWith("PUZZLE FAIL! " + getPlayer().getName())) {
             chat(message, 1);
         }
         if (unformattedMessage.startsWith(" ☠ You") && unformattedMessage.endsWith("and became a ghost.")) {
             chat(message, 2);
-//            chat(message.substring(11), 2);
         }
     }
 }

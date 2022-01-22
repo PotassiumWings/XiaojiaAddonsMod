@@ -29,7 +29,7 @@ public class GhostBlock {
         if (!Configs.GhostBlockWithPickaxe) return;
         try {
             if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-                if (BlockUtils.isInteractive(mc.theWorld.getBlockState(event.pos).getBlock())) return;
+                if (BlockUtils.canGhostBlock(mc.theWorld.getBlockState(event.pos).getBlock())) return;
                 ItemStack heldItemStack = ControlUtils.getHeldItemStack();
                 if (heldItemStack == null || !heldItemStack.hasDisplayName()) return;
                 String heldItemName = heldItemStack.getDisplayName();
@@ -50,7 +50,7 @@ public class GhostBlock {
             BlockPos lookingAtPos = getPlayer().rayTrace(mc.playerController.getBlockReachDistance(), 1.0F).getBlockPos();
             if (lookingAtPos != null) {
                 Block lookingAtBlock = getWorld().getBlockState(lookingAtPos).getBlock();
-                if (!BlockUtils.isInteractive(lookingAtBlock))
+                if (!BlockUtils.canGhostBlock(lookingAtBlock))
                     mc.theWorld.setBlockToAir(lookingAtPos);
             }
         }

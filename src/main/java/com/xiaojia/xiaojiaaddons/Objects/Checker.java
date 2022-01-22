@@ -4,6 +4,7 @@ import com.google.gson.JsonParser;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Remote.RemoteUtils;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.http.message.BasicNameValuePair;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Checker {
     //    private static final HashSet<String> pool = new HashSet<>(Arrays.asList(
@@ -41,11 +43,14 @@ public class Checker {
     public void onTickCheck(TickEndEvent event) {
         long cur = TimeUtils.curTime();
         if (getPlayer() == null) return;
-        if (cur - lastCheck > 100000) {
+        if (getWorld() == null) return;
+        if (cur - lastCheck > 30000) {
             lastCheck = cur;
             try {
                 List<BasicNameValuePair> list = new ArrayList<>();
                 list.add(new BasicNameValuePair("uuid", XiaojiaChat.getUUID()));
+                list.add(new BasicNameValuePair("version", XiaojiaAddons.VERSION));
+
                 String permit = RemoteUtils.get("/xja/verify", list);
 
                 JsonParser jsonParser = new JsonParser();

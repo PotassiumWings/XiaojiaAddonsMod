@@ -46,7 +46,7 @@ public class RemoteUtils {
             RequestConfig requestConfig = RequestConfig.custom()
                     .setConnectTimeout(2000)
                     .setConnectionRequestTimeout(2000)
-                    .setSocketTimeout(2000)
+                    .setSocketTimeout(1000)
                     .build();
             String params = EntityUtils.toString(new UrlEncodedFormEntity(list, Consts.UTF_8));
             HttpGet request = new HttpGet(baseURL + url + "?" + params);
