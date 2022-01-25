@@ -1,27 +1,13 @@
 package com.xiaojia.xiaojiaaddons.Features.Remote;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class XiaojiaChat {
-    private static Thread getThread = null;
-
-    public static void init() {
-        // join server
-    }
 
     public static void ping() {
         new Thread(() -> System.out.println("ping: " + RemoteUtils.get("xjaddons_ping"))).start();

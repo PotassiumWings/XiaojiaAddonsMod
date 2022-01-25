@@ -12,6 +12,12 @@ import java.util.regex.Pattern;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class ChatLib {
+    public static boolean toggleOff = false;
+
+    public static void toggle() {
+        toggleOff = !toggleOff;
+        ChatLib.chat((toggleOff? "&cDisabled" : "&aEnabled") + "&r&b xj chat!");
+    }
 
     public static String removeFormatting(String text) {
         if (text == null) return null;
@@ -42,6 +48,7 @@ public class ChatLib {
     // type=0: chat
     // type=1: yikes
     public static void xjchat(int type, String name, String chatMessage) {
+        if (toggleOff) return;
         if (chatMessage == null) chatMessage = "null";
         String[] texts = chatMessage.split("\n");
         for (String text : texts) {

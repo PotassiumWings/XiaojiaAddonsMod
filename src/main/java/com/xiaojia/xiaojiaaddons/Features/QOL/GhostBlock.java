@@ -50,7 +50,7 @@ public class GhostBlock {
             BlockPos lookingAtPos = getPlayer().rayTrace(mc.playerController.getBlockReachDistance(), 1.0F).getBlockPos();
             if (lookingAtPos != null) {
                 Block lookingAtBlock = getWorld().getBlockState(lookingAtPos).getBlock();
-                if (!BlockUtils.canGhostBlock(lookingAtBlock))
+                if (BlockUtils.canGhostBlock(lookingAtBlock))
                     mc.theWorld.setBlockToAir(lookingAtPos);
             }
         }

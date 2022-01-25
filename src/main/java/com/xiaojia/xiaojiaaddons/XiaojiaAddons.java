@@ -114,7 +114,6 @@ public class XiaojiaAddons {
 
         Config.load();
         RoomLoader.load();
-        XiaojiaChat.init();
         ClientSocket.connect();
 
         ClientCommandHandler.instance.registerCommand(new Command());

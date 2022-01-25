@@ -31,6 +31,10 @@ public class XiaojiaChat extends CommandBase {
             return;
         }
         String message = String.join(" ", strings);
+        if (message.equals("toggle")) {
+            ChatLib.toggle();
+            return;
+        }
         com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat.chat(message, 0);
     }
 
