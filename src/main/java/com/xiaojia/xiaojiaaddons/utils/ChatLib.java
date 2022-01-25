@@ -21,11 +21,11 @@ public class ChatLib {
     }
 
     public static void chat(String chatMessage) {
+        if (chatMessage == null) chatMessage = "null";
         if (!Configs.ShowXJAMessage) {
             System.err.println("Chat: " + chatMessage);
             return;
         }
-        if (chatMessage == null) chatMessage = "null";
         String[] texts = chatMessage.split("\n");
         for (String text : texts) {
             text = "&9[XJA] > &b" + text;

@@ -24,9 +24,9 @@ public class RemoteUtils {
         try {
             HttpClient client = HttpClients.createDefault();
             RequestConfig requestConfig = RequestConfig.custom()
-                    .setConnectTimeout(2000)
-                    .setConnectionRequestTimeout(2000)
-                    .setSocketTimeout(2000)
+                    .setConnectTimeout(20000)
+                    .setConnectionRequestTimeout(20000)
+                    .setSocketTimeout(20000)
                     .build();
             HttpPost post = new HttpPost(baseURL + url);
             post.addHeader("Content-type", "application/json; charset=utf-8");
@@ -44,9 +44,9 @@ public class RemoteUtils {
             HttpClientBuilder client = HttpClients.custom();
             client.setUserAgent("XiaojiaAddons/" + XiaojiaAddons.VERSION);
             RequestConfig requestConfig = RequestConfig.custom()
-                    .setConnectTimeout(2000)
-                    .setConnectionRequestTimeout(2000)
-                    .setSocketTimeout(1000)
+                    .setConnectTimeout(20000)
+                    .setConnectionRequestTimeout(20000)
+                    .setSocketTimeout(20000)
                     .build();
             String params = EntityUtils.toString(new UrlEncodedFormEntity(list, Consts.UTF_8));
             HttpGet request = new HttpGet(baseURL + url + "?" + params);

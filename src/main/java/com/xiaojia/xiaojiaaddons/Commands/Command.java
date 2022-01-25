@@ -7,6 +7,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
+import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
@@ -136,6 +137,9 @@ public class Command extends CommandBase {
                 break;
             case "ping":
                 XiaojiaChat.ping();
+                break;
+            case "reconnect":
+                ClientSocket.reconnect();
                 break;
 //            case "shoot":
 //                AutoShootCrystal.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));

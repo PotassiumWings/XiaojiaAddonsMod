@@ -17,22 +17,10 @@ import java.util.List;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class XiaojiaChat {
-
-    private static final String GET_CHAT_ID_URL = "/xja/chatid";
-    private static final String GET_CHAT_URL = "/xja/chat";
-    private static final String POST_CHAT_URL = "/xja/chat";
-    private static int currentChatId;
     private static Thread getThread = null;
 
     public static void init() {
         // join server
-        getThread = new Thread(() -> {
-            String chatIdString = RemoteUtils.get(GET_CHAT_ID_URL);
-            JsonParser jsonParser = new JsonParser();
-            JsonObject jsonObject = jsonParser.parse(chatIdString).getAsJsonObject();
-            currentChatId = jsonObject.get("chatId").getAsInt();
-        });
-        getThread.start();
     }
 
     public static void ping() {
@@ -44,42 +32,11 @@ public class XiaojiaChat {
         String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"msg\": \"%s\", \"type\": \"%d\"}",
                 getUUID(), getPlayer().getName(), message, type);
         ChatLib.debug("body: " + body + ", type: " + type + ".");
-        new Thread(() -> RemoteUtils.post(POST_CHAT_URL, body)).start();
+        new Thread(() -> ClientSocket.chat(body)).start();
     }
 
     public static String getUUID() {
         return getPlayer().getUniqueID().toString().replace("-", "");
-    }
-
-    @SubscribeEvent
-    public void onTick(TickEndEvent event) {
-        if (!Checker.enabled) return;
-        if (getThread == null || !getThread.isAlive()) {
-            getThread = new Thread(() -> {
-                try {
-                    List<BasicNameValuePair> list = new ArrayList<>();
-                    list.add(new BasicNameValuePair("uuid", getUUID()));
-                    list.add(new BasicNameValuePair("chatId", currentChatId + ""));
-
-                    String chatIdString = RemoteUtils.get(GET_CHAT_URL, list);
-                    JsonParser jsonParser = new JsonParser();
-                    JsonArray jsonElements = jsonParser.parse(chatIdString).getAsJsonObject().get("res").getAsJsonArray();
-                    for (JsonElement element : jsonElements) {
-                        JsonObject singleObject = element.getAsJsonObject();
-                        int type = singleObject.get("type").getAsInt();
-                        String message = singleObject.get("msg").getAsString();
-                        String name = singleObject.get("name").getAsString();
-                        int chatId = singleObject.get("chatId").getAsInt();
-                        ChatLib.xjchat(type, name, message);
-                        currentChatId = Math.max(currentChatId, chatId);
-                    }
-                    Thread.sleep(200);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-            getThread.start();
-        }
     }
 
     // puzzle fail
@@ -91,7 +48,7 @@ public class XiaojiaChat {
         if (unformattedMessage.startsWith("PUZZLE FAIL! " + getPlayer().getName())) {
             chat(message, 1);
         }
-        if (unformattedMessage.startsWith(" ☠ You") && unformattedMessage.endsWith("and became a ghost.")) {
+        if (unformattedMessage.startsWith(" ☠ You")) {
             chat(message, 2);
         }
     }

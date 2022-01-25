@@ -52,6 +52,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.OneTick;
 import com.xiaojia.xiaojiaaddons.Features.QOL.RemoveBlindness;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
+import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoCloseCrystalHollowsChest;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowder;
@@ -91,7 +92,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.3.4";
+    public static final String VERSION = "2.3.4.1";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -114,6 +115,7 @@ public class XiaojiaAddons {
         Config.load();
         RoomLoader.load();
         XiaojiaChat.init();
+        ClientSocket.connect();
 
         ClientCommandHandler.instance.registerCommand(new Command());
         ClientCommandHandler.instance.registerCommand(new PP());
