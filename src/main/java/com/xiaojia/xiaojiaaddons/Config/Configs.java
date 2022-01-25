@@ -4,6 +4,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Show XJA Message")
     public static boolean ShowXJAMessage = true;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Hide XJA mod id")
+    public static boolean HideModID = true;
+
     // Dragons
     @Property(type = Property.Type.FOLDER, name = "Dragon")
     public static boolean DragonEnabled = false;
