@@ -29,7 +29,7 @@ public class GhostBlock {
         if (!Configs.GhostBlockWithPickaxe) return;
         try {
             if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-                if (BlockUtils.canGhostBlock(mc.theWorld.getBlockState(event.pos).getBlock())) return;
+                if (!BlockUtils.canGhostBlock(mc.theWorld.getBlockState(event.pos).getBlock())) return;
                 ItemStack heldItemStack = ControlUtils.getHeldItemStack();
                 if (heldItemStack == null || !heldItemStack.hasDisplayName()) return;
                 String heldItemName = heldItemStack.getDisplayName();
