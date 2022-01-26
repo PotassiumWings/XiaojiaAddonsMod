@@ -6,13 +6,13 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class XiaojiaChat {
 
     public static void ping() {
         new Thread(() -> System.out.println("ping: " + RemoteUtils.get("xjaddons_ping"))).start();
     }
-
 
     public static void chat(String message, int type) {
         String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"msg\": \"%s\", \"type\": \"%d\"}",
@@ -21,8 +21,16 @@ public class XiaojiaChat {
         new Thread(() -> ClientSocket.chat(body)).start();
     }
 
+    public static void chat(String nbt, String displayName, int type) {
+        String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"dis\": \"%s\", \"type\": \"%d\", \"nbt\": \"%s\"}",
+                getUUID(), getPlayer().getName(), displayName, type, nbt);
+        ChatLib.debug("body: " + body + ", type: " + type + ".");
+        new Thread(() -> ClientSocket.chat(body)).start();
+    }
+
+
     public static String getUUID() {
-        return getPlayer().getUniqueID().toString().replace("-", "");
+        return mc.getSession().getProfile().getId().toString().replace("-", "");
     }
 
     // puzzle fail

@@ -9,6 +9,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
+import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
@@ -97,6 +98,9 @@ public class Command extends CommandBase {
             case "rename":
                 ItemRename.process(strings);
                 break;
+            case "showitem":
+                ShowItem.show();
+                break;
             // debug commands
             case "debug":
                 XiaojiaAddons.setDebug();
@@ -174,7 +178,8 @@ public class Command extends CommandBase {
                 "&c/xj s&b to open gui settings.\n" +
                 "&c/xj 300&b to see, and &c/xj 300 message&b to set announce300 message.\n" +
                 "&c/xj show dungarmor&b, &c/xj show dungtrash&b, and &c/xj show runes&b to show auto-sell dungeon armors/dungeon trash/runes seperately.\n" +
-                "&c/xj rename&b to rename items.";
+                "&c/xj rename&b to rename items.\n" +
+                "&c/xj showitem&b to show held item.";
     }
 
     @Override

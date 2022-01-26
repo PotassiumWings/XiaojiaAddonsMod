@@ -4,7 +4,9 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -60,6 +62,8 @@ public class ChatLib {
         if (!Checker.enabled) return;
         if (toggleOff) return;
         if (chatMessage == null) chatMessage = "null";
+        if (type != 0 && type != 1 && type != 2) return;
+
         String[] texts = chatMessage.split("\n");
         for (String text : texts) {
             text = "&bXJC > &r&8" + name + "&r&f: &r" + text;
@@ -68,6 +72,22 @@ public class ChatLib {
             IChatComponent component = new ChatComponentText(text);
             addComponent(component);
         }
+    }
+
+    public static void showItem(int type, String name, String displayName, String nbt){
+        if (type != 3) return;
+        // show item
+        String text = "&bXJC > &r&8" + name + "&r&f: &r" + "Showed item ";
+        text = addColor(text);
+        IChatComponent component = new ChatComponentText(text);
+
+        IChatComponent itemComponent = new ChatComponentText(displayName);
+        ChatStyle itemStyle = new ChatStyle();
+        itemStyle.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ChatComponentText(nbt)));
+        itemComponent.setChatStyle(itemStyle);
+
+        component.appendSibling(itemComponent);
+        addComponent(component);
     }
 
     public static void debug(String message) {

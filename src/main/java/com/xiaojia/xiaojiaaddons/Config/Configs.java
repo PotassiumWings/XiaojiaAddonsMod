@@ -415,6 +415,32 @@ public class Configs {
                     "§8Dark Gray", "§9Blue"})
     public static int BloodKeyColor = 2;
 
+    // M4ESP
+    @Property(type = Property.Type.FOLDER, name = "M4 ESP", parent = "Dungeons")
+    public static boolean M4ESPEnable = false;
+
+    @Property(type = Property.Type.SELECT, name = "Spirit Bear ESP Type", parent = "M4 ESP",
+            options = {"Off", "Bounding Box", "Filled Box"})
+    public static int SpiritBearESPType = 0;
+
+    @Property(type = Property.Type.SELECT, name = "Spirit Bow ESP Type", parent = "M4 ESP",
+            options = {"Off", "Bounding Box", "Filled Box"})
+    public static int SpiritBowESPType = 0;
+
+    @Property(type = Property.Type.SELECT, name = "Wither Key ESP Color", parent = "M4 ESP",
+            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
+                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
+                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
+                    "§8Dark Gray", "§9Blue"})
+    public static int SpiritBearColor = 11;
+
+    @Property(type = Property.Type.SELECT, name = "Blood Key ESP Color", parent = "M4 ESP",
+            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
+                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
+                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
+                    "§8Dark Gray", "§9Blue"})
+    public static int SpiritBowColor = 11;
+
     // BatESP
     @Property(type = Property.Type.FOLDER, name = "Bat ESP", parent = "Dungeons")
     public static boolean BatESPEnable = false;

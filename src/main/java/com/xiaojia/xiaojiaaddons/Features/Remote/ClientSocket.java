@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Remote;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 
 import java.io.BufferedReader;
@@ -11,6 +12,12 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
+
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class ClientSocket {
     private static PrintWriter out;
@@ -33,6 +40,8 @@ public class ClientSocket {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             new Thread(() -> {
                 try {
+                    authenticate();
+
                     boolean first = true;
                     while (true) {
                         StringBuilder sb = new StringBuilder();
@@ -40,7 +49,7 @@ public class ClientSocket {
                         if (recv == -1) break;
                         if (first) {
                             first = false;
-                            ChatLib.chat("Connected to xc server!");
+                            ChatLib.debug("Connected to xc server!");
                         }
 
                         // linux, '\n' at last char
@@ -52,14 +61,64 @@ public class ClientSocket {
 
                         String s = sb.toString();
                         ChatLib.debug(s);
-                        JsonParser jsonParser = new JsonParser();
-                        JsonObject singleObject = jsonParser.parse(s).getAsJsonObject();
-                        int type = singleObject.get("type").getAsInt();
-                        String message = singleObject.get("msg").getAsString();
-                        String name = singleObject.get("name").getAsString();
-                        ChatLib.xjchat(type, name, message);
+
+                        // type 0-2, normal chat / puzzle fail / death
+                        Pattern pattern = Pattern.compile("^\\{" +
+                                "\"uuid\": \"(.*)\", " +
+                                "\"name\": \"(.*)\", " +
+                                "\"msg\": \"(.*)\", " +
+                                "\"type\": \"(.*)\"}$"
+                        );
+                        Matcher matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            String uuid = matcher.group(1);
+                            String name = matcher.group(2);
+                            String message = matcher.group(3);
+                            int type = Integer.parseInt(matcher.group(4));
+                            assert (type == 0 || type == 1 || type == 2);
+                            // chat
+                            ChatLib.xjchat(type, name, message);
+                            continue;
+                        }
+
+                        // type 3, show item
+                        pattern = Pattern.compile("^\\{" +
+                                "\"uuid\": \"(.*)\", " +
+                                "\"name\": \"(.*)\", " +
+                                "\"dis\": \"(.*)\", " +
+                                "\"type\": \"(.*)\", " +
+                                "\"nbt\": \"(.*)\"}$"
+                        );
+                        matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            String uuid = matcher.group(1);
+                            String name = matcher.group(2);
+                            String dis = matcher.group(3);
+                            int type = Integer.parseInt(matcher.group(4));
+                            String nbt = matcher.group(5);
+                            assert (type == 3);
+                            ChatLib.showItem(type, name, dis, nbt);
+                            return;
+                        }
+
+                        // type 4, authenticate
+                        pattern = Pattern.compile("^\\{" +
+                                "\"uuid\": \"(.*)\", " +
+                                "\"name\": \"(.*)\", " +
+                                "\"type\": \"(.*)\", " +
+                                "\"ver\": \"(.*)\"}$"
+                        );
+                        matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            String uuid = matcher.group(1);
+                            String name = matcher.group(2);
+                            int type = Integer.parseInt(matcher.group(3));
+                            String ver = matcher.group(4);
+                            assert (type == 4);
+                            ChatLib.debug("Received ack.");
+                        }
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
                     disconnect();
@@ -72,13 +131,19 @@ public class ClientSocket {
     }
 
     public static void disconnect() {
-        ChatLib.chat("Disconnected from xc server. This may be caused by server updating. Trying to reconnect...");
+        ChatLib.debug("Disconnected from xc server. This may be caused by server updating. Trying to reconnect...");
         connected = false;
         connect();
     }
 
     public static void chat(String message) {
         out.println(message);
+        out.flush();
+    }
+
+    public static void authenticate() {
+        out.println(String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"type\": \"%d\", \"ver\": \"%s\"}",
+                mc.getSession().getProfile().getId().toString(), mc.getSession().getUsername(), 4, XiaojiaAddons.VERSION));
         out.flush();
     }
 }

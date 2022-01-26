@@ -25,6 +25,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.CoordsGB;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.KeyESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.LividESP;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.M4ESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Map;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.MapUpdater;
@@ -168,6 +169,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new CoordsGB());
         MinecraftForge.EVENT_BUS.register(new KeyESP());
         MinecraftForge.EVENT_BUS.register(new LividESP());
+        MinecraftForge.EVENT_BUS.register(new M4ESP());
         MinecraftForge.EVENT_BUS.register(new MimicWarn());
         MinecraftForge.EVENT_BUS.register(new ShowHiddenMobs());
         MinecraftForge.EVENT_BUS.register(new ShadowAssassinESP());
