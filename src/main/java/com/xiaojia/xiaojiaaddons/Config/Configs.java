@@ -393,7 +393,27 @@ public class Configs {
                     "§8Dark Gray", "§9Blue"})
     public static int ShadowAssassinESPColor = 0;
 
+    // KeyESP
+    @Property(type = Property.Type.FOLDER, name = "Wither/Blood Key ESP", parent = "Dungeons")
+    public static boolean KeyESPEnable = false;
 
+    @Property(type = Property.Type.SELECT, name = "Key ESP Type", parent = "Wither/Blood Key ESP",
+            options = {"Off", "Bounding Box", "Filled Box"})
+    public static int KeyESPType = 0;
+
+    @Property(type = Property.Type.SELECT, name = "Wither Key ESP Color", parent = "Wither/Blood Key ESP",
+            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
+                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
+                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
+                    "§8Dark Gray", "§9Blue"})
+    public static int WitherKeyColor = 12;
+
+    @Property(type = Property.Type.SELECT, name = "Blood Key ESP Color", parent = "Wither/Blood Key ESP",
+            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
+                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
+                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
+                    "§8Dark Gray", "§9Blue"})
+    public static int BloodKeyColor = 2;
 
     // BatESP
     @Property(type = Property.Type.FOLDER, name = "Bat ESP", parent = "Dungeons")

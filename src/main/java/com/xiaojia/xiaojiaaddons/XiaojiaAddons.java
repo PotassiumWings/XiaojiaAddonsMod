@@ -23,6 +23,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoTerminal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BatESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.CoordsGB;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.KeyESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.LividESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Map;
@@ -97,7 +98,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.3.4.3";
+    public static final String VERSION = "2.3.4.4";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -165,6 +166,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new BatESP());
         MinecraftForge.EVENT_BUS.register(new BloodAssist());
         MinecraftForge.EVENT_BUS.register(new CoordsGB());
+        MinecraftForge.EVENT_BUS.register(new KeyESP());
         MinecraftForge.EVENT_BUS.register(new LividESP());
         MinecraftForge.EVENT_BUS.register(new MimicWarn());
         MinecraftForge.EVENT_BUS.register(new ShowHiddenMobs());
