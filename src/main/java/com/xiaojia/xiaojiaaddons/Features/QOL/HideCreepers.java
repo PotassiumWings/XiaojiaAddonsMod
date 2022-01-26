@@ -21,7 +21,7 @@ public class HideCreepers {
         List<Entity> allEntities = getWorld().loadedEntityList;
         for (Entity entity : allEntities) {
             if (entity instanceof EntityCreeper) {
-                entity.setDead();
+                entity.posY = entity.lastTickPosY = 9999;
             }
         }
     }

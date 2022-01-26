@@ -62,10 +62,10 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "One Tick", parent = "QOL")
     public static boolean OneTick = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Aots With Anything (left click)", parent = "One Tick")
+    @Property(type = Property.Type.BOOLEAN, name = "Aots With Anything (left click/keybind)", parent = "One Tick")
     public static boolean AotsWithAnything = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Soul Whip With Anything (left click)", parent = "One Tick")
+    @Property(type = Property.Type.BOOLEAN, name = "Soul Whip With Anything (left click/keybind)", parent = "One Tick")
     public static boolean SoulWhipWithAnything = false;
 
     // AutoIsland
@@ -362,6 +362,10 @@ public class Configs {
                     "§8Dark Gray", "§9Blue"})
     public static int StarredMobESPColor = 1;
 
+    // TrapChestESP
+    @Property(type = Property.Type.BOOLEAN, name = "Trap Chest ESP", parent = "Dungeons")
+    public static boolean TrapChestESP = false;
+
     // ShowHiddenMobs
     @Property(type = Property.Type.FOLDER, name = "Show Hidden Mobs", parent = "Dungeons")
     public static boolean ShowHiddenMobsEnable = false;
@@ -374,6 +378,22 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Fels", parent = "Show Hidden Mobs")
     public static boolean ShowFels = false;
+
+    // ShadowAssassinESP
+    @Property(type = Property.Type.FOLDER, name = "Shadow Assassin ESP", parent = "Dungeons")
+    public static boolean ShadowAssassinESPEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Shadow Assassin ESP Box", parent = "Shadow Assassin ESP")
+    public static boolean ShadowAssassinESP = false;
+
+    @Property(type = Property.Type.SELECT, name = "Shadow Assassin ESP Color", parent = "Shadow Assassin ESP",
+            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
+                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
+                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
+                    "§8Dark Gray", "§9Blue"})
+    public static int ShadowAssassinESPColor = 0;
+
+
 
     // BatESP
     @Property(type = Property.Type.FOLDER, name = "Bat ESP", parent = "Dungeons")

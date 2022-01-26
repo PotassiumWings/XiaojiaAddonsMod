@@ -12,7 +12,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
 public class OneTick {
-    private final KeyBind keyBind = new KeyBind("One Tick", Keyboard.KEY_NONE);
+    private final KeyBind keyBind = new KeyBind("Left Click One Tick", Keyboard.KEY_NONE);
+    private final KeyBind useKeyBind = new KeyBind("One Tick", Keyboard.KEY_NONE);
     private boolean should = false;
 
     @SubscribeEvent
@@ -20,7 +21,10 @@ public class OneTick {
         if (!Checker.enabled) return;
         if (keyBind.isPressed()) {
             should = !should;
-            ChatLib.chat(should ? "One Tick &aactivated" : "One Tick &cdeactivated");
+            ChatLib.chat(should ? "Left Click One Tick &aactivated" : "Left Click One Tick &cdeactivated");
+        }
+        if (useKeyBind.isPressed()) {
+            oneTick();
         }
     }
 
@@ -30,7 +34,10 @@ public class OneTick {
         if (!should) return;
         if (ControlUtils.checkHoldingItem("Gloomlock Grimoire")) return;
         if (ControlUtils.checkHoldingItem("Gyrokinetic Wand")) return;
+        oneTick();
+    }
 
+    private void oneTick() {
         int cur = ControlUtils.getHeldItemIndex();
         int whipSlot = HotbarUtils.soulwhipSlot;
         int aotsSlot = HotbarUtils.aotsSlot;

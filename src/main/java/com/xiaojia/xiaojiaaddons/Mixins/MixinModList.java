@@ -16,10 +16,10 @@ import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 @Mixin({FMLHandshakeMessage.ModList.class})
 public abstract class MixinModList {
-    @Shadow
+    @Shadow(remap = false)
     private Map<String, String> modTags;
 
-    @Inject(method = "<init>(Ljava/util/List;)V", at = @At("RETURN"))
+    @Inject(method = "<init>(Ljava/util/List;)V", at = @At("RETURN"), remap = false)
     private void removeMod(List<ModContainer> modList, CallbackInfo ci) {
         if (mc.isSingleplayer()) return;
         if (!Configs.HideModID) return;

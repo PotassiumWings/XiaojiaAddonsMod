@@ -67,11 +67,11 @@ public class EntityQOL {
         for (Entity entity : allEntities) {
             if (isPlayer(entity)) {
                 if (Configs.HidePlayers && MathUtils.distanceSquareFromPlayer(entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius) {
-                    entity.setDead();
+                    entity.posY = entity.lastTickPosY = 9999;
                 }
             } else if (isSummon(entity)) {
                 if (Configs.HideSummons) {
-                    entity.setDead();
+                    entity.posY = entity.lastTickPosY = 9999;
                 }
             }
         }

@@ -30,10 +30,12 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.MapUpdater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.RoomLoader;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.TeleportMaze;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShadowAssassinESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShowHiddenMobs;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESPBox;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.TrapChestESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChatCopy;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
@@ -95,7 +97,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.3.4.2";
+    public static final String VERSION = "2.3.4.3";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -166,9 +168,11 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new LividESP());
         MinecraftForge.EVENT_BUS.register(new MimicWarn());
         MinecraftForge.EVENT_BUS.register(new ShowHiddenMobs());
+        MinecraftForge.EVENT_BUS.register(new ShadowAssassinESP());
         MinecraftForge.EVENT_BUS.register(new StarredMobESP());
         MinecraftForge.EVENT_BUS.register(new StarredMobESPBox());
         MinecraftForge.EVENT_BUS.register(new StonklessStonk());
+        MinecraftForge.EVENT_BUS.register(new TrapChestESP());
         // map
         MinecraftForge.EVENT_BUS.register(new Dungeon());
         MinecraftForge.EVENT_BUS.register(new MapUpdater());

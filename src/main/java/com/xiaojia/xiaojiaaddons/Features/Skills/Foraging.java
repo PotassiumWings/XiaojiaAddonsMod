@@ -180,6 +180,23 @@ public class Foraging {
                     }
                     ControlUtils.releaseLeftClick();
                     Thread.sleep(500);
+
+                    for (int i = 0; i < 6; i++) {
+                        Vector3f q = clearBlocks.get(i);
+                        if (!BlockUtils.isBlockAir(q.x, q.y, q.z)) {
+                            ControlUtils.face(q.x, q.y + 0.5F, q.z);
+                            ControlUtils.holdLeftClick();
+                            while (!BlockUtils.isBlockAir(q.x, q.y, q.z)) {
+                                if (!isAutoForaging) {
+                                    ControlUtils.releaseLeftClick();
+                                    return;
+                                }
+                                Thread.sleep(20);
+                            }
+                            ControlUtils.releaseLeftClick();
+                            lastTreecapTime = TimeUtils.curTime();
+                        }
+                    }
                 }
             } catch (Exception e) {
                 stopAutoForaging();

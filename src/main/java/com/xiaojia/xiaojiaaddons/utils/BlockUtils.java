@@ -25,8 +25,7 @@ public class BlockUtils {
 
     public static boolean canGhostBlock(Block block) {
         if (isInteractive(block)) return false;
-        if (block == Blocks.bedrock) return false;
-        return true;
+        return block != Blocks.bedrock;
     }
 
     public static Block getBlockAt(int x, int y, int z) {
