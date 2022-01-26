@@ -32,7 +32,7 @@ public class ClickScreenMaddox {
                 }
             }
             if (Configs.ClickScreenMaddox)
-                getPlayer().addChatMessage(new ChatComponentText("&aOpen chat then click anywhere on-screen to open Maddox"));
+                getPlayer().addChatMessage(new ChatComponentText(ChatLib.addColor("&aOpen chat then click anywhere on-screen to open Maddox")));
         }
     }
 

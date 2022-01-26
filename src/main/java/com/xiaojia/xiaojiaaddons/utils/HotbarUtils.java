@@ -41,30 +41,44 @@ public class HotbarUtils {
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null || inventory.getSize() != 45) return;
         List<ItemStack> items = inventory.getItemStacks().subList(36, 45);
-        terminatorSlot = emeraldBladeSlot = aotsSlot = soulwhipSlot = plasmaSlot =
-                healingwandSlot = gyroSlot = zombieswordSlot = gloomlockSlot =
-                        enchantedBoneMealSlot = boneMealSlot = treecapitatorSlot = saplingSlot = rodSlot = -1;
+        boolean terminator = false, emerald = false, aots = false, soulWhip = false, plasma = false,
+                healingWand = false, gyro = false, zombieSword = false, gloomlock = false,
+                ebm = false, bm = false, treecap = false, sapling = false, rod = false;
         for (int i = 0; i < 9; i++) {
             ItemStack item = items.get(i);
             if (item == null) continue;
             String name = item.hasDisplayName() ? item.getDisplayName() : item.getUnlocalizedName();
             String registryName = item.getItem().getRegistryName();
             if (name == null || name.toLowerCase().contains("air")) continue;
-            if (name.contains("Terminator")) terminatorSlot = i;
-            else if (name.contains("Giant's Sword") || name.contains("Emerald Blade")) emeraldBladeSlot = i;
-            else if (name.contains("Axe of the Shredded")) aotsSlot = i;
-            else if (name.contains("Soul Whip")) soulwhipSlot = i;
-            else if (name.contains("Plasmaflux")) plasmaSlot = i;
-            else if (name.contains("Wand of")) healingwandSlot = i;
-            else if (name.contains("Gyrokinetic Wand")) gyroSlot = i;
-            else if (name.contains("Zombie Sword")) zombieswordSlot = i;
-            else if (name.contains("Gloomlock Grimoire")) gloomlockSlot = i;
+            if (name.contains("Terminator")) {terminatorSlot = i; terminator = true;}
+            else if (name.contains("Giant's Sword") || name.contains("Emerald Blade")) {emeraldBladeSlot = i; emerald = true;}
+            else if (name.contains("Axe of the Shredded")) {aotsSlot = i; aots = true;}
+            else if (name.contains("Soul Whip")) {soulwhipSlot = i; soulWhip = true;}
+            else if (name.contains("Plasmaflux")) {plasmaSlot = i; plasma = true;}
+            else if (name.contains("Wand of")) {healingwandSlot = i; healingWand = true;}
+            else if (name.contains("Gyrokinetic Wand")) {gyroSlot = i; gyro = true;}
+            else if (name.contains("Zombie Sword")) {zombieswordSlot = i; zombieSword = true;}
+            else if (name.contains("Gloomlock Grimoire")) {gloomlockSlot = i; gloomlock = true;}
                 // auto foraging
-            else if (name.contains("Enchanted Bone Meal")) enchantedBoneMealSlot = i;
-            else if (name.contains("Bone Meal")) boneMealSlot = i;
-            else if (name.contains("Treecapitator")) treecapitatorSlot = i;
-            else if (name.contains("Sapling")) saplingSlot = i;
-            else if (registryName.toLowerCase().contains("rod")) rodSlot = i;
+            else if (name.contains("Enchanted Bone Meal")) {enchantedBoneMealSlot = i; ebm = true;}
+            else if (name.contains("Bone Meal")) {boneMealSlot = i; bm = true;}
+            else if (name.contains("Treecapitator")) {treecapitatorSlot = i; treecap = true;}
+            else if (name.contains("Sapling")) {saplingSlot = i; sapling = true;}
+            else if (registryName.toLowerCase().contains("rod")) {rodSlot = i; rod = true;}
         }
+        if (!terminator) terminatorSlot = -1;
+        if (!emerald) emeraldBladeSlot = -1;
+        if (!aots) aotsSlot = -1;
+        if (!soulWhip) soulwhipSlot = -1;
+        if (!plasma) plasmaSlot = -1;
+        if (!healingWand) healingwandSlot = -1;
+        if (!gyro) gyroSlot = -1;
+        if (!zombieSword) zombieswordSlot = -1;
+        if (!gloomlock) gloomlockSlot = -1;
+        if (!ebm) enchantedBoneMealSlot = -1;
+        if (!bm) boneMealSlot = -1;
+        if (!treecap) treecapitatorSlot = -1;
+        if (!sapling) saplingSlot = -1;
+        if (!rod) rodSlot = -1;
     }
 }
