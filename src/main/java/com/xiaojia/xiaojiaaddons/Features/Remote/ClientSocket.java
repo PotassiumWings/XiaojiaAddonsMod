@@ -98,7 +98,7 @@ public class ClientSocket {
                             String nbt = matcher.group(5);
                             assert (type == 3);
                             ChatLib.showItem(type, name, dis, nbt);
-                            return;
+                            continue;
                         }
 
                         // type 4, authenticate
