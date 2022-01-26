@@ -1,10 +1,13 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,7 +19,7 @@ public class ChatLib {
 
     public static void toggle() {
         toggleOff = !toggleOff;
-        ChatLib.chat((toggleOff? "&cDisabled" : "&aEnabled") + "&r&b xj chat!");
+        ChatLib.chat((toggleOff ? "&cDisabled" : "&aEnabled") + "&r&b xj chat!");
     }
 
     public static String removeFormatting(String text) {
@@ -37,31 +40,33 @@ public class ChatLib {
             text = "&9[XJA] > &b" + text;
             text = addColor(text);
             System.out.println(text);
-            EntityPlayerSP player = getPlayer();
-            if (player != null) {
-                IChatComponent component = new ChatComponentText(text);
-                player.addChatMessage(component);
-            }
+            IChatComponent component = new ChatComponentText(text);
+            addComponent(component);
+        }
+    }
+
+    public static void addComponent(IChatComponent component) {
+        try {
+            if (!MinecraftForge.EVENT_BUS.post(new ClientChatReceivedEvent((byte) 0, component)))
+                getPlayer().addChatMessage(component);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     // type=0: chat
     // type=1: yikes
     public static void xjchat(int type, String name, String chatMessage) {
+        if (!Checker.enabled) return;
         if (toggleOff) return;
         if (chatMessage == null) chatMessage = "null";
         String[] texts = chatMessage.split("\n");
         for (String text : texts) {
-//            if (type == 2) text = " ☠ &7" + text;
-
             text = "&bXJC > &r&8" + name + "&r&f: &r" + text;
             text = addColor(text);
             System.out.println(text);
-            EntityPlayerSP player = getPlayer();
-            if (player != null) {
-                IChatComponent component = new ChatComponentText(text);
-                player.addChatMessage(component);
-            }
+            IChatComponent component = new ChatComponentText(text);
+            addComponent(component);
         }
     }
 
@@ -85,5 +90,20 @@ public class ChatLib {
         Pattern pattern = Pattern.compile("((?<!\\\\))&(?![^0-9a-fklmnor]|$)");
         Matcher matcher = pattern.matcher(text);
         return matcher.replaceAll("\u00a7");
+    }
+
+    public static String removeColor(String text) {
+        if (text == null) return "";
+        Pattern pattern = Pattern.compile("((?<!\\\\))\u00a7(?![^0-9a-fklmnor]|$)");
+        Matcher matcher = pattern.matcher(text);
+        return matcher.replaceAll("&");
+    }
+
+    public static String getPrefix(String text) {
+        if (text == null) return "";
+        Pattern pattern = Pattern.compile("^(&[0-9a-fklmnor])*");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) return matcher.group(0);
+        return "&r";
     }
 }

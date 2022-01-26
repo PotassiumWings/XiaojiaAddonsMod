@@ -29,6 +29,10 @@ public class NBTUtils {
         return itemStack.getTooltip(mc.thePlayer, mc.gameSettings.advancedItemTooltips);
     }
 
+    public static String getUUID(ItemStack itemStack) {
+        return getStringFromExtraAttributes(itemStack, "uuid");
+    }
+
     public static boolean isItemRecombobulated(ItemStack itemStack) {
         return getIntFromExtraAttributes(itemStack, "rarity_upgrades") == 1;
     }

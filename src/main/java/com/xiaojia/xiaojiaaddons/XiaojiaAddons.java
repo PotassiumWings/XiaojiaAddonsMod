@@ -34,6 +34,8 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShowHiddenMobs;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESPBox;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChatCopy;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
@@ -63,6 +65,7 @@ import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
 import com.xiaojia.xiaojiaaddons.Features.Skills.GemstoneESP;
 import com.xiaojia.xiaojiaaddons.Features.Skills.JadeCrystalHelper;
 import com.xiaojia.xiaojiaaddons.Features.Skills.SuperPairs;
+import com.xiaojia.xiaojiaaddons.Features.Slayers.ClickScreenMaddox;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
@@ -92,7 +95,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.3.4.1";
+    public static final String VERSION = "2.3.4.2";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -114,6 +117,7 @@ public class XiaojiaAddons {
 
         Config.load();
         RoomLoader.load();
+        ItemRename.load();
         ClientSocket.connect();
 
         ClientCommandHandler.instance.registerCommand(new Command());
@@ -172,6 +176,9 @@ public class XiaojiaAddons {
         // puzzles
         MinecraftForge.EVENT_BUS.register(new TeleportMaze());
 
+        // Miscellaneous
+        MinecraftForge.EVENT_BUS.register(new ChatCopy());
+
         // QOL
         MinecraftForge.EVENT_BUS.register(new AutoCombine());
         MinecraftForge.EVENT_BUS.register(new AutoHarp());
@@ -206,6 +213,7 @@ public class XiaojiaAddons {
         // Slayer
         MinecraftForge.EVENT_BUS.register(new Sven());
         MinecraftForge.EVENT_BUS.register(new Voidgloom());
+        MinecraftForge.EVENT_BUS.register(new ClickScreenMaddox());
 
 //        MinecraftForge.EVENT_BUS.register(new ClickTest());
 

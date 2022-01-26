@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
@@ -24,6 +25,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,12 +60,10 @@ public class Command extends CommandBase {
             return;
         }
         String arg = strings[0];
+        String allArg = strings.length == 1 ? "" : String.join(" ", Arrays.copyOfRange(strings, 1, strings.length));
         switch (arg) {
             case "curmap":
                 ChatLib.chat(SkyblockUtils.getCurrentMap());
-                break;
-            case "debug":
-                XiaojiaAddons.setDebug();
                 break;
             case "s":
                 XiaojiaAddons.guiToOpen = new ConfigGui();
@@ -73,6 +74,32 @@ public class Command extends CommandBase {
                     Dungeon.message300 = String.join(" ", Arrays.copyOfRange(strings, 1, strings.length));
                     ChatLib.chat("Successfully set announce300 message to: " + Dungeon.message300);
                 }
+                break;
+            case "show":
+                String str = strings[1];
+                String[] toShow = null;
+                if (str.equals("dungarmor")) toShow = InCombatQOL.dungArmor;
+                if (str.equals("dungtrash")) toShow = InCombatQOL.dungTrash;
+                if (str.equals("runes")) toShow = InCombatQOL.runes;
+                if (toShow != null) {
+                    ChatLib.chat(Arrays.toString(toShow));
+                    break;
+                }
+            case "report":
+                Dungeon.showDungeonInfo();
+                break;
+            case "commands":
+                BatchCommands.execute();
+                break;
+            case "copy":
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(ChatLib.removeColor(allArg)), null);
+                break;
+            case "rename":
+                ItemRename.process(strings);
+                break;
+            // debug commands
+            case "debug":
+                XiaojiaAddons.setDebug();
                 break;
             case "tab":
                 TabUtils.printTab();
@@ -113,22 +140,6 @@ public class Command extends CommandBase {
             case "players":
                 Dungeon.showPlayers();
                 break;
-            case "show":
-                String str = strings[1];
-                String[] toShow = null;
-                if (str.equals("dungarmor")) toShow = InCombatQOL.dungArmor;
-                if (str.equals("dungtrash")) toShow = InCombatQOL.dungTrash;
-                if (str.equals("runes")) toShow = InCombatQOL.runes;
-                if (toShow != null) {
-                    ChatLib.chat(Arrays.toString(toShow));
-                    break;
-                }
-            case "report":
-                Dungeon.showDungeonInfo();
-                break;
-            case "commands":
-                BatchCommands.execute();
-                break;
             case "blood":
                 BloodAssist.showBloodMobs();
                 break;
@@ -162,7 +173,8 @@ public class Command extends CommandBase {
         return "&c/xj curmap&b for current map information.\n" +
                 "&c/xj s&b to open gui settings.\n" +
                 "&c/xj 300&b to see, and &c/xj 300 message&b to set announce300 message.\n" +
-                "&c/xj show dungarmor&b, &c/xj show dungtrash&b, and &c/xj show runes&b to show auto-sell dungeon armors/dungeon trash/runes seperately.";
+                "&c/xj show dungarmor&b, &c/xj show dungtrash&b, and &c/xj show runes&b to show auto-sell dungeon armors/dungeon trash/runes seperately.\n" +
+                "&c/xj rename&b to rename items.";
     }
 
     @Override

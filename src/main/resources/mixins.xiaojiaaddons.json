@@ -11,6 +11,8 @@
         "MixinWindowClick",
         "MixinPacket",
         "MixinGuiContainer",
-        "MixinMinecraft"
+        "MixinMinecraft",
+        "MixinModList",
+        "MixinItemStack"
     ]
 }

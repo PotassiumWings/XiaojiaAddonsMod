@@ -7,6 +7,13 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Hide XJA mod id")
     public static boolean HideModID = true;
 
+    // Miscellaneous
+    @Property(type = Property.Type.FOLDER, name = "Miscellaneous")
+    public static boolean MiscellaneousEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Chat Copy", parent = "Miscellaneous")
+    public static boolean ChatCopy = false;
+
     // Dragons
     @Property(type = Property.Type.FOLDER, name = "Dragon")
     public static boolean DragonEnabled = false;
@@ -507,6 +514,10 @@ public class Configs {
     // Slayer
     @Property(type = Property.Type.FOLDER, name = "Slayer")
     public static boolean SlayerEnabled = false;
+
+    // ClickScreenMaddox
+    @Property(type = Property.Type.BOOLEAN, name = "Click Screen Maddox", parent = "Slayer")
+    public static boolean ClickScreenMaddox = false;
 
     // Voidgloom
     @Property(type = Property.Type.FOLDER, name = "Voidgloom", parent = "Slayer")
