@@ -39,7 +39,9 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESPBox;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.TrapChestESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChatCopy;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
@@ -99,7 +101,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.3.4.6";
+    public static final String VERSION = "2.3.5";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -186,6 +188,8 @@ public class XiaojiaAddons {
 
         // Miscellaneous
         MinecraftForge.EVENT_BUS.register(new ChatCopy());
+        MinecraftForge.EVENT_BUS.register(new ColorName());
+        MinecraftForge.EVENT_BUS.register(new KeepSprint());
 
         // QOL
         MinecraftForge.EVENT_BUS.register(new AutoCombine());

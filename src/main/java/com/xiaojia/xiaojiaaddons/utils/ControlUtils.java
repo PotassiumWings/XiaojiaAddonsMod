@@ -37,6 +37,7 @@ public class ControlUtils {
     private static final KeyBind moveRightKeyBind = new KeyBind(mc.gameSettings.keyBindRight);
 
     private static final KeyBind sneakKeyBind = new KeyBind(mc.gameSettings.keyBindSneak);
+    private static final KeyBind sprintKeyBind = new KeyBind(mc.gameSettings.keyBindSprint);
 
     private static Inventory openedInventory = null;
 
@@ -249,6 +250,10 @@ public class ControlUtils {
 
     public static void holdLeftClick() {
         KeyBinding.setKeyBindState(attackKeyBind.mcKeyBinding().getKeyCode(), true);
+    }
+
+    public static void holdSprint() {
+        KeyBinding.setKeyBindState(sprintKeyBind.mcKeyBinding().getKeyCode(), true);
     }
 
     public static void releaseLeftClick() {

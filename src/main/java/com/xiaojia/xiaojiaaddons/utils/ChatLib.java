@@ -48,9 +48,14 @@ public class ChatLib {
     }
 
     public static void addComponent(IChatComponent component) {
+        addComponent(component, true);
+    }
+
+    public static void addComponent(IChatComponent component, boolean post) {
+        if (getPlayer() == null) return;
         try {
-            if (!MinecraftForge.EVENT_BUS.post(new ClientChatReceivedEvent((byte) 0, component)))
-                getPlayer().addChatMessage(component);
+            if (post && MinecraftForge.EVENT_BUS.post(new ClientChatReceivedEvent((byte) 0, component))) return;
+            getPlayer().addChatMessage(component);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,6 +80,8 @@ public class ChatLib {
     }
 
     public static void showItem(int type, String name, String displayName, String nbt){
+        if (!Checker.enabled) return;
+        if (toggleOff) return;
         if (type != 3) return;
         // show item
         String text = "&bXJC > &r&8" + name + "&r&f: &r" + "Showed item ";
@@ -87,6 +94,32 @@ public class ChatLib {
         itemComponent.setChatStyle(itemStyle);
 
         component.appendSibling(itemComponent);
+        addComponent(component);
+    }
+
+    public static void playerJoin(String name) {
+        if (!Checker.enabled) return;
+        if (toggleOff) return;
+        String text = "&bXJC > &r&8" + name + " &ejoined.";
+        text = addColor(text);
+        IChatComponent component = new ChatComponentText(text);
+        addComponent(component);
+    }
+
+    public static void playerLeft(String name) {
+        if (!Checker.enabled) return;
+        if (toggleOff) return;
+        String text = "&bXJC > &r&8" + name + " &eleft.";
+        text = addColor(text);
+        IChatComponent component = new ChatComponentText(text);
+        addComponent(component);
+    }
+
+    public static void showXJCMessage(String text) {
+        if (!Checker.enabled) return;
+        if (toggleOff) return;
+        text = addColor(text);
+        IChatComponent component = new ChatComponentText(text);
         addComponent(component);
     }
 

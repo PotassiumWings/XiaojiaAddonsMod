@@ -65,6 +65,7 @@ public class StonklessStonk {
         if (!Configs.StonklessStonkEnable) return;
         if (!should) return;
         if (isInPuzzle) return;
+        if (getPlayer() == null) return;
 
         float PI = (float) Math.PI;
         float px = MathUtils.getX(getPlayer()), py = MathUtils.getY(getPlayer()) + getPlayer().getEyeHeight(), pz = MathUtils.getZ(getPlayer());

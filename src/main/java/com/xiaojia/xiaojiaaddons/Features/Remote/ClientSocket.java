@@ -1,9 +1,9 @@
 package com.xiaojia.xiaojiaaddons.Features.Remote;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,10 +14,6 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
-
-import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class ClientSocket {
     private static PrintWriter out;
@@ -54,15 +50,21 @@ public class ClientSocket {
 
                         // linux, '\n' at last char
                         // WARN: '\r' if windows server!
-                        while (recv != 10) {
+                        int leftBracket = 0;
+                        if ((char) recv == '{') leftBracket++;
+                        else continue;
+                        while (leftBracket != 0) {
                             sb.append((char) recv);
                             recv = in.read();
+                            if ((char) recv == '{') leftBracket++;
+                            if ((char) recv == '}') leftBracket--;
                         }
+                        sb.append((char) recv);
 
                         String s = sb.toString();
                         ChatLib.debug(s);
 
-                        // type 0-2, normal chat / puzzle fail / death
+                        // type 0-2, normal chat / puzzle fail / death;
                         Pattern pattern = Pattern.compile("^\\{" +
                                 "\"uuid\": \"(.*)\", " +
                                 "\"name\": \"(.*)\", " +
@@ -116,6 +118,54 @@ public class ClientSocket {
                             String ver = matcher.group(4);
                             assert (type == 4);
                             ChatLib.debug("Received ack.");
+                            continue;
+                        }
+
+                        // type 5 join, 6 left
+                        pattern = Pattern.compile("^\\{" +
+                                "\"uuid\": \"(.*)\", " +
+                                "\"name\": \"(.*)\", " +
+                                "\"type\": \"(.*)\"}$"
+                        );
+                        matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            String uuid = matcher.group(1);
+                            String name = matcher.group(2);
+                            int type = Integer.parseInt(matcher.group(3));
+                            assert (type == 5 || type == 6);
+                            if (type == 5) ChatLib.playerJoin(name);
+                            else ChatLib.playerLeft(name);
+                            continue;
+                        }
+
+                        // type 7, xc online
+                        pattern = Pattern.compile("^\\{" +
+                                "\"type\": \"(.*)\", " +
+                                "\"msg\": \"((.|\\n)*)\"}$"
+                        );
+                        matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            int type = Integer.parseInt(matcher.group(1));
+                            String msg = matcher.group(2);
+                            assert (type == 7);
+                            ChatLib.showXJCMessage(msg);
+                            continue;
+                        }
+
+                        // type 8, color name
+                        pattern = Pattern.compile("^\\{" +
+                                "\"type\": \"(.*)\", " +
+                                "\"rank\": \"(.*)\", " +
+                                "\"color\": \"(.*)\"}$"
+                        );
+                        matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            int type = Integer.parseInt(matcher.group(1));
+                            String rank = matcher.group(2);
+                            String color = matcher.group(3);
+                            assert (type == 8);
+                            new Thread(() -> ColorName.setColorMap(rank, color)).start();
+                            continue;
                         }
                     }
                 } catch (Exception e) {
@@ -143,7 +193,7 @@ public class ClientSocket {
 
     public static void authenticate() {
         out.println(String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"type\": \"%d\", \"ver\": \"%s\"}",
-                mc.getSession().getProfile().getId().toString(), mc.getSession().getUsername(), 4, XiaojiaAddons.VERSION));
+                SessionUtils.getUUID(), SessionUtils.getName(), 4, XiaojiaAddons.VERSION));
         out.flush();
     }
 }

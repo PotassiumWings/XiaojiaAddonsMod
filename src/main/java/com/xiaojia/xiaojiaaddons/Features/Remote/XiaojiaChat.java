@@ -28,6 +28,17 @@ public class XiaojiaChat {
         new Thread(() -> ClientSocket.chat(body)).start();
     }
 
+    public static void queryOnline() {
+        String body = "{\"type\": \"7\"}";
+        new Thread(() -> ClientSocket.chat(body)).start();
+    }
+
+    public static void addRank(String name, String rank, String color) {
+        String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"person\": \"%s\", \"rank\": \"%s\", \"color\": \"%s\", \"type\": \"%d\"}",
+                getUUID(), getPlayer().getName(), name, rank, color, 8);
+        ChatLib.chat("body: " + body);
+        new Thread(() -> ClientSocket.chat(body)).start();
+    }
 
     public static String getUUID() {
         return mc.getSession().getProfile().getId().toString().replace("-", "");

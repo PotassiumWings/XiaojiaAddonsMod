@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ChatCopy {
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onMessageReceived(ClientChatReceivedEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.ChatCopy) return;

@@ -14,6 +14,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Chat Copy", parent = "Miscellaneous")
     public static boolean ChatCopy = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Keep Sprint", parent = "Miscellaneous")
+    public static boolean KeepSprint = false;
+
     // Dragons
     @Property(type = Property.Type.FOLDER, name = "Dragon")
     public static boolean DragonEnabled = false;
