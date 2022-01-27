@@ -38,12 +38,12 @@ public class M4ESP extends RenderEntityESP {
                 color = ColorUtils.realColors[Configs.SpiritBowColor];
                 height = 0.8F;
                 yOffset = -1.5F;
-                isFilled = Configs.SpiritBearESPType == 2;
+                isFilled = Configs.SpiritBowESPType == 2;
             } else {
                 color = ColorUtils.realColors[Configs.SpiritBearColor];
                 height = 2F;
                 yOffset = 1F;
-                isFilled = Configs.SpiritBowESPType == 2;
+                isFilled = Configs.SpiritBearESPType == 2;
             }
             hashMap.put("r", color.getRed());
             hashMap.put("g", color.getGreen());
