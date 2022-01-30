@@ -54,8 +54,9 @@ public class ChatLib {
     public static void addComponent(IChatComponent component, boolean post) {
         if (getPlayer() == null) return;
         try {
-            if (post && MinecraftForge.EVENT_BUS.post(new ClientChatReceivedEvent((byte) 0, component))) return;
-            getPlayer().addChatMessage(component);
+            ClientChatReceivedEvent event = new ClientChatReceivedEvent((byte) 0, component);
+            if (post && MinecraftForge.EVENT_BUS.post(event)) return;
+            getPlayer().addChatMessage(event.message);
         } catch (Exception e) {
             e.printStackTrace();
         }

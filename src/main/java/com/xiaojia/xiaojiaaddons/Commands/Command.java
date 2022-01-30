@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
@@ -138,7 +139,7 @@ public class Command extends CommandBase {
             case "entities":
                 List<Entity> list = getWorld().loadedEntityList;
                 for (Entity entity : list) {
-                    ChatLib.chat(entity.getName() + ", " + MathUtils.getPosString(entity));
+                    ChatLib.chat(entity.hasCustomName() + ", " + entity.getName() + ", " + MathUtils.getPosString(entity));
                 }
                 break;
             case "players":

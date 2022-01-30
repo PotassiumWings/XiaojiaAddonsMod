@@ -41,11 +41,15 @@ public class XiaojiaChat extends CommandBase {
             com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat.queryOnline();
             return;
         }
-        if (strings[0].equals("addrankaddrankaddrank") && SessionUtils.getUUID().replace("-", "").equals("1c6d48a96cb3465681382590ec82fa68")) {
+        if (strings[0].equals("addRank") && SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) {
             String color = strings[strings.length - 1];
             String name = strings[1];
             String rank = String.join(" ", Arrays.copyOfRange(strings, 2, strings.length - 1));
             com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat.addRank(name, rank, color);
+            return;
+        }
+        if (strings[0].equals("updateRanks")) {
+            com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat.addRank("", "", "");
             return;
         }
         com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat.chat(message, 0);

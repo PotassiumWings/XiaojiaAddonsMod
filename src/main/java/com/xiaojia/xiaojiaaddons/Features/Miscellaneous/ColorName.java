@@ -2,32 +2,264 @@ package com.xiaojia.xiaojiaaddons.Features.Miscellaneous;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Objects.Pair;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import net.minecraft.util.ChatComponentStyle;
+import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
+import net.minecraft.network.play.server.S3EPacketTeams;
+import net.minecraft.network.play.server.S45PacketTitle;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class ColorName {
     public static HashMap<String, String> colorMap;
     public static HashMap<String, String> rankMap;
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    // colorname chat
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onMessageReceived(ClientChatReceivedEvent event) {
         if (!Checker.enabled) return;
         if (event.type != 0) return;
+        if (!Configs.ColorNameChat) return;
         IChatComponent message = event.message.createCopy();
-        event.setCanceled(true);
-        ChatLib.addComponent(convert(message), false);
+        event.message = convert(message);
+//        event.setCanceled(true);
+////        System.err.println(message);
+//        ChatLib.addComponent(convert(message), false);
+    }
+
+    // colorname nametag
+    @SubscribeEvent
+    public void onPlayerJoin(EntityJoinWorldEvent event) {
+//    public void onTick(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.ColorNameNameTag) return;
+//        if (getWorld() == null) return;
+//        for (Entity entity: getWorld().loadedEntityList) {
+        if (event.entity instanceof EntityPlayer) {
+            EntityPlayer entity = (EntityPlayer) event.entity;
+//            if (!(entity instanceof EntityPlayer)) return;
+            Field nameField = null;
+            try {
+                nameField = EntityPlayer.class.getDeclaredField("displayname");
+            } catch (NoSuchFieldException e) {
+                return;
+            }
+            nameField.setAccessible(true);
+            try {
+                String displayName = entity.getDisplayName().getFormattedText();
+                String res = addColorName(displayName);
+                if (res.equals(displayName)) return;
+
+                nameField.set(entity, res);
+                ScorePlayerTeam team = mc.getNetHandler().getPlayerInfo(entity.getName()).getPlayerTeam();
+                team.setNamePrefix("");
+                team.setNameSuffix("");
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    // colorname scoreboard
+    @SubscribeEvent
+    public void onScoreBoardPacketReceived(PacketReceivedEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.ColorNameScoreboard) return;
+
+        if (event.packet instanceof S3EPacketTeams) {
+            S3EPacketTeams packet = (S3EPacketTeams) event.packet;
+
+            Field prefixField = null;
+            Field suffixField = null;
+            try {
+                prefixField = S3EPacketTeams.class.getDeclaredField("field_149319_c");
+                suffixField = S3EPacketTeams.class.getDeclaredField("field_149316_d");
+            } catch (NoSuchFieldException e) {
+                return;
+            }
+            prefixField.setAccessible(true);
+            suffixField.setAccessible(true);
+            try {
+                String prefix = (String) prefixField.get(packet);
+                String suffix = (String) suffixField.get(packet);
+                Pair<String, String> res = addColorNameToScoreboard(prefix, suffix);
+
+                prefixField.set(packet, res.getKey());
+                suffixField.set(packet, res.getValue());
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    // colorname title
+    @SubscribeEvent
+    public void onTitlePacketReceived(PacketReceivedEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.ColorNameTitle) return;
+
+        if (event.packet instanceof S45PacketTitle) {
+            S45PacketTitle packet = (S45PacketTitle) event.packet;
+
+            Field field = null;
+            try {
+                field = S45PacketTitle.class.getDeclaredField("field_179810_b");
+            } catch (NoSuchFieldException e) {
+                try {
+                    field = S45PacketTitle.class.getDeclaredField("message");
+                } catch (NoSuchFieldException e1) {
+                    return;
+                }
+            }
+            field.setAccessible(true);
+            try {
+                IChatComponent component = (IChatComponent) field.get(packet);
+                if (component != null) {
+                    field.set(packet, convert(component));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // colorname tooltip
+    @SubscribeEvent
+    public void onToolTip(ItemTooltipEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.ColorNameItem) return;
+        String uuid = NBTUtils.getUUID(event.itemStack);
+        if (uuid.equals("")) return;
+        List<String> lore = event.toolTip.stream().map(ColorName::addColorName).collect(Collectors.toList());
+        event.toolTip.clear();
+        event.toolTip.addAll(lore);
+    }
+
+    // colorname tab
+//    @SubscribeEvent
+//    public void onWorldLoad(WorldEvent.Load event) {
+//        if (!Checker.enabled) return;
+//        if (!Configs.ColorNameTab) return;
+//        if (true) return;
+//        NetworkPlayerInfo playerInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(SessionUtils.getUUID());
+//        if (playerInfo == null) {
+//            ChatLib.chat("player info is null!");
+//            return;
+//        }
+//        IChatComponent origin = playerInfo.getDisplayName();
+//        IChatComponent dst = convert(origin);
+//        ChatLib.chat("player info from " + origin + " to " + dst);
+//        playerInfo.setDisplayName(dst);
+//    }
+//
+//    @SubscribeEvent
+//    public void onPlayerJoin(EntityJoinWorldEvent event) {
+//        if (!Checker.enabled) return;
+//        if (!Configs.ColorNameTab) return;
+//        if (event.entity instanceof EntityPlayer) {
+//            ChatLib.chat(event.entity + " joined!");
+//            NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(event.entity.getUniqueID());
+//            if (playerInfo == null) {
+//                ChatLib.chat("player info is null for " + event.entity.getDisplayName());
+//                return;
+//            }
+//            ChatLib.chat(playerInfo + " owo");
+//            IChatComponent origin = playerInfo.getDisplayName();
+//            IChatComponent dst = convert(origin);
+//            ChatLib.chat("player info from " + origin + " to " + dst);
+//            playerInfo.setDisplayName(dst);
+//        }
+//    }
+//
+//    public static void getPlayerInfos() {
+//        for (EntityPlayer player: getWorld().playerEntities) {
+//            NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(player.getUniqueID());
+//            if (playerInfo == null || playerInfo.getDisplayName() == null) {
+//                ChatLib.chat("player info or displayName is null" + player.getDisplayName());
+//                return;
+//            }
+//            ChatLib.chat(playerInfo + " owo");
+//            IChatComponent origin = playerInfo.getDisplayName();
+//            IChatComponent dst = convert(origin);
+//            ChatLib.chat("player info from " + origin + " to " + dst);
+//            playerInfo.setDisplayName(dst);
+//        }
+//    }
+
+    @SubscribeEvent
+    public void onTabPacketReceived(PacketReceivedEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.ColorNameTab) return;
+
+        if (event.packet instanceof S38PacketPlayerListItem) {
+            S38PacketPlayerListItem packet = (S38PacketPlayerListItem) event.packet;
+            List<S38PacketPlayerListItem.AddPlayerData> list = packet.func_179767_a();
+            List<S38PacketPlayerListItem.AddPlayerData> newList = new ArrayList<>();
+//            StringBuilder out = new StringBuilder();
+            for (S38PacketPlayerListItem.AddPlayerData player : list) {
+                if (player.getDisplayName() == null) {
+                    newList.add(player);
+//                    out.append("null").append(", ");
+                    continue;
+                }
+                String name = player.getDisplayName().getUnformattedText();
+                String[] splits = name.split(" ");
+
+                // [YOUTUBE] Mxmimi (Mage I)
+                // PotassiumWings (DEAD)
+                int index = 0;
+                if (splits[0].matches("^\\[.*]$")) index = 1;
+                name = splits[index];
+
+                if (colorMap.containsKey(name)) {
+                    String s = player.getDisplayName().getFormattedText().replaceAll(name, colorMap.get(name) + name);
+                    IChatComponent component = new ChatComponentText(ChatLib.addColor(s));
+                    S38PacketPlayerListItem.AddPlayerData newPlayer = packet.new AddPlayerData(
+                            player.getProfile(), player.getPing(), player.getGameMode(), component
+                    );
+                    newList.add(newPlayer);
+                } else {
+                    newList.add(player);
+                }
+//                out.append(name).append(", ");
+            }
+
+            try {
+                Field field = null;
+                try {
+                    field = S38PacketPlayerListItem.class.getDeclaredField("players");
+                } catch (NoSuchFieldException e) {
+                    field = S38PacketPlayerListItem.class.getDeclaredField("field_179769_b");
+                }
+
+                field.setAccessible(true);
+                field.set(event.packet, newList);
+            } catch (Exception ignored) {
+            }
+//            ChatLib.chat(packet.func_179768_b() + ": " + out.toString());
+        }
     }
 
     public static void setColorMap(String rank, String color) {
@@ -35,12 +267,13 @@ public class ColorName {
         }).getType();
         rankMap = (new Gson()).fromJson(rank, type);
         colorMap = (new Gson()).fromJson(color, type);
+        cachedColorName.clear();
 //        for (String str: rankMap.keySet()) {
 //            ChatLib.chat(str + ": " + rankMap.get(str) + " " + colorMap.get(str) + str);
 //        }
     }
 
-    private static IChatComponent convert(IChatComponent message) {
+    public static IChatComponent convert(IChatComponent message) {
         List<IChatComponent> siblings = message.getSiblings();
         ChatStyle style = message.getChatStyle();
         if (siblings.isEmpty()) {
@@ -50,31 +283,68 @@ public class ColorName {
                 return component;
             } else {
                 System.out.println(message.getFormattedText());
-                ChatLib.chat("what is this ???");
+//                ChatLib.chat("what is this ???");
                 return message;
             }
         } else {
             int index = message.getFormattedText().indexOf(siblings.get(0).getFormattedText());
-            int i;
-            for (i = 0; i < siblings.size(); i++) {
-                IChatComponent component = siblings.get(i);
-                if (component.getChatStyle().getChatClickEvent() == null && component.getChatStyle().getChatHoverEvent() == null) {
-                    index += component.getFormattedText().length();
-                } else {
-                    break;
-                }
-            }
-            IChatComponent component = new ChatComponentText(addColorName(message.getFormattedText().substring(0, index)));
+            IChatComponent component = new ChatComponentText(message.getFormattedText().substring(0, index));
             component.setChatStyle(style);
-            for (; i < siblings.size(); i++) {
-                IChatComponent component1 = siblings.get(i);
-                component.appendSibling(convert(component1));
+            siblings.add(0, component);
+
+            siblings = compactSiblings(siblings);
+
+//            System.err.println(message.getFormattedText() + ", owo!");
+//            for (IChatComponent component1 : siblings) {
+//                System.err.println(component1.getFormattedText());
+//            }
+//            System.err.println("owo!");
+
+            IChatComponent res = null;
+            for (IChatComponent component1 : siblings) {
+                if (res == null) res = convert(component1);
+                else res.appendSibling(convert(component1));
             }
-            return component;
+            return res;
         }
     }
 
-    private static String addColorName(String message) {
+    private static List<IChatComponent> compactSiblings(List<IChatComponent> siblings) {
+        String str = "";
+        List<IChatComponent> res = new ArrayList<>();
+        for (int i = 0; i < siblings.size(); i++) {
+            IChatComponent component = siblings.get(i);
+            ClickEvent clickEvent = component.getChatStyle().getChatClickEvent();
+            HoverEvent hoverEvent = component.getChatStyle().getChatHoverEvent();
+            if ((clickEvent == null || clickEvent.getAction() == ClickEvent.Action.SUGGEST_COMMAND) && hoverEvent == null) {
+                str += component.getFormattedText();
+            } else {
+//                if (component.getChatStyle().getChatClickEvent() != null)
+//                    System.err.println(component + "click: " + component.getChatStyle().getChatClickEvent());
+//                if (component.getChatStyle().getChatHoverEvent() != null)
+//                    System.err.println(component + "hover: " + component.getChatStyle().getChatHoverEvent());
+                res.add(new ChatComponentText(str));
+                res.add(component);
+                str = "";
+            }
+        }
+        if (!str.equals("")) res.add(new ChatComponentText(str));
+        return res;
+    }
+
+    private static final HashMap<String, String> cachedColorName = new HashMap<>();
+
+    private static void addToCache(String src, String dst) {
+        if (cachedColorName.size() > 10000) cachedColorName.clear();
+        cachedColorName.put(src, dst);
+    }
+
+    // message: \u00a7
+    public static String addColorName(String message) {
+        if (message == null) return null;
+        if (colorMap == null) return message;
+        if (cachedColorName.containsKey(message)) return cachedColorName.get(message);
+
 //        System.err.println("msg: " + message);
         for (String name : colorMap.keySet()) {
             String color = colorMap.get(name);
@@ -91,6 +361,38 @@ public class ColorName {
             if (!rankMap.get(name).equals("")) dst = rankMap.get(name) + " " + dst;
             message = message.replace("\u1105", dst);
         }
-        return ChatLib.addColor(message);
+        String res = ChatLib.addColor(message);
+        addToCache(message, res);
+        return res;
+    }
+
+    private static Pair<String, String> addColorNameToScoreboard(String prefix, String suffix) {
+        // prefix: \u00a77WingP suffix: \u00a771234
+        // prefix: \u00a7e[M] \u00a7bPotassium suffix: \u00a7bWin \u00a7c(DEAD)
+        String noFormat = ChatLib.removeFormatting(prefix + suffix);
+        if (!noFormat.startsWith("[") || !noFormat.contains(" ")) return new Pair<>(prefix, suffix);
+        String part = noFormat.split(" ")[1];
+        String prefixPart = ChatLib.removeFormatting(prefix).split(" ")[1];
+        boolean shouldRemoveSuffixPrefixFormat = prefixPart.length() < part.length();
+//        ChatLib.chat("prefix: " + prefix);
+//        ChatLib.chat("suffix: " + suffix);
+//        ChatLib.chat("part: " + part);
+//        ChatLib.chat("prefixPart: " + prefixPart);
+        for (String name : colorMap.keySet()) {
+            if (name.contains(part)) {
+                String color = ChatLib.addColor(colorMap.get(name));
+                int index = prefix.indexOf(prefixPart);
+
+                String resPrefix = prefix.substring(0, index) + color + prefix.substring(index);
+                String resSuffix = suffix;
+                if (shouldRemoveSuffixPrefixFormat)
+                    resSuffix = color + suffix.substring(ChatLib.getPrefix(ChatLib.removeColor(suffix)).length());
+
+//                ChatLib.chat("resprefix: " + resPrefix);
+//                ChatLib.chat("ressuffix: " + resSuffix);
+                return new Pair<>(resPrefix, resSuffix);
+            }
+        }
+        return new Pair<>(prefix, suffix);
     }
 }

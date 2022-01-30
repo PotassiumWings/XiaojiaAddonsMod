@@ -4,7 +4,7 @@ import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class SessionUtils {
     public static String getUUID() {
-        return mc.getSession().getProfile().getId().toString();
+        return mc.getSession().getProfile().getId().toString().replace("-", "");
     }
 
     public static String getName() {

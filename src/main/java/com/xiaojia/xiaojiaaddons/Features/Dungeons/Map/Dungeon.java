@@ -376,7 +376,7 @@ public class Dungeon {
 
     public static void showRooms() {
         for (Room room : rooms) {
-            ChatLib.chat(room.name + " is at " + room.x + ", " + room.z);
+            ChatLib.chat(room.name + " is at " + room.x + ", " + room.z + ", core: " + room.core);
         }
     }
 

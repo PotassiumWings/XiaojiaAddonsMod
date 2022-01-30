@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Remote;
 
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -41,7 +42,7 @@ public class XiaojiaChat {
     }
 
     public static String getUUID() {
-        return mc.getSession().getProfile().getId().toString().replace("-", "");
+        return SessionUtils.getUUID();
     }
 
     // puzzle fail

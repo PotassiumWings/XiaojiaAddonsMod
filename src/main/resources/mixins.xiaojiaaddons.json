@@ -13,6 +13,7 @@
         "MixinGuiContainer",
         "MixinMinecraft",
         "MixinModList",
-        "MixinItemStack"
+        "MixinItemStack",
+        "MixinEntity"
     ]
 }

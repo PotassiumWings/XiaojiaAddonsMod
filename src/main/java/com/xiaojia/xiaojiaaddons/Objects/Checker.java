@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Remote.RemoteUtils;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.http.message.BasicNameValuePair;
@@ -43,14 +44,12 @@ public class Checker {
     @SubscribeEvent
     public void onTickCheck(TickEndEvent event) {
         long cur = TimeUtils.curTime();
-        if (getPlayer() == null) return;
-        if (getWorld() == null) return;
         if (cur - lastCheck > 30000) {
             lastCheck = cur;
             new Thread(() -> {
                 try {
                     List<BasicNameValuePair> list = new ArrayList<>();
-                    list.add(new BasicNameValuePair("uuid", XiaojiaChat.getUUID()));
+                    list.add(new BasicNameValuePair("uuid", SessionUtils.getUUID()));
                     list.add(new BasicNameValuePair("version", XiaojiaAddons.VERSION));
 
                     String permit = RemoteUtils.get("/xja/verify", list);

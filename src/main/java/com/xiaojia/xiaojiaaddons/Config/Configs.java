@@ -17,6 +17,29 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Keep Sprint", parent = "Miscellaneous")
     public static boolean KeepSprint = false;
 
+    // ColorName
+    @Property(type = Property.Type.FOLDER, name = "Color Name", parent = "Miscellaneous")
+    public static boolean ColorNameEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Color Name Chat", parent = "Color Name")
+    public static boolean ColorNameChat = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Color Name Tab", parent = "Color Name", description = "Only works in SkyBlock!")
+    public static boolean ColorNameTab = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Color Name Scoreboard", parent = "Color Name")
+    public static boolean ColorNameScoreboard = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Color Name Title", parent = "Color Name")
+    public static boolean ColorNameTitle = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Color Name NameTag", parent = "Color Name")
+    public static boolean ColorNameNameTag = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Color Name Item", parent = "Color Name")
+    public static boolean ColorNameItem = true;
+
+
     // Dragons
     @Property(type = Property.Type.FOLDER, name = "Dragon")
     public static boolean DragonEnabled = false;
