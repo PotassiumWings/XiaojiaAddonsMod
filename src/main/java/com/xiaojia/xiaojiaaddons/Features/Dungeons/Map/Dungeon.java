@@ -232,6 +232,7 @@ public class Dungeon {
                 Player newPlayer = new Player();
                 newPlayer.name = name;
                 newPlayer.isDead = dead;
+                newPlayer.fetchHead();
                 newPlayer.icon = dead ? null : "icon-" + iconNum;
                 newPlayer.className = className;
                 players.add(newPlayer);
@@ -752,19 +753,19 @@ public class Dungeon {
                 float y = room.z * 1.25F - checkSize / 4F;
 
                 if (room.checkmark.equals("green")) {
-                    if (Configs.DrawCheckMode == 1) RenderUtils.drawImage(greenCheck, x, y, checkSize, checkSize);
+                    if (Configs.DrawCheckMode == 1) RenderUtils.drawImage(greenCheck, x, y, 25, 25);
                     else if (Configs.DrawCheckMode == 2)
-                        RenderUtils.drawImage(newGreenCheck, x, y, checkSize, checkSize);
+                        RenderUtils.drawImage(newGreenCheck, x, y, 25, 25);
                     names.add(room.name);
                 }
                 if (room.checkmark.equals("white")) {
-                    if (Configs.DrawCheckMode == 1) RenderUtils.drawImage(whiteCheck, x, y, checkSize, checkSize);
+                    if (Configs.DrawCheckMode == 1) RenderUtils.drawImage(whiteCheck, x, y, 25, 25);
                     else if (Configs.DrawCheckMode == 2)
-                        RenderUtils.drawImage(newWhiteCheck, x, y, checkSize, checkSize);
+                        RenderUtils.drawImage(newWhiteCheck, x, y, 25, 25);
                     names.add(room.name);
                 }
                 if (room.checkmark.equals("failed")) {
-                    if (Configs.DrawCheckMode != 0) RenderUtils.drawImage(failedRoom, x, y, checkSize, checkSize);
+                    if (Configs.DrawCheckMode != 0) RenderUtils.drawImage(failedRoom, x, y, 25, 25);
                     names.add(room.name);
                 }
             }

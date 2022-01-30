@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -39,6 +40,11 @@ public class DisplayDayAndCoords {
         }
         if (Configs.DisplayDay) {
             DisplayLine line = new DisplayLine("Day " + worldDay);
+            line.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line);
+        }
+        if (Configs.DisplayPing) {
+            DisplayLine line = new DisplayLine("Ping: " + SkyblockUtils.getPing());
             line.setScale(Configs.DisplayScale / 20F);
             display.addLine(line);
         }

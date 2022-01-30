@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Vector2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -286,6 +287,7 @@ public class GuiUtils {
         GL11.glPushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
+        GL11.glLineWidth(Configs.BoxLineWidth);
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         RenderManager renderManager = mc.getRenderManager();
         GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ);

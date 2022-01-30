@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -139,10 +140,56 @@ public class SkyblockUtils {
         return ChatLib.removeFormatting(ScoreBoard.title).contains("SKYBLOCK");
     }
 
+    public static long ping = -1;
+    public static long[] pings = new long[]{-1, -1, -1, -1, -1};
+    public static int pingsIndex = 0;
+    private long lastPing;
+    private Thread pingThread;
+
+    public static int getPing() {
+        int cnt = 0;
+        int sum = 0;
+        for (long ping: pings) {
+            if (ping != -1) {
+                sum += ping;
+                cnt++;
+            }
+        }
+        if (cnt == 0) return -1;
+        return sum / cnt;
+    }
+
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!set || !XiaojiaAddons.isDebug())
             currentMap = updateCurrentMap();
+        if (isInSkyblock() && (pingThread == null || !pingThread.isAlive())) {
+            long cur = TimeUtils.curTime();
+            if (cur - lastPing > 1500) {
+                lastPing = cur;
+                pingThread = new Thread(() -> {
+                    ChatLib.say("/whereami");
+                    try {
+                        Thread.sleep(60000);
+                    } catch (InterruptedException e) {
+                        long ping = TimeUtils.curTime() - lastPing;
+                        pings[pingsIndex] = ping;
+                        pingsIndex = (pingsIndex + 1) % 5;
+                    }
+                });
+                pingThread.start();
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void pingChatReceived(ClientChatReceivedEvent event) {
+        if (event.type != 0) return;
+        if (ChatLib.removeFormatting(event.message.getUnformattedText()).startsWith("You are currently connected to server")
+                && pingThread != null && pingThread.isAlive()) {
+            pingThread.interrupt();
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent

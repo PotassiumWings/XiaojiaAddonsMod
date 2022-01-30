@@ -17,6 +17,10 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Keep Sprint", parent = "Miscellaneous")
     public static boolean KeepSprint = false;
 
+    @Property(type = Property.Type.NUMBER, name = "Box Line Width", parent = "Miscellaneous",
+            min = 1, max = 20, step = 1)
+    public static int BoxLineWidth = 5;
+
     // ColorName
     @Property(type = Property.Type.FOLDER, name = "Color Name", parent = "Miscellaneous")
     public static boolean ColorNameEnabled = false;
@@ -66,22 +70,25 @@ public class Configs {
     public static boolean NakePrevention = true;
 
     // DisplayDayAndCoords
-    @Property(type = Property.Type.FOLDER, name = "Day and Coords Display", parent = "QOL")
+    @Property(type = Property.Type.FOLDER, name = "Information Display", parent = "QOL")
     public static boolean DisplayDayAndCoords = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Display Day", parent = "Day and Coords Display")
+    @Property(type = Property.Type.BOOLEAN, name = "Display Day", parent = "Information Display")
     public static boolean DisplayDay = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Display Coords", parent = "Day and Coords Display")
+    @Property(type = Property.Type.BOOLEAN, name = "Display Ping", parent = "Information Display")
+    public static boolean DisplayPing = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Display Coords", parent = "Information Display")
     public static boolean DisplayCoords = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Display X", parent = "Day and Coords Display", step = 10)
+    @Property(type = Property.Type.NUMBER, name = "Display X", parent = "Information Display", step = 10)
     public static int DisplayDayX = 5;
 
-    @Property(type = Property.Type.NUMBER, name = "Display Y", parent = "Day and Coords Display", step = 10)
+    @Property(type = Property.Type.NUMBER, name = "Display Y", parent = "Information Display", step = 10)
     public static int DisplayDayY = 5;
 
-    @Property(type = Property.Type.NUMBER, name = "Display Scale", parent = "Day and Coords Display", min = 5, max = 100, step = 5)
+    @Property(type = Property.Type.NUMBER, name = "Display Scale", parent = "Information Display", min = 5, max = 100, step = 5)
     public static int DisplayScale = 20;
 
     // OneTick
@@ -774,9 +781,13 @@ public class Configs {
                     "§8Dark Gray", "§9Blue"})
     public static int PlayerNameColor = 5;
 
-    @Property(type = Property.Type.SELECT, name = "Self Icon Color", parent = "Map",
+    @Property(type = Property.Type.SELECT, name = "Self Icon Color", parent = "Map", description = "For Arrow Icon",
             options = {"Blue", "Green", "Red"})
     public static int SelfIconColor = 2;
+
+    @Property(type = Property.Type.SELECT, name = "Self Icon Border Color", parent = "Map", description = "For Avatar; Restart dungeon to load",
+            options = {"No Border", "Green", "Red", "Blue"})
+    public static int SelfIconBorderColor = 2;
 
     @Property(type = Property.Type.NUMBER, name = "Background Alpha", parent = "Map",
             min = 0, max = 255, step = 5)

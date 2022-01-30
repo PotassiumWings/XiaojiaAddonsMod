@@ -1,7 +1,9 @@
 package com.xiaojia.xiaojiaaddons.Features.Remote;
 
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import org.apache.http.Consts;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -38,10 +40,16 @@ public class RemoteUtils {
         }
     }
 
-    public static String get(String url, List<BasicNameValuePair> list) {
+    public static String get(String url, List<BasicNameValuePair> list, boolean addXiaojiaPrefix) {
         String response = null;
         try {
             HttpClientBuilder client = HttpClients.custom();
+            client.addInterceptorFirst((HttpRequestInterceptor) (request, context) -> {
+                if (!request.containsHeader("Pragma"))
+                    request.addHeader("Pragma", "no-cache");
+                if (!request.containsHeader("Cache-Control"))
+                    request.addHeader("Cache-Control", "no-cache");
+            });
             client.setUserAgent("XiaojiaAddons/" + XiaojiaAddons.VERSION);
             RequestConfig requestConfig = RequestConfig.custom()
                     .setConnectTimeout(20000)
@@ -49,13 +57,22 @@ public class RemoteUtils {
                     .setSocketTimeout(20000)
                     .build();
             String params = EntityUtils.toString(new UrlEncodedFormEntity(list, Consts.UTF_8));
-            HttpGet request = new HttpGet(baseURL + url + "?" + params);
+
+            String fullUrl = url;
+            if (params.length() > 0) fullUrl = fullUrl + "?" + params;
+            if (addXiaojiaPrefix) fullUrl = baseURL + fullUrl;
+
+            HttpGet request = new HttpGet(fullUrl);
             request.setConfig(requestConfig);
             response = EntityUtils.toString(client.build().execute(request).getEntity(), "UTF-8");
         } catch (Exception exception) {
             exception.printStackTrace();
         }
         return response;
+    }
+
+    public static String get(String url, List<BasicNameValuePair> list) {
+        return get(url, list, true);
     }
 
     public static String get(String url) {

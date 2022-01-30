@@ -63,10 +63,12 @@ public class BloodAssist {
 //            GuiUtils.disableESP();
 
             if (info == null || info.endX < 0) continue;
+            Color color = new Color(0, 255, 0);
+            if (info.shouldAttack) color = new Color(0, 0, 255);
             GuiUtils.enableESP();
             GuiUtils.drawBoundingBoxAtPos(
                     info.endX, info.endY + 1, info.endZ,
-                    new Color(0, 255, 0), 0.5F, 1F
+                    color, 0.5F, 1F
             );
             GuiUtils.disableESP();
 
@@ -74,7 +76,7 @@ public class BloodAssist {
             GuiUtils.drawLine(
                     (float) skull.posX, (float) skull.posY + 2, (float) skull.posZ,
                     info.endX, info.endY + 2, info.endZ,
-                    new Color(255, 0, 0), 2
+                    new Color(255, 0, 0), Configs.BoxLineWidth
             );
             GuiUtils.disableESP();
         }
@@ -132,6 +134,8 @@ public class BloodAssist {
                     zSpeed = (float) ((skull.posZ - info.startZ) / delta);
 
                     long remainTime = (spawnId >= 4 ? 2950 : 4875) - delta;
+                    int ping = SkyblockUtils.getPing();
+                    if (remainTime <= ping) info.shouldAttack = true;
                     info.endX = (float) skull.posX + remainTime * xSpeed;
                     info.endY = (float) (skull.posY + remainTime * ySpeed);
                     info.endZ = (float) (skull.posZ + remainTime * zSpeed);
@@ -215,6 +219,8 @@ public class BloodAssist {
         public double lastY = -1;
         public double lastZ = -1;
         public boolean isDead = false;
+
+        public boolean shouldAttack = false;
 
         public float endX = -1;
         public float endY = -1;
