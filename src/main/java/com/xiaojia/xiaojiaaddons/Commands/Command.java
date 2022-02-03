@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
+import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
@@ -157,9 +158,9 @@ public class Command extends CommandBase {
             case "reconnect":
                 ClientSocket.reconnect();
                 break;
-//            case "shoot":
-//                AutoShootCrystal.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
-//                break;
+            case "shoot":
+                AutoShootCrystal.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
+                break;
 //            case "click":
 //                ClickTest.setEnabled();
 //                break;

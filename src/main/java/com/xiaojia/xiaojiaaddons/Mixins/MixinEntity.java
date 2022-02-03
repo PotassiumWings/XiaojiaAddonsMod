@@ -25,7 +25,7 @@ public abstract class MixinEntity {
         if (!Checker.enabled || !Configs.ColorNameNameTag) return;
         if (str.equals(lastString)) ci.setReturnValue(lastResult);
         else {
-            String result = ColorName.addColorName(str);
+            String result = ColorName.addColorNameWithPrefix(str);
             lastResult = result;
             lastString = str;
             ci.setReturnValue(result);

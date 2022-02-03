@@ -335,8 +335,15 @@ public class ColorName {
     private static final HashMap<String, String> cachedColorName = new HashMap<>();
 
     private static void addToCache(String src, String dst) {
-        if (cachedColorName.size() > 10000) cachedColorName.clear();
+        if (cachedColorName.size() > 10000) {
+            ChatLib.chat("Color name cache too big! Clearing cache...");
+            cachedColorName.clear();
+        }
         cachedColorName.put(src, dst);
+    }
+
+    public static int getCacheSize() {
+         return cachedColorName.size();
     }
 
     // message: \u00a7
@@ -364,6 +371,27 @@ public class ColorName {
         String res = ChatLib.addColor(message);
         addToCache(message, res);
         return res;
+    }
+
+    public static String addColorNameWithPrefix(String message) {
+        if (message == null) return null;
+        if (colorMap == null) return message;
+        if (cachedColorName.containsKey(message)) return cachedColorName.get(message);
+        if (!message.contains("'s")) return addColorName(message);
+
+        String unformatted = ChatLib.removeFormatting(message);
+        for (String name : colorMap.keySet()) {
+            String color = colorMap.get(name);
+
+            if (unformatted.matches("\\[Lv[0-9]+] " + name + "'s.*")) {
+                String res = message.replace(name, color + name +
+                        ChatLib.getPrefix(ChatLib.removeColor(message.replaceAll(".*\\[.*] ", ""))));
+                res = ChatLib.addColor(res);
+                addToCache(message, res);
+                return res;
+            }
+        }
+        return addColorName(message);
     }
 
     private static Pair<String, String> addColorNameToScoreboard(String prefix, String suffix) {

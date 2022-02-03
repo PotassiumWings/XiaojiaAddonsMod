@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.QOL.AutoLobby;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class SkyblockUtils {
     private static final ArrayList<String> maps = new ArrayList<>(Arrays.asList(
@@ -140,13 +143,13 @@ public class SkyblockUtils {
         return ChatLib.removeFormatting(ScoreBoard.title).contains("SKYBLOCK");
     }
 
-    public static long ping = -1;
+    public static int calculatedPing = -1;
     public static long[] pings = new long[]{-1, -1, -1, -1, -1};
     public static int pingsIndex = 0;
     private long lastPing;
     private Thread pingThread;
 
-    public static int getPing() {
+    public static int calcPing() {
         int cnt = 0;
         int sum = 0;
         for (long ping: pings) {
@@ -157,6 +160,26 @@ public class SkyblockUtils {
         }
         if (cnt == 0) return -1;
         return sum / cnt;
+    }
+
+    public static int getPing() {
+        return calculatedPing;
+    }
+
+    public static double getAccelerate() {
+        return AutoLobby.getAccelerate();
+    }
+
+    public static double getMotionY() {
+        return getPlayer().motionY;
+    }
+
+    public static double getVelocity() {
+        return AutoLobby.getVelocity();
+    }
+
+    public static double getCurrentY() {
+        return AutoLobby.getCurrentY();
     }
 
     @SubscribeEvent
@@ -174,6 +197,7 @@ public class SkyblockUtils {
                     } catch (InterruptedException e) {
                         long ping = TimeUtils.curTime() - lastPing;
                         pings[pingsIndex] = ping;
+                        calculatedPing = calcPing();
                         pingsIndex = (pingsIndex + 1) % 5;
                     }
                 });

@@ -153,6 +153,7 @@ public class ChatLib {
         return matcher.replaceAll("&");
     }
 
+    // remove color first!
     public static String getPrefix(String text) {
         if (text == null) return "";
         Pattern pattern = Pattern.compile("^(&[0-9a-fklmnor])*");

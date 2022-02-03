@@ -6,6 +6,8 @@ import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.List;
+
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
@@ -38,6 +40,13 @@ public class XiaojiaChat {
         String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"person\": \"%s\", \"rank\": \"%s\", \"color\": \"%s\", \"type\": \"%d\"}",
                 getUUID(), getPlayer().getName(), name, rank, color, 8);
         ChatLib.chat("body: " + body);
+        new Thread(() -> ClientSocket.chat(body)).start();
+    }
+
+    public static void uploadLoot(String floor,int score, String chestType, List<String> loots) {
+        String lootsString = loots.stream().reduce("", (a, b) -> a.equals("") ? b : a + ", " + b);
+        String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"floor\": \"%s\", \"score\": \"%d\", \"chest\": \"%s\", \"loots\": \"%s\", \"type\": \"%d\"}",
+                getUUID(), getPlayer().getName(), floor, score, chestType, lootsString, 9);
         new Thread(() -> ClientSocket.chat(body)).start();
     }
 

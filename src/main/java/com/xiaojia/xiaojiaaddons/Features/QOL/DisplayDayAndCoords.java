@@ -1,10 +1,12 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
@@ -45,6 +47,11 @@ public class DisplayDayAndCoords {
         }
         if (Configs.DisplayPing) {
             DisplayLine line = new DisplayLine("Ping: " + SkyblockUtils.getPing());
+            line.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line);
+        }
+        if (SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) {
+            DisplayLine line = new DisplayLine("Cache size: " + ColorName.getCacheSize());
             line.setScale(Configs.DisplayScale / 20F);
             display.addLine(line);
         }

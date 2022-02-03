@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.Objects.StepEvent;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.StringUtils;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -34,18 +35,6 @@ public class AutoCombine extends StepEvent {
         put("Mana Steal", 3);
         put("Smarty Pants", 5);
     }};
-    private static final HashMap<String, Integer> romanToInteger = new HashMap<String, Integer>() {{
-        put("I", 1);
-        put("II", 2);
-        put("III", 3);
-        put("IV", 4);
-        put("V", 5);
-        put("VI", 6);
-        put("VII", 7);
-        put("VIII", 8);
-        put("IX", 9);
-        put("X", 10);
-    }};
 
     private static boolean isFusingBooks = false;
 
@@ -54,11 +43,7 @@ public class AutoCombine extends StepEvent {
     }
 
     private static int getEnchantLevel(String s) {
-        try {
-            return Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            return romanToInteger.get(s);
-        }
+        return StringUtils.getNumberFromRoman(s);
     }
 
     private static boolean haveItemsInAnvil() {

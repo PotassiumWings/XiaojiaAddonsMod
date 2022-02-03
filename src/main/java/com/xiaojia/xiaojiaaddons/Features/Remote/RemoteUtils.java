@@ -61,6 +61,7 @@ public class RemoteUtils {
             String fullUrl = url;
             if (params.length() > 0) fullUrl = fullUrl + "?" + params;
             if (addXiaojiaPrefix) fullUrl = baseURL + fullUrl;
+            else System.err.println(fullUrl);
 
             HttpGet request = new HttpGet(fullUrl);
             request.setConfig(requestConfig);

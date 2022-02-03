@@ -69,6 +69,10 @@ public class Configs {
             description = "When Auto-Swapping Armor")
     public static boolean NakePrevention = true;
 
+    // AutoLobby
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Lobby", parent = "QOL", description = "/l when falling to the void")
+    public static boolean AutoLobby = false;
+
     // DisplayDayAndCoords
     @Property(type = Property.Type.FOLDER, name = "Information Display", parent = "QOL")
     public static boolean DisplayDayAndCoords = false;
@@ -508,7 +512,7 @@ public class Configs {
     public static int AutoTerminalCD = 150;
 
     // AutoItemFrame
-    @Property(type = Property.Type.FOLDER, name = "Auto Devices", parent = "Dungeons", description = "Not tested dont use!")
+    @Property(type = Property.Type.FOLDER, name = "Auto Devices", parent = "Dungeons")
     public static boolean AutoDevices = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto P3-3 Arrows", parent = "Auto Devices")

@@ -45,6 +45,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
+import com.xiaojia.xiaojiaaddons.Features.QOL.AutoLobby;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoUseItem;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisplayDayAndCoords;
@@ -61,6 +62,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.RemoveBlindness;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
+import com.xiaojia.xiaojiaaddons.Features.Remote.DungeonLoot;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoCloseCrystalHollowsChest;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowder;
@@ -101,7 +103,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.3.5.2";
+    public static final String VERSION = "2.3.5.3";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -194,6 +196,7 @@ public class XiaojiaAddons {
         // QOL
         MinecraftForge.EVENT_BUS.register(new AutoCombine());
         MinecraftForge.EVENT_BUS.register(new AutoHarp());
+        MinecraftForge.EVENT_BUS.register(new AutoLobby());
         MinecraftForge.EVENT_BUS.register(new AutoIsland());
         MinecraftForge.EVENT_BUS.register(new AutoUseItem());
         MinecraftForge.EVENT_BUS.register(new BlockAbility());
@@ -226,6 +229,9 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new Sven());
         MinecraftForge.EVENT_BUS.register(new Voidgloom());
         MinecraftForge.EVENT_BUS.register(new ClickScreenMaddox());
+
+        // Remote
+        MinecraftForge.EVENT_BUS.register(new DungeonLoot());
 
 //        MinecraftForge.EVENT_BUS.register(new ClickTest());
 
