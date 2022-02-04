@@ -335,9 +335,9 @@ public class ColorName {
     private static final HashMap<String, String> cachedColorName = new HashMap<>();
 
     private static void addToCache(String src, String dst) {
-        if (cachedColorName.size() > 10000) {
-            ChatLib.chat("Color name cache too big! Clearing cache...");
+        if (cachedColorName.size() > 50000) {
             cachedColorName.clear();
+            ChatLib.chat("Color name cache too big! Clearing cache...");
         }
         cachedColorName.put(src, dst);
     }
