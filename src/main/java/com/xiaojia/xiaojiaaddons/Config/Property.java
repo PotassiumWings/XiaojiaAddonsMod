@@ -33,6 +33,6 @@ public @interface Property {
     String suffix() default "";
 
     enum Type {
-        BOOLEAN, NUMBER, SELECT, CHECKBOX, FOLDER
+        BOOLEAN, NUMBER, SELECT, FOLDER
     }
 }

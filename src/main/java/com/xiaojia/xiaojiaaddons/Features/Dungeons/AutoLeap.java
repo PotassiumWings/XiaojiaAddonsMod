@@ -50,9 +50,10 @@ public class AutoLeap {
                     names[i - 9] = "";
                     continue;
                 }
-                String name = ChatLib.removeFormatting(itemStack.getDisplayName());
+                String displayName = itemStack.getDisplayName();
+                String name = ChatLib.removeFormatting(displayName);
                 if (name.length() > 5) name = name.substring(0, 5);
-                names[i - 9] = name;
+                names[i - 9] = displayName.substring(0, displayName.indexOf(name) + name.length());
                 ChatLib.debug(i + " is " + name + ", id: " + Item.getIdFromItem(itemStack.getItem()));
             }
         }

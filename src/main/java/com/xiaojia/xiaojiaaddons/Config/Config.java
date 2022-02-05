@@ -31,7 +31,6 @@ public class Config {
             if (annotation == null) continue;
             switch (annotation.type()) {
                 case BOOLEAN:
-                case CHECKBOX:
                     settings.add(new BooleanSetting(annotation, field, annotation.type()));
                     break;
                 case NUMBER:

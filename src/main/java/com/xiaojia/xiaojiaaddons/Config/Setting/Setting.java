@@ -14,6 +14,11 @@ public class Setting {
     public Setting parent = null;
     public ArrayList<Setting> sons = new ArrayList<>();
 
+    public int x = -1;
+    public int y = -1;
+    public int width = 0;
+    public int height = 0;
+
     public Setting(Property annotation, Field field) {
         this.annotation = annotation;
         this.field = field;
@@ -46,5 +51,21 @@ public class Setting {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public ArrayList<Setting> getSons() {
+        ArrayList<Setting> res = new ArrayList<>();
+        for (Setting son: sons) {
+            if (son.sons.size() == 0) {
+                res.add(son);
+            }
+        }
+        for (Setting son: sons) {
+            if (son.sons.size() != 0) {
+                res.add(son);
+                res.addAll(son.getSons());
+            }
+        }
+        return res;
     }
 }

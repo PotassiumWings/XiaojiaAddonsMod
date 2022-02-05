@@ -18,7 +18,6 @@ public class Room {
     public int secrets;
     public int core;
     public String checkmark;
-    public boolean hasMimic;
     public int[] size;
     public boolean explored;
 
@@ -33,7 +32,6 @@ public class Room {
         this.size = new int[]{3, 3};
         this.checkmark = "";
         this.explored = true;
-        this.hasMimic = false;
     }
 
     private int getCore() {
@@ -46,8 +44,6 @@ public class Room {
     }
 
     public Color getColor() {
-        if (this.hasMimic && Configs.ShowMimicRoom)
-            return new Color(186, 66, 52, 255);
         switch (this.type) {
             case "puzzle":
                 return new Color(117, 0, 133, 255);

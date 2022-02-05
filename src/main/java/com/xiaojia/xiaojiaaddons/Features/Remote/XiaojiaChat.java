@@ -63,7 +63,7 @@ public class XiaojiaChat {
         if (unformattedMessage.startsWith("PUZZLE FAIL! " + getPlayer().getName())) {
             chat(message, 1);
         }
-        if (unformattedMessage.startsWith(" ☠ You")) {
+        if (unformattedMessage.startsWith(" ☠ You ")) {
             chat(message, 2);
         }
     }

@@ -75,8 +75,9 @@ public class ConfigGui extends GuiScreen {
                     x + settingNameWidth, y + 1, false);
             GlStateManager.translate(0.0D, -1.8D, 0.0D);
         }
-        if ((this.prevWidth != this.width || this.prevHeight != this.height))
+        if ((this.prevWidth != this.width || this.prevHeight != this.height)){
             mc.displayGuiScreen(new ConfigGui());
+        }
         this.prevWidth = this.width;
         this.prevHeight = this.height;
     }

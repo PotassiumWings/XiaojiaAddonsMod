@@ -130,7 +130,8 @@ public class Fishing {
                         ControlUtils.checkDirection(yaw, pitch, true);
                     }
 
-                    ControlUtils.unSneak();
+                    if (!shouldMove)
+                        ControlUtils.unSneak();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

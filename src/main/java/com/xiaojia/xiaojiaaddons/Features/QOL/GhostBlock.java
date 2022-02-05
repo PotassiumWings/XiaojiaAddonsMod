@@ -7,6 +7,7 @@ import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -22,6 +23,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class GhostBlock {
     private static final KeyBind ghostBlockKeyBind = new KeyBind("Ghost Block", Keyboard.KEY_NONE);
+    private long lastSwing = 0;
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -35,6 +37,10 @@ public class GhostBlock {
                 String heldItemName = heldItemStack.getDisplayName();
                 if (heldItemName.contains("Stonk") || heldItemName.contains("Pickaxe")) {
                     mc.theWorld.setBlockToAir(event.pos);
+                    if (lastSwing + 300 < TimeUtils.curTime()) {
+                        getPlayer().swingItem();
+                        lastSwing = TimeUtils.curTime();
+                    }
                     event.setCanceled(true);
                     if (XiaojiaAddons.isDebug()) ChatLib.chat("Created ghost block!");
                 }
@@ -50,8 +56,13 @@ public class GhostBlock {
             BlockPos lookingAtPos = getPlayer().rayTrace(mc.playerController.getBlockReachDistance(), 1.0F).getBlockPos();
             if (lookingAtPos != null) {
                 Block lookingAtBlock = getWorld().getBlockState(lookingAtPos).getBlock();
-                if (BlockUtils.canGhostBlock(lookingAtBlock))
+                if (BlockUtils.canGhostBlock(lookingAtBlock)) {
+                    if (lastSwing + 300 < TimeUtils.curTime()) {
+                        getPlayer().swingItem();
+                        lastSwing = TimeUtils.curTime();
+                    }
                     mc.theWorld.setBlockToAir(lookingAtPos);
+                }
             }
         }
     }
