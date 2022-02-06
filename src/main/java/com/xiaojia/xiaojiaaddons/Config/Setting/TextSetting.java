@@ -11,6 +11,6 @@ public class TextSetting extends Setting {
 
     @Override
     public boolean set(Object value) {
-        return super.set((String) value);
+        return super.set(value);
     }
 }

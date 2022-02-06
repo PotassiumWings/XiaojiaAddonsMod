@@ -80,7 +80,7 @@ public class ChatLib {
         }
     }
 
-    public static void showItem(int type, String name, String displayName, String nbt){
+    public static void showItem(int type, String name, String displayName, String nbt) {
         if (!Checker.enabled) return;
         if (toggleOff) return;
         if (type != 3) return;

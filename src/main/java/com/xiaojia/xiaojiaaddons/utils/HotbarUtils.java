@@ -50,21 +50,51 @@ public class HotbarUtils {
             String name = item.hasDisplayName() ? item.getDisplayName() : item.getUnlocalizedName();
             String registryName = item.getItem().getRegistryName();
             if (name == null || name.toLowerCase().contains("air")) continue;
-            if (name.contains("Terminator")) {terminatorSlot = i; terminator = true;}
-            else if (name.contains("Giant's Sword") || name.contains("Emerald Blade")) {emeraldBladeSlot = i; emerald = true;}
-            else if (name.contains("Axe of the Shredded")) {aotsSlot = i; aots = true;}
-            else if (name.contains("Soul Whip")) {soulwhipSlot = i; soulWhip = true;}
-            else if (name.contains("Plasmaflux")) {plasmaSlot = i; plasma = true;}
-            else if (name.contains("Wand of")) {healingwandSlot = i; healingWand = true;}
-            else if (name.contains("Gyrokinetic Wand")) {gyroSlot = i; gyro = true;}
-            else if (name.contains("Zombie Sword")) {zombieswordSlot = i; zombieSword = true;}
-            else if (name.contains("Gloomlock Grimoire")) {gloomlockSlot = i; gloomlock = true;}
-                // auto foraging
-            else if (name.contains("Enchanted Bone Meal")) {enchantedBoneMealSlot = i; ebm = true;}
-            else if (name.contains("Bone Meal")) {boneMealSlot = i; bm = true;}
-            else if (name.contains("Treecapitator")) {treecapitatorSlot = i; treecap = true;}
-            else if (name.contains("Sapling")) {saplingSlot = i; sapling = true;}
-            else if (registryName.toLowerCase().contains("rod")) {rodSlot = i; rod = true;}
+            if (name.contains("Terminator")) {
+                terminatorSlot = i;
+                terminator = true;
+            } else if (name.contains("Giant's Sword") || name.contains("Emerald Blade")) {
+                emeraldBladeSlot = i;
+                emerald = true;
+            } else if (name.contains("Axe of the Shredded")) {
+                aotsSlot = i;
+                aots = true;
+            } else if (name.contains("Soul Whip")) {
+                soulwhipSlot = i;
+                soulWhip = true;
+            } else if (name.contains("Plasmaflux")) {
+                plasmaSlot = i;
+                plasma = true;
+            } else if (name.contains("Wand of")) {
+                healingwandSlot = i;
+                healingWand = true;
+            } else if (name.contains("Gyrokinetic Wand")) {
+                gyroSlot = i;
+                gyro = true;
+            } else if (name.contains("Zombie Sword")) {
+                zombieswordSlot = i;
+                zombieSword = true;
+            } else if (name.contains("Gloomlock Grimoire")) {
+                gloomlockSlot = i;
+                gloomlock = true;
+            }
+            // auto foraging
+            else if (name.contains("Enchanted Bone Meal")) {
+                enchantedBoneMealSlot = i;
+                ebm = true;
+            } else if (name.contains("Bone Meal")) {
+                boneMealSlot = i;
+                bm = true;
+            } else if (name.contains("Treecapitator")) {
+                treecapitatorSlot = i;
+                treecap = true;
+            } else if (name.contains("Sapling")) {
+                saplingSlot = i;
+                sapling = true;
+            } else if (registryName.toLowerCase().contains("rod")) {
+                rodSlot = i;
+                rod = true;
+            }
         }
         if (!terminator) terminatorSlot = -1;
         if (!emerald) emeraldBladeSlot = -1;

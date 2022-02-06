@@ -19,6 +19,14 @@ public class Setting {
     public int width = 0;
     public int height = 0;
 
+    public Setting(Property annotation, Field field) {
+        this.annotation = annotation;
+        this.field = field;
+        this.name = annotation.name();
+        this.illegal = annotation.illegal();
+        this.description = annotation.description();
+    }
+
     public int hashCode() {
         return name.hashCode();
     }
@@ -28,14 +36,6 @@ public class Setting {
             return ((Setting) o).name.equals(name);
         }
         return false;
-    }
-
-    public Setting(Property annotation, Field field) {
-        this.annotation = annotation;
-        this.field = field;
-        this.name = annotation.name();
-        this.illegal = annotation.illegal();
-        this.description = annotation.description();
     }
 
     public int getIndent(int startingIndent) {
@@ -66,12 +66,12 @@ public class Setting {
 
     public ArrayList<Setting> getSons() {
         ArrayList<Setting> res = new ArrayList<>();
-        for (Setting son: sons) {
+        for (Setting son : sons) {
             if (son.sons.size() == 0) {
                 res.add(son);
             }
         }
-        for (Setting son: sons) {
+        for (Setting son : sons) {
             if (son.sons.size() != 0) {
                 res.add(son);
                 res.addAll(son.getSons());

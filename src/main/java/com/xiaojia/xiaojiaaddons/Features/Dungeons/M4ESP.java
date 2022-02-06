@@ -28,7 +28,7 @@ public class M4ESP extends RenderEntityESP {
         String name = ChatLib.removeFormatting(entity.getName());
         if (entity instanceof EntityArmorStand &&
                 (name.contains("Spirit Bear") && Configs.SpiritBearESPType != 0 ||
-                name.contains("Spirit Bow") && Configs.SpiritBowESPType != 0)) {
+                        name.contains("Spirit Bow") && Configs.SpiritBowESPType != 0)) {
             HashMap<String, Object> hashMap = new HashMap<>();
             Color color;
             float height;

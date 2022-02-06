@@ -19,13 +19,29 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class AutoLobby {
-    private long lastTime = 0;
-    private boolean isSending = false;
+    private final static double[] yCoordList = new double[]{-1, -1, -1, -1};
+    private final static long[] timeList = new long[]{-1, -1, -1, -1};
     private static double accelerate = 0;
     private static double velocity = 0;
     private static double currentY = 0;
-    private final static double[] yCoordList = new double[]{-1, -1, -1, -1};
-    private final static long[] timeList = new long[]{-1, -1, -1, -1};
+    private long lastTime = 0;
+    private boolean isSending = false;
+
+    public static double getAccelerate() {
+        return accelerate;
+    }
+
+    public static double getVelocity() {
+        return velocity;
+    }
+
+    public static double getCurrentY() {
+        return currentY;
+    }
+
+    public static boolean isFalling() {
+        return velocity < -8 && velocity + accelerate < -30;
+    }
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -69,7 +85,7 @@ public class AutoLobby {
 
     @SubscribeEvent
     public void onMessageReceived(ClientChatReceivedEvent event) {
-        if (ChatLib.removeFormatting(event.message.getUnformattedText()).startsWith("Sending to server ")){
+        if (ChatLib.removeFormatting(event.message.getUnformattedText()).startsWith("Sending to server ")) {
             isSending = true;
             for (int i = 0; i < yCoordList.length; i++) yCoordList[i] = timeList[i] = -1;
         }
@@ -78,21 +94,5 @@ public class AutoLobby {
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         isSending = false;
-    }
-
-    public static double getAccelerate() {
-        return accelerate;
-    }
-
-    public static double getVelocity() {
-        return velocity;
-    }
-
-    public static double getCurrentY() {
-        return currentY;
-    }
-
-    public static boolean isFalling() {
-        return velocity < -8 && velocity + accelerate < -30;
     }
 }

@@ -13,10 +13,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DungeonLoot {
+    private final List<String> loots = new ArrayList<>();
     private String floor;
     private int score = -1;
     private chestType type;
-    private final List<String> loots = new ArrayList<>();
 
     @SubscribeEvent
     public void onChatReceived(ClientChatReceivedEvent event) {
@@ -75,6 +75,6 @@ public class DungeonLoot {
     }
 
     enum chestType {
-        WOOD, DIAMOND, EMERALD, OBSIDIAN, BEDROCK;
+        WOOD, DIAMOND, EMERALD, OBSIDIAN, BEDROCK
     }
 }

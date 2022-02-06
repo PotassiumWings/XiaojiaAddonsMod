@@ -6,7 +6,6 @@ import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;

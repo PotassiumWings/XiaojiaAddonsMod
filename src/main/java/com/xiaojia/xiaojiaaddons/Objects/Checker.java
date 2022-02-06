@@ -3,7 +3,6 @@ package com.xiaojia.xiaojiaaddons.Objects;
 import com.google.gson.JsonParser;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Remote.RemoteUtils;
-import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
@@ -12,9 +11,6 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Checker {
     //    private static final HashSet<String> pool = new HashSet<>(Arrays.asList(

@@ -2,7 +2,6 @@ package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoLobby;
-import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -30,11 +29,16 @@ public class SkyblockUtils {
             "Magma Fields", "Crystal Nucleus",
             "Khazad", "Dragon's Lair"
     ));
+    public static int calculatedPing = -1;
+    public static long[] pings = new long[]{-1, -1, -1, -1, -1};
+    public static int pingsIndex = 0;
     private static String currentMap = "";
     private static String currentServer = "";
     private static boolean set = false;
     private static boolean isInCrystalHollows = false;
     private static String dungeon = "F6";
+    private long lastPing;
+    private Thread pingThread;
 
     private static String updateCurrentMap() {
         ArrayList<String> lines = ScoreBoard.getLines();
@@ -143,16 +147,10 @@ public class SkyblockUtils {
         return ChatLib.removeFormatting(ScoreBoard.title).contains("SKYBLOCK");
     }
 
-    public static int calculatedPing = -1;
-    public static long[] pings = new long[]{-1, -1, -1, -1, -1};
-    public static int pingsIndex = 0;
-    private long lastPing;
-    private Thread pingThread;
-
     public static int calcPing() {
         int cnt = 0;
         int sum = 0;
-        for (long ping: pings) {
+        for (long ping : pings) {
             if (ping != -1) {
                 sum += ping;
                 cnt++;

@@ -1,7 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Features.Remote;
 
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import org.apache.http.Consts;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.HttpClient;

@@ -3,7 +3,6 @@ package com.xiaojia.xiaojiaaddons.Config.ButtonsNew;
 import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Config.Setting.TextSetting;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;

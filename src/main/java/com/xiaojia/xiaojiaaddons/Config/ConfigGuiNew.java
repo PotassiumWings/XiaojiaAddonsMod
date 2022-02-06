@@ -2,7 +2,6 @@ package com.xiaojia.xiaojiaaddons.Config;
 
 import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.Button;
 import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.ClearTextButton;
-import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.SwitchInput;
 import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.TextInput;
 import com.xiaojia.xiaojiaaddons.Config.Setting.BooleanSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.FolderSetting;
@@ -25,18 +24,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class ConfigGuiNew extends GuiScreen {
-    // settings
-    private static ArrayList<Setting> settings;
-    private static ArrayList<Setting> firstCategory;
-    private static ArrayList<Setting> secondCategory;
-    private static Setting selectedFirstCategory = null;
-    private static Setting selectedSecondCategory = null;
     // wid, height
     private static final int guiWidth = 500;
     private static final int guiHeight = 260;
     private static final int titleHeight = 30;
     private static final int firstCategoryHeight = 23;
     private static final int secondCategoryWidth = 150;
+    // settings
+    private static ArrayList<Setting> settings;
+    private static ArrayList<Setting> firstCategory;
+    private static ArrayList<Setting> secondCategory;
+    private static Setting selectedFirstCategory = null;
+    private static Setting selectedSecondCategory = null;
+    // search bar
+    private static GuiTextField searchBar = null;
     // first line
     private final int iconHeight = 14;
     private final int gapBetween = 3;
@@ -52,15 +53,13 @@ public class ConfigGuiNew extends GuiScreen {
     private final int thirdGapBetween = 5;
     // color
     private final Color descriptionColor = new Color(0xaa, 0xaa, 0xaa, 240);
+    // text inputs
+    private final ArrayList<TextInput> textInputs = new ArrayList<>();
     // scroll
     private int secondScroll = 0;
     private int thirdScroll = 0;
     private int maxSecondScroll = 0;
     private int maxThirdScroll = 0;
-    // search bar
-    private static GuiTextField searchBar = null;
-    // text inputs
-    private final ArrayList<TextInput> textInputs = new ArrayList<>();
 
     public ConfigGuiNew() {
         getSettings();
@@ -87,7 +86,7 @@ public class ConfigGuiNew extends GuiScreen {
             String search = searchBar.getText().toLowerCase();
             settings = new ArrayList<>();
             HashSet<String> selectedSettings = new HashSet<>();
-            for (Setting setting: XiaojiaAddons.settings) {
+            for (Setting setting : XiaojiaAddons.settings) {
                 if (isFirstCategory(setting)) continue;
                 if (setting.name.toLowerCase().contains(search) ||
                         setting.description.toLowerCase().contains(search) ||
@@ -173,7 +172,7 @@ public class ConfigGuiNew extends GuiScreen {
         // other settings
         drawSettings();
         drawButtons(mc, mouseX, mouseY);
-        for (TextInput textInput: textInputs) {
+        for (TextInput textInput : textInputs) {
             textInput.draw();
         }
     }
@@ -353,13 +352,12 @@ public class ConfigGuiNew extends GuiScreen {
             setting.width = guiWidth - secondCategoryWidth - 2 * thirdGap;
             int line = getLines(setting.description);
             setting.height = 18 + 10 * line;
-            if (curY >= sy && curY + 14 < ty){
+            if (curY >= sy && curY + 14 < ty) {
                 if (setting instanceof TextSetting) {
                     TextInput textInput = new TextInput(this, (TextSetting) setting, setting.x, setting.y);
                     this.textInputs.add(textInput);
                     this.buttonList.add(new ClearTextButton(this, (TextSetting) setting, setting.x, setting.y));
-                }
-                else
+                } else
                     this.buttonList.add(Button.buttonFromSetting(this, setting, setting.x, setting.y));
             }
             curY += setting.height + thirdGapBetween;
@@ -382,7 +380,7 @@ public class ConfigGuiNew extends GuiScreen {
     protected void mouseClicked(int x, int y, int btn) throws IOException {
         super.mouseClicked(x, y, btn);
         searchBar.mouseClicked(x, y, btn);
-        for (TextInput textInput: textInputs) {
+        for (TextInput textInput : textInputs) {
             textInput.mouseClicked(x, y, btn);
         }
     }
@@ -396,7 +394,7 @@ public class ConfigGuiNew extends GuiScreen {
             getSettings();
             initGui();
         }
-        for (TextInput textInput: textInputs) {
+        for (TextInput textInput : textInputs) {
             if (textInput.isFocused()) {
                 textInput.keyTyped(c, i);
             }

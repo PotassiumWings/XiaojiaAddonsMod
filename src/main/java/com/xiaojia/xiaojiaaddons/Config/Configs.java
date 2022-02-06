@@ -74,7 +74,6 @@ public class Configs {
     public static boolean ColorNameItem = true;
 
 
-
     // Bestiary
     @Property(type = Property.Type.FOLDER, name = "Bestiary")
     public static boolean BestiaryEnabled = false;
@@ -506,7 +505,6 @@ public class Configs {
                     "Lower packet loss rate and better server \n" +
                     "equals better success rate.")
     public static boolean AutoHarp = false;
-
 
 
     // Dungeons

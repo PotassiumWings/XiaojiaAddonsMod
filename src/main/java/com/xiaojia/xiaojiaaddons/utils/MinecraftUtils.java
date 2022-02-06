@@ -1,8 +1,6 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.xiaojia.xiaojiaaddons.Features.Remote.RemoteUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -17,7 +15,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -71,7 +68,7 @@ public class MinecraftUtils {
 
     public static String getUUIDFromName(String name) {
         String url = "https://api.mojang.com/users/profiles/minecraft/" + name;
-        String response = RemoteUtils.get(url, new ArrayList<>(),false);
+        String response = RemoteUtils.get(url, new ArrayList<>(), false);
         MojangApi apiRet = new Gson().fromJson(response, MojangApi.class);
         String uuid = apiRet.id;
         System.err.println("Got uuid for name " + name + ": " + uuid);

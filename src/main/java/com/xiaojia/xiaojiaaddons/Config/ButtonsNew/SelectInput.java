@@ -17,7 +17,7 @@ public class SelectInput extends Button {
         super(gui, setting, x, y);
         this.setting = setting;
         int mx = 0;
-        for (String str: setting.options) {
+        for (String str : setting.options) {
             mx = Math.max(mx, mc.fontRendererObj.getStringWidth(str));
         }
         maxLen = mx;

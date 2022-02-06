@@ -6,7 +6,6 @@ import com.xiaojia.xiaojiaaddons.Config.Setting.FolderSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.NumberSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.SelectSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
-import com.xiaojia.xiaojiaaddons.Config.Setting.TextSetting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
@@ -19,11 +18,6 @@ public abstract class Button extends GuiButton {
         this.setting = setting;
         this.gui = gui;
     }
-
-    @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY) {}
-
-    public abstract void draw(Minecraft mc, int mouseX, int mouseY);
 
     public static Button buttonFromSetting(ConfigGuiNew gui, Setting setting, int x, int y) {
         switch (setting.annotation.type()) {
@@ -38,4 +32,10 @@ public abstract class Button extends GuiButton {
         }
         return null;
     }
+
+    @Override
+    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+    }
+
+    public abstract void draw(Minecraft mc, int mouseX, int mouseY);
 }

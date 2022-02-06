@@ -105,7 +105,7 @@ public class Player {
 
         float yaw = this.isDead ? 0 : this.yaw;
         this.size = isSelf && this.head != null && Configs.SelfIconBorderColor != 0 ?
-                new Vector2f(Configs.MapScale * Configs.HeadScale * 0.05f, Configs.MapScale * Configs.HeadScale * 0.05f):
+                new Vector2f(Configs.MapScale * Configs.HeadScale * 0.05f, Configs.MapScale * Configs.HeadScale * 0.05f) :
                 new Vector2f(Configs.MapScale * Configs.HeadScale * 0.04f, Configs.MapScale * Configs.HeadScale * 0.04f);
         Vector2f size = this.isDead ?
                 new Vector2f(Configs.MapScale * Configs.HeadScale * 0.03f, Configs.MapScale * Configs.HeadScale * 0.03f) :

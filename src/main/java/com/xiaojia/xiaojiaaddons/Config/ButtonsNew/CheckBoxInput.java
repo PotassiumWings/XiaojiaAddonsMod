@@ -1,9 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Config.ButtonsNew;
 
-import com.xiaojia.xiaojiaaddons.Config.Colors;
 import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Config.Setting.BooleanSetting;
-import com.xiaojia.xiaojiaaddons.utils.FontUtils;
 import net.minecraft.client.Minecraft;
 
 public class CheckBoxInput extends Button {
