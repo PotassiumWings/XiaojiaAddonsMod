@@ -954,14 +954,17 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Map", parent = "Illegal Map")
     public static boolean MapPart = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Map Enabled", parent = "Map")
+    @Property(type = Property.Type.BOOLEAN, name = "Map Enabled", parent = "Map",
+            description = "Need to be enabled to guarantee some dungeon features to work.")
     public static boolean MapEnabled = true;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Scan", parent = "Map")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Scan", parent = "Map",
+            description = "Auto Scans the map 0.5s per time when not fully scanned.")
     public static boolean AutoScan = true;
 
     @Property(type = Property.Type.BOOLEAN, name = "Chat Info", parent = "Map",
-            description = "Send chat when fully scanned")
+            description = "Send map messages in chat when fully scanned:\n" +
+                    "Puzzles, Trap type, Wither Doors, Total Secrets.")
     public static boolean ChatInfo = true;
 
     @Property(type = Property.Type.NUMBER, name = "Map Scale", parent = "Map", min = 1, max = 10)
@@ -979,25 +982,6 @@ public class Configs {
             min = 0, max = 1000, step = 5)
     public static int MapY = 0;
 
-    @Property(type = Property.Type.SELECT, name = "Show Player Names", parent = "Map",
-            options = {"Off", "Holding Leaps", "Always"})
-    public static int ShowPlayerNames = 0;
-
-    @Property(type = Property.Type.SELECT, name = "Player Name Color", parent = "Map",
-            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
-                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
-                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
-                    "§8Dark Gray", "§9Blue"})
-    public static int PlayerNameColor = 5;
-
-    @Property(type = Property.Type.SELECT, name = "Self Icon Color", parent = "Map", description = "For Arrow Icon",
-            options = {"Blue", "Green", "Red"})
-    public static int SelfIconColor = 2;
-
-    @Property(type = Property.Type.SELECT, name = "Self Icon Border Color", parent = "Map", description = "For Avatar; Restart dungeon to load",
-            options = {"No Border", "Green", "Red", "Blue"})
-    public static int SelfIconBorderColor = 2;
-
     @Property(type = Property.Type.NUMBER, name = "Background Alpha", parent = "Map",
             min = 0, max = 255, step = 5)
     public static int BackgroundAlpha = 15;
@@ -1005,6 +989,36 @@ public class Configs {
     @Property(type = Property.Type.SELECT, name = "Checkmark Image", parent = "Map",
             options = {"Off", "Dmap Image", "New Image"})
     public static int DrawCheckMode = 2;
+
+    // Player
+    @Property(type = Property.Type.FOLDER, name = "Players", parent = "Illegal Map")
+    public static boolean PlayerPart = false;
+
+    @Property(type = Property.Type.SELECT, name = "Show Player Names", parent = "Players",
+            options = {"Off", "Holding Leaps", "Always"})
+    public static int ShowPlayerNames = 0;
+
+    @Property(type = Property.Type.SELECT, name = "Player Name Color", parent = "Players",
+            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
+                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
+                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
+                    "§8Dark Gray", "§9Blue"})
+    public static int PlayerNameColor = 5;
+
+    @Property(type = Property.Type.SELECT, name = "Self Icon Color", parent = "Players",
+            description = "For Arrow Icon. \n" +
+                    "Normal players will show as blue icon,\n" +
+                    "and change this to set self icon color.\n" +
+                    "Arrow icons are loaded when players' avatars arent loaded successfully.\n" +
+                    "&cDon't nick in dungeons!",
+            options = {"Blue", "Green", "Red"})
+    public static int SelfIconColor = 2;
+
+    @Property(type = Property.Type.SELECT, name = "Self Icon Border Color", parent = "Players",
+            description = "Border color of Avatar.\n" +
+                    "Restart dungeon to reload changes.",
+            options = {"No Border", "Green", "Red", "Blue"})
+    public static int SelfIconBorderColor = 2;
 
     // Rooms
     @Property(type = Property.Type.FOLDER, name = "Rooms", parent = "Illegal Map")
@@ -1027,21 +1041,16 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Darken Unexplored", parent = "Rooms")
     public static boolean DarkenUnexplored = true;
 
-    @Property(type = Property.Type.FOLDER, name = "Show Room Name", parent = "Rooms")
-    public static boolean RoomNamesEnable = false;
-
-    @Property(type = Property.Type.BOOLEAN, name = "Trap Room Name", parent = "Show Room Name")
+    @Property(type = Property.Type.BOOLEAN, name = "Show Trap Room Name", parent = "Rooms")
     public static boolean ShowTrapName = true;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Puzzle Room Name", parent = "Show Room Name")
+    @Property(type = Property.Type.BOOLEAN, name = "Show Puzzle Room Name", parent = "Rooms")
     public static boolean ShowPuzzleName = true;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Normal Room Name", parent = "Show Room Name")
+    @Property(type = Property.Type.BOOLEAN, name = "Show Normal Room Name", parent = "Rooms",
+            description = "Can bind a keybinding to toggle.")
     public static boolean ShowNormalName = false;
 
-    //    @Property(type = Property.Type.SELECT, name = "Show Secrets", parent = "Rooms",
-//            options = {"Off", "Small", "Large", "Replace Checkmarks"})
-//    public static int ShowSecrets = 0;
     @Property(type = Property.Type.SELECT, name = "Show Secrets", parent = "Rooms",
             options = {"Off", "Small"})
     public static int ShowSecrets = 0;
@@ -1064,9 +1073,13 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Display Title for 300 announce", parent = "Score")
     public static boolean DisplayAnnounce300 = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Assume Spirit", parent = "Score")
-    public static boolean AssumeSpirit = true;
+    @Property(type = Property.Type.BOOLEAN, name = "Assume Spirit", parent = "Score",
+            description = "Assume first death only -1 score.\n" +
+                    "Will automatically check in future updates!")
+    public static boolean AssumeSpirit = true;  // TODO
 
-    @Property(type = Property.Type.BOOLEAN, name = "Assume Paul", parent = "Score")
+    @Property(type = Property.Type.BOOLEAN, name = "Assume Paul", parent = "Score",
+            description = "Assume paul's +10 point perk is active.\n" +
+                    "Will automatically check in future updates!")
     public static boolean AssumePaul = false;
 }

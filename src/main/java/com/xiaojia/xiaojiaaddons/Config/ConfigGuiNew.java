@@ -10,9 +10,12 @@ import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Mouse;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ConfigGuiNew extends GuiScreen {
@@ -39,6 +42,11 @@ public class ConfigGuiNew extends GuiScreen {
     private final int thirdGapBetween = 5;
     // color
     private final Color descriptionColor = new Color(0xaa, 0xaa, 0xaa, 240);
+    // scroll
+    private int secondScroll = 0;
+    private int thirdScroll = 0;
+    private int maxSecondScroll = 0;
+    private int maxThirdScroll = 0;
 
     public ConfigGuiNew() {
         getSettings();
@@ -175,49 +183,89 @@ public class ConfigGuiNew extends GuiScreen {
 
     private void drawSecondCategory() {
         for (Setting setting : secondCategory) {
-            if (setting == selectedSecondCategory)
-                drawGradientRect(setting.x, setting.y + 1,
-                        setting.x + setting.width, setting.y + setting.height,
-                        new Color(0x35, 0xFF, 0x35, 0x68).getRGB(),
-                        new Color(0x35, 0xFF, 0x35, 0x50).getRGB()
+            if (setting == selectedSecondCategory) {
+                if (isInSecondCategory(setting.y + 1) || isInSecondCategory(setting.y + setting.height))
+                    drawGradientRect(setting.x, Math.max(setting.y + 1, getStartY() + titleHeight + firstCategoryHeight),
+                            setting.x + setting.width, Math.min(setting.y + setting.height, getStartY() + guiHeight),
+                            new Color(0x35, 0xFF, 0x35, 0x68).getRGB(),
+                            new Color(0x35, 0xFF, 0x35, 0x50).getRGB()
+                    );
+            }
+            if (isInSecondCategory(setting.y + (lineHeight - 9) / 2 + 1, setting.y + (lineHeight - 9) / 2 + 1 + 9))
+                drawString(mc.fontRendererObj, setting.name,
+                        setting.x + (lineHeight - 9) / 2 + 1, setting.y + (lineHeight - 9) / 2 + 1,
+                        -1
                 );
-            drawString(mc.fontRendererObj, setting.name,
-                    setting.x + (lineHeight - 9) / 2 + 1, setting.y + (lineHeight - 9) / 2 + 1,
-                    -1
-            );
-            drawRect(setting.x, setting.y + setting.height, setting.x + setting.width, setting.y + setting.height + 1, -1);
+            if (isInSecondCategory(setting.y + setting.height, setting.y + setting.height + 1))
+                drawRect(setting.x, setting.y + setting.height, setting.x + setting.width, setting.y + setting.height + 1, -1);
         }
+    }
+
+    private boolean isInSecondCategory(int y1, int y2) {
+        int sy = getStartY() + titleHeight + firstCategoryHeight;
+        int ty = getStartY() + guiHeight;
+        return y1 >= sy && y2 >= y1 && ty >= y2;
+    }
+
+    private boolean isInSecondCategory(int y1) {
+        int sy = getStartY() + titleHeight + firstCategoryHeight;
+        int ty = getStartY() + guiHeight;
+        return y1 >= sy && ty >= y1;
     }
 
     private void drawSettings() {
         if (selectedSecondCategory != null) {
             int curX = getStartX() + (secondCategoryWidth + guiWidth) / 2;
-            int curY = getStartY() + titleHeight + firstCategoryHeight + 10;
-            for (String str: selectedSecondCategory.description.split("\n")) {
-                drawCenteredString(fontRendererObj, ChatLib.addColor(str), curX, curY, descriptionColor.getRGB());
+            int curY = getStartY() + titleHeight + firstCategoryHeight + thirdGap + thirdScroll;
+            for (String str : selectedSecondCategory.description.split("\n")) {
+                if (isInThirdCategory(curY, curY + 9))
+                    drawCenteredString(fontRendererObj, ChatLib.addColor(str), curX, curY, descriptionColor.getRGB());
                 curY += 10;
             }
         }
         for (Setting setting : settings) {
-            drawGradientRect(setting.x, setting.y,
-                    setting.x + setting.width, setting.y + setting.height,
-                    new Color(25, 25, 25, 95).getRGB(),
-                    new Color(25, 25, 25, 85).getRGB()
-            );
+            if (!(setting instanceof FolderSetting) && (isInThirdCategory(setting.y) || isInThirdCategory(setting.y + setting.height)))
+                drawGradientRect(setting.x, Math.max(setting.y, getStartY() + titleHeight + firstCategoryHeight),
+                        setting.x + setting.width, Math.min(setting.y + setting.height, getStartY() + guiHeight),
+                        new Color(25, 25, 25, 95).getRGB(),
+                        new Color(25, 25, 25, 85).getRGB()
+                );
             String str = setting.name;
             if (setting instanceof BooleanSetting && setting.get(Boolean.class)) str = "\u00a7a" + str;
 
-            drawString(fontRendererObj, str, setting.x + 5, setting.y + 4, new Color(255, 255, 255, 255).getRGB());
+            if (isInThirdCategory(setting.y + 4, setting.y + 4 + 10)) {
+                if (setting instanceof FolderSetting)
+                    drawCenteredString(fontRendererObj, str, getStartX() + (guiWidth + secondCategoryWidth) / 2, setting.y + 4, new Color(255, 255, 255, 255).getRGB());
+                else
+                    drawString(fontRendererObj, str, setting.x + 5, setting.y + 4, new Color(255, 255, 255, 255).getRGB());
+            }
             int curX = setting.x + 4, curY = setting.y + 14 + 4;
             for (String line : setting.description.split("\n")) {
-                drawString(fontRendererObj, ChatLib.addColor(line), curX, curY, descriptionColor.getRGB());
+                if (isInThirdCategory(curY, curY + 10)) {
+                    if (setting instanceof FolderSetting)
+                        drawCenteredString(fontRendererObj, ChatLib.addColor(line), getStartX() + (guiWidth + secondCategoryWidth) / 2, curY, descriptionColor.getRGB());
+                    else
+                        drawString(fontRendererObj, ChatLib.addColor(line), curX, curY, descriptionColor.getRGB());
+                }
                 curY += 10;
             }
         }
     }
 
+    private boolean isInThirdCategory(int y1, int y2) {
+        int sy = getStartY() + titleHeight + firstCategoryHeight + thirdGap;
+        int ty = getStartY() + guiHeight;
+        return y1 >= sy && y2 >= y1 && ty >= y2;
+    }
+
+    private boolean isInThirdCategory(int y1) {
+        int sy = getStartY() + titleHeight + firstCategoryHeight + thirdGap;
+        int ty = getStartY() + guiHeight;
+        return y1 >= sy && ty >= y1;
+    }
+
     private void drawButtons(Minecraft mc, int mouseX, int mouseY) {
-        for (GuiButton button: this.buttonList) {
+        for (GuiButton button : this.buttonList) {
             if (button instanceof Button) {
                 ((Button) button).draw(mc, mouseX, mouseY);
             }
@@ -228,6 +276,7 @@ public class ConfigGuiNew extends GuiScreen {
     public void initGui() {
         this.buttonList.clear();
 
+        // first category
         int gap = (firstCategoryHeight - iconHeight) / 2;
         int curX = getStartX() + gap, curY = getStartY() + titleHeight + gap;
         int insideGap = (iconHeight - fontRendererObj.FONT_HEIGHT) / 2;
@@ -241,21 +290,31 @@ public class ConfigGuiNew extends GuiScreen {
             curX += lineWidth + 2 * insideGap + gapBetween;
         }
 
+        // second category
+        int sy = getStartY() + titleHeight + firstCategoryHeight;
+        int ty = getStartY() + guiHeight;
         curX = getStartX();
-        curY = getStartY() + titleHeight + firstCategoryHeight;
+        curY = getStartY() + titleHeight + firstCategoryHeight + secondScroll;
+        maxSecondScroll = 1 + 1;
         for (Setting setting : secondCategory) {
             setting.x = curX;
             setting.y = curY;
             setting.width = secondCategoryWidth;
             setting.height = lineHeight;
-            this.buttonList.add(Button.buttonFromSetting(this, setting, setting.x, setting.y));
+            if (curY >= sy && curY + lineHeight < ty)
+                this.buttonList.add(Button.buttonFromSetting(this, setting, setting.x, setting.y));
             curY += lineHeight;
+            maxSecondScroll += lineHeight;
         }
 
+        // settings
         curX = getStartX() + secondCategoryWidth + thirdGap;
-        curY = getStartY() + titleHeight + firstCategoryHeight + thirdGap;
+        curY = getStartY() + titleHeight + firstCategoryHeight + thirdGap + thirdScroll;
+        maxThirdScroll = thirdGap;
         if (selectedSecondCategory != null && !selectedSecondCategory.description.equals("")) {
-            curY += getLines(selectedSecondCategory.description) * 10 + 5;
+            int descriptionY = getLines(selectedSecondCategory.description) * 10 + 5;
+            curY += descriptionY;
+            maxThirdScroll += descriptionY;
         }
         for (Setting setting : settings) {
             setting.x = curX;
@@ -263,20 +322,46 @@ public class ConfigGuiNew extends GuiScreen {
             setting.width = guiWidth - secondCategoryWidth - 2 * thirdGap;
             int line = getLines(setting.description);
             setting.height = 18 + 10 * line;
-            this.buttonList.add(Button.buttonFromSetting(this, setting, setting.x, setting.y));
+            if (curY >= sy && curY + 14 < ty)
+                this.buttonList.add(Button.buttonFromSetting(this, setting, setting.x, setting.y));
             curY += setting.height + thirdGapBetween;
+            maxThirdScroll += setting.height + thirdGapBetween;
         }
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        if (Mouse.getEventDWheel() != 0) {
+            int delta = Integer.signum(Mouse.getEventDWheel()) * 10;
+            ChatLib.chat(mouseX + ", " + mouseY + ", " + delta);
+            if (mouseY >= getStartY() + titleHeight + firstCategoryHeight && mouseY <= getStartY() + guiHeight) {
+                if (mouseX >= getStartX() && mouseX <= getStartX() + secondCategoryWidth) {
+                    // in second part
+                    secondScroll = MathHelper.clamp_int(secondScroll + delta,
+                            Math.min(0, guiHeight - firstCategoryHeight - titleHeight - maxSecondScroll), 0);
+                } else if (mouseX >= getStartX() + secondCategoryWidth && mouseX <= getStartX() + guiWidth) {
+                    // in third part
+                    thirdScroll = MathHelper.clamp_int(thirdScroll + delta,
+                            Math.min(0, guiHeight - firstCategoryHeight - titleHeight - maxThirdScroll), 0);
+                }
+            }
+            initGui();
+        }
+        super.handleMouseInput();
     }
 
     public void update(Setting setting, boolean val) {
         ChatLib.chat("clicked " + setting.name);
         if (isFirstCategory(setting)) {
+            secondScroll = thirdScroll = 0;
             if (val) {
                 selectedFirstCategory = setting;
                 selectedSecondCategory = null;
-            }
-            else selectedFirstCategory = selectedSecondCategory = null;
+            } else selectedFirstCategory = selectedSecondCategory = null;
         } else if (isSecondCategory(setting)) {
+            thirdScroll = 0;
             if (val) selectedSecondCategory = setting;
             else selectedSecondCategory = null;
         }
