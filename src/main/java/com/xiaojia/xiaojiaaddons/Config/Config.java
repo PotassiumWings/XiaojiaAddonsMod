@@ -7,6 +7,7 @@ import com.xiaojia.xiaojiaaddons.Config.Setting.FolderSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.NumberSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.SelectSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
+import com.xiaojia.xiaojiaaddons.Config.Setting.TextSetting;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 
 import java.io.File;
@@ -41,6 +42,9 @@ public class Config {
                     break;
                 case FOLDER:
                     settings.add(new FolderSetting(annotation, field));
+                    break;
+                case TEXT:
+                    settings.add(new TextSetting(annotation, field));
                     break;
             }
         }

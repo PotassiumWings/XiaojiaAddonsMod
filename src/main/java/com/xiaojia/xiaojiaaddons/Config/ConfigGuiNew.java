@@ -1,9 +1,13 @@
 package com.xiaojia.xiaojiaaddons.Config;
 
 import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.Button;
+import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.ClearTextButton;
+import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.SwitchInput;
+import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.TextInput;
 import com.xiaojia.xiaojiaaddons.Config.Setting.BooleanSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.FolderSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
+import com.xiaojia.xiaojiaaddons.Config.Setting.TextSetting;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
@@ -55,6 +59,8 @@ public class ConfigGuiNew extends GuiScreen {
     private int maxThirdScroll = 0;
     // search bar
     private static GuiTextField searchBar = null;
+    // text inputs
+    private final ArrayList<TextInput> textInputs = new ArrayList<>();
 
     public ConfigGuiNew() {
         getSettings();
@@ -80,14 +86,15 @@ public class ConfigGuiNew extends GuiScreen {
         if (searchBar != null && !searchBar.getText().equals("")) {
             String search = searchBar.getText().toLowerCase();
             settings = new ArrayList<>();
-            HashSet<Setting> selectedSettings = new HashSet<>();
+            HashSet<String> selectedSettings = new HashSet<>();
             for (Setting setting: XiaojiaAddons.settings) {
                 if (isFirstCategory(setting)) continue;
                 if (setting.name.toLowerCase().contains(search) ||
                         setting.description.toLowerCase().contains(search) ||
-                        selectedSettings.contains(setting.parent)) {
+                        selectedSettings.contains(setting.parent.name)) {
                     settings.add(setting);
-                    selectedSettings.add(setting);
+                    selectedSettings.add(setting.name);
+                    ChatLib.chat("added " + setting.name);
                 }
             }
         }
@@ -167,6 +174,9 @@ public class ConfigGuiNew extends GuiScreen {
         // other settings
         drawSettings();
         drawButtons(mc, mouseX, mouseY);
+        for (TextInput textInput: textInputs) {
+            textInput.draw();
+        }
     }
 
     private void drawSearchBar(int sx, int sy, int tx, int ty, int iconSize) {
@@ -295,6 +305,7 @@ public class ConfigGuiNew extends GuiScreen {
 
     @Override
     public void initGui() {
+        this.textInputs.clear();
         this.buttonList.clear();
 
         // first category
@@ -343,13 +354,19 @@ public class ConfigGuiNew extends GuiScreen {
             setting.width = guiWidth - secondCategoryWidth - 2 * thirdGap;
             int line = getLines(setting.description);
             setting.height = 18 + 10 * line;
-            if (curY >= sy && curY + 14 < ty)
-                this.buttonList.add(Button.buttonFromSetting(this, setting, setting.x, setting.y));
+            if (curY >= sy && curY + 14 < ty){
+                if (setting instanceof TextSetting) {
+                    TextInput textInput = new TextInput(this, (TextSetting) setting, setting.x, setting.y);
+                    this.textInputs.add(textInput);
+                    this.buttonList.add(new ClearTextButton(this, (TextSetting) setting, setting.x, setting.y));
+                }
+                else
+                    this.buttonList.add(Button.buttonFromSetting(this, setting, setting.x, setting.y));
+            }
             curY += setting.height + thirdGapBetween;
             maxThirdScroll += setting.height + thirdGapBetween;
         }
         if (searchBar == null) {
-            int gapIcon = (searchHeight - 9) / 2;
             searchBar = new GuiTextField(
                     1, fontRendererObj,
                     getStartX() + guiWidth - (titleHeight - 12) / 2 - searchWidth + searchHeight + 1,
@@ -366,15 +383,24 @@ public class ConfigGuiNew extends GuiScreen {
     protected void mouseClicked(int x, int y, int btn) throws IOException {
         super.mouseClicked(x, y, btn);
         searchBar.mouseClicked(x, y, btn);
+        for (TextInput textInput: textInputs) {
+            textInput.mouseClicked(x, y, btn);
+        }
     }
 
     protected void keyTyped(char c, int i) throws IOException {
         super.keyTyped(c, i);
         if (searchBar.isFocused()) {
             selectedFirstCategory = selectedSecondCategory = null;
+            thirdScroll = secondScroll = 0;
             searchBar.textboxKeyTyped(c, i);
             getSettings();
             initGui();
+        }
+        for (TextInput textInput: textInputs) {
+            if (textInput.isFocused()) {
+                textInput.keyTyped(c, i);
+            }
         }
     }
 
@@ -389,7 +415,6 @@ public class ConfigGuiNew extends GuiScreen {
         int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         if (Mouse.getEventDWheel() != 0) {
             int delta = Integer.signum(Mouse.getEventDWheel()) * 10;
-            ChatLib.chat(mouseX + ", " + mouseY + ", " + delta);
             if (mouseY >= getStartY() + titleHeight + firstCategoryHeight && mouseY <= getStartY() + guiHeight) {
                 if (mouseX >= getStartX() && mouseX <= getStartX() + secondCategoryWidth) {
                     // in second part
@@ -407,7 +432,6 @@ public class ConfigGuiNew extends GuiScreen {
     }
 
     public void update(Setting setting, boolean val) {
-        ChatLib.chat("clicked " + setting.name);
         if (isFirstCategory(setting)) {
             secondScroll = thirdScroll = 0;
             searchBar.setText("");

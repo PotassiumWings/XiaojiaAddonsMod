@@ -32,8 +32,6 @@ public @interface Property {
 
     String suffix() default "";
 
-    String text() default "";
-
     enum Type {
         BOOLEAN, NUMBER, SELECT, FOLDER, TEXT
     }

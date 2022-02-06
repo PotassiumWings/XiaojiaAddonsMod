@@ -35,8 +35,6 @@ public abstract class Button extends GuiButton {
                 return new NumberInput(gui, (NumberSetting) setting, x, y);
             case SELECT:
                 return new SelectInput(gui, (SelectSetting) setting, x, y);
-            case TEXT:
-                return new TextInput(gui, (TextSetting) setting, x, y);
         }
         return null;
     }

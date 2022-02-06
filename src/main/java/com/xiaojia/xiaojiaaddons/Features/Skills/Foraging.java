@@ -235,7 +235,8 @@ public class Foraging {
 
     private void stopAutoForaging() {
         if (!isAutoForaging) return;
-        getPlayer().playSound("random.successful_hit", 1000, 1);
+        if (getPlayer() != null)
+            getPlayer().playSound("random.successful_hit", 1000, 1);
         isAutoForaging = false;
         ChatLib.chat("Auto Foraging &cdeactivated");
     }

@@ -19,7 +19,7 @@ public class BooleanSetting extends Setting {
             }
             return super.set(value);
         } catch (Exception e) {
-            System.out.println("Filed to set " + name + " to " + value);
+            System.out.println("Failed to set " + name + " to " + value);
             e.printStackTrace();
             return false;
         }

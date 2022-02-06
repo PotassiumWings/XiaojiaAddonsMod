@@ -836,7 +836,7 @@ public class Dungeon {
         // Announce 300
         if (Configs.Announce300 && !said300 && score >= 300) {
             said300 = true;
-            CommandsUtils.addCommand("/pc " + message300);
+            CommandsUtils.addCommand("/pc " + Configs.Announce300Message);
         }
     }
 

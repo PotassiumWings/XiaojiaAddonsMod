@@ -1,6 +1,5 @@
 package com.xiaojia.xiaojiaaddons.Commands;
 
-import com.xiaojia.xiaojiaaddons.Config.ConfigGui;
 import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
@@ -69,11 +68,8 @@ public class Command extends CommandBase {
             case "curmap":
                 ChatLib.chat(SkyblockUtils.getCurrentMap());
                 break;
-            case "sn":
-                XiaojiaAddons.guiToOpen = new ConfigGuiNew();
-                break;
             case "s":
-                XiaojiaAddons.guiToOpen = new ConfigGui();
+                XiaojiaAddons.guiToOpen = new ConfigGuiNew();
                 break;
             case "300":
                 if (strings.length == 1) ChatLib.chat("announce300: " + Dungeon.message300);

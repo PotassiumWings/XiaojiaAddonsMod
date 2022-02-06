@@ -1073,6 +1073,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Display Title for 300 announce", parent = "Score")
     public static boolean DisplayAnnounce300 = false;
 
+    @Property(type = Property.Type.TEXT, name = "Announce 300 Message", parent = "Score")
+    public static String Announce300Message = "300 Score Reached!";
+
     @Property(type = Property.Type.BOOLEAN, name = "Assume Spirit", parent = "Score",
             description = "Assume first death only -1 score.\n" +
                     "Will automatically check in future updates!")
