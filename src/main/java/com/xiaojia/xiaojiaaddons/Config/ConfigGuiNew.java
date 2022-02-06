@@ -10,6 +10,7 @@ import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
@@ -17,6 +18,7 @@ import org.lwjgl.input.Mouse;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ConfigGuiNew extends GuiScreen {
     // settings
@@ -35,6 +37,10 @@ public class ConfigGuiNew extends GuiScreen {
     private final int iconHeight = 14;
     private final int gapBetween = 3;
     private final int insideGap = (iconHeight - 9) / 2 + 1;
+    // search bar
+    private final int searchWidth = 120;
+    private final int searchHeight = 14;
+    private final int secondGap = (firstCategoryHeight - searchHeight) / 2;
     // second category
     private final int lineHeight = 20;
     // third part
@@ -47,6 +53,8 @@ public class ConfigGuiNew extends GuiScreen {
     private int thirdScroll = 0;
     private int maxSecondScroll = 0;
     private int maxThirdScroll = 0;
+    // search bar
+    private static GuiTextField searchBar = null;
 
     public ConfigGuiNew() {
         getSettings();
@@ -67,8 +75,23 @@ public class ConfigGuiNew extends GuiScreen {
         }
         if (selectedFirstCategory != null) selectedFirstCategory.set(true);
         if (selectedSecondCategory != null) selectedSecondCategory.set(true);
-
         settings = selectedSecondCategory == null ? new ArrayList<>() : selectedSecondCategory.getSons();
+
+        if (searchBar != null && !searchBar.getText().equals("")) {
+            String search = searchBar.getText().toLowerCase();
+            settings = new ArrayList<>();
+            HashSet<Setting> selectedSettings = new HashSet<>();
+            for (Setting setting: XiaojiaAddons.settings) {
+                if (isFirstCategory(setting)) continue;
+                if (setting.name.toLowerCase().contains(search) ||
+                        setting.description.toLowerCase().contains(search) ||
+                        selectedSettings.contains(setting.parent)) {
+                    settings.add(setting);
+                    selectedSettings.add(setting);
+                }
+            }
+        }
+
         firstCategory = first;
         secondCategory = second;
     }
@@ -132,9 +155,6 @@ public class ConfigGuiNew extends GuiScreen {
                 startX + guiWidth - gap - closeIconSize, startY + gap
                 , closeIconSize, closeIconSize);
         // search bar
-        int searchWidth = 70;
-        int searchHeight = 12;
-        int secondGap = (firstCategoryHeight - searchHeight) / 2;
         drawSearchBar(
                 startX + guiWidth - gap - searchWidth, startY + titleHeight + secondGap,
                 startX + guiWidth - gap, startY + titleHeight + firstCategoryHeight - secondGap,
@@ -163,6 +183,7 @@ public class ConfigGuiNew extends GuiScreen {
                 tx - gap, sy + gap + iconSize + 1,
                 new Color(255, 255, 255, 255).getRGB()
         );
+        searchBar.drawTextBox();
     }
 
     private void drawFirstLine() {
@@ -327,6 +348,39 @@ public class ConfigGuiNew extends GuiScreen {
             curY += setting.height + thirdGapBetween;
             maxThirdScroll += setting.height + thirdGapBetween;
         }
+        if (searchBar == null) {
+            int gapIcon = (searchHeight - 9) / 2;
+            searchBar = new GuiTextField(
+                    1, fontRendererObj,
+                    getStartX() + guiWidth - (titleHeight - 12) / 2 - searchWidth + searchHeight + 1,
+                    getStartY() + titleHeight + secondGap + 2,
+                    searchWidth - searchHeight, searchHeight - 1
+            );
+            searchBar.setMaxStringLength(10);
+            searchBar.setEnableBackgroundDrawing(false);
+            searchBar.setText("");
+            searchBar.setFocused(false);
+        }
+    }
+
+    protected void mouseClicked(int x, int y, int btn) throws IOException {
+        super.mouseClicked(x, y, btn);
+        searchBar.mouseClicked(x, y, btn);
+    }
+
+    protected void keyTyped(char c, int i) throws IOException {
+        super.keyTyped(c, i);
+        if (searchBar.isFocused()) {
+            selectedFirstCategory = selectedSecondCategory = null;
+            searchBar.textboxKeyTyped(c, i);
+            getSettings();
+            initGui();
+        }
+    }
+
+    public void updateScreen() {
+        super.updateScreen();
+        searchBar.updateCursorCounter();
     }
 
     @Override
@@ -356,12 +410,14 @@ public class ConfigGuiNew extends GuiScreen {
         ChatLib.chat("clicked " + setting.name);
         if (isFirstCategory(setting)) {
             secondScroll = thirdScroll = 0;
+            searchBar.setText("");
             if (val) {
                 selectedFirstCategory = setting;
                 selectedSecondCategory = null;
             } else selectedFirstCategory = selectedSecondCategory = null;
         } else if (isSecondCategory(setting)) {
             thirdScroll = 0;
+            searchBar.setText("");
             if (val) selectedSecondCategory = setting;
             else selectedSecondCategory = null;
         }

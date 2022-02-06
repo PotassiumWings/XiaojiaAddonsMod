@@ -2,10 +2,7 @@ package com.xiaojia.xiaojiaaddons.Config.ButtonsNew;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Config.Setting.FolderSetting;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
-import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 
 public class FolderInput extends Button {
     public FolderSetting setting;
@@ -18,14 +15,6 @@ public class FolderInput extends Button {
     }
 
     public void draw(Minecraft mc, int mouseX, int mouseY) {
-//        GuiUtils.drawRotatedTexture(
-//                new ResourceLocation(XiaojiaAddons.MODID + ":chevron.png"),
-//                this.xPosition + this.width - this.height,
-//                this.yPosition,
-//                this.height,
-//                this.height,
-//                this.setting.get(Boolean.class) ? 180 : 0
-//        );
     }
 
     @Override

@@ -19,6 +19,17 @@ public class Setting {
     public int width = 0;
     public int height = 0;
 
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    public boolean equals(Object o) {
+        if (o instanceof Setting) {
+            return ((Setting) o).name.equals(name);
+        }
+        return false;
+    }
+
     public Setting(Property annotation, Field field) {
         this.annotation = annotation;
         this.field = field;
