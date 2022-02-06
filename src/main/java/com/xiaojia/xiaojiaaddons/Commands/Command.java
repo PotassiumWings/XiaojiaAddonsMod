@@ -70,13 +70,13 @@ public class Command extends CommandBase {
             case "s":
                 XiaojiaAddons.guiToOpen = new ConfigGuiNew();
                 break;
-            case "300":
-                if (strings.length == 1) ChatLib.chat("announce300: " + Dungeon.message300);
-                else {
-                    Dungeon.message300 = String.join(" ", Arrays.copyOfRange(strings, 1, strings.length));
-                    ChatLib.chat("Successfully set announce300 message to: " + Dungeon.message300);
-                }
-                break;
+//            case "300":
+//                if (strings.length == 1) ChatLib.chat("announce300: " + Dungeon.message300);
+//                else {
+//                    Dungeon.message300 = String.join(" ", Arrays.copyOfRange(strings, 1, strings.length));
+//                    ChatLib.chat("Successfully set announce300 message to: " + Dungeon.message300);
+//                }
+//                break;
             case "show":
                 String str = strings[1];
                 String[] toShow = null;
@@ -175,9 +175,10 @@ public class Command extends CommandBase {
 
     private String getUsage() {
 //        return "/xj curmap for current map information.\n/xj debug to debug.\n/xj s to open gui settings";
-        return "&c/xj curmap&b for current map information.\n" +
+        return "" +
+//                "&c/xj curmap&b for current map information.\n" +
                 "&c/xj s&b to open gui settings.\n" +
-                "&c/xj 300&b to see, and &c/xj 300 message&b to set announce300 message.\n" +
+//                "&c/xj 300&b to see, and &c/xj 300 message&b to set announce300 message.\n" +
                 "&c/xj show dungarmor&b, &c/xj show dungtrash&b, and &c/xj show runes&b to show auto-sell dungeon armors/dungeon trash/runes seperately.\n" +
                 "&c/xj rename&b to rename items.\n" +
                 "&c/xj showitem&b to show held item.";
