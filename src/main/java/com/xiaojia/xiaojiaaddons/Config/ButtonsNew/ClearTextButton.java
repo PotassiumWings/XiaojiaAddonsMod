@@ -3,7 +3,6 @@ package com.xiaojia.xiaojiaaddons.Config.ButtonsNew;
 import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Config.Setting.TextSetting;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -15,7 +14,7 @@ public class ClearTextButton extends Button {
     public ClearTextButton(ConfigGuiNew gui, TextSetting setting, int x, int y) {
         super(gui, setting, x, y);
         sx = x + setting.width - 5 - 150 - 15;
-        sy = y + 2;
+        sy = y + 4;
     }
 
     @Override
@@ -28,7 +27,6 @@ public class ClearTextButton extends Button {
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
         if (hover(mouseX, mouseY)) {
             setting.set("");
-            ChatLib.chat("mouse pressed, " + setting.get(String.class));
             gui.update(setting, true);
             return true;
         }

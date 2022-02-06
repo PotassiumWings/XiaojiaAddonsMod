@@ -37,7 +37,7 @@ public class GhostBlock {
                 String heldItemName = heldItemStack.getDisplayName();
                 if (heldItemName.contains("Stonk") || heldItemName.contains("Pickaxe")) {
                     mc.theWorld.setBlockToAir(event.pos);
-                    if (lastSwing + 200 < TimeUtils.curTime()) {
+                    if (lastSwing + 250 < TimeUtils.curTime()) {
                         getPlayer().swingItem();
                         lastSwing = TimeUtils.curTime();
                     }
@@ -57,7 +57,7 @@ public class GhostBlock {
             if (lookingAtPos != null) {
                 Block lookingAtBlock = getWorld().getBlockState(lookingAtPos).getBlock();
                 if (BlockUtils.canGhostBlock(lookingAtBlock)) {
-                    if (lastSwing + 200 < TimeUtils.curTime()) {
+                    if (lastSwing + 250 < TimeUtils.curTime()) {
                         getPlayer().swingItem();
                         lastSwing = TimeUtils.curTime();
                     }

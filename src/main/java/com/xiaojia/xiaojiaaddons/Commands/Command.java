@@ -68,7 +68,8 @@ public class Command extends CommandBase {
                 ChatLib.chat(SkyblockUtils.getCurrentMap());
                 break;
             case "s":
-                XiaojiaAddons.guiToOpen = new ConfigGuiNew();
+                XiaojiaAddons.guiToOpen = new ConfigGuiNew(XiaojiaAddons.mc.gameSettings.guiScale);
+                XiaojiaAddons.mc.gameSettings.guiScale = 3;
                 break;
 //            case "300":
 //                if (strings.length == 1) ChatLib.chat("announce300: " + Dungeon.message300);

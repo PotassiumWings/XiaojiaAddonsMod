@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Config;
 
 import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.Button;
 import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.ClearTextButton;
+import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.CloseButton;
 import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.TextInput;
 import com.xiaojia.xiaojiaaddons.Config.Setting.BooleanSetting;
 import com.xiaojia.xiaojiaaddons.Config.Setting.FolderSetting;
@@ -60,9 +61,15 @@ public class ConfigGuiNew extends GuiScreen {
     private int thirdScroll = 0;
     private int maxSecondScroll = 0;
     private int maxThirdScroll = 0;
+    // close icon
+    private final int closeIconSize = 12;
 
-    public ConfigGuiNew() {
+    // GUI scale
+    private final int startScale;
+
+    public ConfigGuiNew(int startScale) {
         getSettings();
+        this.startScale = startScale;
     }
 
     private static void getSettings() {
@@ -146,7 +153,6 @@ public class ConfigGuiNew extends GuiScreen {
         );
 
         // Xiaojia Addons
-        int closeIconSize = 12;
         int gap = (titleHeight - closeIconSize) / 2;
         String titleString = "XiaojiaAddons - " + XiaojiaAddons.VERSION;
         drawCenteredString(
@@ -306,8 +312,17 @@ public class ConfigGuiNew extends GuiScreen {
         this.textInputs.clear();
         this.buttonList.clear();
 
+        // close icon
+        int gap = (titleHeight - closeIconSize) / 2;
+        this.buttonList.add(
+                new CloseButton(
+                        this, 0, getStartX() + guiWidth - gap - closeIconSize, getStartY() + gap,
+                        closeIconSize, closeIconSize, ""
+                )
+        );
+
         // first category
-        int gap = (firstCategoryHeight - iconHeight) / 2;
+        gap = (firstCategoryHeight - iconHeight) / 2;
         int curX = getStartX() + gap, curY = getStartY() + titleHeight + gap;
         int insideGap = (iconHeight - fontRendererObj.FONT_HEIGHT) / 2;
         for (Setting setting : firstCategory) {
@@ -402,6 +417,7 @@ public class ConfigGuiNew extends GuiScreen {
     }
 
     public void onGuiClosed() {
+        XiaojiaAddons.mc.gameSettings.guiScale = startScale;
         Config.save();
     }
 
