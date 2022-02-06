@@ -94,7 +94,6 @@ public class ConfigGuiNew extends GuiScreen {
                         selectedSettings.contains(setting.parent.name)) {
                     settings.add(setting);
                     selectedSettings.add(setting.name);
-                    ChatLib.chat("added " + setting.name);
                 }
             }
         }
@@ -256,7 +255,7 @@ public class ConfigGuiNew extends GuiScreen {
         }
         for (Setting setting : settings) {
             if (!(setting instanceof FolderSetting) && (isInThirdCategory(setting.y) || isInThirdCategory(setting.y + setting.height)))
-                drawGradientRect(setting.x, Math.max(setting.y, getStartY() + titleHeight + firstCategoryHeight),
+                drawGradientRect(setting.x, Math.max(setting.y, getStartY() + titleHeight + firstCategoryHeight + 5),
                         setting.x + setting.width, Math.min(setting.y + setting.height, getStartY() + guiHeight),
                         new Color(25, 25, 25, 95).getRGB(),
                         new Color(25, 25, 25, 85).getRGB()
@@ -284,13 +283,13 @@ public class ConfigGuiNew extends GuiScreen {
     }
 
     private boolean isInThirdCategory(int y1, int y2) {
-        int sy = getStartY() + titleHeight + firstCategoryHeight + thirdGap;
+        int sy = getStartY() + titleHeight + firstCategoryHeight + 5;
         int ty = getStartY() + guiHeight;
         return y1 >= sy && y2 >= y1 && ty >= y2;
     }
 
     private boolean isInThirdCategory(int y1) {
-        int sy = getStartY() + titleHeight + firstCategoryHeight + thirdGap;
+        int sy = getStartY() + titleHeight + firstCategoryHeight + 5;
         int ty = getStartY() + guiHeight;
         return y1 >= sy && ty >= y1;
     }
@@ -402,6 +401,10 @@ public class ConfigGuiNew extends GuiScreen {
                 textInput.keyTyped(c, i);
             }
         }
+    }
+
+    public void onGuiClosed() {
+        Config.save();
     }
 
     public void updateScreen() {
