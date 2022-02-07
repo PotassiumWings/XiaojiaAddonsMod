@@ -826,7 +826,8 @@ public class Dungeon {
         int secrets = calculatedTotalSecrets > 0 ? calculatedTotalSecrets : totalSecrets;
         // Line 1
         String scSecrets = "&7Secrets: &b" + secretsFound;
-        String scSecretsExtra = calculatedTotalSecrets == 0 ? "" : "&8-&e" + (secrets - secretsFound) + "&8-&c" + secrets;
+        String scSecretsExtra = calculatedTotalSecrets == 0 ? "&8-&c" + totalSecrets :
+                "&8-&e" + (secrets - secretsFound) + "&8-&c" + secrets;
         String scCrypts = crypts == 0 ? "&7Crypts: &c0" : crypts < 5 ? "&7Crypts: &e" + crypts : "&7Crypts: &a" + crypts;
         String scMimic = floorInt < 6 ? "" : isMimicDead ? "&7Mimic: &a✔" : "&7Mimic: &c✘";
 

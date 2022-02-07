@@ -47,7 +47,6 @@ public class BugReport extends GuiScreen {
                 getStartX(), getStartY(),
                 guiWidth, guiHeight
         );
-        ChatLib.chat(getStartX() + ", " + getStartY());
         reportBar.setMaxStringLength(100);
         reportBar.setEnableBackgroundDrawing(false);
         reportBar.setText("");

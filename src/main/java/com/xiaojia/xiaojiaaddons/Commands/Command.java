@@ -107,7 +107,7 @@ public class Command extends CommandBase {
                 ShowItem.show();
                 break;
 //            case "textcipher":
-//                CipherUtils.test();
+//                CipherUtils.test(strings[1]);
 //                break;
             // debug commands
             case "debug":

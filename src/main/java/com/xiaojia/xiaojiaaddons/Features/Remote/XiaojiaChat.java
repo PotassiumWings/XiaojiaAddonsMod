@@ -8,7 +8,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
@@ -56,15 +59,17 @@ public class XiaojiaChat {
         StringBuilder log = new StringBuilder();
         try {
             File file = new File("logs/fml-client-latest.log");
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "GBK"));
             String line;
             while ((line = reader.readLine()) != null) {
                 log.append(line);
+                log.append("\n");
             }
-            String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"introduction\": \"%s\", \"type\": \"%d\", \"log\": \"%s\"}",
-                    getUUID(), getPlayer().getName(), reason, 10, log.toString());
+            String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"introduction\": \"%s\", \"type\": \"%d\"}",
+                    getUUID(), getPlayer().getName(), reason, 10);
             new Thread(() -> {
                 ClientSocket.chat(body);
+                ClientSocket.chat(log.toString());
                 ChatLib.chat("Bug report has been successfully sent. Thank you for reporting!");
             }).start();
         } catch (Exception e) {
