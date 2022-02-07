@@ -66,6 +66,8 @@ public class ConfigGuiNew extends GuiScreen {
 
     // GUI scale
     private final int startScale;
+    private int lastWidth = width;
+    private int lastHeight = height;
 
     public ConfigGuiNew(int startScale) {
         getSettings();
@@ -378,7 +380,7 @@ public class ConfigGuiNew extends GuiScreen {
             curY += setting.height + thirdGapBetween;
             maxThirdScroll += setting.height + thirdGapBetween;
         }
-        if (searchBar == null) {
+        if (searchBar == null || width != lastWidth || height != lastHeight) {
             searchBar = new GuiTextField(
                     1, fontRendererObj,
                     getStartX() + guiWidth - (titleHeight - 12) / 2 - searchWidth + searchHeight + 1,
@@ -388,7 +390,9 @@ public class ConfigGuiNew extends GuiScreen {
             searchBar.setMaxStringLength(10);
             searchBar.setEnableBackgroundDrawing(false);
             searchBar.setText("");
-            searchBar.setFocused(false);
+            searchBar.setFocused(true);
+            lastWidth = width;
+            lastHeight = height;
         }
     }
 

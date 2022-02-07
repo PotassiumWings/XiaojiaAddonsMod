@@ -82,6 +82,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayHandler;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.CipherUtils;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
@@ -103,11 +104,12 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.3.6";
+    public static final String VERSION = "2.3.7";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
     private static boolean debug = false;
+    public static CipherUtils cipherUtils;
 
     public static void setDebug() {
         debug = !debug;
@@ -120,6 +122,12 @@ public class XiaojiaAddons {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        try {
+            cipherUtils = new CipherUtils();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         MinecraftForge.EVENT_BUS.register(new TickEndEvent());
         MinecraftForge.EVENT_BUS.register(new Checker());
 

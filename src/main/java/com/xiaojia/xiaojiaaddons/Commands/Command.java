@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
@@ -17,6 +18,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.CipherUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TabUtils;
@@ -90,6 +92,7 @@ public class Command extends CommandBase {
                 }
             case "report":
                 Dungeon.showDungeonInfo();
+                XiaojiaAddons.guiToOpen = new BugReport();
                 break;
             case "commands":
                 BatchCommands.execute();
@@ -103,6 +106,9 @@ public class Command extends CommandBase {
             case "showitem":
                 ShowItem.show();
                 break;
+//            case "textcipher":
+//                CipherUtils.test();
+//                break;
             // debug commands
             case "debug":
                 XiaojiaAddons.setDebug();
@@ -182,7 +188,8 @@ public class Command extends CommandBase {
 //                "&c/xj 300&b to see, and &c/xj 300 message&b to set announce300 message.\n" +
                 "&c/xj show dungarmor&b, &c/xj show dungtrash&b, and &c/xj show runes&b to show auto-sell dungeon armors/dungeon trash/runes seperately.\n" +
                 "&c/xj rename&b to rename items.\n" +
-                "&c/xj showitem&b to show held item.";
+                "&c/xj showitem&b to show held item.\n" +
+                "&c/xj report&b to report a bug.";
     }
 
     @Override

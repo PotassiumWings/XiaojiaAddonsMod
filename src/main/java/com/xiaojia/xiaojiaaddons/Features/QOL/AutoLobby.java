@@ -48,6 +48,10 @@ public class AutoLobby {
         if (!Checker.enabled) return;
         if (isSending) return;
         double y = getY(getPlayer());
+        long cur = TimeUtils.curTime();
+        if (timeList[timeList.length - 1] == cur) {
+            return;
+        }
         for (int i = 1; i < yCoordList.length; i++) {
             yCoordList[i - 1] = yCoordList[i];
             timeList[i - 1] = timeList[i];
@@ -77,6 +81,11 @@ public class AutoLobby {
                     return;
                 }
             }
+            StringBuilder s = new StringBuilder();
+            for (long time: timeList) s.append(time).append(" ");
+            s.append("\n");
+            for (double yCoord : yCoordList) s.append(String.format("%.2f ", yCoord));
+            System.out.println(s.toString());
             ChatLib.chat("Detected falling to the void, auto /l");
             CommandsUtils.addCommand("/l");
             lastTime = TimeUtils.curTime();

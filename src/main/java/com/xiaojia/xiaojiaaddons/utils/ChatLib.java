@@ -66,7 +66,7 @@ public class ChatLib {
     // type=1: yikes
     public static void xjchat(int type, String name, String chatMessage) {
         if (!Checker.enabled) return;
-        if (toggleOff) return;
+        if (!name.equals("&c[UPDATE AUTOCHECKER]") && toggleOff) return;
         if (chatMessage == null) chatMessage = "null";
         if (type != 0 && type != 1 && type != 2) return;
 

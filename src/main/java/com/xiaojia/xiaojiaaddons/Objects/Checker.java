@@ -40,7 +40,7 @@ public class Checker {
     @SubscribeEvent
     public void onTickCheck(TickEndEvent event) {
         long cur = TimeUtils.curTime();
-        if (cur - lastCheck > 30000) {
+        if (cur - lastCheck > 20000) {
             lastCheck = cur;
             new Thread(() -> {
                 try {

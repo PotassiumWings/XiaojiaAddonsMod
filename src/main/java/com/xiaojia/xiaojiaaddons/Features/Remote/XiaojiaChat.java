@@ -6,6 +6,9 @@ import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
@@ -47,6 +50,27 @@ public class XiaojiaChat {
         String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"floor\": \"%s\", \"score\": \"%d\", \"chest\": \"%s\", \"loots\": \"%s\", \"type\": \"%d\"}",
                 getUUID(), getPlayer().getName(), floor, score, chestType, lootsString, 9);
         new Thread(() -> ClientSocket.chat(body)).start();
+    }
+
+    public static void bugReport(String reason) {
+        StringBuilder log = new StringBuilder();
+        try {
+            File file = new File("logs/fml-client-latest.log");
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                log.append(line);
+            }
+            String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"introduction\": \"%s\", \"type\": \"%d\", \"log\": \"%s\"}",
+                    getUUID(), getPlayer().getName(), reason, 10, log.toString());
+            new Thread(() -> {
+                ClientSocket.chat(body);
+                ChatLib.chat("Bug report has been successfully sent. Thank you for reporting!");
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ChatLib.chat("Failed to send bug report. Please ensure you have logs/fml-client-latest.log!");
+        }
     }
 
     public static String getUUID() {

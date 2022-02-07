@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Commands;
 
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import net.minecraft.command.CommandBase;
@@ -27,6 +28,7 @@ public class XiaojiaChat extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender iCommandSender, String[] strings) throws CommandException {
+        if (!Checker.enabled) return;
         if (strings == null) return;
         if (strings.length == 0) {
             ChatLib.chat(getUsage());

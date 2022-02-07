@@ -99,6 +99,7 @@ public class Dungeon {
     public static int bonusScore = 0;
     public static int score = 0;
     public static boolean said300 = false;
+    public static boolean said270 = false;
     public static int puzzleCount = 0;
     public static int puzzleDone = 0;
     public static int totalSecrets = 0;
@@ -116,7 +117,6 @@ public class Dungeon {
     public static Image newWhiteCheck = new Image("MapWhiteCheck.png");
     public static Image questionMark = new Image("BloomMapQuestionMark.png");
     public static int floorInt;
-    public static String message300 = "8173c4nh29384tcn28734mco8haeuyfgblcaii34icy5jmo8137gbqglgieaw83m7yrho8yahblgwtmp0983q1hc9liuba,wkhznf";
     // scan
     private static boolean isScanning = false;
     private static long lastScan = 0;
@@ -166,7 +166,7 @@ public class Dungeon {
 
     public static void showPlayers() {
         for (Player player : players) {
-            ChatLib.chat(player.name + ": " + player.className);
+            System.out.println(player.name + ": " + player.className);
         }
     }
 
@@ -178,25 +178,31 @@ public class Dungeon {
             for (int x = 0; x < 128; x++) {
                 res.append(String.format("%3d", colors[x + y * 128])).append(" ");
             }
-            ChatLib.chat(res.toString());
+            System.out.println(res.toString());
         }
 
         for (int i = Map.startCorner.x + (Map.roomSize / 2); i < 128; i += Map.roomSize / 2 + 2) {
             for (int j = Map.startCorner.y + (Map.roomSize / 2); j < 128; j += Map.roomSize / 2 + 2) {
                 byte color = colors[i + j * 128];
                 byte secondColor = colors[(i - 3) + j * 128];
-                ChatLib.chat(i + ", " + j + ", " + color + ", " + secondColor);
+                System.out.println(i + ", " + j + ", " + color + ", " + secondColor);
             }
         }
     }
 
     public static void showDungeonInfo() {
         if (!isInDungeon && isFullyScanned) return;
-        ChatLib.chat("Dungeon floor: " + floorInt);
-        ChatLib.chat("Total Rooms: " + totalRooms);
-        ChatLib.chat("Start Corner: " + Map.startCorner);
-        ChatLib.chat("Room Size: " + Map.roomSize);
+        System.out.println("Dungeon floor: " + floorInt);
+        System.out.println("Total Rooms: " + totalRooms);
+        System.out.println("Start Corner: " + Map.startCorner);
+        System.out.println("Room Size: " + Map.roomSize);
+        System.out.println("Total Secrets: " + totalSecrets);
+        System.out.println("Secrets Found: " + secretsFound);
+        System.out.println("Skill Score: " + skillScore);
+        System.out.println("Explore Score: " + exploreScore);
+        System.out.println("Score: " + score);
         showMap();
+        showPlayers();
     }
 
     public static void updatePlayers() {
@@ -834,6 +840,10 @@ public class Dungeon {
         scoreString2 = (scTrap + "     " + scDeaths + "     " + scScore).trim();
 
         // Announce 300
+        if (Configs.Announce270 && !said270 && score >= 270) {
+            said270 = true;
+            CommandsUtils.addCommand("/pc " + Configs.Announce270Message);
+        }
         if (Configs.Announce300 && !said300 && score >= 300) {
             said300 = true;
             CommandsUtils.addCommand("/pc " + Configs.Announce300Message);
@@ -900,6 +910,7 @@ public class Dungeon {
         scoreString2 = "";
 
         said300 = false;
+        said270 = false;
 
         skillScore = 0;
         exploreScore = 0;

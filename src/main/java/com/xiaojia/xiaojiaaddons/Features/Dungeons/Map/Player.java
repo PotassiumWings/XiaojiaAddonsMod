@@ -74,7 +74,7 @@ public class Player {
                     this.head = new Image(centerHead);
                 }
             } catch (Exception e) {
-                ChatLib.chat("Failed to load head of " + name);
+                ChatLib.debug("Failed to load head of " + name);
                 e.printStackTrace();
 //                fetchHead();
             }

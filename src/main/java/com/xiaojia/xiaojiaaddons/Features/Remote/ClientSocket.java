@@ -30,7 +30,7 @@ public class ClientSocket {
 
     public static void connect() {
         try {
-            Socket socket = new Socket("47.94.243.9", 11051);
+            Socket socket = new Socket("47.94.243.9", 11052);
             connected = true;
             out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
@@ -50,18 +50,13 @@ public class ClientSocket {
 
                         // linux, '\n' at last char
                         // WARN: '\r' if windows server!
-                        int leftBracket = 0;
-                        if ((char) recv == '{') leftBracket++;
-                        else continue;
-                        while (leftBracket != 0) {
+                        while ((char) recv != '\n') {
                             sb.append((char) recv);
                             recv = in.read();
-                            if ((char) recv == '{') leftBracket++;
-                            if ((char) recv == '}') leftBracket--;
                         }
-                        sb.append((char) recv);
 
                         String s = sb.toString();
+                        s = XiaojiaAddons.cipherUtils.decrypt(s);
                         ChatLib.debug(s);
 
                         // type 0-2, normal chat / puzzle fail / death;
@@ -187,13 +182,20 @@ public class ClientSocket {
     }
 
     public static void chat(String message) {
-        out.println(message);
-        out.flush();
+        synchronized (out) {
+            try {
+                message = XiaojiaAddons.cipherUtils.encrypt(message);
+                out.println(message);
+                out.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void authenticate() {
-        out.println(String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"type\": \"%d\", \"ver\": \"%s\"}",
-                SessionUtils.getUUID(), SessionUtils.getName(), 4, XiaojiaAddons.VERSION));
-        out.flush();
+        String message = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"type\": \"%d\", \"ver\": \"%s\"}",
+                SessionUtils.getUUID(), SessionUtils.getName(), 4, XiaojiaAddons.VERSION);
+        chat(message);
     }
 }

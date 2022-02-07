@@ -831,7 +831,7 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Powder Enabled", parent = "Powder Relevant", illegal = true,
             description = "AFK mine hardstone and open chests. Low efficiency!\n" +
                     "Toggleable through keybindings.\n" +
-                    "&c&lDONT TOTALLY AFK!")
+                    "&c&lDONT FULLY AFK!")
     public static boolean AutoPowder = false;
 
     // AutoPowderChest
@@ -855,7 +855,7 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Move Randomly", parent = "Fishing", illegal = true,
             description = "Move around and rotate to bypass afk test \n" +
                     "and gain fishing exp while afk.\n" +
-                    "&c&lDONT TOTALLY AFK!\n")
+                    "&c&lDONT FULLY AFK!\n")
     public static boolean AutoMove = false;
 
     // Foraging
@@ -868,7 +868,7 @@ public class Configs {
                     "/foragingpoint north/south etc. to set starting point and direction.\n" +
                     "Autopet rule: on rod, monkey; on jungle collection, ocelot.\n" +
                     "Set a keybinding to toggle.\n" +
-                    "&c&lDONT TOTALLY AFK!")
+                    "&c&lDONT FULLY AFK!")
     public static boolean AutoForaging = false;
 
     // GemstoneESP
@@ -1068,11 +1068,17 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Announce 300", parent = "Score")
     public static boolean Announce300 = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Announce 270", parent = "Score")
+    public static boolean Announce270 = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Display Title for 300 announce", parent = "Score")
     public static boolean DisplayAnnounce300 = false;
 
     @Property(type = Property.Type.TEXT, name = "Announce 300 Message", parent = "Score")
     public static String Announce300Message = "300 Score Reached!";
+
+    @Property(type = Property.Type.TEXT, name = "Announce 270 Message", parent = "Score")
+    public static String Announce270Message = "270 Score Reached!";
 
     @Property(type = Property.Type.BOOLEAN, name = "Assume Spirit", parent = "Score",
             description = "Assume first death only -1 score.\n" +
