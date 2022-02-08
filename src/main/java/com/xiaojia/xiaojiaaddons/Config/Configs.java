@@ -193,12 +193,17 @@ public class Configs {
 
     @Property(type = Property.Type.FOLDER, name = "In Combat QOL", parent = "QOL",
             description = "Set keybindings to swap armor (slot 0-8),\n" +
-                    "Open trade menu, and Auto Selling.\n")
+                    "Open trade menu, and Auto Selling.\n" +
+                    "There has been known crashes with Skytils / DSM.")
     public static boolean InCombatQOLEnabled = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Nake Prevention", parent = "In Combat QOL",
             description = "When Auto-Swapping Armor")
     public static boolean NakePrevention = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Fast Mode", parent = "In Combat QOL",
+            description = "Make Auto-Swapping Armor, Auto Selling or Open Trade faster.")
+    public static boolean InCombatFastMode = false;
 
     // InCombatQOL
     @Property(type = Property.Type.FOLDER, name = "Auto Sell", parent = "QOL",
@@ -243,9 +248,51 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Can Sell Training Weight with >100 minutes held", parent = "Auto Sell Dungeon Trash")
     public static boolean CanSellTrainingWeightLong = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Cheap Runes", parent = "Auto Sell",
+    @Property(type = Property.Type.FOLDER, name = "Auto Sell Miscellaneous", parent = "Auto Sell")
+    public static boolean AutoSellMisc = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Cheap Runes", parent = "Auto Sell Miscellaneous",
             description = "&c/xj show runes&r to see list")
     public static boolean AutoSellRunes = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Superboom TNT", parent = "Auto Sell Miscellaneous")
+    public static boolean AutoSellSuperboom = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Auto Sell Fishing Stuff", parent = "Auto Sell")
+    public static boolean AutoSellFishing = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Ice Rod", parent = "Auto Sell Fishing Stuff")
+    public static boolean AutoSellIceRod = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Auto Sell Mining Stuff", parent = "Auto Sell")
+    public static boolean AutoSellMining = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Ascension Rope", parent = "Auto Sell Mining Stuff")
+    public static boolean AutoSellAscensionRope = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Wishing Compass", parent = "Auto Sell Mining Stuff")
+    public static boolean AutoSellWishingCompass = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Fine Gemstone", parent = "Auto Sell Mining Stuff")
+    public static boolean AutoSellFineGem = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Auto Sell Enchanted Book", parent = "Auto Sell")
+    public static boolean AutoSellBook = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Bank I-V", parent = "Auto Sell Enchanted Book")
+    public static boolean AutoSellBank = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell No Pain No Gain I-V", parent = "Auto Sell Enchanted Book")
+    public static boolean AutoSellNoPainNoGain = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Ultimate Jerry I-V", parent = "Auto Sell Enchanted Book")
+    public static boolean AutoSellUltimateJerry = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Feather Falling VI-VII", parent = "Auto Sell Enchanted Book")
+    public static boolean AutoSellFeatherFalling = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Infinite Quiver VI-VII", parent = "Auto Sell Enchanted Book")
+    public static boolean AutoSellInfiniteQuiver = false;
 
     // DisplayDayAndCoords
     @Property(type = Property.Type.FOLDER, name = "Information Display", parent = "QOL")
@@ -707,6 +754,10 @@ public class Configs {
             min = 80, max = 500, step = 10,
             description = "Cool down between clicks.")
     public static int AutoTerminalCD = 150;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Quit Long Maze", parent = "Terminals",
+            description = "Close screen when > 20 clicks needed.")
+    public static boolean QuitWhenLongMaze = false;
 
     // AutoItemFrame
     @Property(type = Property.Type.FOLDER, name = "Auto Devices", parent = "Dungeons")

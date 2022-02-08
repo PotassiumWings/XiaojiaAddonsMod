@@ -181,15 +181,13 @@ public class ClientSocket {
         connect();
     }
 
-    public static void chat(String message) {
-        synchronized (out) {
-            try {
-                message = XiaojiaAddons.cipherUtils.encrypt(message);
-                out.println(message);
-                out.flush();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    public synchronized static void chat(String message) {
+        try {
+            message = XiaojiaAddons.cipherUtils.encrypt(message);
+            out.println(message);
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

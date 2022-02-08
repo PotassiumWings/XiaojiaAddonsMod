@@ -52,12 +52,8 @@ public class Inventory {
         return "container";
     }
 
-    public void click(int slot) {
-        click(slot, false, "LEFT");
-    }
-
-    public void click(int slot, boolean shift, String buttonString) {
-        int windowId = getWindowId();
+    public void click(int slot, boolean shift, String buttonString, int incrementWindowId) {
+        int windowId = getWindowId() + incrementWindowId;
         int button;
         switch (buttonString) {
             case "MIDDLE":
@@ -77,5 +73,13 @@ public class Inventory {
                 windowId, slot, button, mode, getPlayer()
         );
         if (XiaojiaAddons.isDebug()) ChatLib.chat(String.format("%d %d %d %d", windowId, slot, button, mode));
+    }
+
+    public void click(int slot) {
+        click(slot, false, "LEFT");
+    }
+
+    public void click(int slot, boolean shift, String buttonString) {
+        click(slot, shift, buttonString, 0);
     }
 }

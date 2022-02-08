@@ -15,6 +15,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
@@ -94,6 +96,20 @@ public class InCombatQOL {
                 if (openTrade || openWardrobe || autoSelling) {
                     inventory.click(48, false, "MIDDLE");
                     currentStep++;
+                    if (!Configs.InCombatFastMode) return;
+                    if (openTrade || autoSelling) {
+                        inventory.click(22, false, "MIDDLE", 1);
+                        currentStep++;
+                    } else if (openWardrobe) {
+                        inventory.click(32, false, "MIDDLE", 1);
+                        currentStep++;
+
+                        if (!Configs.NakePrevention) {
+                            inventory.click(wardrobeSlot + 36, false, "LEFT", 2);
+                            getPlayer().closeScreen();
+                            openWardrobe = false;
+                        }
+                    }
                 }
             }
         } else if (invName.contains("SkyBlock Menu")) {
@@ -138,49 +154,13 @@ public class InCombatQOL {
                         if (inventory1 == null || inventory1.getSize() != 90) return;
                         ItemStack itemStack = inventory1.getItemInSlot(i);
                         if (itemStack == null) continue;
-                        String name = itemStack.getDisplayName();
-                        boolean isRecomed = NBTUtils.isItemRecombobulated(itemStack);
-                        boolean isFullQuality = NBTUtils.isItemFullQuality(itemStack);
-                        boolean isStarred = NBTUtils.isItemStarred(itemStack);
-                        int heldTime = NBTUtils.getIntFromExtraAttributes(itemStack, "trainingWeightsHeldTime");
-                        boolean canSell = false;
-                        if (Configs.AutoSellDungeonArmor) {
-                            if (isRecomed && !Configs.CanAutoSellRecomed) continue;
-                            if (isFullQuality && !Configs.CanAutoSellFullQuality) continue;
-                            if (isStarred && !Configs.CanAutoSellStarred) continue;
-                            if (isRecomed && isFullQuality && !Configs.CanAutoSellFullQualityRecomed) continue;
-                            for (String shit : dungArmor) {
-                                if (name.toLowerCase().contains(shit.toLowerCase())) {
-                                    canSell = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (Configs.AutoSellDungeonTrash) {
-                            if (isRecomed && !Configs.CanSellRecomedDungeonTrash) continue;
-                            if (heldTime > 10000 && !Configs.CanSellTrainingWeightLong) continue;
-                            for (String shit : dungTrash) {
-                                if (name.toLowerCase().contains(shit.toLowerCase())) {
-                                    canSell = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (Configs.AutoSellRunes) {
-                            for (String shit : runes) {
-                                if (name.toLowerCase().contains(shit.toLowerCase())) {
-                                    canSell = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (canSell) {
-                            try {
+                        try {
+                            if (canSell(itemStack)) {
                                 inventory1.click(i, false, "MIDDLE");
                                 Thread.sleep(Configs.AutoSellCD);
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                     getPlayer().closeScreen();
@@ -188,5 +168,63 @@ public class InCombatQOL {
                 }).start();
             }
         }
+    }
+
+    private static boolean canSell(ItemStack itemStack) {
+        String name = ChatLib.removeFormatting(itemStack.getDisplayName()).toLowerCase();
+        boolean isRecomed = NBTUtils.isItemRecombobulated(itemStack);
+        boolean isFullQuality = NBTUtils.isItemFullQuality(itemStack);
+        boolean isStarred = NBTUtils.isItemStarred(itemStack);
+        int heldTime = NBTUtils.getIntFromExtraAttributes(itemStack, "trainingWeightsHeldTime");
+        if (Configs.AutoSellDungeonArmor) {
+            for (String shit : dungArmor)
+                if (name.contains(shit.toLowerCase())) {
+                    if (isRecomed && !Configs.CanAutoSellRecomed) return false;
+                    if (isFullQuality && !Configs.CanAutoSellFullQuality) return false;
+                    if (isStarred && !Configs.CanAutoSellStarred) return false;
+                    return !isRecomed || !isFullQuality || Configs.CanAutoSellFullQualityRecomed;
+                }
+        }
+        if (Configs.AutoSellDungeonTrash) {
+            if (heldTime > 10000 && !Configs.CanSellTrainingWeightLong) return false;
+            for (String shit : dungTrash) {
+                if (name.contains(shit.toLowerCase())) {
+                    return !isRecomed || Configs.CanSellRecomedDungeonTrash;
+                }
+            }
+        }
+        // misc
+        if (Configs.AutoSellSuperboom && name.contains("superboom tnt")) return true;
+        if (Configs.AutoSellRunes) {
+            for (String shit : runes)
+                if (name.contains(shit.toLowerCase()))
+                    return true;
+        }
+        // fishing stuff
+        if (Configs.AutoSellIceRod && name.contains("ice rod")) return true;
+        // mining stuff
+        if (Configs.AutoSellAscensionRope && name.contains("ascension rope")) return true;
+        if (Configs.AutoSellWishingCompass && name.contains("wishing compass")) return true;
+        if (Configs.AutoSellFineGem) {
+            Pattern pattern = Pattern.compile("fine \\w+ gemstone");
+            Matcher matcher = pattern.matcher(name);
+            if (matcher.find()) return true;
+        }
+        // books
+        if (name.startsWith("enchanted book")) {
+            ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
+            // "Feather Falling"
+            String bookName = nameAndLevel.get(0);
+            // "VI"
+            String levelString = nameAndLevel.get(1);
+            if (bookName.equals("Feather Falling") && Configs.AutoSellFeatherFalling &&
+                    (levelString.equals("VI") || levelString.equals("VII"))) return true;
+            if (bookName.equals("Infinite Quiver") && Configs.AutoSellInfiniteQuiver &&
+                    (levelString.equals("VI") || levelString.equals("VII"))) return true;
+            if (bookName.equals("Bank") && Configs.AutoSellBank) return true;
+            if (bookName.equals("No Pain No Gain") && Configs.AutoSellNoPainNoGain) return true;
+            if (bookName.equals("Ultimate Jerry") && Configs.AutoSellUltimateJerry) return true;
+        }
+        return false;
     }
 }

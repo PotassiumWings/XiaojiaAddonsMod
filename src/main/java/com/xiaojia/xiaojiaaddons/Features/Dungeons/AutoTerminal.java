@@ -57,7 +57,10 @@ public class AutoTerminal {
         if (!Checker.enabled) return;
         if (!SkyblockUtils.isInDungeon()) return;
         Inventory inventory = ControlUtils.getOpenedInventory();
-        if (inventory == null) return;
+        if (inventory == null) {
+            clickQueue.clear();
+            return;
+        }
 
         String invName = inventory.getName();
         if (invName.startsWith("Click in order!")) enumTerminal = EnumTerminal.ORDER;
@@ -72,7 +75,10 @@ public class AutoTerminal {
             Matcher matcher = pattern.matcher(invName);
             if (matcher.find()) color = matcher.group(1).toUpperCase();
         }
-        if (enumTerminal == EnumTerminal.NONE) return;
+        if (enumTerminal == EnumTerminal.NONE) {
+            clickQueue.clear();
+            return;
+        }
         if (!Configs.AutoTerminal) return;
 
         try {
@@ -82,6 +88,12 @@ public class AutoTerminal {
                     ChatLib.chat(clickQueue.size() + "");
                     for (int x : clickQueue) ChatLib.chat(x + "");
                 }
+            }
+
+            if (clickQueue.size() > 20 && Configs.QuitWhenLongMaze) {
+                getPlayer().closeScreen();
+                clickQueue.clear();
+                return;
             }
 
             if (!clickQueue.isEmpty()) {

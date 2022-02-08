@@ -47,6 +47,7 @@ public class AutoLobby {
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (isSending) return;
+        if (getPlayer() == null) return;
         double y = getY(getPlayer());
         long cur = TimeUtils.curTime();
         if (timeList[timeList.length - 1] == cur) {
@@ -68,6 +69,9 @@ public class AutoLobby {
         double v2 = x2 / t2;
         accelerate = (v2 - v1) / ((t1 + t2) / 2);
         velocity = v2;
+
+        double motionY = getPlayer().motionY;
+        if (Math.abs(motionY) < 1e-5 || velocity / motionY > 30) return;
 
         if (timeList[0] == -1) return;
         if (!Configs.AutoLobby) return;

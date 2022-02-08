@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.Objects.StepEvent;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import com.xiaojia.xiaojiaaddons.utils.StringUtils;
 import net.minecraft.item.ItemStack;
 
@@ -67,8 +68,7 @@ public class AutoCombine extends StepEvent {
     }
 
     private static List<String> getItemLore(ItemStack itemStack) {
-        if (itemStack == null) return new ArrayList<>();
-        return itemStack.getTooltip(getPlayer(), mc.gameSettings.advancedItemTooltips);
+        return NBTUtils.getLore(itemStack);
     }
 
     private static boolean isAir(int slot) {
@@ -97,15 +97,11 @@ public class AutoCombine extends StepEvent {
                 String itemName = ChatLib.removeFormatting(item.getDisplayName()).toLowerCase();
                 if (!itemName.equals("enchanted book")) continue;
                 // Feather Falling VI
-                String bookName = ChatLib.removeFormatting(getItemLore(item).get(1));
-                // "Feather", "Falling", "VI"
-                ArrayList<String> bookNameSplit = new ArrayList<>(Arrays.asList(bookName.split(" ")));
-                // "VI" -> 6
-                String levelString = bookNameSplit.get(bookNameSplit.size() - 1);
-
-                int level = getEnchantLevel(levelString);
+                ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(item);
                 // "Feather Falling"
-                bookName = bookName.substring(0, bookName.length() - levelString.length() - 1);
+                String bookName = nameAndLevel.get(0);
+                String levelString = nameAndLevel.get(1);
+                int level = getEnchantLevel(levelString);
                 if (booksLevel.containsKey(bookName) &&
                         level < booksLevel.get(bookName) &&
                         checkKindEnable(bookName)

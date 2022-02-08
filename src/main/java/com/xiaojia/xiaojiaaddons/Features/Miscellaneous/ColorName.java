@@ -36,8 +36,8 @@ import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class ColorName {
     private static final HashMap<String, String> cachedColorName = new HashMap<>();
-    public static HashMap<String, String> colorMap;
-    public static HashMap<String, String> rankMap;
+    public static HashMap<String, String> colorMap = new HashMap<>();
+    public static HashMap<String, String> rankMap = new HashMap<>();
 
     public static void setColorMap(String rank, String color) {
         Type type = (new TypeToken<HashMap<String, String>>() {
