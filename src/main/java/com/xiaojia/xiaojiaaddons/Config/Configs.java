@@ -207,7 +207,8 @@ public class Configs {
 
     // InCombatQOL
     @Property(type = Property.Type.FOLDER, name = "Auto Sell", parent = "QOL",
-            description = "Set a keybinding to work.\n" +
+            description = "Sell items in inventory &cexcludes&r hotbar.\n" +
+                    "Set a keybinding to work.\n" +
                     "Can be done while in combat.")
     public static boolean AutoSellEnable = false;
 
@@ -526,7 +527,8 @@ public class Configs {
             description = "Auto right click Soul Whip and\n" +
                     "swap to Emerald Blade or Giant's Sword,\n" +
                     "every 0.5s.\n" +
-                    "This method was useful for grinding ghosts.")
+                    "This method was useful for grinding ghosts.\n" +
+                    "Use a keybinding to toggle.")
     public static boolean GhostSwordSwap = false;
 
     // AutoLobby
