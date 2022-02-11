@@ -25,7 +25,11 @@ public class GolemAlert {
 
     public static void golemWarn() {
         golemSpawnTime = TimeUtils.curTime() + 20000;
-        getPlayer().playSound("mob.irongolem.hit", 1000, 1);
+        try {
+            getPlayer().playSound("mob.irongolem.hit", 1000, 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @SubscribeEvent

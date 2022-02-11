@@ -7,6 +7,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -26,7 +27,9 @@ public class NearbyChestESP {
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!isEnabled()) return;
-        BlockPos pos = getPlayer().getPosition();
+        EntityPlayer player = getPlayer();
+        if (player == null) return;
+        BlockPos pos = player.getPosition();
         for (int x = pos.getX() - 10; x <= pos.getX() + 10; x++) {
             for (int y = pos.getY() - 10; y <= pos.getY() + 10; y++) {
                 for (int z = pos.getZ() - 10; z <= pos.getZ() + 10; z++) {

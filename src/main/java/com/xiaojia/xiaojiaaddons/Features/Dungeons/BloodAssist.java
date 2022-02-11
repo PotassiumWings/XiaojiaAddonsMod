@@ -178,6 +178,7 @@ public class BloodAssist {
             for (Entity entity : getWorld().loadedEntityList) {
                 if (!(entity instanceof EntityArmorStand)) continue;
                 newArmorStands.offerLast((EntityArmorStand) entity);
+                ChatLib.debug("worldload, " + entity.getDisplayName());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,11 +189,12 @@ public class BloodAssist {
         ItemStack helm = entityArmorStand.getEquipmentInSlot(4);
         if (helm == null) return;
         String name = ChatLib.removeFormatting(helm.getDisplayName()).trim();
+        ChatLib.debug("detected " + name);
 
         if (!bloodTrunk.equals(new Vector2i(-1, -1))) {
             if (new Vector2i(entityArmorStand.chunkCoordX / 2, entityArmorStand.chunkCoordZ / 2).equals(bloodTrunk)) {
                 skulls.add(entityArmorStand);
-                ChatLib.debug("added " + entityArmorStand.getUniqueID().toString());
+                ChatLib.debug("added " + name + ", " + entityArmorStand.getUniqueID().toString());
             }
         } else {
             if (name.endsWith(getPlayer().getName() + "'s Head") || name.endsWith(getPlayer().getName() + "' Head")) {

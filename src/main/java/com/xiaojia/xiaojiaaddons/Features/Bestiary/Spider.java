@@ -46,7 +46,6 @@ public class Spider extends RenderEntityESP {
     public void onTickShadowFury(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!SkyblockUtils.isInSpiderDen() || !Configs.SpiderDenShadowfuryPoint) return;
-
         List<Entity> shadowFuryEntities = new ArrayList<>();
         List<Entity> list = getWorld().loadedEntityList;
         for (Entity entity : list) {

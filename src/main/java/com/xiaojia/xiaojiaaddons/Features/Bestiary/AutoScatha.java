@@ -10,6 +10,7 @@ import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -33,12 +34,14 @@ public class AutoScatha {
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.AutoScatha) return;
+        EntityPlayer player = getPlayer();
+        if (player == null) return;
         if (keyBind.isPressed()) {
             should = !should;
             ChatLib.chat(should ? "Auto Scatha &aactivated" : "Auto Scatha &cdeactivated");
             if (!should) stop(false);
             if (should) {
-                y = MathUtils.floor(getY(getPlayer()));
+                y = MathUtils.floor(getY(player));
                 yaw = fit(getYaw());
                 pitch = 45;
                 ChatLib.debug("getYaw: " + getYaw() + ", pitch: " + getPitch());
@@ -66,7 +69,7 @@ public class AutoScatha {
                                 stop();
                                 return;
                             }
-                            getPlayer().closeScreen();
+                            player.closeScreen();
                             BlockPos blockPos = mc.objectMouseOver.getBlockPos();
                             Block block = BlockUtils.getBlockAt(blockPos);
                             if (blockPos != null && blockPos.getY() >= y) ControlUtils.holdLeftClick();
@@ -89,7 +92,7 @@ public class AutoScatha {
             }
         }
         if (!should) return;
-        if (MathUtils.floor(getY(getPlayer())) != y) {
+        if (MathUtils.floor(getY(player)) != y) {
             ChatLib.chat("Y changed! Auto Scatha stoped. Remember to turn off mole!");
             stop();
         }
@@ -113,7 +116,8 @@ public class AutoScatha {
     private void stop(boolean play) {
         ControlUtils.releaseLeftClick();
         ControlUtils.releaseForward();
-        if (play) getPlayer().playSound("random.successful_hit", 1000, 1);
+        EntityPlayer player = getPlayer();
+        if (play && player != null) player.playSound("random.successful_hit", 1000, 1);
         should = false;
         if (thread != null && thread.isAlive()) thread.interrupt();
     }
