@@ -40,7 +40,7 @@ public class Checker {
     @SubscribeEvent
     public void onTickCheck(TickEndEvent event) {
         long cur = TimeUtils.curTime();
-        if (cur - lastCheck > 20000) {
+        if (cur - lastCheck > 200 * 1000) {
             lastCheck = cur;
             new Thread(() -> {
                 try {
@@ -53,6 +53,7 @@ public class Checker {
                     JsonParser jsonParser = new JsonParser();
                     enabled = jsonParser.parse(permit).getAsJsonObject().get("res").getAsBoolean();
                 } catch (Exception e) {
+                    lastCheck -= 150 * 1000;
                     e.printStackTrace();
                 }
             }).start();
