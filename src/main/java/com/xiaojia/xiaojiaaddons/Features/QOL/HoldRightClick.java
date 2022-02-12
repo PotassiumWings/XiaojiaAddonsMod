@@ -26,7 +26,7 @@ public class HoldRightClick {
     private static final KeyBind useKeyBind = new KeyBind(mc.gameSettings.keyBindUseItem);
     private long systemTimeTerm;
     private long systemTimeRogue;
-    private int currentSpeed;
+    private double currentSpeed;
     private boolean isRightClicking = false;
 
     @SubscribeEvent
@@ -56,12 +56,12 @@ public class HoldRightClick {
         if (useKeyBind.isKeyDown() && ControlUtils.checkHoldingItem(rogueNames)) {
             if (!isRightClicking) {
                 isRightClicking = true;
-                currentSpeed = (int) (getPlayer().capabilities.getWalkSpeed() * 1000);
+                currentSpeed = getPlayer().capabilities.getWalkSpeed() * 1000;
             }
             if (currentSpeed < Configs.MaxSpeed) {
                 ControlUtils.rightClick();
                 if (XiaojiaAddons.isDebug()) ChatLib.chat("rightClick!");
-                currentSpeed += SkyblockUtils.isInDungeon() ? 3 : 10;
+                currentSpeed += SkyblockUtils.isInDungeon() ? 3.33 : 10;
             }
         } else {
             isRightClicking = false;
