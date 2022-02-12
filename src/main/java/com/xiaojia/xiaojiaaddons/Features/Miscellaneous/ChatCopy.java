@@ -20,6 +20,9 @@ public class ChatCopy {
         if (event.type != 0) return;
         String message = event.message.getFormattedText();
         String noColorMessage = ChatLib.removeFormatting(event.message.getUnformattedText());
+        if (noColorMessage.matches("-+") && noColorMessage.length() >= 4) {
+            return;
+        }
 
         IChatComponent noColorComponent = new ChatComponentText(ChatLib.addColor("&r&8 [&0C"));
         ChatStyle noColorStyle = new ChatStyle();

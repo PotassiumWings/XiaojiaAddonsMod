@@ -14,10 +14,10 @@ public class Configs {
                     "Click &8C]&r copies the whole message with color code.")
     public static boolean ChatCopy = false;
 
-    @Property(type = Property.Type.FOLDER, name = "Keep Sprint", parent = "Misc")
+    @Property(type = Property.Type.FOLDER, name = "Keep Sprinting", parent = "Misc")
     public static boolean KeepSprintEnable = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Keep Sprint Enable", parent = "Keep Sprint",
+    @Property(type = Property.Type.BOOLEAN, name = "Keep Sprinting Enable", parent = "Keep Sprinting",
             description = "Keep holding sprint key. &cNOT A CHEAT!")
     public static boolean KeepSprint = false;
 
@@ -869,7 +869,7 @@ public class Configs {
     public static boolean WolfMiniESP = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Sven miniboss HP", parent = "Sven",
-            description = "Display a green bounding box at Sven minibosses.")
+            description = "Display HP of Sven minibosses.")
     public static boolean ShowWolfMiniHP = false;
 
 
@@ -908,6 +908,7 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Move Randomly", parent = "Fishing", illegal = true,
             description = "Move around and rotate to bypass afk test \n" +
                     "and gain fishing exp while afk.\n" +
+                    "Requires keybinding to toggle.\n" +
                     "&c&lDONT FULLY AFK!\n")
     public static boolean AutoMove = false;
 

@@ -99,6 +99,9 @@ public class InCombatQOL {
                     if (!Configs.InCombatFastMode) return;
                     if (openTrade || autoSelling) {
                         inventory.click(22, false, "MIDDLE", 1);
+                        if (openTrade) {
+                            openTrade = false;
+                        }
                         currentStep++;
                     } else if (openWardrobe) {
                         inventory.click(32, false, "MIDDLE", 1);

@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -60,7 +61,7 @@ public class HoldRightClick {
             if (currentSpeed < Configs.MaxSpeed) {
                 ControlUtils.rightClick();
                 if (XiaojiaAddons.isDebug()) ChatLib.chat("rightClick!");
-                currentSpeed += 5;
+                currentSpeed += SkyblockUtils.isInDungeon() ? 3 : 10;
             }
         } else {
             isRightClicking = false;
