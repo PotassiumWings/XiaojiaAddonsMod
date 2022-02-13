@@ -8,7 +8,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class ShortbowUtils {
-    private static double getProjectileFunction(double x, double alpha) {
+    public static double getProjectileFunction(double x, double alpha) {
         double v0 = 13.7, g = 1.0, k = 0.045;
         double t = -Math.log(1 - k * x / v0 / Math.cos(alpha)) / k;
         return x / (v0 * k * Math.cos(alpha)) * (v0 * k * Math.sin(alpha) + g) - g * t / k;
@@ -26,7 +26,7 @@ public class ShortbowUtils {
         return getDirection(x, y, z, tx, ty + 1, tz);
     }
 
-    private static Vector2d getDirection(double x, double y, double z, double tx, double ty, double tz) {
+    public static Vector2d getDirection(double x, double y, double z, double tx, double ty, double tz) {
         double PI = Math.PI;
         double dx = tx - x, dy = ty - y, dz = tz - z;
         double X = Math.sqrt((x - tx) * (x - tx) + (z - tz) * (z - tz));

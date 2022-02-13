@@ -14,6 +14,7 @@ import com.xiaojia.xiaojiaaddons.Features.Bestiary.SneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.Spider;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.EnderCrystalESP;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoBlood;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoCloseSecretChest;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
@@ -170,6 +171,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new EnderCrystalESP());
 
         // Dungeons
+        MinecraftForge.EVENT_BUS.register(new AutoBlaze());
         MinecraftForge.EVENT_BUS.register(new AutoBlood());
         MinecraftForge.EVENT_BUS.register(new AutoCloseSecretChest());
         MinecraftForge.EVENT_BUS.register(new AutoItemFrame());

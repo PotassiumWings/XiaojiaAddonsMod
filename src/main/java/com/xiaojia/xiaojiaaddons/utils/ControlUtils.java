@@ -25,6 +25,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getYaw;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
+import static com.xiaojia.xiaojiaaddons.utils.SkyblockUtils.getPing;
 
 public class ControlUtils {
 
@@ -107,7 +108,7 @@ public class ControlUtils {
         if (yaw < 0) yaw += 360;  // yaw \in [0, 360]
         if (yaw - curyaw > 180) yaw -= 360;  // yaw = 359, curyaw = 1 -> yaw = -1, curyaw = 1
         if (curyaw - yaw > 180) curyaw -= 360;  // yaw = 1, curyaw = 359 -> yaw = 1, curyaw = -1
-        int rotate_times = (int) Math.floor(2 + Math.random() * 6);
+        int rotate_times = (int) Math.floor(1 + Math.random() * 5);
         System.err.printf("curyaw %.2f, yaw %.2f%n", curyaw, yaw);
         for (int j = 1; j <= rotate_times; j++) {
             float toturn_yaw = curyaw + (yaw - curyaw) / rotate_times * j;
@@ -117,6 +118,19 @@ public class ControlUtils {
             ControlUtils.changeDirection(toturn_yaw, toturn_pitch);
             Thread.sleep((long) (10 + Math.random() * 20));
             checkDirection(toturn_yaw, toturn_pitch, shouldThrow);
+        }
+    }
+
+    public static void etherWarp(double x, double y, double z) {
+        // shift click
+        try {
+            ControlUtils.sneak();
+            ControlUtils.faceSlowly(x, y, z);
+            Thread.sleep(getPing() + 50);
+            ControlUtils.rightClick();
+            ControlUtils.unSneak();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -137,6 +151,14 @@ public class ControlUtils {
 
     public static void faceSlowly(float tx, float ty, float tz) throws InterruptedException {
         faceSlowly(tx, ty, tz, true);
+    }
+
+    public static void faceSlowly(double yaw, double pitch) throws InterruptedException {
+        faceSlowly((float) yaw, (float) pitch, true);
+    }
+
+    public static void faceSlowly(double tx, double ty, double tz) throws InterruptedException {
+        faceSlowly((float) tx, (float) ty, (float) tz);
     }
 
     public static void faceSlowly(BlockPos pos) throws InterruptedException {

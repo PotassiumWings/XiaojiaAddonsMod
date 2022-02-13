@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
@@ -389,6 +390,9 @@ public class Dungeon {
 
     private static void addRoom(Room room) {
         if (room.name.equals("Unknown")) return;
+        if (room.name.equals("Blaze")) {
+            AutoBlaze.setRoom(room);
+        }
         rooms.add(room);
     }
 
@@ -512,8 +516,8 @@ public class Dungeon {
                     player.inRender = false;
                     continue;
                 }
-                if (MapUtils.isBetween((int) entityPlayer.posX, 0, 190) &&
-                        MapUtils.isBetween((int) entityPlayer.posZ, 0, 190)) {
+                if (MathUtils.isBetween((int) entityPlayer.posX, 0, 190) &&
+                        MathUtils.isBetween((int) entityPlayer.posZ, 0, 190)) {
                     player.inRender = true;
                     player.realX = entityPlayer.posX;
                     player.realZ = entityPlayer.posZ;
@@ -560,8 +564,8 @@ public class Dungeon {
         int x = MathUtils.floor(getX(getPlayer())), z = MathUtils.floor(getZ(getPlayer()));
         if (XiaojiaAddons.isDebug()) ChatLib.chat("x: " + x + ", z: " + z);
         for (Room room : rooms) {
-            if (MapUtils.isBetween(x, room.x - 16, room.x + 16) &&
-                    MapUtils.isBetween(z, room.z - 16, room.z + 16)) {
+            if (MathUtils.isBetween(x, room.x - 16, room.x + 16) &&
+                    MathUtils.isBetween(z, room.z - 16, room.z + 16)) {
                 currentRoom = room.name;
                 StonklessStonk.setInPuzzle(room.type.equals("puzzle") &&
                         (room.name.equals("Water Board") || room.name.equals("Three Weirdos")) ||

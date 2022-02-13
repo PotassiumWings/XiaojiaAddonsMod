@@ -607,6 +607,10 @@ public class Configs {
                     "Blue Pad = has a chance to be final tp.")
     public static boolean TeleportMazeSolver = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Blaze", parent = "Solvers",
+            description = "Bind a key to use!")
+    public static boolean AutoBlaze = false;
+
     // StarredMobESP
     @Property(type = Property.Type.FOLDER, name = "Starred Mob ESP", parent = "Dungeons")
     public static boolean StarredMobESPEnable = false;

@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
@@ -19,6 +20,7 @@ import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CipherUtils;
+import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.ShortbowUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -37,6 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
+import static com.xiaojia.xiaojiaaddons.utils.SkyblockUtils.getPing;
 
 public class Command extends CommandBase {
     @Override
@@ -106,6 +109,17 @@ public class Command extends CommandBase {
                 break;
             case "showitem":
                 ShowItem.show();
+                break;
+            case "etherwarp":
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception ignored) {}
+                    ControlUtils.etherWarp(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
+                }).start();
+                break;
+            case "testblaze":
+                AutoBlaze.test();
                 break;
 //            case "textcipher":
 //                CipherUtils.test(strings[1]);

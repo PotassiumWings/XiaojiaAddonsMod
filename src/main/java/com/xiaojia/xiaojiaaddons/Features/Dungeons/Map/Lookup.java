@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 
 import java.util.ArrayList;
 
@@ -38,8 +39,8 @@ public class Lookup {
         for (int x = Dungeon.startX; x <= Dungeon.startX + (Dungeon.roomSize + 1) * 5; x += 16) {
             for (int z = Dungeon.startZ; z <= Dungeon.startZ + (Dungeon.roomSize + 1) * 5; z += 16) {
                 if (x % (Dungeon.roomSize + 1) == 15 && z % (Dungeon.roomSize + 1) == 15) {
-                    if (MapUtils.isBetween(coords.x, x + 16, x - 16) &&
-                            MapUtils.isBetween(coords.y, z + 16, z - 16)) {
+                    if (MathUtils.isBetween(coords.x, x + 16, x - 16) &&
+                            MathUtils.isBetween(coords.y, z + 16, z - 16)) {
                         return new Vector2i(x, z);
                     }
                 }

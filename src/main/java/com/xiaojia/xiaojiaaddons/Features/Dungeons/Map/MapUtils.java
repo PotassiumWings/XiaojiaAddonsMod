@@ -24,10 +24,6 @@ public class MapUtils {
                 || (!isColumnAir(x + 4, z) && !isColumnAir(x - 4, z) && isColumnAir(x, z + 4) && isColumnAir(x, z - 4));
     }
 
-    public static boolean isBetween(int a, int b, int c) {
-        return (a - b) * (a - c) <= 0;
-    }
-
     public static boolean chunkLoaded(Vector3i coords) {
         return getWorld().getChunkFromBlockCoords(
                 new BlockPos(coords.x, coords.y, coords.z)

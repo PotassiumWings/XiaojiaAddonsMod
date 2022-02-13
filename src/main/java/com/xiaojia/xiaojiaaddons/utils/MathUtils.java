@@ -32,6 +32,14 @@ public class MathUtils {
         return deltaYaw * deltaYaw + deltaPitch * deltaPitch;
     }
 
+    public static boolean isBetween(int a, int from, int to) {
+        return (a - from) * (a - to) <= 0;
+    }
+
+    public static boolean isBetween(double a, double from, double to) {
+        return (a - from) * (a - to) <= 0;
+    }
+
     public static boolean checkBlocksBetween(int x, int y, int z) {
         float px = getX(getPlayer()), py = getY(getPlayer()) + 1.5F, pz = getZ(getPlayer());
         float tx = x + 0.5F, ty = y + 0.5F, tz = z + 0.5F;
