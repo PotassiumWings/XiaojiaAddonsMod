@@ -29,7 +29,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class EntityQOL {
     private static final ArrayList<String> summonItemIDs = new ArrayList<>(
-            Arrays.asList("HEAVY_HELMET", "ZOMBIE_KNIGHT_HELMET", "SKELETOR_HELMET")
+            Arrays.asList("HEAVY_HELMET", "ZOMBIE_KNIGHT_HELMET", "SKELETOR_HELMET", "SUPER_HEAVY_HELMET")
     );
 
     private static boolean isSummon(Entity entity) {

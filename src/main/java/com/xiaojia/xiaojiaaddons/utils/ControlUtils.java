@@ -128,6 +128,7 @@ public class ControlUtils {
             ControlUtils.faceSlowly(x, y, z);
             Thread.sleep(getPing() + 50);
             ControlUtils.rightClick();
+            Thread.sleep(getPing());
             ControlUtils.unSneak();
         } catch (Exception e) {
             e.printStackTrace();

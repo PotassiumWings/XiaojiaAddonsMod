@@ -76,6 +76,11 @@ public class BlockUtils {
         return block.getUnlocalizedName().toLowerCase().contains("air");
     }
 
+    public static boolean isBlockAir(double x, double y, double z) {
+        Block block = getBlockAt(x, y, z);
+        return block.getUnlocalizedName().toLowerCase().contains("air");
+    }
+
     public static boolean isBlockSapling(float x, float y, float z) {
         Block block = getBlockAt(x, y, z);
         return block.getRegistryName().toLowerCase().contains("sapling");
