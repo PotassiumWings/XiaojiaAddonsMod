@@ -31,7 +31,11 @@ public class Sven extends RenderEntityESP {
 
     @Override
     public EntityInfo getEntityInfo(Entity entity) {
-        if (!Checker.enabled || !SkyblockUtils.isInHowlingCave()) return null;
+        // hub / howling cave
+        if (!Checker.enabled ||
+                (!SkyblockUtils.isInHowlingCave() && !SkyblockUtils.isInForest() &&
+                        !SkyblockUtils.isInMountain() && !SkyblockUtils.isInRuin())
+        ) return null;
         if (!Configs.WolfMiniESP) return null;
         if (!(entity instanceof EntityArmorStand) || entity.getName() == null) return null;
         for (Map.Entry<String, Integer> entry : kindColorMap.entrySet()) {
@@ -45,6 +49,7 @@ public class Sven extends RenderEntityESP {
                 hashMap.put("drawString", EntityInfo.EnumDraw.DRAW_ARMORSTAND_HP);
                 hashMap.put("scale", 2F);
                 hashMap.put("kind", kind);
+                hashMap.put("isESP", true);
                 hashMap.put("fontColor", fontColor);
                 return new EntityInfo(hashMap);
             }

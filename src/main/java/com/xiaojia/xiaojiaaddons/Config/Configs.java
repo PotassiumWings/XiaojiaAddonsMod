@@ -92,6 +92,7 @@ public class Configs {
             description = "Auto aim ender crystals round-robin and\n" +
                     "right click Terminator during dragon's fight.\n" +
                     "&cRequires terminator in hotbar.\n" +
+                    "&6Bind a key to toggle!\n" +
                     "&c&lPlease use this friendly and respect other players!")
     public static boolean AutoShootCrystal = false;
 
@@ -869,12 +870,36 @@ public class Configs {
     public static boolean WolfEnabled = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Sven miniboss ESP", parent = "Sven",
-            description = "Display a green bounding box at Sven minibosses.")
+            description = "Display a green bounding box at Sven mini/bosses.")
     public static boolean WolfMiniESP = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Sven miniboss HP", parent = "Sven",
-            description = "Display HP of Sven minibosses.")
+            description = "Display HP of Sven mini/bosses.")
     public static boolean ShowWolfMiniHP = false;
+
+    // Revenant
+    @Property(type = Property.Type.FOLDER, name = "Revenant", parent = "Slayer")
+    public static boolean RevenantEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Revenant miniboss ESP", parent = "Revenant",
+            description = "Display a green bounding box at Revenant mini/bosses.")
+    public static boolean RevMiniESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Revenant miniboss HP", parent = "Revenant",
+            description = "Display HP of Revenant mini/bosses.")
+    public static boolean ShowRevMiniHP = false;
+
+    // Tarantula
+    @Property(type = Property.Type.FOLDER, name = "Tarantula", parent = "Slayer")
+    public static boolean TaraEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Tarantula miniboss ESP", parent = "Tarantula",
+            description = "Display a green bounding box at Tarantula mini/bosses.")
+    public static boolean TaraMiniESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Tarantula miniboss HP", parent = "Tarantula",
+            description = "Display HP of Tarantula mini/bosses.")
+    public static boolean ShowTaraMiniHP = false;
 
 
     // Skills

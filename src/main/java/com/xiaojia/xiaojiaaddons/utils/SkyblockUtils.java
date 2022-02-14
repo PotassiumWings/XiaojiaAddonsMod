@@ -16,6 +16,8 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class SkyblockUtils {
     private static final ArrayList<String> maps = new ArrayList<>(Arrays.asList(
+            "Ruins", "Forest", "Mountain", "High Level", "Wilderness",
+            "Dungeon Hub",
             "Hub", "Spider's Den", "Gunpowder Mines", "Void Sepulture", "Dragon's Nest",
             "The End", "The Mist", "Blazing Fortress", "The Catacombs", "Howling Cave",
             "Your Island", "None"
@@ -133,6 +135,18 @@ public class SkyblockUtils {
 
     public static boolean isInHowlingCave() {
         return currentMap.equals("Howling Cave");
+    }
+
+    public static boolean isInRuin() {
+        return currentMap.equals("Ruins");
+    }
+
+    public static boolean isInMountain() {
+        return currentMap.equals("Mountain");
+    }
+
+    public static boolean isInForest() {
+        return currentMap.equals("Forest");
     }
 
     public static boolean isInCrystalHollows() {
