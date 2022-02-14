@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public class TickEndEvent extends Event {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END){
+        if (event.phase == TickEvent.Phase.END) {
             try {
                 MinecraftForge.EVENT_BUS.post(new TickEndEvent());
             } catch (Exception e) {

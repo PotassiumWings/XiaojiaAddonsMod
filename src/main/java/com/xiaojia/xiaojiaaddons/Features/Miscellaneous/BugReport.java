@@ -1,11 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Features.Miscellaneous;
 
-import com.xiaojia.xiaojiaaddons.Config.ButtonsNew.TextInput;
-import com.xiaojia.xiaojiaaddons.Config.Colors;
-import com.xiaojia.xiaojiaaddons.Config.Config;
-import com.xiaojia.xiaojiaaddons.Features.Remote.RemoteUtils;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

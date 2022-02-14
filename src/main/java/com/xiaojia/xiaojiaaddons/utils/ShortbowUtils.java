@@ -3,13 +3,9 @@ package com.xiaojia.xiaojiaaddons.utils;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Cube;
 import com.xiaojia.xiaojiaaddons.Objects.TestCubeGUI;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.vecmath.Vector2d;
-
-import java.awt.Color;
 import java.util.ArrayList;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getPitch;
@@ -18,7 +14,6 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getYaw;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class ShortbowUtils {
     public static double getProjectileFunction(double x, double alpha) {
@@ -129,20 +124,6 @@ public class ShortbowUtils {
         }).start();
     }
 
-    @SubscribeEvent
-    public void onTick(TickEndEvent event) {
-//        for (Entity entity: getWorld().loadedEntityList) {
-//            if (entity instanceof EntityArrow) {
-//                Cube arrowCube = new Cube(
-//                        getX(entity), getY(entity) - 0.1F, getZ(entity),
-//                        0.1F, 0.1F
-//                );
-//                arrowCube.color = new Color(255, 255, 255);
-//                TestCubeGUI.cubes.add(arrowCube);
-//            }
-//        }
-    }
-
     public static Vector2d calcYawPitchEnderCrystal(double tx, double ty, double tz) {
         // consider player EyeHeight and crystal HitBox
         double x = getX(getPlayer()), y = getY(getPlayer()) + getPlayer().getEyeHeight(), z = getZ(getPlayer());
@@ -194,5 +175,19 @@ public class ShortbowUtils {
         double pitch = pitch1;
         if (Math.abs(pitch2) < Math.abs(pitch)) pitch = pitch2;
         return new Vector2d(yaw, pitch);
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEndEvent event) {
+//        for (Entity entity: getWorld().loadedEntityList) {
+//            if (entity instanceof EntityArrow) {
+//                Cube arrowCube = new Cube(
+//                        getX(entity), getY(entity) - 0.1F, getZ(entity),
+//                        0.1F, 0.1F
+//                );
+//                arrowCube.color = new Color(255, 255, 255);
+//                TestCubeGUI.cubes.add(arrowCube);
+//            }
+//        }
     }
 }

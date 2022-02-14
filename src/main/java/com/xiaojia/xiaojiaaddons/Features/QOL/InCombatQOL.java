@@ -57,6 +57,64 @@ public class InCombatQOL {
     private int currentStep = 0;
     private int wardrobeSlot = -1;
 
+    private static boolean canSell(ItemStack itemStack) {
+        String name = ChatLib.removeFormatting(itemStack.getDisplayName()).toLowerCase();
+        boolean isRecomed = NBTUtils.isItemRecombobulated(itemStack);
+        boolean isFullQuality = NBTUtils.isItemFullQuality(itemStack);
+        boolean isStarred = NBTUtils.isItemStarred(itemStack);
+        int heldTime = NBTUtils.getIntFromExtraAttributes(itemStack, "trainingWeightsHeldTime");
+        if (Configs.AutoSellDungeonArmor) {
+            for (String shit : dungArmor)
+                if (name.contains(shit.toLowerCase())) {
+                    if (isRecomed && !Configs.CanAutoSellRecomed) return false;
+                    if (isFullQuality && !Configs.CanAutoSellFullQuality) return false;
+                    if (isStarred && !Configs.CanAutoSellStarred) return false;
+                    return !isRecomed || !isFullQuality || Configs.CanAutoSellFullQualityRecomed;
+                }
+        }
+        if (Configs.AutoSellDungeonTrash) {
+            if (heldTime > 10000 && !Configs.CanSellTrainingWeightLong) return false;
+            for (String shit : dungTrash) {
+                if (name.contains(shit.toLowerCase())) {
+                    return !isRecomed || Configs.CanSellRecomedDungeonTrash;
+                }
+            }
+        }
+        // misc
+        if (Configs.AutoSellSuperboom && name.contains("superboom tnt")) return true;
+        if (Configs.AutoSellRunes) {
+            for (String shit : runes)
+                if (name.contains(shit.toLowerCase()))
+                    return true;
+        }
+        // fishing stuff
+        if (Configs.AutoSellIceRod && name.contains("ice rod")) return true;
+        // mining stuff
+        if (Configs.AutoSellAscensionRope && name.contains("ascension rope")) return true;
+        if (Configs.AutoSellWishingCompass && name.contains("wishing compass")) return true;
+        if (Configs.AutoSellFineGem) {
+            Pattern pattern = Pattern.compile("fine \\w+ gemstone");
+            Matcher matcher = pattern.matcher(name);
+            if (matcher.find()) return true;
+        }
+        // books
+        if (name.startsWith("enchanted book")) {
+            ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
+            // "Feather Falling"
+            String bookName = nameAndLevel.get(0);
+            // "VI"
+            String levelString = nameAndLevel.get(1);
+            if (bookName.equals("Feather Falling") && Configs.AutoSellFeatherFalling &&
+                    (levelString.equals("VI") || levelString.equals("VII"))) return true;
+            if (bookName.equals("Infinite Quiver") && Configs.AutoSellInfiniteQuiver &&
+                    (levelString.equals("VI") || levelString.equals("VII"))) return true;
+            if (bookName.equals("Bank") && Configs.AutoSellBank) return true;
+            if (bookName.equals("No Pain No Gain") && Configs.AutoSellNoPainNoGain) return true;
+            return bookName.equals("Ultimate Jerry") && Configs.AutoSellUltimateJerry;
+        }
+        return false;
+    }
+
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
@@ -171,63 +229,5 @@ public class InCombatQOL {
                 }).start();
             }
         }
-    }
-
-    private static boolean canSell(ItemStack itemStack) {
-        String name = ChatLib.removeFormatting(itemStack.getDisplayName()).toLowerCase();
-        boolean isRecomed = NBTUtils.isItemRecombobulated(itemStack);
-        boolean isFullQuality = NBTUtils.isItemFullQuality(itemStack);
-        boolean isStarred = NBTUtils.isItemStarred(itemStack);
-        int heldTime = NBTUtils.getIntFromExtraAttributes(itemStack, "trainingWeightsHeldTime");
-        if (Configs.AutoSellDungeonArmor) {
-            for (String shit : dungArmor)
-                if (name.contains(shit.toLowerCase())) {
-                    if (isRecomed && !Configs.CanAutoSellRecomed) return false;
-                    if (isFullQuality && !Configs.CanAutoSellFullQuality) return false;
-                    if (isStarred && !Configs.CanAutoSellStarred) return false;
-                    return !isRecomed || !isFullQuality || Configs.CanAutoSellFullQualityRecomed;
-                }
-        }
-        if (Configs.AutoSellDungeonTrash) {
-            if (heldTime > 10000 && !Configs.CanSellTrainingWeightLong) return false;
-            for (String shit : dungTrash) {
-                if (name.contains(shit.toLowerCase())) {
-                    return !isRecomed || Configs.CanSellRecomedDungeonTrash;
-                }
-            }
-        }
-        // misc
-        if (Configs.AutoSellSuperboom && name.contains("superboom tnt")) return true;
-        if (Configs.AutoSellRunes) {
-            for (String shit : runes)
-                if (name.contains(shit.toLowerCase()))
-                    return true;
-        }
-        // fishing stuff
-        if (Configs.AutoSellIceRod && name.contains("ice rod")) return true;
-        // mining stuff
-        if (Configs.AutoSellAscensionRope && name.contains("ascension rope")) return true;
-        if (Configs.AutoSellWishingCompass && name.contains("wishing compass")) return true;
-        if (Configs.AutoSellFineGem) {
-            Pattern pattern = Pattern.compile("fine \\w+ gemstone");
-            Matcher matcher = pattern.matcher(name);
-            if (matcher.find()) return true;
-        }
-        // books
-        if (name.startsWith("enchanted book")) {
-            ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
-            // "Feather Falling"
-            String bookName = nameAndLevel.get(0);
-            // "VI"
-            String levelString = nameAndLevel.get(1);
-            if (bookName.equals("Feather Falling") && Configs.AutoSellFeatherFalling &&
-                    (levelString.equals("VI") || levelString.equals("VII"))) return true;
-            if (bookName.equals("Infinite Quiver") && Configs.AutoSellInfiniteQuiver &&
-                    (levelString.equals("VI") || levelString.equals("VII"))) return true;
-            if (bookName.equals("Bank") && Configs.AutoSellBank) return true;
-            if (bookName.equals("No Pain No Gain") && Configs.AutoSellNoPainNoGain) return true;
-            if (bookName.equals("Ultimate Jerry") && Configs.AutoSellUltimateJerry) return true;
-        }
-        return false;
     }
 }

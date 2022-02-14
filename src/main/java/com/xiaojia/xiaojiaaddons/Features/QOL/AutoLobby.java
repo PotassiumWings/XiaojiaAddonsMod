@@ -86,7 +86,7 @@ public class AutoLobby {
                 }
             }
             StringBuilder s = new StringBuilder();
-            for (long time: timeList) s.append(time).append(" ");
+            for (long time : timeList) s.append(time).append(" ");
             s.append("\n");
             for (double yCoord : yCoordList) s.append(String.format("%.2f ", yCoord));
             System.out.println(s.toString());

@@ -12,15 +12,12 @@ import com.xiaojia.xiaojiaaddons.Objects.Line;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
-import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.ShortbowUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.util.BlockPos;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -28,7 +25,6 @@ import org.lwjgl.input.Keyboard;
 
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,24 +37,135 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 import static com.xiaojia.xiaojiaaddons.utils.SkyblockUtils.getPing;
 
 public class AutoBlaze {
-    private final KeyBind keyBind = new KeyBind("Auto Blaze", Keyboard.KEY_NONE);
-    public boolean should = false;
-    public static Room room = null;
-
     // principle: whatever being saved is the center of the block, not +0.25+1.5
     private final static List<BlazeInfo> blazes = new ArrayList<>();
     private final static List<Cube> blocks = new ArrayList<>();
     private final static HashMap<Vector3d, List<Vector3d>> transGraph = new HashMap<>();  // from a -> b: graph[a].contains(b)
     private final static List<Vector3d> places = new ArrayList<>();  // aotv
-
+    public static Room room = null;
+    public static StringBuilder log = new StringBuilder();
     private static boolean lowFirst = false;
+    private final KeyBind keyBind = new KeyBind("Auto Blaze", Keyboard.KEY_NONE);
+    public boolean should = false;
     private Thread shootingThread = null;
     private boolean tpPacketReceived = false;
-    private boolean arrowShot = false;
 //    private boolean arrowDirection = false;
 //    private double xzPlaneArrowAlpha = -1;
+    private boolean arrowShot = false;
 
-    public static StringBuilder log = new StringBuilder();
+    // v: middle of block
+    public static Vector3d calculateSidePosToEtherWarp(double x, double y, double z) throws Exception {
+        int[] dx = new int[]{1, -1, 0, 0};
+        int[] dz = new int[]{0, 0, 1, -1};
+        for (int i = 0; i < 4; i++) {
+            float tx = (float) x + dx[i];
+            float tz = (float) z + dz[i];
+            if (BlockUtils.isBlockAir(tx, (float) y, tz) && BlockUtils.isBlockAir(tx, (float) y - 1, tz))
+                return new Vector3d(x + dx[i] / 2F, y, z + dz[i] / 2F);
+        }
+        throw new Exception();
+    }
+
+    public static Vector3d whereShouldIEtherWarpTo(double curY, double x, double y, double z) throws Exception {
+        // h: half height of block
+        double h = Math.round(y * 4) % 4 == 1 ? 0.25 : 0.5;
+        if (curY >= y + 20) return new Vector3d(x, y + h, z);
+        return calculateSidePosToEtherWarp(x, y, z);
+    }
+
+    // v: standing at v, v_y + 0.25
+    private static boolean blazeCanHit(Vector3d v, int i) {
+        BlazeInfo blazeInfo = blazes.get(i);
+        double x = blazeInfo.cube.x;
+        double y = blazeInfo.cube.y;
+        double z = blazeInfo.cube.z;
+        Vector2d yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.62, v.z, x, y, z);
+        double yaw = yawAndPitch.getX();
+        double pitch = yawAndPitch.getY();
+        if (!canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, blazeInfo.cube)) {
+            log.append("can't hit, ????").append("\n");
+            return false;
+        }
+        for (int j = i + 1; j < blazes.size(); j++)
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, blazes.get(j).cube)) {
+                log.append("can't hit, because it may shoot " + j + " th blaze!").append("\n");
+                return false;
+            }
+        for (Cube cube : blocks)
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, cube)) {
+                log.append(String.format("can't hit, because it may hit block at %.2f %.2f %.2f", cube.x, cube.y, cube.z)).append("\n");
+                return false;
+            }
+        return true;
+    }
+
+    private static Vector3d diff(Vector3d from, Vector3d to) {
+        return new Vector3d(to.x - from.x, to.y - from.y, to.z - from.z);
+    }
+
+    private static Vector3d add(Vector3d a, Vector3d b) {
+        return new Vector3d(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    private static Vector3d mul(double x, Vector3d v) {
+        return new Vector3d(v.x * x, v.y * x, v.z * x);
+    }
+
+    public static boolean canHit(double x, double y, double z, double yaw, double pitch, Cube cube) {
+        // solve in xz plane
+        log.append(String.format("trying canHit with yaw: %.2f, pitch: %.2f", yaw, pitch)).append("\n");
+        double PI = Math.PI;
+        double sx = cube.x - cube.w, sz = cube.z - cube.w;
+        double tx = cube.x + cube.w, tz = cube.z + cube.w;
+        if (isInXZSquare(x, z, sx, sz, tx, tz)) return true;
+        // calculate intersections with 4 edges of the square
+        // z * cos(alpha) = sin(alpha) * (x - x0) + z0 * cos(alpha)
+        double xzAlpha = yaw + 90;
+        double tan = Math.tan(xzAlpha * PI / 180);
+        double zSx = z + (sx - x) * tan, xSz = x + (sz - z) * (1 / tan);
+        double zTx = z + (tx - x) * tan, xTz = x + (tz - z) * (1 / tan);
+        ArrayList<Vector2d> intersects = new ArrayList<>();
+        if (zSx >= sz && zSx < tz) intersects.add(new Vector2d(sx, zSx));
+        if (zTx > sz && zTx <= tz) intersects.add(new Vector2d(tx, zTx));
+        if (xSz > sx && xSz <= tx) intersects.add(new Vector2d(xSz, sz));
+        if (xTz >= sx && xTz < tx) intersects.add(new Vector2d(xTz, tz));
+        if (intersects.size() <= 1) {
+            log.append("canHit false: intersect size too small").append("\n");
+            return false;
+        }
+        if (intersects.size() != 2) {
+            ChatLib.chat("NOOOOOOOOO");
+            return false;
+        }
+
+        // solve in y-X plane
+        sx = intersects.get(0).x;
+        tx = intersects.get(1).x;
+        sz = intersects.get(0).y;
+        tz = intersects.get(1).y;
+
+        double sX = Math.sqrt((x - sx) * (x - sx) + (z - sz) * (z - sz));
+        double tX = Math.sqrt((x - tx) * (x - tx) + (z - tz) * (z - tz));
+        pitch = -PI / 180 * pitch;
+
+        double sy = (cube.y - cube.h) - y;
+        double ty = (cube.y + cube.h) - y;
+        double sY = ShortbowUtils.getProjectileFunction(sX, pitch);
+        double tY = ShortbowUtils.getProjectileFunction(tX, pitch);
+        log.append(String.format("sx: %.2f, tx: %.2f, sz: %.2f, tz: %.2f", sx, tx, sz, tz)).append("\n");
+        log.append(String.format("sX: %.2f, tX: %.2f, pitch: %.2f", sX, tX, pitch)).append("\n");
+        log.append(String.format("sy: %.2f, ty: %.2f, sY: %.2f, tY: %.2f", sy, ty, sY, tY)).append("\n");
+        // not exactly, but most of the case
+        return MathUtils.isBetween(sY, sy, ty) || MathUtils.isBetween(tY, sy, ty);
+    }
+
+    public static boolean isInXZSquare(double x, double z, double sx, double sz, double tx, double tz) {
+        return MathUtils.isBetween(x, sx, tx) && MathUtils.isBetween(z, sz, tz);
+    }
+
+    public static void setRoom(Room blazeRoom) {
+        room = blazeRoom;
+    }
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -197,52 +304,6 @@ public class AutoBlaze {
         shootingThread.start();
     }
 
-    // v: middle of block
-    public static Vector3d calculateSidePosToEtherWarp(double x, double y, double z) throws Exception {
-        int[] dx = new int[]{1, -1, 0, 0};
-        int[] dz = new int[]{0, 0, 1, -1};
-        for (int i = 0; i < 4; i++) {
-            float tx = (float) x + dx[i];
-            float tz = (float) z + dz[i];
-            if (BlockUtils.isBlockAir(tx, (float) y, tz) && BlockUtils.isBlockAir(tx, (float) y - 1, tz))
-                return new Vector3d(x + dx[i] / 2F, y, z + dz[i] / 2F);
-        }
-        throw new Exception();
-    }
-
-    public static Vector3d whereShouldIEtherWarpTo(double curY, double x, double y, double z) throws Exception {
-        // h: half height of block
-        double h = Math.round(y * 4) % 4 == 1 ? 0.25 : 0.5;
-        if (curY >= y + 20) return new Vector3d(x, y + h, z);
-        return calculateSidePosToEtherWarp(x, y, z);
-    }
-
-    // v: standing at v, v_y + 0.25
-    private static boolean blazeCanHit(Vector3d v, int i) {
-        BlazeInfo blazeInfo = blazes.get(i);
-        double x = blazeInfo.cube.x;
-        double y = blazeInfo.cube.y;
-        double z = blazeInfo.cube.z;
-        Vector2d yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.62, v.z, x, y, z);
-        double yaw = yawAndPitch.getX();
-        double pitch = yawAndPitch.getY();
-        if (!canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, blazeInfo.cube)) {
-            log.append("can't hit, ????").append("\n");
-            return false;
-        }
-        for (int j = i + 1; j < blazes.size(); j++)
-            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, blazes.get(j).cube)) {
-                log.append("can't hit, because it may shoot " + j + " th blaze!").append("\n");
-                return false;
-            }
-        for (Cube cube : blocks)
-            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, cube)) {
-                log.append(String.format("can't hit, because it may hit block at %.2f %.2f %.2f", cube.x, cube.y, cube.z)).append("\n");
-                return false;
-            }
-        return true;
-    }
-
     public void calculatePlaces() throws Exception {
         int x = room.x, z = room.z;
         int[] dx = new int[]{7, -7, 0, 0};
@@ -319,18 +380,6 @@ public class AutoBlaze {
         return true;
     }
 
-    private static Vector3d diff(Vector3d from, Vector3d to) {
-        return new Vector3d(to.x - from.x, to.y - from.y, to.z - from.z);
-    }
-
-    private static Vector3d add(Vector3d a, Vector3d b) {
-        return new Vector3d(a.x + b.x, a.y + b.y, a.z + b.z);
-    }
-
-    private static Vector3d mul(double x, Vector3d v) {
-        return new Vector3d(v.x * x, v.y * x, v.z * x);
-    }
-
     public void calculateBlazes() {
         List<BlazeInfo> newBlaze = new ArrayList<>();
         for (Entity entity : getWorld().loadedEntityList) {
@@ -368,58 +417,6 @@ public class AutoBlaze {
         }
         blocks.clear();
         blocks.addAll(newBlocks);
-    }
-
-    public static boolean canHit(double x, double y, double z, double yaw, double pitch, Cube cube) {
-        // solve in xz plane
-        log.append(String.format("trying canHit with yaw: %.2f, pitch: %.2f", yaw, pitch)).append("\n");
-        double PI = Math.PI;
-        double sx = cube.x - cube.w, sz = cube.z - cube.w;
-        double tx = cube.x + cube.w, tz = cube.z + cube.w;
-        if (isInXZSquare(x, z, sx, sz, tx, tz)) return true;
-        // calculate intersections with 4 edges of the square
-        // z * cos(alpha) = sin(alpha) * (x - x0) + z0 * cos(alpha)
-        double xzAlpha = yaw + 90;
-        double tan = Math.tan(xzAlpha * PI / 180);
-        double zSx = z + (sx - x) * tan, xSz = x + (sz - z) * (1 / tan);
-        double zTx = z + (tx - x) * tan, xTz = x + (tz - z) * (1 / tan);
-        ArrayList<Vector2d> intersects = new ArrayList<>();
-        if (zSx >= sz && zSx < tz) intersects.add(new Vector2d(sx, zSx));
-        if (zTx > sz && zTx <= tz) intersects.add(new Vector2d(tx, zTx));
-        if (xSz > sx && xSz <= tx) intersects.add(new Vector2d(xSz, sz));
-        if (xTz >= sx && xTz < tx) intersects.add(new Vector2d(xTz, tz));
-        if (intersects.size() <= 1) {
-            log.append("canHit false: intersect size too small").append("\n");
-            return false;
-        }
-        if (intersects.size() != 2) {
-            ChatLib.chat("NOOOOOOOOO");
-            return false;
-        }
-
-        // solve in y-X plane
-        sx = intersects.get(0).x;
-        tx = intersects.get(1).x;
-        sz = intersects.get(0).y;
-        tz = intersects.get(1).y;
-
-        double sX = Math.sqrt((x - sx) * (x - sx) + (z - sz) * (z - sz));
-        double tX = Math.sqrt((x - tx) * (x - tx) + (z - tz) * (z - tz));
-        pitch = -PI / 180 * pitch;
-
-        double sy = (cube.y - cube.h) - y;
-        double ty = (cube.y + cube.h) - y;
-        double sY = ShortbowUtils.getProjectileFunction(sX, pitch);
-        double tY = ShortbowUtils.getProjectileFunction(tX, pitch);
-        log.append(String.format("sx: %.2f, tx: %.2f, sz: %.2f, tz: %.2f", sx, tx, sz, tz)).append("\n");
-        log.append(String.format("sX: %.2f, tX: %.2f, pitch: %.2f", sX, tX, pitch)).append("\n");
-        log.append(String.format("sy: %.2f, ty: %.2f, sY: %.2f, tY: %.2f", sy, ty, sY, tY)).append("\n");
-        // not exactly, but most of the case
-        return MathUtils.isBetween(sY, sy, ty) || MathUtils.isBetween(tY, sy, ty);
-    }
-
-    public static boolean isInXZSquare(double x, double z, double sx, double sz, double tx, double tz) {
-        return MathUtils.isBetween(x, sx, tx) && MathUtils.isBetween(z, sz, tz);
     }
 
     @SubscribeEvent
@@ -465,10 +462,6 @@ public class AutoBlaze {
         }
     }
 
-    public static void setRoom(Room blazeRoom) {
-        room = blazeRoom;
-    }
-
     static class BlazeInfo {
         Cube cube;
         int hp;
@@ -488,10 +481,6 @@ public class AutoBlaze {
         double w, h;
         Entity entity;
 
-        enum Type {
-            WARP, SHOOT
-        }
-
         public Sequence(double x, double y, double z) {
             type = Type.WARP;
             this.x = x;
@@ -504,6 +493,10 @@ public class AutoBlaze {
             this.yaw = yaw;
             this.pitch = pitch;
             this.entity = entity;
+        }
+
+        enum Type {
+            WARP, SHOOT
         }
     }
 }

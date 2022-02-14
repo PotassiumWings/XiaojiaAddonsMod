@@ -11,12 +11,8 @@ import com.xiaojia.xiaojiaaddons.utils.StringUtils;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class AutoCombine extends StepEvent {
     private static final HashMap<String, Integer> booksLevel = new HashMap<String, Integer>() {{

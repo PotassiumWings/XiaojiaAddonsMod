@@ -56,16 +56,15 @@ public class ConfigGuiNew extends GuiScreen {
     private final Color descriptionColor = new Color(0xaa, 0xaa, 0xaa, 240);
     // text inputs
     private final ArrayList<TextInput> textInputs = new ArrayList<>();
+    // close icon
+    private final int closeIconSize = 12;
+    // GUI scale
+    private final int startScale;
     // scroll
     private int secondScroll = 0;
     private int thirdScroll = 0;
     private int maxSecondScroll = 0;
     private int maxThirdScroll = 0;
-    // close icon
-    private final int closeIconSize = 12;
-
-    // GUI scale
-    private final int startScale;
     private int lastWidth = width;
     private int lastHeight = height;
 

@@ -14,7 +14,6 @@ import com.xiaojia.xiaojiaaddons.Features.Bestiary.SneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.Spider;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
 import com.xiaojia.xiaojiaaddons.Features.Dragons.EnderCrystalESP;
-import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoBlood;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoCloseSecretChest;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
@@ -32,6 +31,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Map;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.MapUpdater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.RoomLoader;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.TeleportMaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShadowAssassinESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShowHiddenMobs;
@@ -113,8 +113,8 @@ public class XiaojiaAddons {
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
-    private static boolean debug = false;
     public static CipherUtils cipherUtils;
+    private static boolean debug = false;
 
     public static void setDebug() {
         debug = !debug;
