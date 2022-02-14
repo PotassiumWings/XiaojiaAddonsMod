@@ -116,18 +116,12 @@ public class Command extends CommandBase {
                     ControlUtils.etherWarp(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
                 }).start();
                 break;
-//            case "setfrom":
-//                AutoBlaze.setFrom();
-//                break;
-//            case "setto":
-//                AutoBlaze.setTo();
-//                break;
             case "blaze":
                 System.out.println(AutoBlaze.log.toString());
                 break;
-//            case "textcipher":
-//                CipherUtils.test(strings[1]);
-//                break;
+            case "term":
+                ShortbowUtils.testTerminator();
+                break;
             // debug commands
             case "debug":
                 XiaojiaAddons.setDebug();
@@ -184,7 +178,7 @@ public class Command extends CommandBase {
                 ClientSocket.reconnect();
                 break;
             case "shoot":
-                ShortbowUtils.test(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
+                ShortbowUtils.testEnderCrystals(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
                 break;
 //            case "click":
 //                ClickTest.setEnabled();

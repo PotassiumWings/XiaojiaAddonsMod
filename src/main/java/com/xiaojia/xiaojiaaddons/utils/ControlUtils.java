@@ -169,7 +169,7 @@ public class ControlUtils {
     public static Tuple<Float, Float> getFaceYawAndPitch(float tx, float ty, float tz) {
         System.err.printf("facing %.2f %.2f %.2f%n", tx, ty, tz);
         float PI = (float) Math.PI;
-        float x = getX(getPlayer()), y = getY(getPlayer()) + 1.5F, z = getZ(getPlayer());
+        float x = getX(getPlayer()), y = getY(getPlayer()) + getPlayer().getEyeHeight(), z = getZ(getPlayer());
         float dx = tx - x, dy = ty - y, dz = tz - z;
         float X = (float) Math.sqrt((x - tx) * (x - tx) + (z - tz) * (z - tz));
         float alpha = (float) Math.atan2(dy, X);

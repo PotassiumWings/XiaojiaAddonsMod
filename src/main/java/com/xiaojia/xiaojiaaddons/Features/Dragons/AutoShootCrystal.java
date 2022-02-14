@@ -66,7 +66,7 @@ public class AutoShootCrystal {
                 return;
             }
             double x = p.x, y = p.y, z = p.z;
-            Vector2d res = ShortbowUtils.calc(x, y, z);
+            Vector2d res = ShortbowUtils.calcYawPitchEnderCrystal(x, y, z);
             double yaw = res.x, pitch = res.y;
             lastShootTime = TimeUtils.curTime();
             new Thread(() -> {

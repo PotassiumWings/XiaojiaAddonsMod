@@ -6,7 +6,9 @@ import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Objects.Cube;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
+import com.xiaojia.xiaojiaaddons.Objects.Line;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
@@ -99,7 +101,7 @@ public class AutoBlaze {
                     if (lastTp == null) {
                         for (Vector3d vec : places) {
                             if (noBlocksBetween(
-                                    new Vector3d(getX(getPlayer()), getY(getPlayer()) + 1.5, getZ(getPlayer())),
+                                    new Vector3d(getX(getPlayer()), getY(getPlayer()) + 1.54, getZ(getPlayer())),
                                     whereShouldIEtherWarpTo(getY(getPlayer()), vec.x, vec.y, vec.z)
                             )) {
                                 log.append("can go to " + vec).append("\n");
@@ -132,7 +134,7 @@ public class AutoBlaze {
                         double x = blazeInfo.cube.x;
                         double y = blazeInfo.cube.y;
                         double z = blazeInfo.cube.z;
-                        Vector2d yawAndPitch = ShortbowUtils.getDirection(res.x, res.y + 0.25 + 1.5, res.z, x, y, z);
+                        Vector2d yawAndPitch = ShortbowUtils.getDirection(res.x, res.y + 0.25 + 1.62, res.z, x, y, z);
                         seq.add(new Sequence(yawAndPitch.x, yawAndPitch.y, blazeInfo.hpEntity));
                         i++;
                     }
@@ -221,20 +223,20 @@ public class AutoBlaze {
         double x = blazeInfo.cube.x;
         double y = blazeInfo.cube.y;
         double z = blazeInfo.cube.z;
-        Vector2d yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.5, v.z, x, y, z);
+        Vector2d yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.62, v.z, x, y, z);
         double yaw = yawAndPitch.getX();
         double pitch = yawAndPitch.getY();
-        if (!canHit(v.x, v.y + 0.25 + 1.5, v.z, yaw, pitch, blazeInfo.cube)) {
+        if (!canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, blazeInfo.cube)) {
             log.append("can't hit, ????").append("\n");
             return false;
         }
         for (int j = i + 1; j < blazes.size(); j++)
-            if (canHit(v.x, v.y + 0.25 + 1.5, v.z, yaw, pitch, blazes.get(j).cube)) {
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, blazes.get(j).cube)) {
                 log.append("can't hit, because it may shoot " + j + " th blaze!").append("\n");
                 return false;
             }
         for (Cube cube : blocks)
-            if (canHit(v.x, v.y + 0.25 + 1.5, v.z, yaw, pitch, cube)) {
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, cube)) {
                 log.append(String.format("can't hit, because it may hit block at %.2f %.2f %.2f", cube.x, cube.y, cube.z)).append("\n");
                 return false;
             }
@@ -268,7 +270,7 @@ public class AutoBlaze {
                     if (y2 % 2 == 0) blockCube = new Cube(tx, y2 / 2F - 0.5, tz, 0.5, 0.5);
                     else blockCube = new Cube(tx, y, tz, 0.5, 0.25);
                     blocks.add(blockCube);
-                    log.append(String.format("block: %.2f %.2f %.2f", blockCube.x, blockCube.y ,blockCube.z)).append("\n");
+                    log.append(String.format("block: %.2f %.2f %.2f", blockCube.x, blockCube.y, blockCube.z)).append("\n");
                 }
             }
         }
@@ -277,8 +279,8 @@ public class AutoBlaze {
         for (Vector3d vecFrom : places) {
             transGraph.put(vecFrom, new ArrayList<>());
             for (Vector3d vecTo : places) {
-                Vector3d startFrom = new Vector3d(vecFrom.x, vecFrom.y + 1.5 + 0.25, vecFrom.z);
-                Vector3d endTo = whereShouldIEtherWarpTo(vecFrom.y + 0.25 + 1.5, vecTo.x, vecTo.y, vecTo.z);
+                Vector3d startFrom = new Vector3d(vecFrom.x, vecFrom.y + 1.54 + 0.25, vecFrom.z);
+                Vector3d endTo = whereShouldIEtherWarpTo(vecFrom.y + 0.25 + 1.54, vecTo.x, vecTo.y, vecTo.z);
                 boolean noBlock = noBlocksBetween(startFrom, endTo);
 
                 lines.add(new Line(startFrom, endTo, noBlock));
@@ -288,71 +290,6 @@ public class AutoBlaze {
             }
         }
 //        this.lines = lines;
-    }
-
-    public static Vector3d from = null, to = null;
-    public static ArrayList<BlockPos> highlightBlockPos = new ArrayList<>();
-    private static final ArrayList<Line> lines = new ArrayList<>();
-
-    @SubscribeEvent
-    public void test(RenderWorldLastEvent event) {
-        if (from != null) {
-            GuiUtils.drawBoundingBoxAtPos((float) from.x, (float) from.y, (float) from.z, new Color(255, 0, 0), 0.1F, 0.1F);
-        }
-        if (to != null) {
-            GuiUtils.drawBoundingBoxAtPos((float) to.x, (float) to.y, (float) to.z, new Color(0, 0, 255), 0.1F, 0.1F);
-        }
-        for (BlockPos blockPos : highlightBlockPos) {
-            GuiUtils.drawBoxAtBlock(blockPos, new Color(0, 255, 0), 1, 1, 0);
-        }
-        for (Line line : lines) {
-            Color color;
-            if (line.can) color = new Color(0, 255, 0);
-            else color = new Color(255, 0, 0);
-            GuiUtils.drawLine(
-                    (float) line.from.x, (float) line.from.y, (float) line.from.z,
-                    (float) line.to.x, (float) line.to.y, (float) line.to.z,
-                    color, 2
-            );
-        }
-    }
-
-    public static void setTo() {
-        to = new Vector3d(getX(getPlayer()), getY(getPlayer()), getZ(getPlayer()));
-
-        Vector3d v = new Vector3d();
-        v.normalize(diff(from, to));
-
-        new Thread(() -> {
-            try {
-                double epsilon = 1e-5;
-                Vector3d curV = from;
-                ArrayList<BlockPos> temp = new ArrayList<>();
-                while (MathUtils.floor(curV.x) != MathUtils.floor(to.x) ||
-                        MathUtils.floor(curV.y) != MathUtils.floor(to.y) ||
-                        MathUtils.floor(curV.z) != MathUtils.floor(to.z)) {
-                    double xScale = (epsilon + MathUtils.ceil(curV.x) - curV.x) / v.x;
-                    double yScale = (epsilon + MathUtils.ceil(curV.y) - curV.y) / v.y;
-                    double zScale = (epsilon + MathUtils.ceil(curV.z) - curV.z) / v.z;
-                    if (v.x < 0) xScale = (MathUtils.floor(curV.x) - epsilon - curV.x) / v.x;
-                    if (v.y < 0) yScale = (MathUtils.floor(curV.y) - epsilon - curV.y) / v.y;
-                    if (v.z < 0) zScale = (MathUtils.floor(curV.z) - epsilon - curV.z) / v.z;
-
-                    double scale = xScale;
-                    if (yScale < scale) scale = yScale;
-                    if (zScale < scale) scale = zScale;
-                    curV = add(curV, mul(scale, v));
-                    temp.add(new BlockPos(curV.x, curV.y, curV.z));
-                }
-                highlightBlockPos = temp;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-    public static void setFrom() {
-        from = new Vector3d(getX(getPlayer()), getY(getPlayer()) + 1.5, getZ(getPlayer()));
     }
 
     // exact coords
@@ -442,7 +379,7 @@ public class AutoBlaze {
         if (isInXZSquare(x, z, sx, sz, tx, tz)) return true;
         // calculate intersections with 4 edges of the square
         // z * cos(alpha) = sin(alpha) * (x - x0) + z0 * cos(alpha)
-        double xzAlpha = yaw - 90;
+        double xzAlpha = yaw + 90;
         double tan = Math.tan(xzAlpha * PI / 180);
         double zSx = z + (sx - x) * tan, xSz = x + (sz - z) * (1 / tan);
         double zTx = z + (tx - x) * tan, xTz = x + (tz - z) * (1 / tan);
@@ -474,7 +411,7 @@ public class AutoBlaze {
         double ty = (cube.y + cube.h) - y;
         double sY = ShortbowUtils.getProjectileFunction(sX, pitch);
         double tY = ShortbowUtils.getProjectileFunction(tX, pitch);
-        log.append(String.format("sx: %.2f, tx: %.2f, sz: %.2f, tz: %.2f",sx,tx,sz,tz)).append("\n");
+        log.append(String.format("sx: %.2f, tx: %.2f, sz: %.2f, tz: %.2f", sx, tx, sz, tz)).append("\n");
         log.append(String.format("sX: %.2f, tX: %.2f, pitch: %.2f", sX, tX, pitch)).append("\n");
         log.append(String.format("sy: %.2f, ty: %.2f, sY: %.2f, tY: %.2f", sy, ty, sY, tY)).append("\n");
         // not exactly, but most of the case
@@ -544,19 +481,6 @@ public class AutoBlaze {
         }
     }
 
-    static class Cube {
-        double x, y, z;
-        double h, w;
-
-        public Cube(double x, double y, double z, double h, double w) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.h = h;
-            this.w = w;
-        }
-    }
-
     static class Sequence {
         Type type;
         double yaw, pitch;
@@ -580,19 +504,6 @@ public class AutoBlaze {
             this.yaw = yaw;
             this.pitch = pitch;
             this.entity = entity;
-        }
-    }
-
-    // for test and show
-    static class Line {
-        Vector3d from;
-        Vector3d to;
-        boolean can;
-
-        public Line(Vector3d from, Vector3d to, boolean can) {
-            this.from = from;
-            this.to = to;
-            this.can = can;
         }
     }
 }

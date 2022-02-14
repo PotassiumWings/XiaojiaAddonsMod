@@ -84,6 +84,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayHandler;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
+import com.xiaojia.xiaojiaaddons.Objects.TestCubeGUI;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CipherUtils;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
@@ -91,6 +92,7 @@ import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.KeyBindUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.ShortbowUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -161,6 +163,8 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new SkyblockUtils());
         MinecraftForge.EVENT_BUS.register(new CommandsUtils());
         MinecraftForge.EVENT_BUS.register(new GuiTest());
+        MinecraftForge.EVENT_BUS.register(new ShortbowUtils());
+        MinecraftForge.EVENT_BUS.register(new TestCubeGUI());
 
         // Bestiary
         MinecraftForge.EVENT_BUS.register(new AutoScatha());
