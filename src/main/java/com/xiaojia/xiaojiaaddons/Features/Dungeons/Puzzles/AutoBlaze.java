@@ -152,7 +152,7 @@ public class AutoBlaze {
                             }
                             cnt++;
                         }
-                        Thread.sleep(100);
+                        Thread.sleep(getPing());
                     }
                 }
             } catch (Exception e) {
@@ -185,7 +185,7 @@ public class AutoBlaze {
         for (int i = 0; i < 4; i++) {
             float tx = (float) x + dx[i];
             float tz = (float) z + dz[i];
-            if (BlockUtils.isBlockAir(tx, (float) y, tz))
+            if (BlockUtils.isBlockAir(tx, (float) y, tz) && BlockUtils.isBlockAir(tx, (float) y - 1, tz))
                 return new Vector3d(x + dx[i] / 2F, y, z + dz[i] / 2F);
         }
         throw new Exception();
@@ -361,8 +361,8 @@ public class AutoBlaze {
         Entity entity = event.entity;
         if (entity instanceof EntityArrow) {
             double dis2 = MathUtils.distanceSquareFromPlayer(entity.posX, entity.posY, entity.posZ);
-            ChatLib.debug("entity join: " + entity + ", " + dis2);
             if (dis2 < 5 * 5) {
+                ChatLib.chat("entity join: " + entity + ", " + dis2);
                 arrowShot = true;
             }
         }
