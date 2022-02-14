@@ -341,7 +341,8 @@ public class Configs {
                     "Can be triggered by left click or keybinding press.\n" +
                     "&6Both requires keybinding to work!!!\n" +
                     "&cLeft click ability of current item can't be done normally.\n" +
-                    "Auto disabled when holding Gyrokinetic Wand or Gloomlock Grimoire.")
+                    "Auto disabled when holding Gyrokinetic Wand or Gloomlock Grimoire.\n" +
+                    "Auto disabled when holding Terminator.")
     public static boolean OneTick = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Aots With Anything", parent = "One Tick",

@@ -18,6 +18,7 @@ public class Revenant extends RenderEntityESP {
         put("Atoned Champion", 0xdc143c);
         put("Atoned Revenant", 0xdc143c);
         put("Revenant Horror", 0xdc143c);
+        put("Atoned Horror", 0xdc143c);
     }};
 
     @Override

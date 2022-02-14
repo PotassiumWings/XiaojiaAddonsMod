@@ -34,6 +34,7 @@ public class OneTick {
         if (!should) return;
         if (ControlUtils.checkHoldingItem("Gloomlock Grimoire")) return;
         if (ControlUtils.checkHoldingItem("Gyrokinetic Wand")) return;
+        if (ControlUtils.checkHoldingItem("Terminator")) return;
         oneTick();
     }
 
