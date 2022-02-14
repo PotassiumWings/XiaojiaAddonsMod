@@ -2,7 +2,6 @@ package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
-import com.xiaojia.xiaojiaaddons.Features.Dragons.AutoShootCrystal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
@@ -19,7 +18,6 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import com.xiaojia.xiaojiaaddons.utils.CipherUtils;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.ShortbowUtils;
@@ -39,7 +37,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
-import static com.xiaojia.xiaojiaaddons.utils.SkyblockUtils.getPing;
 
 public class Command extends CommandBase {
     @Override
@@ -114,15 +111,19 @@ public class Command extends CommandBase {
                 new Thread(() -> {
                     try {
                         Thread.sleep(100);
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                     ControlUtils.etherWarp(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
                 }).start();
                 break;
-            case "setfrom":
-                AutoBlaze.setFrom();
-                break;
-            case "setto":
-                AutoBlaze.setTo();
+//            case "setfrom":
+//                AutoBlaze.setFrom();
+//                break;
+//            case "setto":
+//                AutoBlaze.setTo();
+//                break;
+            case "blaze":
+                System.out.println(AutoBlaze.log.toString());
                 break;
 //            case "textcipher":
 //                CipherUtils.test(strings[1]);

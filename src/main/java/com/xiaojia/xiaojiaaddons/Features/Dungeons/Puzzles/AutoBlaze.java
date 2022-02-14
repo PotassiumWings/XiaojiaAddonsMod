@@ -53,6 +53,10 @@ public class AutoBlaze {
     private Thread shootingThread = null;
     private boolean tpPacketReceived = false;
     private boolean arrowShot = false;
+//    private boolean arrowDirection = false;
+//    private double xzPlaneArrowAlpha = -1;
+
+    public static StringBuilder log = new StringBuilder();
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -69,13 +73,13 @@ public class AutoBlaze {
         if (shootingThread != null && shootingThread.isAlive()) return;
         shootingThread = new Thread(() -> {
             try {
-                ChatLib.debug("lowFirst: " + lowFirst);
+                log.append("lowFirst: " + lowFirst).append("\n");
                 calculatePlaces();
                 calculateBlazes();
                 calculateBlocks();
                 int aotvSlot = HotbarUtils.aotvSlot;
                 int terminatorSlot = HotbarUtils.terminatorSlot;
-                ChatLib.debug("starting!");
+                log.append("starting!").append("\n");
                 if (aotvSlot == -1) {
                     ChatLib.chat("Requires aotv in hotbar.");
                     throw new Exception();
@@ -98,7 +102,7 @@ public class AutoBlaze {
                                     new Vector3d(getX(getPlayer()), getY(getPlayer()) + 1.5, getZ(getPlayer())),
                                     whereShouldIEtherWarpTo(getY(getPlayer()), vec.x, vec.y, vec.z)
                             )) {
-                                ChatLib.debug("can go to " + vec);
+                                log.append("can go to " + vec).append("\n");
                                 tryPlaces.add(vec);
                             }
                         }
@@ -106,10 +110,10 @@ public class AutoBlaze {
                         tryPlaces.addAll(transGraph.get(lastTp));
                     }
                     // iterate over all places that can be tped on, find the max
-                    for (Vector3d vec: tryPlaces) {
+                    for (Vector3d vec : tryPlaces) {
                         int i = hit;
                         while (i < blazes.size() && blazeCanHit(vec, i)) {
-                            ChatLib.debug("Can hit: " + vec + ", " + i);
+                            log.append("Can hit: " + vec + ", " + i).append("\n");
                             i++;
                         }
                         if (i > count) {
@@ -139,8 +143,8 @@ public class AutoBlaze {
                 for (Sequence todo : seq) {
                     if (todo.type == Sequence.Type.WARP) {
                         Vector3d v = whereShouldIEtherWarpTo(getY(getPlayer()), todo.x, todo.y, todo.z);
-                        ChatLib.debug("etherwarp to " + todo.x + ", " + todo.y + ", " + todo.z);
-                        ChatLib.debug("aim at " + v.x + ", " + v.y + ", " + v.z);
+                        log.append(String.format("etherwarp to %.2f %.2f %.2f", todo.x, todo.y, todo.z)).append("\n");
+                        log.append(String.format("aim at %.2f %.2f %.2f", v.x, v.y, v.z)).append("\n");
                         tpPacketReceived = false;
                         ControlUtils.setHeldItemIndex(aotvSlot);
                         ControlUtils.etherWarp(v.x, v.y, v.z);
@@ -157,12 +161,12 @@ public class AutoBlaze {
                         Thread.sleep(getPing());
                         if (MathUtils.distanceSquareFromPlayer(todo.x, todo.y + 0.25, todo.z) > 1) {
                             ChatLib.chat("Failed to etherwarp!");
-                            ChatLib.debug("Player is at " + getX(getPlayer()) + ", " + getY(getPlayer()) + ", " + getZ(getPlayer()));
+                            log.append(String.format("Player is at %.2f %.2f %.2f", getX(getPlayer()), getY(getPlayer()), getZ(getPlayer()))).append("\n");
                             throw new Exception();
                         }
                     } else {
                         arrowShot = false;
-                        ChatLib.debug("shooting to " + todo.yaw + ", " + todo.pitch);
+                        log.append("shooting to " + todo.yaw + ", " + todo.pitch).append("\n");
                         ControlUtils.setHeldItemIndex(terminatorSlot);
                         ControlUtils.faceSlowly(todo.yaw, todo.pitch);
                         Thread.sleep(200);
@@ -170,11 +174,11 @@ public class AutoBlaze {
 
                         int cnt = 0;
                         while (!arrowShot && should) {
-                            Thread.sleep(20);
                             if (cnt > 10) {
                                 ControlUtils.rightClick();
                                 cnt = 0;
                             }
+                            Thread.sleep(20);
                             cnt++;
                         }
                     }
@@ -206,8 +210,8 @@ public class AutoBlaze {
 
     public static Vector3d whereShouldIEtherWarpTo(double curY, double x, double y, double z) throws Exception {
         // h: half height of block
-        double h = Math.round(y * 4) % 4 == 1 ? 0.25: 0.5;
-        if (curY >= y) return new Vector3d(x, y +h , z);
+        double h = Math.round(y * 4) % 4 == 1 ? 0.25 : 0.5;
+        if (curY >= y + 20) return new Vector3d(x, y + h, z);
         return calculateSidePosToEtherWarp(x, y, z);
     }
 
@@ -221,17 +225,17 @@ public class AutoBlaze {
         double yaw = yawAndPitch.getX();
         double pitch = yawAndPitch.getY();
         if (!canHit(v.x, v.y + 0.25 + 1.5, v.z, yaw, pitch, blazeInfo.cube)) {
-            ChatLib.debug("can't hit, ????");
+            log.append("can't hit, ????").append("\n");
             return false;
         }
         for (int j = i + 1; j < blazes.size(); j++)
             if (canHit(v.x, v.y + 0.25 + 1.5, v.z, yaw, pitch, blazes.get(j).cube)) {
-                ChatLib.debug("can't hit, because it may shoot " + j + " the blaze!");
+                log.append("can't hit, because it may shoot " + j + " th blaze!").append("\n");
                 return false;
             }
         for (Cube cube : blocks)
             if (canHit(v.x, v.y + 0.25 + 1.5, v.z, yaw, pitch, cube)) {
-                ChatLib.debug("can't hit, because it may hit block at " + cube.x + ", " + cube.y + ", " + cube.z);
+                log.append(String.format("can't hit, because it may hit block at %.2f %.2f %.2f", cube.x, cube.y, cube.z)).append("\n");
                 return false;
             }
         return true;
@@ -258,21 +262,21 @@ public class AutoBlaze {
                 if (!BlockUtils.isBlockAir(tx, y, tz) &&
                         BlockUtils.isBlockAir(tx, y + 1, tz)) {
                     places.add(new Vector3d(tx, y, tz));
-                    ChatLib.debug("add new place: " + tx + ", " + y + ", " + tz);
+                    log.append(String.format("add new place: %.2f %.2f %.2f", tx, y, tz)).append("\n");
 
                     Cube blockCube;
                     if (y2 % 2 == 0) blockCube = new Cube(tx, y2 / 2F - 0.5, tz, 0.5, 0.5);
                     else blockCube = new Cube(tx, y, tz, 0.5, 0.25);
                     blocks.add(blockCube);
-                    ChatLib.debug("block: " + blockCube.x + ", " + blockCube.y + ", " + blockCube.z);
+                    log.append(String.format("block: %.2f %.2f %.2f", blockCube.x, blockCube.y ,blockCube.z)).append("\n");
                 }
             }
         }
         transGraph.clear();
         ArrayList<Line> lines = new ArrayList<>();
-        for (Vector3d vecFrom: places) {
+        for (Vector3d vecFrom : places) {
             transGraph.put(vecFrom, new ArrayList<>());
-            for (Vector3d vecTo: places) {
+            for (Vector3d vecTo : places) {
                 Vector3d startFrom = new Vector3d(vecFrom.x, vecFrom.y + 1.5 + 0.25, vecFrom.z);
                 Vector3d endTo = whereShouldIEtherWarpTo(vecFrom.y + 0.25 + 1.5, vecTo.x, vecTo.y, vecTo.z);
                 boolean noBlock = noBlocksBetween(startFrom, endTo);
@@ -288,20 +292,20 @@ public class AutoBlaze {
 
     public static Vector3d from = null, to = null;
     public static ArrayList<BlockPos> highlightBlockPos = new ArrayList<>();
-    private static ArrayList<Line> lines = new ArrayList<>();
+    private static final ArrayList<Line> lines = new ArrayList<>();
 
     @SubscribeEvent
     public void test(RenderWorldLastEvent event) {
         if (from != null) {
-            GuiUtils.drawBoundingBoxAtPos((float)from.x, (float)from.y, (float)from.z, new Color(255, 0, 0), 0.1F, 0.1F);
+            GuiUtils.drawBoundingBoxAtPos((float) from.x, (float) from.y, (float) from.z, new Color(255, 0, 0), 0.1F, 0.1F);
         }
         if (to != null) {
-            GuiUtils.drawBoundingBoxAtPos((float)to.x, (float)to.y, (float)to.z, new Color(0, 0, 255), 0.1F, 0.1F);
+            GuiUtils.drawBoundingBoxAtPos((float) to.x, (float) to.y, (float) to.z, new Color(0, 0, 255), 0.1F, 0.1F);
         }
-        for (BlockPos blockPos: highlightBlockPos) {
+        for (BlockPos blockPos : highlightBlockPos) {
             GuiUtils.drawBoxAtBlock(blockPos, new Color(0, 255, 0), 1, 1, 0);
         }
-        for (Line line: lines) {
+        for (Line line : lines) {
             Color color;
             if (line.can) color = new Color(0, 255, 0);
             else color = new Color(255, 0, 0);
@@ -408,7 +412,7 @@ public class AutoBlaze {
         blazes.addAll(newBlaze);
         blazes.sort((a, b) -> lowFirst ? a.hp - b.hp : b.hp - a.hp);
         for (BlazeInfo blazeInfo : blazes) {
-            ChatLib.debug("blaze: " + blazeInfo.cube.x + ", " + blazeInfo.cube.y + ", " + blazeInfo.cube.z + ": " + blazeInfo.hp);
+            log.append(String.format("blaze: %.2f %.2f %.2f %d", blazeInfo.cube.x, blazeInfo.cube.y, blazeInfo.cube.z, blazeInfo.hp)).append("\n");
         }
     }
 
@@ -422,7 +426,7 @@ public class AutoBlaze {
         for (int i = startY; i < endY; i++) {
 //            if (!BlockUtils.isBlockAir(room.x, i, room.z)) {
             newBlocks.add(new Cube(room.x + 0.5, i + 0.5, room.z + 0.5, 0.5, 0.5));
-            ChatLib.debug("block: " + room.x + ", " + i + ", " + room.z);
+            log.append("block: " + room.x + ", " + i + ", " + room.z).append("\n");
 //            }
         }
         blocks.clear();
@@ -431,7 +435,7 @@ public class AutoBlaze {
 
     public static boolean canHit(double x, double y, double z, double yaw, double pitch, Cube cube) {
         // solve in xz plane
-        ChatLib.debug("trying canHit with yaw: " + yaw + ", pitch: " + pitch);
+        log.append(String.format("trying canHit with yaw: %.2f, pitch: %.2f", yaw, pitch)).append("\n");
         double PI = Math.PI;
         double sx = cube.x - cube.w, sz = cube.z - cube.w;
         double tx = cube.x + cube.w, tz = cube.z + cube.w;
@@ -448,7 +452,7 @@ public class AutoBlaze {
         if (xSz > sx && xSz <= tx) intersects.add(new Vector2d(xSz, sz));
         if (xTz >= sx && xTz < tx) intersects.add(new Vector2d(xTz, tz));
         if (intersects.size() <= 1) {
-            ChatLib.debug("canHit false: intersect size too small");
+            log.append("canHit false: intersect size too small").append("\n");
             return false;
         }
         if (intersects.size() != 2) {
@@ -470,9 +474,9 @@ public class AutoBlaze {
         double ty = (cube.y + cube.h) - y;
         double sY = ShortbowUtils.getProjectileFunction(sX, pitch);
         double tY = ShortbowUtils.getProjectileFunction(tX, pitch);
-        ChatLib.debug("sx: " + sx + ", tx: " + tx + ", sz: " + sz + ", tz: " + tz);
-        ChatLib.debug("sX: " + sX + ", tX: " + tX + ", pitch: " + pitch);
-        ChatLib.debug("sy: " + sy + ", ty: " + ty + ", sY: " + sY + ", tY: " + tY);
+        log.append(String.format("sx: %.2f, tx: %.2f, sz: %.2f, tz: %.2f",sx,tx,sz,tz)).append("\n");
+        log.append(String.format("sX: %.2f, tX: %.2f, pitch: %.2f", sX, tX, pitch)).append("\n");
+        log.append(String.format("sy: %.2f, ty: %.2f, sY: %.2f, tY: %.2f", sy, ty, sY, tY)).append("\n");
         // not exactly, but most of the case
         return MathUtils.isBetween(sY, sy, ty) || MathUtils.isBetween(tY, sy, ty);
     }
@@ -487,6 +491,7 @@ public class AutoBlaze {
         blocks.clear();
         places.clear();
         setRoom(null);
+        log = new StringBuilder();
     }
 
     @SubscribeEvent
@@ -494,7 +499,14 @@ public class AutoBlaze {
         if (event.packet instanceof S08PacketPlayerPosLook) {
             S08PacketPlayerPosLook packet = (S08PacketPlayerPosLook) event.packet;
             tpPacketReceived = true;
-            ChatLib.debug("received packet! " + packet.getYaw() + ", " + packet.getPitch());
+            log.append(String.format("received packet! %.2f, %.2f; %.2f, %.2f, %.2f: ",
+                    packet.getYaw(), packet.getPitch(), packet.getX(), packet.getY(), packet.getZ()));
+            if (packet.func_179834_f().contains(S08PacketPlayerPosLook.EnumFlags.X)) log.append("X");
+            if (packet.func_179834_f().contains(S08PacketPlayerPosLook.EnumFlags.Y)) log.append("Y");
+            if (packet.func_179834_f().contains(S08PacketPlayerPosLook.EnumFlags.Z)) log.append("Z");
+            if (packet.func_179834_f().contains(S08PacketPlayerPosLook.EnumFlags.X_ROT)) log.append(" XR");
+            if (packet.func_179834_f().contains(S08PacketPlayerPosLook.EnumFlags.Y_ROT)) log.append(" YR");
+            log.append("\n");
         }
     }
 
@@ -504,7 +516,13 @@ public class AutoBlaze {
         if (entity instanceof EntityArrow) {
             double dis2 = MathUtils.distanceSquareFromPlayer(entity.posX, entity.posY, entity.posZ);
             if (dis2 < 5 * 5) {
-                ChatLib.debug("entity join: " + entity + ", " + dis2);
+                log.append(String.format("entity join: " + entity.toString() + ", %.2f", dis2)).append("\n");
+//                double dz = entity.posZ - getZ(getPlayer());
+//                double dx = entity.posX - getX(getPlayer());
+//                double arrowAlpha = Math.atan2(dz, dx);
+//                double diff = Math.abs(arrowAlpha - xzPlaneArrowAlpha);
+//                diff = Math.min(diff, 2 * Math.PI - diff);
+//                arrowDirection = diff < 1e-4;
                 arrowShot = true;
             }
         }
@@ -570,6 +588,7 @@ public class AutoBlaze {
         Vector3d from;
         Vector3d to;
         boolean can;
+
         public Line(Vector3d from, Vector3d to, boolean can) {
             this.from = from;
             this.to = to;

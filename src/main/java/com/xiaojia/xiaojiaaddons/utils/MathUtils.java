@@ -132,6 +132,18 @@ public class MathUtils {
         return new BlockPos(player.posX, player.posY, player.posZ);
     }
 
+    public static double validYaw(double yaw) {
+        if (yaw >= 180.0) yaw -= 360;
+        if (yaw <= -180) yaw += 360;
+        return yaw;
+    }
+
+    public static double validPitch(double pitch) {
+        if (pitch > 90.0) pitch = 180 - pitch;
+        if (pitch < -90.0) pitch = -180 - pitch;
+        return pitch;
+    }
+
     public static int floor(float x) {
         return (int) Math.floor(x);
     }
