@@ -75,7 +75,9 @@ import com.xiaojia.xiaojiaaddons.Features.Skills.GemstoneESP;
 import com.xiaojia.xiaojiaaddons.Features.Skills.JadeCrystalHelper;
 import com.xiaojia.xiaojiaaddons.Features.Skills.SuperPairs;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.ClickScreenMaddox;
+import com.xiaojia.xiaojiaaddons.Features.Slayers.Revenant;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
+import com.xiaojia.xiaojiaaddons.Features.Slayers.Tarantula;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
@@ -237,6 +239,8 @@ public class XiaojiaAddons {
 
         // Slayer
         MinecraftForge.EVENT_BUS.register(new Sven());
+        MinecraftForge.EVENT_BUS.register(new Revenant());
+        MinecraftForge.EVENT_BUS.register(new Tarantula());
         MinecraftForge.EVENT_BUS.register(new Voidgloom());
         MinecraftForge.EVENT_BUS.register(new ClickScreenMaddox());
 

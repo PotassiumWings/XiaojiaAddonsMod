@@ -67,8 +67,11 @@ public class ChatLib {
     public static void xjchat(int type, String name, String chatMessage) {
         if (!Checker.enabled) return;
         if (!name.equals("&c[UPDATE AUTOCHECKER]") && toggleOff) return;
-        if (chatMessage == null) chatMessage = "null";
+        if (type == 0 && Configs.HideChatMessages) return;
+        if (type == 1 && Configs.HidePuzzleFailMessages) return;
+        if (type == 2 && Configs.HideDeathMessages) return;
         if (type != 0 && type != 1 && type != 2) return;
+        if (chatMessage == null) chatMessage = "null";
 
         String[] texts = chatMessage.split("\n");
         for (String text : texts) {

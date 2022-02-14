@@ -21,6 +21,19 @@ public class Configs {
             description = "Keep holding sprint key. &cNOT A CHEAT!")
     public static boolean KeepSprint = false;
 
+    @Property(type = Property.Type.FOLDER, name = "XJ Chat Settings", parent = "Misc",
+            description = "&c/xc&r to see how to use this channel.")
+    public static boolean XJCSetting = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Death Messages", parent = "XJ Chat Settings")
+    public static boolean HideDeathMessages = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Puzzle Fail Messages", parent = "XJ Chat Settings")
+    public static boolean HidePuzzleFailMessages = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Chat Messages", parent = "XJ Chat Settings")
+    public static boolean HideChatMessages = false;
+
     @Property(type = Property.Type.FOLDER, name = "General XJA Setting", parent = "Misc")
     public static boolean GeneralSetting = false;
 
