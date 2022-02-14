@@ -221,17 +221,17 @@ public class AutoBlaze {
         double yaw = yawAndPitch.getX();
         double pitch = yawAndPitch.getY();
         if (!canHit(v.x, v.y + 0.25 + 1.5, v.z, yaw, pitch, blazeInfo.cube)) {
-            ChatLib.chat("can't hit, ????");
+            ChatLib.debug("can't hit, ????");
             return false;
         }
         for (int j = i + 1; j < blazes.size(); j++)
             if (canHit(v.x, v.y + 0.25 + 1.5, v.z, yaw, pitch, blazes.get(j).cube)) {
-                ChatLib.chat("can't hit, because it may shoot " + j + " the blaze!");
+                ChatLib.debug("can't hit, because it may shoot " + j + " the blaze!");
                 return false;
             }
         for (Cube cube : blocks)
             if (canHit(v.x, v.y + 0.25 + 1.5, v.z, yaw, pitch, cube)) {
-                ChatLib.chat("can't hit, because it may hit block at " + cube.x + ", " + cube.y + ", " + cube.z);
+                ChatLib.debug("can't hit, because it may hit block at " + cube.x + ", " + cube.y + ", " + cube.z);
                 return false;
             }
         return true;
@@ -258,13 +258,13 @@ public class AutoBlaze {
                 if (!BlockUtils.isBlockAir(tx, y, tz) &&
                         BlockUtils.isBlockAir(tx, y + 1, tz)) {
                     places.add(new Vector3d(tx, y, tz));
-                    ChatLib.chat("add new place: " + tx + ", " + y + ", " + tz);
+                    ChatLib.debug("add new place: " + tx + ", " + y + ", " + tz);
 
                     Cube blockCube;
                     if (y2 % 2 == 0) blockCube = new Cube(tx, y2 / 2F - 0.5, tz, 0.5, 0.5);
                     else blockCube = new Cube(tx, y, tz, 0.5, 0.25);
                     blocks.add(blockCube);
-                    ChatLib.chat("block: " + blockCube.x + ", " + blockCube.y + ", " + blockCube.z);
+                    ChatLib.debug("block: " + blockCube.x + ", " + blockCube.y + ", " + blockCube.z);
                 }
             }
         }
@@ -408,7 +408,7 @@ public class AutoBlaze {
         blazes.addAll(newBlaze);
         blazes.sort((a, b) -> lowFirst ? a.hp - b.hp : b.hp - a.hp);
         for (BlazeInfo blazeInfo : blazes) {
-            ChatLib.chat("blaze: " + blazeInfo.cube.x + ", " + blazeInfo.cube.y + ", " + blazeInfo.cube.z + ": " + blazeInfo.hp);
+            ChatLib.debug("blaze: " + blazeInfo.cube.x + ", " + blazeInfo.cube.y + ", " + blazeInfo.cube.z + ": " + blazeInfo.hp);
         }
     }
 
@@ -422,7 +422,7 @@ public class AutoBlaze {
         for (int i = startY; i < endY; i++) {
 //            if (!BlockUtils.isBlockAir(room.x, i, room.z)) {
             newBlocks.add(new Cube(room.x + 0.5, i + 0.5, room.z + 0.5, 0.5, 0.5));
-            ChatLib.chat("block: " + room.x + ", " + i + ", " + room.z);
+            ChatLib.debug("block: " + room.x + ", " + i + ", " + room.z);
 //            }
         }
         blocks.clear();
