@@ -384,7 +384,7 @@ public class AutoBlaze {
                         long estimate = MathUtils.floor(distance * 50 / 1.7);
                         log.append(String.format("distance: %.2f, estimate: %d\n", distance, estimate));
                         Thread.sleep(200);
-                        while (TimeUtils.curTime() + estimate < lastBlazeHitTime + 150 && should)
+                        while (TimeUtils.curTime() + estimate < lastBlazeHitTime + 50 && should)
                             Thread.sleep(20);
                         ControlUtils.leftClick();
 
