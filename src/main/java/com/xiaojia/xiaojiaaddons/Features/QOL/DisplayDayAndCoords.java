@@ -54,12 +54,12 @@ public class DisplayDayAndCoords {
             DisplayLine line = new DisplayLine("Cache size: " + ColorName.getCacheSize());
             line.setScale(Configs.DisplayScale / 20F);
             display.addLine(line);
-//            DisplayLine line1 = new DisplayLine("motionY: " + SkyblockUtils.getMotionY());
-//            line1.setScale(Configs.DisplayScale / 20F);
-//            display.addLine(line1);
-//            DisplayLine line2 = new DisplayLine("velocity: " + SkyblockUtils.getVelocity());
-//            line2.setScale(Configs.DisplayScale / 20F);
-//            display.addLine(line2);
+            DisplayLine line1 = new DisplayLine("yaw: " + MathUtils.getYaw());
+            line1.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line1);
+            DisplayLine line2 = new DisplayLine("pitch: " + MathUtils.getPitch());
+            line2.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line2);
 //            DisplayLine line3 = new DisplayLine("v/m: " + SkyblockUtils.getVelocity() / SkyblockUtils.getMotionY());
 //            line3.setScale(Configs.DisplayScale / 20F);
 //            display.addLine(line3);

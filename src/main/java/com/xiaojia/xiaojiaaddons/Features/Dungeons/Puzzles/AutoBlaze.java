@@ -53,6 +53,7 @@ public class AutoBlaze {
     private Thread shootingThread = null;
     private boolean tpPacketReceived = false;
     private boolean arrowShot = false;
+    private double facingYaw = 10000;
 
     // v: middle of block
     public static Vector3d calculateSidePosToEtherWarp(double x, double y, double z) throws Exception {
@@ -198,21 +199,33 @@ public class AutoBlaze {
         return new Vector3d(v.x * x, v.y * x, v.z * x);
     }
 
+    public static void test() {
+        blazes.clear();
+        lowFirst = true;
+        blazes.add(new BlazeInfo(45, 51, 143, 10, null));
+        blazes.add(new BlazeInfo(49, 59, 143, 100, null));
+        System.out.println(checkMiddle(
+                new Vector3d(40.5, 42.75, 143.5), 0,
+                new Vector2d(-96.34, -59.24)
+        ));
+        System.out.println(log);
+    }
+
     // isMiddle: is the middle arrow
     public static boolean canHit(double x, double y, double z, Vector2d yawAndPitch, Cube cube, boolean isMiddle) {
         double yaw = yawAndPitch.x;
         double pitch = yawAndPitch.y;
         // solve in xz plane
         tempLog = new StringBuilder();
-        tempLog.append(String.format("trying canHit with yaw: %.2f, pitch: %.2f", yaw, pitch)).append("\n");
+        log.append(String.format("trying canHit with yaw: %.2f, pitch: %.2f", yaw, pitch)).append("\n");
         double PI = Math.PI;
         double sx = cube.x - cube.w, sz = cube.z - cube.w;
         double tx = cube.x + cube.w, tz = cube.z + cube.w;
         if (isInXZSquare(x, z, sx, sz, tx, tz)) return true;
         // calculate intersections with 4 edges of the square
         // z * cos(alpha) = sin(alpha) * (x - x0) + z0 * cos(alpha)
-        double xzAlpha = yaw + 90;
-        double tan = Math.tan(xzAlpha * PI / 180);
+        double xzAlpha = (yaw + 90)  * PI / 180;
+        double tan = Math.tan(xzAlpha);
         double zSx = z + (sx - x) * tan, xSz = x + (sz - z) * (1 / tan);
         double zTx = z + (tx - x) * tan, xTz = x + (tz - z) * (1 / tan);
         ArrayList<Vector2d> intersects = new ArrayList<>();
@@ -221,7 +234,7 @@ public class AutoBlaze {
         if (xSz > sx && xSz <= tx) intersects.add(new Vector2d(xSz, sz));
         if (xTz >= sx && xTz < tx) intersects.add(new Vector2d(xTz, tz));
         if (intersects.size() <= 1) {
-            tempLog.append("canHit false: intersect size too small").append("\n");
+            log.append("canHit false: intersect size too small").append("\n");
             return false;
         }
         if (intersects.size() != 2) {
@@ -243,9 +256,9 @@ public class AutoBlaze {
         double ty = (cube.y + cube.h) - y;
         double sY = ShortbowUtils.getProjectileFunction(sX, pitch, isMiddle);
         double tY = ShortbowUtils.getProjectileFunction(tX, pitch, isMiddle);
-        tempLog.append(String.format("sx: %.2f, tx: %.2f, sz: %.2f, tz: %.2f", sx, tx, sz, tz)).append("\n");
-        tempLog.append(String.format("sX: %.2f, tX: %.2f, pitch: %.2f", sX, tX, pitch)).append("\n");
-        tempLog.append(String.format("sy: %.2f, ty: %.2f, sY: %.2f, tY: %.2f", sy, ty, sY, tY)).append("\n");
+        log.append(String.format("sx: %.2f, tx: %.2f, sz: %.2f, tz: %.2f", sx, tx, sz, tz)).append("\n");
+        log.append(String.format("sX: %.2f, tX: %.2f, pitch: %.2f", sX, tX, pitch)).append("\n");
+        log.append(String.format("sy: %.2f, ty: %.2f, sY: %.2f, tY: %.2f", sy, ty, sY, tY)).append("\n");
         // not exactly, but most of the case
         return MathUtils.isBetween(sY, sy, ty) || MathUtils.isBetween(tY, sy, ty) ||
                 (MathUtils.isBetween(sy, sY, tY) && MathUtils.isBetween(ty, sY, tY));
@@ -380,6 +393,7 @@ public class AutoBlaze {
                         log.append("shooting to " + todo.yaw + ", " + todo.pitch).append("\n");
                         ControlUtils.setHeldItemIndex(slot);
                         ControlUtils.faceSlowly(todo.yaw, todo.pitch);
+                        facingYaw = todo.yaw;
                         double distance = Math.sqrt(MathUtils.distanceSquareFromPlayer(todo.entity));
                         long estimate = MathUtils.floor(distance * 50 / 1.7);
                         log.append(String.format("distance: %.2f, estimate: %d\n", distance, estimate));
@@ -567,13 +581,15 @@ public class AutoBlaze {
             double dis2 = MathUtils.distanceSquareFromPlayer(entity.posX, entity.posY, entity.posZ);
             if (dis2 < 5 * 5) {
                 log.append(String.format("entity join: " + entity.toString() + ", %.2f", dis2)).append("\n");
-//                double dz = entity.posZ - getZ(getPlayer());
-//                double dx = entity.posX - getX(getPlayer());
-//                double arrowAlpha = Math.atan2(dz, dx);
-//                double diff = Math.abs(arrowAlpha - xzPlaneArrowAlpha);
-//                diff = Math.min(diff, 2 * Math.PI - diff);
-//                arrowDirection = diff < 1e-4;
-                arrowShot = true;
+                double dz = entity.posZ - getZ(getPlayer());
+                double dx = entity.posX - getX(getPlayer());
+                double arrowAlpha = Math.atan2(dz, dx);
+                double facingAlpha = (facingYaw + 90) * Math.PI / 180;
+                double diff = Math.abs(arrowAlpha - facingAlpha);
+                diff = Math.min(diff, 2 * Math.PI - diff);
+                log.append(String.format("arrow: %.2f, facing: %.2f, diff: %.2f\n", arrowAlpha, facingAlpha, diff));
+                if (diff < 0.1)
+                    arrowShot = true;
             }
         }
     }
@@ -584,7 +600,8 @@ public class AutoBlaze {
         Entity hpEntity;
 
         public BlazeInfo(double x, double y, double z, int hp, Entity entity) {
-            cube = new Cube(x, y, z, 1, 0.3);
+            // tho it's 0.3, set it to 0.5 to reduce errors
+            cube = new Cube(x, y, z, 1, 0.5);
             this.hp = hp;
             this.hpEntity = entity;
         }

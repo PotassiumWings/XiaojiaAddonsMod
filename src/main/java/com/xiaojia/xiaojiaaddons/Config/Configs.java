@@ -501,9 +501,7 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Rogue Sword rightclick Enable", illegal = true, parent = "Hold Right Click",
             description = "Holding Rogue Sword = high CPS right click, \n" +
-                    "till it thinks you have reached the expected speed.\n" +
-                    "Due to the bug of rogue sword, speed after right click\n" +
-                    "might not be accurate.")
+                    "till it thinks you have reached the expected speed.")
     public static boolean RogueAutoRightClick = false;
 
     @Property(type = Property.Type.NUMBER, name = "Rogue Sword rightclick CPS", parent = "Hold Right Click",

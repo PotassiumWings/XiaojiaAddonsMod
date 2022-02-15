@@ -118,7 +118,8 @@ public class Command extends CommandBase {
                 }).start();
                 break;
             case "blaze":
-                System.out.println(AutoBlaze.log.toString());
+//                System.out.println(AutoBlaze.log.toString());
+                AutoBlaze.test();
                 break;
 //            case "term":
 //                ShortbowUtils.testTerminator();

@@ -10,6 +10,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
@@ -170,6 +171,21 @@ public class MathUtils {
 
     public static int ceil(double x) {
         return (int) Math.ceil(x);
+    }
+
+    public static double distanceToLine(double x, double y, double alpha) {
+        // (x, y) -> y = tan(alpha) * x
+        if (alpha == 0) {
+            // tan(alpha) = 0, y = 0
+            return Math.abs(x);
+        }
+        Vector2d v1 = new Vector2d(1 / Math.tan(alpha),  1);
+        Vector2d v2 = new Vector2d(x, y);
+        return cross(v1, v2) / v1.length();
+    }
+
+    private static double cross(Vector2d a, Vector2d b) {
+        return a.x * b.y - a.y * b.x;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

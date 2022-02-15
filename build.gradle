@@ -21,7 +21,7 @@ apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 
-version = "2.4.1.1"
+version = "2.4.1.2"
 group= "com.xiaojia.xiaojiaaddons"
 archivesBaseName = "XiaojiaAddons"
 compileJava.options.encoding = "UTF-8"
