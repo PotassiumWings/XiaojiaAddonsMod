@@ -93,6 +93,7 @@ public class Command extends CommandBase {
                 }
             case "report":
                 Dungeon.showDungeonInfo();
+                System.out.println(AutoBlaze.log.toString());
                 XiaojiaAddons.guiToOpen = new BugReport();
                 break;
             case "commands":
