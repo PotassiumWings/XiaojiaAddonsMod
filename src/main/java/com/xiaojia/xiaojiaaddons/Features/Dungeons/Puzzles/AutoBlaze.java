@@ -15,10 +15,13 @@ import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.ShortbowUtils;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
@@ -34,7 +37,6 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
-import static com.xiaojia.xiaojiaaddons.utils.SkyblockUtils.getPing;
 
 public class AutoBlaze {
     // principle: whatever being saved is the center of the block, not +0.25+1.5
@@ -79,9 +81,9 @@ public class AutoBlaze {
         double y = blazeInfo.cube.y;
         double z = blazeInfo.cube.z;
         Vector2d invalid = new Vector2d(10000, 10000);
+        Vector2d yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.62, v.z, x, y, z);
         if (usingTerminator) {
             // check middle
-            Vector2d yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.62, v.z, x, y, z);
             if (checkMiddle(v, i, yawAndPitch)) return yawAndPitch;
 
             // check left
@@ -95,7 +97,6 @@ public class AutoBlaze {
 
             return invalid;
         } else {
-            Vector2d yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.62, v.z, x, y, z);
             if (!canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazeInfo.cube, true)) {
                 log.append("can't hit, ????").append("\ntemp log for this:\n");
                 log.append(String.format("blaze is at %.2f %.2f %.2f\n", x, y, z));
@@ -109,6 +110,7 @@ public class AutoBlaze {
                     log.append("can't hit, because it may shoot " + j + " th blaze!").append("\n");
                     return invalid;
                 }
+            // should check distance, but lazy
             for (Cube cube : blocks)
                 if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, cube, true)) {
                     log.append(String.format("can't hit, because it may hit block at %.2f %.2f %.2f", cube.x, cube.y, cube.z)).append("\n");
@@ -120,8 +122,11 @@ public class AutoBlaze {
 
     private static boolean checkMiddle(Vector3d v, int i, Vector2d yawAndPitch) {
         Vector2d[] leftRightYawPitch = ShortbowUtils.getLeftRightYawPitchByMiddle(yawAndPitch);
-        if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(i).cube, true)) {
-            log.append(String.format("middle: can't hit, ???"));
+        if (!canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(i).cube, true)) {
+            log.append(String.format("middle: can't hit, ???")).append("\ntemp log for this:\n");
+            log.append(String.format("blaze is at %.2f %.2f %.2f\n", blazes.get(i).cube.x, blazes.get(i).cube.y, blazes.get(i).cube.z));
+            log.append(String.format("vec is at %.2f %.2f %.2f\n", v.x, v.y + 0.25 + 1.62, v.z));
+            log.append(String.format("facing at %.2f %.2f\n", yawAndPitch.x, yawAndPitch.y));
             log.append(tempLog);
             return false;
         }
@@ -130,6 +135,7 @@ public class AutoBlaze {
             if (j > i && canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, true)) return false;
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, leftRightYawPitch[1], blazes.get(j).cube, false)) return false;
         }
+        // should check distance, but lazy
         for (Cube cube : blocks)
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, cube, true))
                 return false;
@@ -138,8 +144,11 @@ public class AutoBlaze {
 
     private static boolean checkLeft(Vector3d v, int i, Vector2d yawAndPitch) {
         Vector2d[] middleRightYawPitch = ShortbowUtils.getMiddleRightYawPitchByLeft(yawAndPitch);
-        if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(i).cube, false)) {
-            log.append(String.format("left: can't hit, ???"));
+        if (!canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(i).cube, false)) {
+            log.append(String.format("left: can't hit, ???")).append("\ntemp log for this:\n");
+            log.append(String.format("blaze is at %.2f %.2f %.2f\n", blazes.get(i).cube.x, blazes.get(i).cube.y, blazes.get(i).cube.z));
+            log.append(String.format("vec is at %.2f %.2f %.2f\n", v.x, v.y + 0.25 + 1.62, v.z));
+            log.append(String.format("facing at %.2f %.2f\n", middleRightYawPitch[0].x, middleRightYawPitch[0].y));
             log.append(tempLog);
             return false;
         }
@@ -148,6 +157,7 @@ public class AutoBlaze {
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, middleRightYawPitch[0], blazes.get(j).cube, true)) return false;
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, middleRightYawPitch[1], blazes.get(j).cube, false)) return false;
         }
+        // should check distance, but lazy
         for (Cube cube : blocks)
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, cube, false))
                 return false;
@@ -156,8 +166,11 @@ public class AutoBlaze {
 
     private static boolean checkRight(Vector3d v, int i, Vector2d yawAndPitch) {
         Vector2d[] leftMiddleYawPitch = ShortbowUtils.getLeftMiddleYawPitchByRight(yawAndPitch);
-        if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(i).cube, false)) {
-            log.append(String.format("right: can't hit, ???"));
+        if (!canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(i).cube, false)) {
+            log.append(String.format("right: can't hit, ???")).append("\ntemp log for this:\n");
+            log.append(String.format("blaze is at %.2f %.2f %.2f\n", blazes.get(i).cube.x, blazes.get(i).cube.y, blazes.get(i).cube.z));
+            log.append(String.format("vec is at %.2f %.2f %.2f\n", v.x, v.y + 0.25 + 1.62, v.z));
+            log.append(String.format("facing at %.2f %.2f\n", leftMiddleYawPitch[1].x, leftMiddleYawPitch[1].y));
             log.append(tempLog);
             return false;
         }
@@ -166,6 +179,7 @@ public class AutoBlaze {
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, leftMiddleYawPitch[1], blazes.get(j).cube, true)) return false;
             if (j > i && canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, false)) return false;
         }
+        // should check distance, but lazy
         for (Cube cube : blocks)
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, cube, false))
                 return false;
@@ -233,7 +247,8 @@ public class AutoBlaze {
         tempLog.append(String.format("sX: %.2f, tX: %.2f, pitch: %.2f", sX, tX, pitch)).append("\n");
         tempLog.append(String.format("sy: %.2f, ty: %.2f, sY: %.2f, tY: %.2f", sy, ty, sY, tY)).append("\n");
         // not exactly, but most of the case
-        return MathUtils.isBetween(sY, sy, ty) || MathUtils.isBetween(tY, sy, ty);
+        return MathUtils.isBetween(sY, sy, ty) || MathUtils.isBetween(tY, sy, ty) ||
+                (MathUtils.isBetween(sy, sY, tY) && MathUtils.isBetween(ty, sY, tY));
     }
 
     public static boolean isInXZSquare(double x, double z, double sx, double sz, double tx, double tz) {
@@ -313,7 +328,9 @@ public class AutoBlaze {
                         while (i < blazes.size()) {
                             Vector2d yawAndPitch = blazeCanHit(vec, i, usingTerminator);
                             if (yawAndPitch.x > 1000) break;
-                            seq.add(new Sequence(yawAndPitch.x, yawAndPitch.y, blazes.get(i).hpEntity));
+                            // add this edge case to avoid hitting block
+                            if (yawAndPitch.y > 70) break;
+                            tempSequence.add(new Sequence(yawAndPitch.x, yawAndPitch.y, blazes.get(i).hpEntity));
                             log.append("Can hit: " + vec + ", " + i).append("\n");
                             i++;
                         }
@@ -332,7 +349,9 @@ public class AutoBlaze {
                     lastTp = res;
                 }
                 // go hit
+                long lastBlazeHitTime = 0;
                 for (Sequence todo : seq) {
+                    if (!should) break;
                     if (todo.type == Sequence.Type.WARP) {
                         Vector3d v = whereShouldIEtherWarpTo(getY(getPlayer()), todo.x, todo.y, todo.z);
                         log.append(String.format("etherwarp to %.2f %.2f %.2f", todo.x, todo.y, todo.z)).append("\n");
@@ -350,7 +369,7 @@ public class AutoBlaze {
                                 throw new Exception();
                             }
                         }
-                        Thread.sleep(getPing());
+                        Thread.sleep(100);
                         if (MathUtils.distanceSquareFromPlayer(todo.x, todo.y + 0.25, todo.z) > 1) {
                             ChatLib.chat("Failed to etherwarp!");
                             log.append(String.format("Player is at %.2f %.2f %.2f", getX(getPlayer()), getY(getPlayer()), getZ(getPlayer()))).append("\n");
@@ -361,18 +380,25 @@ public class AutoBlaze {
                         log.append("shooting to " + todo.yaw + ", " + todo.pitch).append("\n");
                         ControlUtils.setHeldItemIndex(slot);
                         ControlUtils.faceSlowly(todo.yaw, todo.pitch);
+                        double distance = Math.sqrt(MathUtils.distanceSquareFromPlayer(todo.entity));
+                        long estimate = MathUtils.floor(distance * 50 / 1.7);
+                        log.append(String.format("distance: %.2f, estimate: %d\n", distance, estimate));
                         Thread.sleep(200);
-                        ControlUtils.rightClick();
+                        while (TimeUtils.curTime() + estimate < lastBlazeHitTime + 150 && should)
+                            Thread.sleep(20);
+                        ControlUtils.leftClick();
 
                         int cnt = 0;
                         while (!arrowShot && should) {
-                            if (cnt > 10) {
-                                ControlUtils.rightClick();
+                            if (cnt > 20) {
+                                ControlUtils.leftClick();
                                 cnt = 0;
                             }
                             Thread.sleep(20);
                             cnt++;
                         }
+                        lastBlazeHitTime = estimate + TimeUtils.curTime();
+                        log.append("lastHitime: " + lastBlazeHitTime + "\n");
                     }
                 }
             } catch (Exception e) {
@@ -385,6 +411,13 @@ public class AutoBlaze {
             }
         });
         shootingThread.start();
+    }
+
+    @SubscribeEvent
+    public void onBlazeDeath(LivingDeathEvent event) {
+        if (event.entity instanceof EntityBlaze) {
+            log.append("blaze " + event.entity + " died!\n");
+        }
     }
 
     public void calculatePlaces() throws Exception {

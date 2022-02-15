@@ -119,9 +119,12 @@ public class Command extends CommandBase {
             case "blaze":
                 System.out.println(AutoBlaze.log.toString());
                 break;
-            case "term":
-                ShortbowUtils.testTerminator();
-                break;
+//            case "term":
+//                ShortbowUtils.testTerminator();
+//                break;
+//            case "ena":
+//                ShortbowUtils.enabled = !ShortbowUtils.enabled;
+//                break;
             // debug commands
             case "debug":
                 XiaojiaAddons.setDebug();

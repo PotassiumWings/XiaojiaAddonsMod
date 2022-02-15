@@ -144,6 +144,18 @@ public class MathUtils {
         return pitch;
     }
 
+    public static boolean sameYaw(double y1, double y2) {
+        y1 = validYaw(y1);
+        y2 = validYaw(y2);
+        return Math.abs(y1 - y2) < 1e-4 || Math.abs(y1 - y2) > 360 - 1e-4;
+    }
+
+    public static boolean samePitch(double p1, double p2) {
+        p1 = validPitch(p1);
+        p2 = validPitch(p2);
+        return Math.abs(p1 - p2) < 1e-4;
+    }
+
     public static int floor(float x) {
         return (int) Math.floor(x);
     }

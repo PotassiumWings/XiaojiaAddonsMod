@@ -14,6 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,31 @@ public class ControlUtils {
     private static final KeyBind sprintKeyBind = new KeyBind(mc.gameSettings.keyBindSprint);
 
     private static Inventory openedInventory = null;
+
+    public static boolean reportedFacing(double yaw, double pitch) {
+        try {
+            Field lastReportedYawField;
+            try {
+                lastReportedYawField = EntityPlayerSP.class.getDeclaredField("lastReportedYaw");
+            } catch (NoSuchFieldException e) {
+                lastReportedYawField = EntityPlayerSP.class.getDeclaredField("field_175164_bL");
+            }
+            Field lastReportedPitchField;
+            try {
+                lastReportedPitchField = EntityPlayerSP.class.getDeclaredField("lastReportedPitch");
+            } catch (NoSuchFieldException e) {
+                lastReportedPitchField = EntityPlayerSP.class.getDeclaredField("field_175165_bM");
+            }
+            lastReportedPitchField.setAccessible(true);
+            lastReportedYawField.setAccessible(true);
+            double lastReportedYaw = lastReportedYawField.getFloat(getPlayer());
+            double lastReportedPitch = lastReportedPitchField.getFloat(getPlayer());
+            return MathUtils.sameYaw(yaw, lastReportedYaw) && MathUtils.samePitch(pitch, lastReportedPitch);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public static void rightClick() {
         try {
@@ -108,7 +134,7 @@ public class ControlUtils {
         if (yaw < 0) yaw += 360;  // yaw \in [0, 360]
         if (yaw - curyaw > 180) yaw -= 360;  // yaw = 359, curyaw = 1 -> yaw = -1, curyaw = 1
         if (curyaw - yaw > 180) curyaw -= 360;  // yaw = 1, curyaw = 359 -> yaw = 1, curyaw = -1
-        int rotate_times = (int) Math.floor(1 + Math.random() * 5);
+        int rotate_times = MathUtils.floor(Math.abs(curyaw - yaw) / 18) + 1;
         System.err.printf("curyaw %.2f, yaw %.2f%n", curyaw, yaw);
         for (int j = 1; j <= rotate_times; j++) {
             float toturn_yaw = curyaw + (yaw - curyaw) / rotate_times * j;
@@ -130,6 +156,7 @@ public class ControlUtils {
             ControlUtils.rightClick();
             Thread.sleep(getPing() + 100);
             ControlUtils.unSneak();
+            Thread.sleep(getPing() + 100);
         } catch (Exception e) {
             e.printStackTrace();
         }
