@@ -29,6 +29,7 @@ public class HotbarUtils {
     public static int saplingSlot = -1;
 
     public static int aotvSlot = -1;
+    public static int shortBowSlot = -1;
 
     public static boolean checkSoulwhip() {
         return checkHotbarItem(soulwhipSlot, "Soul Whip");
@@ -46,7 +47,7 @@ public class HotbarUtils {
         boolean terminator = false, emerald = false, aots = false, soulWhip = false, plasma = false,
                 healingWand = false, gyro = false, zombieSword = false, gloomlock = false,
                 ebm = false, bm = false, treecap = false, sapling = false, rod = false,
-                aotv = false;
+                aotv = false, shortBow = false;
         for (int i = 0; i < 9; i++) {
             ItemStack item = items.get(i);
             if (item == null) continue;
@@ -100,6 +101,9 @@ public class HotbarUtils {
             } else if (name.contains("Aspect of the Void")) {
                 aotvSlot = i;
                 aotv = true;
+            } else if (name.contains("Shortbow")) {
+                shortBowSlot = i;
+                shortBow = true;
             }
         }
         if (!terminator) terminatorSlot = -1;
@@ -117,5 +121,6 @@ public class HotbarUtils {
         if (!sapling) saplingSlot = -1;
         if (!rod) rodSlot = -1;
         if (!aotv) aotvSlot = -1;
+        if (!shortBow) shortBowSlot = -1;
     }
 }

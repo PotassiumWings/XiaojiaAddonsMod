@@ -44,13 +44,12 @@ public class AutoBlaze {
     private final static List<Vector3d> places = new ArrayList<>();  // aotv
     public static Room room = null;
     public static StringBuilder log = new StringBuilder();
+    public static StringBuilder tempLog = new StringBuilder();
     private static boolean lowFirst = false;
     private final KeyBind keyBind = new KeyBind("Auto Blaze", Keyboard.KEY_NONE);
     public boolean should = false;
     private Thread shootingThread = null;
     private boolean tpPacketReceived = false;
-//    private boolean arrowDirection = false;
-//    private double xzPlaneArrowAlpha = -1;
     private boolean arrowShot = false;
 
     // v: middle of block
@@ -74,28 +73,102 @@ public class AutoBlaze {
     }
 
     // v: standing at v, v_y + 0.25
-    private static boolean blazeCanHit(Vector3d v, int i) {
+    private static Vector2d blazeCanHit(Vector3d v, int i, boolean usingTerminator) {
         BlazeInfo blazeInfo = blazes.get(i);
         double x = blazeInfo.cube.x;
         double y = blazeInfo.cube.y;
         double z = blazeInfo.cube.z;
-        Vector2d yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.62, v.z, x, y, z);
-        double yaw = yawAndPitch.getX();
-        double pitch = yawAndPitch.getY();
-        if (!canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, blazeInfo.cube)) {
-            log.append("can't hit, ????").append("\n");
+        Vector2d invalid = new Vector2d(10000, 10000);
+        if (usingTerminator) {
+            // check middle
+            Vector2d yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.62, v.z, x, y, z);
+            if (checkMiddle(v, i, yawAndPitch)) return yawAndPitch;
+
+            // check left
+            yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.62, v.z, x, y, z, false);
+            Vector2d[] middleRightYawPitch = ShortbowUtils.getMiddleRightYawPitchByLeft(yawAndPitch);
+            if (checkLeft(v, i, yawAndPitch)) return middleRightYawPitch[0];
+
+            // check right
+            Vector2d[] leftMiddleYawPitch = ShortbowUtils.getLeftMiddleYawPitchByRight(yawAndPitch);
+            if (checkRight(v, i, yawAndPitch)) return leftMiddleYawPitch[1];
+
+            return invalid;
+        } else {
+            Vector2d yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.62, v.z, x, y, z);
+            if (!canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazeInfo.cube, true)) {
+                log.append("can't hit, ????").append("\ntemp log for this:\n");
+                log.append(String.format("blaze is at %.2f %.2f %.2f\n", x, y, z));
+                log.append(String.format("vec is at %.2f %.2f %.2f\n", v.x, v.y + 0.25 + 1.62, v.z));
+                log.append(String.format("facing at %.2f %.2f\n", yawAndPitch.x, yawAndPitch.y));
+                log.append(tempLog);
+                return invalid;
+            }
+            for (int j = i + 1; j < blazes.size(); j++)
+                if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, true)) {
+                    log.append("can't hit, because it may shoot " + j + " th blaze!").append("\n");
+                    return invalid;
+                }
+            for (Cube cube : blocks)
+                if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, cube, true)) {
+                    log.append(String.format("can't hit, because it may hit block at %.2f %.2f %.2f", cube.x, cube.y, cube.z)).append("\n");
+                    return invalid;
+                }
+            return yawAndPitch;
+        }
+    }
+
+    private static boolean checkMiddle(Vector3d v, int i, Vector2d yawAndPitch) {
+        Vector2d[] leftRightYawPitch = ShortbowUtils.getLeftRightYawPitchByMiddle(yawAndPitch);
+        if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(i).cube, true)) {
+            log.append(String.format("middle: can't hit, ???"));
+            log.append(tempLog);
             return false;
         }
-        for (int j = i + 1; j < blazes.size(); j++)
-            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, blazes.get(j).cube)) {
-                log.append("can't hit, because it may shoot " + j + " th blaze!").append("\n");
-                return false;
-            }
+        for (int j = i; j < blazes.size(); j++) {
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, leftRightYawPitch[0], blazes.get(j).cube, false)) return false;
+            if (j > i && canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, true)) return false;
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, leftRightYawPitch[1], blazes.get(j).cube, false)) return false;
+        }
         for (Cube cube : blocks)
-            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yaw, pitch, cube)) {
-                log.append(String.format("can't hit, because it may hit block at %.2f %.2f %.2f", cube.x, cube.y, cube.z)).append("\n");
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, cube, true))
                 return false;
-            }
+        return true;
+    }
+
+    private static boolean checkLeft(Vector3d v, int i, Vector2d yawAndPitch) {
+        Vector2d[] middleRightYawPitch = ShortbowUtils.getMiddleRightYawPitchByLeft(yawAndPitch);
+        if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(i).cube, false)) {
+            log.append(String.format("left: can't hit, ???"));
+            log.append(tempLog);
+            return false;
+        }
+        for (int j = i; j < blazes.size(); j++) {
+            if (j > i && canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, false)) return false;
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, middleRightYawPitch[0], blazes.get(j).cube, true)) return false;
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, middleRightYawPitch[1], blazes.get(j).cube, false)) return false;
+        }
+        for (Cube cube : blocks)
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, cube, false))
+                return false;
+        return true;
+    }
+
+    private static boolean checkRight(Vector3d v, int i, Vector2d yawAndPitch) {
+        Vector2d[] leftMiddleYawPitch = ShortbowUtils.getLeftMiddleYawPitchByRight(yawAndPitch);
+        if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(i).cube, false)) {
+            log.append(String.format("right: can't hit, ???"));
+            log.append(tempLog);
+            return false;
+        }
+        for (int j = i; j < blazes.size(); j++) {
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, leftMiddleYawPitch[0], blazes.get(j).cube, false)) return false;
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, leftMiddleYawPitch[1], blazes.get(j).cube, true)) return false;
+            if (j > i && canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, false)) return false;
+        }
+        for (Cube cube : blocks)
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, cube, false))
+                return false;
         return true;
     }
 
@@ -111,9 +184,13 @@ public class AutoBlaze {
         return new Vector3d(v.x * x, v.y * x, v.z * x);
     }
 
-    public static boolean canHit(double x, double y, double z, double yaw, double pitch, Cube cube) {
+    // isMiddle: is the middle arrow
+    public static boolean canHit(double x, double y, double z, Vector2d yawAndPitch, Cube cube, boolean isMiddle) {
+        double yaw = yawAndPitch.x;
+        double pitch = yawAndPitch.y;
         // solve in xz plane
-        log.append(String.format("trying canHit with yaw: %.2f, pitch: %.2f", yaw, pitch)).append("\n");
+        tempLog = new StringBuilder();
+        tempLog.append(String.format("trying canHit with yaw: %.2f, pitch: %.2f", yaw, pitch)).append("\n");
         double PI = Math.PI;
         double sx = cube.x - cube.w, sz = cube.z - cube.w;
         double tx = cube.x + cube.w, tz = cube.z + cube.w;
@@ -130,7 +207,7 @@ public class AutoBlaze {
         if (xSz > sx && xSz <= tx) intersects.add(new Vector2d(xSz, sz));
         if (xTz >= sx && xTz < tx) intersects.add(new Vector2d(xTz, tz));
         if (intersects.size() <= 1) {
-            log.append("canHit false: intersect size too small").append("\n");
+            tempLog.append("canHit false: intersect size too small").append("\n");
             return false;
         }
         if (intersects.size() != 2) {
@@ -150,11 +227,11 @@ public class AutoBlaze {
 
         double sy = (cube.y - cube.h) - y;
         double ty = (cube.y + cube.h) - y;
-        double sY = ShortbowUtils.getProjectileFunction(sX, pitch);
-        double tY = ShortbowUtils.getProjectileFunction(tX, pitch);
-        log.append(String.format("sx: %.2f, tx: %.2f, sz: %.2f, tz: %.2f", sx, tx, sz, tz)).append("\n");
-        log.append(String.format("sX: %.2f, tX: %.2f, pitch: %.2f", sX, tX, pitch)).append("\n");
-        log.append(String.format("sy: %.2f, ty: %.2f, sY: %.2f, tY: %.2f", sy, ty, sY, tY)).append("\n");
+        double sY = ShortbowUtils.getProjectileFunction(sX, pitch, isMiddle);
+        double tY = ShortbowUtils.getProjectileFunction(tX, pitch, isMiddle);
+        tempLog.append(String.format("sx: %.2f, tx: %.2f, sz: %.2f, tz: %.2f", sx, tx, sz, tz)).append("\n");
+        tempLog.append(String.format("sX: %.2f, tX: %.2f, pitch: %.2f", sX, tX, pitch)).append("\n");
+        tempLog.append(String.format("sy: %.2f, ty: %.2f, sY: %.2f, tY: %.2f", sy, ty, sY, tY)).append("\n");
         // not exactly, but most of the case
         return MathUtils.isBetween(sY, sy, ty) || MathUtils.isBetween(tY, sy, ty);
     }
@@ -186,16 +263,25 @@ public class AutoBlaze {
                 calculatePlaces();
                 calculateBlazes();
                 calculateBlocks();
+                boolean usingTerminator = true;
                 int aotvSlot = HotbarUtils.aotvSlot;
                 int terminatorSlot = HotbarUtils.terminatorSlot;
+                int shortBowSlot = HotbarUtils.shortBowSlot;
+                int slot;
                 log.append("starting!").append("\n");
                 if (aotvSlot == -1) {
                     ChatLib.chat("Requires aotv in hotbar.");
                     throw new Exception();
                 }
                 if (terminatorSlot == -1) {
-                    ChatLib.chat("Requires terminator in hotbar.");
-                    throw new Exception();
+                    if (shortBowSlot == -1) {
+                        ChatLib.chat("Requires terminator / shortbow in hotbar.");
+                        throw new Exception();
+                    }
+                    slot = shortBowSlot;
+                    usingTerminator = false;
+                } else {
+                    slot = terminatorSlot;
                 }
                 int hit = 0;
                 ArrayList<Sequence> seq = new ArrayList<>();
@@ -219,32 +305,29 @@ public class AutoBlaze {
                         tryPlaces.addAll(transGraph.get(lastTp));
                     }
                     // iterate over all places that can be tped on, find the max
+                    ArrayList<Sequence> maxSequence = new ArrayList<>();
                     for (Vector3d vec : tryPlaces) {
                         int i = hit;
-                        while (i < blazes.size() && blazeCanHit(vec, i)) {
+                        ArrayList<Sequence> tempSequence = new ArrayList<>();
+                        tempSequence.add(new Sequence(vec.x, vec.y, vec.z));
+                        while (i < blazes.size()) {
+                            Vector2d yawAndPitch = blazeCanHit(vec, i, usingTerminator);
+                            if (yawAndPitch.x > 1000) break;
+                            seq.add(new Sequence(yawAndPitch.x, yawAndPitch.y, blazes.get(i).hpEntity));
                             log.append("Can hit: " + vec + ", " + i).append("\n");
                             i++;
                         }
                         if (i > count) {
                             count = i;
                             res = vec;
+                            maxSequence = tempSequence;
                         }
                     }
                     if (res == null) {
                         ChatLib.chat("CANT FIND GOOD POSITION!");
                         return;
                     }
-                    seq.add(new Sequence(res.x, res.y, res.z));
-                    int i = hit;
-                    while (i < count) {
-                        BlazeInfo blazeInfo = blazes.get(i);
-                        double x = blazeInfo.cube.x;
-                        double y = blazeInfo.cube.y;
-                        double z = blazeInfo.cube.z;
-                        Vector2d yawAndPitch = ShortbowUtils.getDirection(res.x, res.y + 0.25 + 1.62, res.z, x, y, z);
-                        seq.add(new Sequence(yawAndPitch.x, yawAndPitch.y, blazeInfo.hpEntity));
-                        i++;
-                    }
+                    seq.addAll(maxSequence);
                     hit = count;
                     lastTp = res;
                 }
@@ -276,7 +359,7 @@ public class AutoBlaze {
                     } else {
                         arrowShot = false;
                         log.append("shooting to " + todo.yaw + ", " + todo.pitch).append("\n");
-                        ControlUtils.setHeldItemIndex(terminatorSlot);
+                        ControlUtils.setHeldItemIndex(slot);
                         ControlUtils.faceSlowly(todo.yaw, todo.pitch);
                         Thread.sleep(200);
                         ControlUtils.rightClick();

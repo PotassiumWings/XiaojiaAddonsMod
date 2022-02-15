@@ -16,8 +16,19 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class ShortbowUtils {
+    private static final double g = 1.0;
+    private static final double k = 0.049;
+
+    private static double getV0(boolean isMiddle) {
+        return isMiddle ? 13.75 : 13.8;
+    }
+
     public static double getProjectileFunction(double x, double alpha) {
-        double v0 = 13.75, g = 1.0, k = 0.049;
+        return getProjectileFunction(x, alpha, true);
+    }
+
+    public static double getProjectileFunction(double x, double alpha, boolean isMiddle) {
+        double v0 = getV0(isMiddle);
         double t = -Math.log(1 - k * x / v0 / Math.cos(alpha)) / k;
         return x / (v0 * k * Math.cos(alpha)) * (v0 * k * Math.sin(alpha) + g) - g * t / k;
     }
@@ -30,17 +41,76 @@ public class ShortbowUtils {
     }
 
     private static double y_t(double alpha, double t, boolean isMiddle) {
-        double v0 = 13.75, g = 1.0, k = 0.049;
-        if (!isMiddle) v0 = 13.8;
+        double v0 = getV0(isMiddle);
         return 1 / k / k * (g + k * v0 * Math.sin(alpha)) * (1 - Math.exp(-k * t)) - g / k * t;
     }
 
     private static double x_t(double alpha, double t, boolean isMiddle) {
-        double v0 = 13.75, g = 1.0, k = 0.049;
-        if (!isMiddle) v0 = 13.8;
+        double v0 = getV0(isMiddle);
         return v0 / k * Math.cos(alpha) * (1 - Math.exp(-k * t));
     }
 
+    public static Vector2d[] getLeftRightYawPitchByMiddle(Vector2d yawAndPitch) {
+        double yaw = yawAndPitch.x,pitch = yawAndPitch.y;
+        double newPitch = getNewPitch(pitch);
+        double dYaw = getDYaw(pitch);
+        return new Vector2d[]{
+                new Vector2d(yaw - dYaw, newPitch),
+                new Vector2d(yaw + dYaw, newPitch)
+        };
+    }
+
+    private static double getRawPitch(double pitch) {
+        assert (pitch >= -90 && pitch <= 90);
+        return (Math.PI / 2 + pitch) / (1 + Math.PI / 180 * (pitch < -Math.PI / 2 ? -1 : 1));
+    }
+
+    private static double getNewPitch(double pitch) {
+        assert (pitch >= -90 && pitch <= 90);
+        return -Math.PI / 2 + pitch + Math.abs(pitch) * Math.PI / 180;
+    }
+
+    private static double getDYaw(double pitch) {
+        return Math.sqrt(5.1 * 5.1 + Math.pow(pitch * Math.PI / 180 - Math.PI / 2, 2));
+    }
+
+    public static Vector2d[] getLeftMiddleYawPitchByRight(Vector2d yawAndPitch) {
+        double yaw = yawAndPitch.x,pitch = yawAndPitch.y;
+        double rawPitch = getRawPitch(pitch);
+        double dYaw = getDYaw(rawPitch);
+        double rawYaw = MathUtils.validYaw(yaw - dYaw);
+
+        Vector2d[] leftRightYawPitch = getLeftRightYawPitchByMiddle(new Vector2d(rawYaw, rawPitch));
+        double rightYaw = leftRightYawPitch[1].x;
+        double rightPitch = leftRightYawPitch[1].y;
+        assert (Math.abs(pitch - rightPitch) < 1e-4);
+        assert (Math.abs(yaw - rightYaw) < 1e-4 || Math.abs(yaw - rightYaw) > 360 - 1e-4);
+
+        return new Vector2d[]{
+                leftRightYawPitch[0],
+                new Vector2d(rawYaw, rawPitch)
+        };
+    }
+
+    public static Vector2d[] getMiddleRightYawPitchByLeft(Vector2d yawAndPitch) {
+        double yaw = yawAndPitch.x,pitch = yawAndPitch.y;
+        double rawPitch = getRawPitch(pitch);
+        double dYaw = getDYaw(rawPitch);
+        double rawYaw = MathUtils.validYaw(yaw + dYaw);
+
+        Vector2d[] leftRightYawPitch = getLeftRightYawPitchByMiddle(new Vector2d(rawYaw, rawPitch));
+        double leftYaw = leftRightYawPitch[0].x;
+        double leftPitch = leftRightYawPitch[0].y;
+        assert (Math.abs(pitch - leftPitch) < 1e-4);
+        assert (Math.abs(yaw - leftYaw) < 1e-4 || Math.abs(yaw - leftYaw) > 360 - 1e-4);
+
+        return new Vector2d[]{
+                new Vector2d(rawYaw, rawPitch),
+                leftRightYawPitch[1]
+        };
+    }
+
+    // terminator shoot
     public static void testTerminator() {
         new Thread(() -> {
             try {
@@ -131,10 +201,14 @@ public class ShortbowUtils {
     }
 
     public static Vector2d getDirection(double x, double y, double z, double tx, double ty, double tz) {
+        return getDirection(x, y, z, tx, ty, tz, true);
+    }
+
+    public static Vector2d getDirection(double x, double y, double z, double tx, double ty, double tz, boolean isMiddle) {
         double PI = Math.PI;
         double dx = tx - x, dy = ty - y, dz = tz - z;
         double X = Math.sqrt((x - tx) * (x - tx) + (z - tz) * (z - tz));
-        double v0 = 13.75, g = 1.0, k = 0.049;
+        double v0 = getV0(isMiddle);
         double MAX_ALPHA = Math.acos(k * X / v0);
         double L = -MAX_ALPHA, R = MAX_ALPHA;
         while (R - L > 0.01) {
