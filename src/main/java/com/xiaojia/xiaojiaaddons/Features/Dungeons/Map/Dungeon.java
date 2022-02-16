@@ -81,6 +81,7 @@ public class Dungeon {
     public static int roomSize = 31;
     // dungeons
     public static ArrayList<Room> rooms = new ArrayList<>();
+    public static ArrayList<Room> unknownRooms = new ArrayList<>();
     public static ArrayList<Door> doors = new ArrayList<>();
     public static ArrayList<String> puzzles = new ArrayList<>();
     public static int totalRooms = -1;
@@ -386,10 +387,16 @@ public class Dungeon {
         for (Room room : rooms) {
             ChatLib.chat(room.name + " is at " + room.x + ", " + room.z + ", core: " + room.core);
         }
+        for (Room room : unknownRooms) {
+            ChatLib.chat("unknown " + room.name + " is at " + room.x + ", " + room.z + ", core: " + room.core);
+        }
     }
 
     private static void addRoom(Room room) {
-        if (room.name.equals("Unknown")) return;
+        if (room.name.equals("Unknown")) {
+            unknownRooms.add(room);
+            return;
+        }
         if (room.name.equals("Blaze")) {
             AutoBlaze.setRoom(room);
         }
@@ -898,6 +905,7 @@ public class Dungeon {
 
         // Dungeon itself
         rooms = new ArrayList<>();
+        unknownRooms = new ArrayList<>();
         doors = new ArrayList<>();
         totalRooms = 0;
         witherDoors = 0;

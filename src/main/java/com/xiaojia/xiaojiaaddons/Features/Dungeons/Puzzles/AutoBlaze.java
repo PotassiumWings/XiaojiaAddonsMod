@@ -83,6 +83,7 @@ public class AutoBlaze {
         double z = blazeInfo.cube.z;
         Vector2d invalid = new Vector2d(10000, 10000);
         Vector2d yawAndPitch = ShortbowUtils.getDirection(v.x, v.y + 0.25 + 1.62, v.z, x, y, z);
+        log.append(String.format("trying blaze can hit: %.2f %.2f %.2f, %d", v.x, v.y, v.z, i));
         if (usingTerminator) {
             // check middle
             if (checkMiddle(v, i, yawAndPitch)) return yawAndPitch;
@@ -131,9 +132,10 @@ public class AutoBlaze {
             log.append(tempLog);
             return false;
         }
-        for (int j = i; j < blazes.size(); j++) {
+        for (int j = i + 1; j < blazes.size(); j++) {
+            log.append("check middle trying to hit " + j + " th blaze\n");
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, leftRightYawPitch[0], blazes.get(j).cube, false)) return false;
-            if (j > i && canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, true)) return false;
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, true)) return false;
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, leftRightYawPitch[1], blazes.get(j).cube, false)) return false;
         }
         // should check distance, but lazy
@@ -153,8 +155,9 @@ public class AutoBlaze {
             log.append(tempLog);
             return false;
         }
-        for (int j = i; j < blazes.size(); j++) {
-            if (j > i && canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, false)) return false;
+        for (int j = i + 1; j < blazes.size(); j++) {
+            log.append("check left trying to hit " + j + " th blaze\n");
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, false)) return false;
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, middleRightYawPitch[0], blazes.get(j).cube, true)) return false;
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, middleRightYawPitch[1], blazes.get(j).cube, false)) return false;
         }
@@ -175,10 +178,11 @@ public class AutoBlaze {
             log.append(tempLog);
             return false;
         }
-        for (int j = i; j < blazes.size(); j++) {
+        for (int j = i + 1; j < blazes.size(); j++) {
+            log.append("check right trying to hit " + j + " th blaze\n");
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, leftMiddleYawPitch[0], blazes.get(j).cube, false)) return false;
             if (canHit(v.x, v.y + 0.25 + 1.62, v.z, leftMiddleYawPitch[1], blazes.get(j).cube, true)) return false;
-            if (j > i && canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, false)) return false;
+            if (canHit(v.x, v.y + 0.25 + 1.62, v.z, yawAndPitch, blazes.get(j).cube, false)) return false;
         }
         // should check distance, but lazy
         for (Cube cube : blocks)
@@ -260,8 +264,10 @@ public class AutoBlaze {
         log.append(String.format("sX: %.2f, tX: %.2f, pitch: %.2f", sX, tX, pitch)).append("\n");
         log.append(String.format("sy: %.2f, ty: %.2f, sY: %.2f, tY: %.2f", sy, ty, sY, tY)).append("\n");
         // not exactly, but most of the case
-        return MathUtils.isBetween(sY, sy, ty) || MathUtils.isBetween(tY, sy, ty) ||
+        boolean res = MathUtils.isBetween(sY, sy, ty) || MathUtils.isBetween(tY, sy, ty) ||
                 (MathUtils.isBetween(sy, sY, tY) && MathUtils.isBetween(ty, sY, tY));
+        log.append("res: " + res + "\n");
+        return res;
     }
 
     public static boolean isInXZSquare(double x, double z, double sx, double sz, double tx, double tz) {
@@ -358,6 +364,8 @@ public class AutoBlaze {
                         return;
                     }
                     seq.addAll(maxSequence);
+                    log.append(String.format("decided to tp to: %.2f %.2f %.2f\n\n",
+                            maxSequence.get(0).x, maxSequence.get(0).y, maxSequence.get(0).z));
                     hit = count;
                     lastTp = res;
                 }
@@ -600,8 +608,9 @@ public class AutoBlaze {
         Entity hpEntity;
 
         public BlazeInfo(double x, double y, double z, int hp, Entity entity) {
-            // tho it's 0.3, set it to 0.5 to reduce errors
-            cube = new Cube(x, y, z, 1, 0.5);
+            // width: tho it's 0.3, set it to 0.5 to reduce errors
+            // height: 1 -> 1.2
+            cube = new Cube(x, y, z, 1.2, 0.5);
             this.hp = hp;
             this.hpEntity = entity;
         }
