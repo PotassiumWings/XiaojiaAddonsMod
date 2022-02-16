@@ -621,8 +621,13 @@ public class Configs {
     public static boolean TeleportMazeSolver = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Blaze", parent = "Solvers",
-            description = "Bind a key to use!")
+            description = "Bind a key to use in blaze room!")
     public static boolean AutoBlaze = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Blaze Secret", parent = "Solvers",
+            description = "Auto Etherwarp to secret after shooting blazes.\n" +
+                    "Requires Auto Blaze.")
+    public static boolean AutoBlazeSecret = false;
 
     // StarredMobESP
     @Property(type = Property.Type.FOLDER, name = "Starred Mob ESP", parent = "Dungeons")

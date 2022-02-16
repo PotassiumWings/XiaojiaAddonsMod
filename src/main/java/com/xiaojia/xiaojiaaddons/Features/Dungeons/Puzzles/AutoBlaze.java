@@ -28,7 +28,9 @@ import org.lwjgl.input.Keyboard;
 
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,6 +56,9 @@ public class AutoBlaze {
     private boolean tpPacketReceived = false;
     private boolean arrowShot = false;
     private double facingYaw = 10000;
+
+    // slot
+    private int aotvSlot;
 
     // v: middle of block
     public static Vector3d calculateSidePosToEtherWarp(double x, double y, double z) throws Exception {
@@ -191,18 +196,6 @@ public class AutoBlaze {
         return true;
     }
 
-    private static Vector3d diff(Vector3d from, Vector3d to) {
-        return new Vector3d(to.x - from.x, to.y - from.y, to.z - from.z);
-    }
-
-    private static Vector3d add(Vector3d a, Vector3d b) {
-        return new Vector3d(a.x + b.x, a.y + b.y, a.z + b.z);
-    }
-
-    private static Vector3d mul(double x, Vector3d v) {
-        return new Vector3d(v.x * x, v.y * x, v.z * x);
-    }
-
     public static void test() {
         blazes.clear();
         lowFirst = true;
@@ -228,7 +221,7 @@ public class AutoBlaze {
         if (isInXZSquare(x, z, sx, sz, tx, tz)) return true;
         // calculate intersections with 4 edges of the square
         // z * cos(alpha) = sin(alpha) * (x - x0) + z0 * cos(alpha)
-        double xzAlpha = (yaw + 90)  * PI / 180;
+        double xzAlpha = (yaw + 90) * PI / 180;
         double tan = Math.tan(xzAlpha);
         double zSx = z + (sx - x) * tan, xSz = x + (sz - z) * (1 / tan);
         double zTx = z + (tx - x) * tan, xTz = x + (tz - z) * (1 / tan);
@@ -278,6 +271,230 @@ public class AutoBlaze {
         room = blazeRoom;
     }
 
+    // current player position
+    private List<Vector3d> getPossibleEtherwarpPointsFromPlayer() throws Exception {
+        ArrayList<Vector3d> res = new ArrayList<>();
+        for (Vector3d vec : places) {
+            if (canEtherwarpFromCur(vec)) {
+                log.append("can go to " + vec).append("\n");
+                res.add(vec);
+            }
+        }
+        return res;
+    }
+
+    // from: -0.25
+    private boolean canEtherwarp(Vector3d from, Vector3d to) throws Exception {
+        return noBlocksBetween(
+                new Vector3d(from.x, from.y + 0.25 + 1.54, from.z),
+                whereShouldIEtherWarpTo(from.y + 0.25 + 1.54, to.x, to.y, to.z)
+        );
+    }
+
+    // from: player
+    private boolean canEtherwarpFromCur(Vector3d to) throws Exception {
+        return noBlocksBetween(
+                new Vector3d(getX(getPlayer()), getY(getPlayer()) + 1.54, getZ(getPlayer())),
+                whereShouldIEtherWarpTo(getY(getPlayer()), to.x, to.y, to.z)
+        );
+    }
+
+    private List<Vector3d> getPossibleEtherwarpPointsToSecret(Vector3d secret) throws Exception {
+        ArrayList<Vector3d> res = new ArrayList<>();
+        for (Vector3d vec : places) {
+            if (canEtherwarp(vec, secret)) {
+                log.append("can go from " + vec).append("\n");
+                res.add(vec);
+            }
+        }
+        return res;
+    }
+
+    private ArrayList<BlazeOrder> getOrderSequence(boolean usingTerminator) throws Exception {
+        ArrayList<BlazeOrder> result = new ArrayList<>();
+        int hit = 0;
+        Vector3d lastTp = null;
+        while (hit < blazes.size()) {
+            Vector3d res = null;
+            int count = hit;
+            List<Vector3d> tryPlaces = new ArrayList<>();
+            if (lastTp == null) tryPlaces = getPossibleEtherwarpPointsFromPlayer();
+            else tryPlaces.addAll(transGraph.get(lastTp));
+
+            // iterate over all places that can be tped on, find the max
+            ArrayList<BlazeOrder> maxSequence = new ArrayList<>();
+            for (Vector3d vec : tryPlaces) {
+                int i = hit;
+                ArrayList<BlazeOrder> tempSequence = new ArrayList<>();
+                tempSequence.add(new BlazeOrder(vec.x, vec.y, vec.z));
+                while (i < blazes.size()) {
+                    Vector2d yawAndPitch = blazeCanHit(vec, i, usingTerminator);
+                    if (yawAndPitch.x > 1000) break;
+                    // add this edge case to avoid hitting block
+                    if (yawAndPitch.y > 70) break;
+                    tempSequence.add(new BlazeOrder(yawAndPitch.x, yawAndPitch.y, blazes.get(i).hpEntity));
+                    log.append("Can hit: " + vec + ", " + i).append("\n");
+                    i++;
+                }
+                if (i > count) {
+                    count = i;
+                    res = vec;
+                    maxSequence = tempSequence;
+                }
+            }
+            if (res == null) {
+                ChatLib.chat("CANT FIND GOOD POSITION!");
+                throw new Exception();
+            }
+            result.addAll(maxSequence);
+            log.append(String.format("decided to tp to: %.2f %.2f %.2f\n\n",
+                    maxSequence.get(0).x, maxSequence.get(0).y, maxSequence.get(0).z));
+            hit = count;
+            lastTp = res;
+        }
+        return result;
+    }
+
+    private void executeOrder(int slot, ArrayList<BlazeOrder> seq) throws Exception {
+        long lastBlazeHitTime = 0;
+        for (BlazeOrder todo : seq) {
+            if (!should) break;
+            if (todo.type == BlazeOrder.Type.WARP) {
+                tpPacketReceived = false;
+                etherWarpTo(new Vector3d(todo.x, todo.y, todo.z));
+            } else {
+                arrowShot = false;
+                log.append("shooting to " + todo.yaw + ", " + todo.pitch).append("\n");
+                ControlUtils.setHeldItemIndex(slot);
+                ControlUtils.faceSlowly(todo.yaw, todo.pitch);
+                facingYaw = todo.yaw;
+                double distance = Math.sqrt(MathUtils.distanceSquareFromPlayer(todo.entity));
+                long estimate = MathUtils.floor(distance * 50 / 1.7);
+                log.append(String.format("distance: %.2f, estimate: %d\n", distance, estimate));
+                Thread.sleep(200);
+                while (TimeUtils.curTime() + estimate < lastBlazeHitTime + 50 && should)
+                    Thread.sleep(20);
+                ControlUtils.leftClick();
+
+                int cnt = 0;
+                while (!arrowShot && should) {
+                    if (cnt > 20) {
+                        ControlUtils.leftClick();
+                        cnt = 0;
+                    }
+                    Thread.sleep(20);
+                    cnt++;
+                }
+                lastBlazeHitTime = estimate + TimeUtils.curTime();
+                Thread.sleep(100);
+                log.append("lastHitime: " + lastBlazeHitTime + "\n");
+            }
+        }
+    }
+
+    private Vector3d getSecretPoint() throws Exception {
+        int y = lowFirst ? 118 : 68;
+        int[] dx = new int[]{1, -1, -1, 1};
+        int[] dz = new int[]{1, 1, -1, -1};
+        for (int i = 0; i < 4; i++) {
+            int tx, tz;
+            tx = room.x + dx[i] * 5;
+            tz = room.z + dz[i] * 8;
+            if (BlockUtils.isBlockBedRock(tx, y, tz) && BlockUtils.isBlockWater(tx, y, tz - dz[i]))
+                return new Vector3d(tx + 0.5, y + 0.75, tz + 0.5);
+            tx = room.x + dx[i] * 8;
+            tz = room.z + dz[i] * 5;
+            if (BlockUtils.isBlockBedRock(tx, y, tz) && BlockUtils.isBlockWater(tx - dx[i], y, tz))
+                return new Vector3d(tx + 0.5, y + 0.75, tz + 0.5);
+        }
+        throw new Exception();
+    }
+
+    private void grabSecret() throws Exception {
+        Vector3d secret = getSecretPoint(); // -0.25
+        log.append(String.format("\nsecret is at: %.2f %.2f %.2f\n", secret.x, secret.y, secret.z));
+        // directly tp to secret
+        if (canEtherwarpFromCur(secret)) {
+            etherWarpTo(secret);
+            return;
+        }
+
+        // get places that can tp to secret
+        Vector3d startVec = new Vector3d(-1, -1, -1);
+        transGraph.put(startVec, new ArrayList<>());
+        List<Vector3d> endPositions = getPossibleEtherwarpPointsToSecret(secret);
+        for (Vector3d pos : endPositions)
+            transGraph.get(pos).add(secret);
+        List<Vector3d> startPositions = getPossibleEtherwarpPointsFromPlayer();
+        for (Vector3d pos : startPositions)
+            transGraph.get(startVec).add(pos);
+        // bfs
+        HashMap<Vector3d, Integer> steps = new HashMap<>();
+        HashMap<Vector3d, Vector3d> pre = new HashMap<>();
+        Deque<Vector3d> queue = new ArrayDeque<>();
+        queue.add(startVec);
+        steps.put(startVec, 0);
+        boolean found = false;
+        while (!queue.isEmpty()) {
+            Vector3d front = queue.pollFirst();
+            int step = steps.get(front);
+            if (found) break;
+            for (Vector3d vec : transGraph.get(front)) {
+                if (steps.getOrDefault(vec, 10000) > step + 1) {
+                    steps.put(vec, step + 1);
+                    pre.put(vec, front);
+                    queue.offerLast(vec);
+                    if (vec == secret) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+        // gogogo
+        if (!found) {
+            ChatLib.chat("Can't find a path to get the secret!");
+            throw new Exception();
+        }
+        Vector3d cur = secret;
+        ArrayList<Vector3d> revertedPath = new ArrayList<>();
+        while (cur != startVec) {
+            revertedPath.add(cur);
+            cur = pre.get(cur);
+        }
+        for (int i = revertedPath.size() - 1; i >= 0; i--) {
+            Vector3d toWarp = revertedPath.get(i);
+            etherWarpTo(toWarp);
+        }
+    }
+
+    // toWarp: -0.25
+    private void etherWarpTo(Vector3d toWarp) throws Exception {
+        tpPacketReceived = false;
+        Vector3d v = whereShouldIEtherWarpTo(getY(getPlayer()), toWarp.x, toWarp.y, toWarp.z);
+        log.append(String.format("etherwarp to %.2f %.2f %.2f", toWarp.x, toWarp.y, toWarp.z)).append("\n");
+        log.append(String.format("aim at %.2f %.2f %.2f", v.x, v.y, v.z)).append("\n");
+        ControlUtils.setHeldItemIndex(aotvSlot);
+        ControlUtils.etherWarp(v.x, v.y, v.z);
+
+        int cnt = 0;
+        while (!tpPacketReceived && should) {
+            Thread.sleep(20);
+            cnt++;
+            if (cnt >= 50) {
+                ChatLib.chat("Too long no packet, please try again.");
+                throw new Exception();
+            }
+        }
+
+        Thread.sleep(100);
+        if (MathUtils.distanceSquareFromPlayer(toWarp.x, toWarp.y + 0.25, toWarp.z) > 1) {
+            ChatLib.chat("Failed to etherwarp!");
+            log.append(String.format("Player is at %.2f %.2f %.2f", getX(getPlayer()), getY(getPlayer()), getZ(getPlayer()))).append("\n");
+            throw new Exception();
+        }
+    }
+
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
@@ -285,11 +502,13 @@ public class AutoBlaze {
             should = !should;
             ChatLib.chat(should ? "Auto Blaze &aactivated" : "Auto Blaze &cdeactivated");
         }
-        if (!Configs.AutoBlaze || !should || !Dungeon.isFullyScanned || room == null) return;
-        lowFirst = (room.core == 1103121487); // ??
-        if (!Dungeon.currentRoom.equals("Blaze")) return;
-        if (!room.checkmark.equals("")) return;
+        if (!Configs.AutoBlaze || !should || !Dungeon.isFullyScanned || room == null ||
+                !Dungeon.currentRoom.equals("Blaze")) {
+            deactivate();
+            return;
+        }
         // in blaze, not cleared
+        lowFirst = (room.core == 1103121487);
         if (shootingThread != null && shootingThread.isAlive()) return;
         shootingThread = new Thread(() -> {
             try {
@@ -298,141 +517,45 @@ public class AutoBlaze {
                 calculateBlazes();
                 calculateBlocks();
                 boolean usingTerminator = true;
-                int aotvSlot = HotbarUtils.aotvSlot;
+                aotvSlot = HotbarUtils.aotvSlot;
                 int terminatorSlot = HotbarUtils.terminatorSlot;
                 int shortBowSlot = HotbarUtils.shortBowSlot;
-                int slot;
+                int shootSlot;
                 log.append("starting!").append("\n");
                 if (aotvSlot == -1) {
                     ChatLib.chat("Requires aotv in hotbar.");
                     throw new Exception();
                 }
-                if (terminatorSlot == -1) {
+                if (terminatorSlot != -1) shootSlot = terminatorSlot;
+                else {
                     if (shortBowSlot == -1) {
                         ChatLib.chat("Requires terminator / shortbow in hotbar.");
                         throw new Exception();
                     }
-                    slot = shortBowSlot;
+                    shootSlot = shortBowSlot;
                     usingTerminator = false;
-                } else {
-                    slot = terminatorSlot;
                 }
-                int hit = 0;
-                ArrayList<Sequence> seq = new ArrayList<>();
+                // killing blaze
+                ArrayList<BlazeOrder> seq = getOrderSequence(usingTerminator);
+                executeOrder(shootSlot, seq);
 
-                Vector3d lastTp = null;
-                while (hit < blazes.size()) {
-                    Vector3d res = null;
-                    int count = hit;
-                    List<Vector3d> tryPlaces = new ArrayList<>();
-                    if (lastTp == null) {
-                        for (Vector3d vec : places) {
-                            if (noBlocksBetween(
-                                    new Vector3d(getX(getPlayer()), getY(getPlayer()) + 1.54, getZ(getPlayer())),
-                                    whereShouldIEtherWarpTo(getY(getPlayer()), vec.x, vec.y, vec.z)
-                            )) {
-                                log.append("can go to " + vec).append("\n");
-                                tryPlaces.add(vec);
-                            }
-                        }
-                    } else {
-                        tryPlaces.addAll(transGraph.get(lastTp));
-                    }
-                    // iterate over all places that can be tped on, find the max
-                    ArrayList<Sequence> maxSequence = new ArrayList<>();
-                    for (Vector3d vec : tryPlaces) {
-                        int i = hit;
-                        ArrayList<Sequence> tempSequence = new ArrayList<>();
-                        tempSequence.add(new Sequence(vec.x, vec.y, vec.z));
-                        while (i < blazes.size()) {
-                            Vector2d yawAndPitch = blazeCanHit(vec, i, usingTerminator);
-                            if (yawAndPitch.x > 1000) break;
-                            // add this edge case to avoid hitting block
-                            if (yawAndPitch.y > 70) break;
-                            tempSequence.add(new Sequence(yawAndPitch.x, yawAndPitch.y, blazes.get(i).hpEntity));
-                            log.append("Can hit: " + vec + ", " + i).append("\n");
-                            i++;
-                        }
-                        if (i > count) {
-                            count = i;
-                            res = vec;
-                            maxSequence = tempSequence;
-                        }
-                    }
-                    if (res == null) {
-                        ChatLib.chat("CANT FIND GOOD POSITION!");
-                        return;
-                    }
-                    seq.addAll(maxSequence);
-                    log.append(String.format("decided to tp to: %.2f %.2f %.2f\n\n",
-                            maxSequence.get(0).x, maxSequence.get(0).y, maxSequence.get(0).z));
-                    hit = count;
-                    lastTp = res;
-                }
-                // go hit
-                long lastBlazeHitTime = 0;
-                for (Sequence todo : seq) {
-                    if (!should) break;
-                    if (todo.type == Sequence.Type.WARP) {
-                        Vector3d v = whereShouldIEtherWarpTo(getY(getPlayer()), todo.x, todo.y, todo.z);
-                        log.append(String.format("etherwarp to %.2f %.2f %.2f", todo.x, todo.y, todo.z)).append("\n");
-                        log.append(String.format("aim at %.2f %.2f %.2f", v.x, v.y, v.z)).append("\n");
-                        tpPacketReceived = false;
-                        ControlUtils.setHeldItemIndex(aotvSlot);
-                        ControlUtils.etherWarp(v.x, v.y, v.z);
-
-                        int cnt = 0;
-                        while (!tpPacketReceived && should) {
-                            Thread.sleep(20);
-                            cnt++;
-                            if (cnt >= 50) {
-                                ChatLib.chat("Too long no packet, please try again.");
-                                throw new Exception();
-                            }
-                        }
-                        Thread.sleep(100);
-                        if (MathUtils.distanceSquareFromPlayer(todo.x, todo.y + 0.25, todo.z) > 1) {
-                            ChatLib.chat("Failed to etherwarp!");
-                            log.append(String.format("Player is at %.2f %.2f %.2f", getX(getPlayer()), getY(getPlayer()), getZ(getPlayer()))).append("\n");
-                            throw new Exception();
-                        }
-                    } else {
-                        arrowShot = false;
-                        log.append("shooting to " + todo.yaw + ", " + todo.pitch).append("\n");
-                        ControlUtils.setHeldItemIndex(slot);
-                        ControlUtils.faceSlowly(todo.yaw, todo.pitch);
-                        facingYaw = todo.yaw;
-                        double distance = Math.sqrt(MathUtils.distanceSquareFromPlayer(todo.entity));
-                        long estimate = MathUtils.floor(distance * 50 / 1.7);
-                        log.append(String.format("distance: %.2f, estimate: %d\n", distance, estimate));
-                        Thread.sleep(200);
-                        while (TimeUtils.curTime() + estimate < lastBlazeHitTime + 50 && should)
-                            Thread.sleep(20);
-                        ControlUtils.leftClick();
-
-                        int cnt = 0;
-                        while (!arrowShot && should) {
-                            if (cnt > 20) {
-                                ControlUtils.leftClick();
-                                cnt = 0;
-                            }
-                            Thread.sleep(20);
-                            cnt++;
-                        }
-                        lastBlazeHitTime = estimate + TimeUtils.curTime();
-                        log.append("lastHitime: " + lastBlazeHitTime + "\n");
-                    }
+                if (Configs.AutoBlazeSecret) {
+                    grabSecret();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (should) {
-                    should = false;
-                    ChatLib.chat("Auto Blaze &cdeactivated");
-                }
+                deactivate();
             }
         });
         shootingThread.start();
+    }
+
+    private void deactivate() {
+        if (should) {
+            should = false;
+            ChatLib.chat("Auto Blaze &cdeactivated");
+        }
     }
 
     @SubscribeEvent
@@ -495,7 +618,7 @@ public class AutoBlaze {
     private boolean noBlocksBetween(Vector3d from, Vector3d to) {
         // calculate from from to to
         Vector3d v = new Vector3d();
-        v.normalize(diff(from, to));
+        v.normalize(MathUtils.diff(from, to));
         double epsilon = 1e-5;
         Vector3d curV = from;
         while (true) {
@@ -509,7 +632,7 @@ public class AutoBlaze {
             double scale = xScale;
             if (yScale < scale) scale = yScale;
             if (zScale < scale) scale = zScale;
-            curV = add(curV, mul(scale, v));
+            curV = MathUtils.add(curV, MathUtils.mul(scale, v));
             if (MathUtils.floor(curV.x) == MathUtils.floor(to.x) &&
                     MathUtils.floor(curV.y) == MathUtils.floor(to.y) &&
                     MathUtils.floor(curV.z) == MathUtils.floor(to.z)) break;
@@ -616,21 +739,21 @@ public class AutoBlaze {
         }
     }
 
-    static class Sequence {
+    static class BlazeOrder {
         Type type;
         double yaw, pitch;
         double x, y, z;
         double w, h;
         Entity entity;
 
-        public Sequence(double x, double y, double z) {
+        public BlazeOrder(double x, double y, double z) {
             type = Type.WARP;
             this.x = x;
             this.y = y;
             this.z = z;
         }
 
-        public Sequence(double yaw, double pitch, Entity entity) {
+        public BlazeOrder(double yaw, double pitch, Entity entity) {
             type = Type.SHOOT;
             this.yaw = yaw;
             this.pitch = pitch;

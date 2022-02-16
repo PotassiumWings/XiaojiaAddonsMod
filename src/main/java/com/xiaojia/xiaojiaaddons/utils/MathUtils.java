@@ -184,6 +184,18 @@ public class MathUtils {
         return cross(v1, v2) / v1.length();
     }
 
+    public static Vector3d diff(Vector3d from, Vector3d to) {
+        return new Vector3d(to.x - from.x, to.y - from.y, to.z - from.z);
+    }
+
+    public static Vector3d add(Vector3d a, Vector3d b) {
+        return new Vector3d(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    public static Vector3d mul(double x, Vector3d v) {
+        return new Vector3d(v.x * x, v.y * x, v.z * x);
+    }
+
     private static double cross(Vector2d a, Vector2d b) {
         return a.x * b.y - a.y * b.x;
     }

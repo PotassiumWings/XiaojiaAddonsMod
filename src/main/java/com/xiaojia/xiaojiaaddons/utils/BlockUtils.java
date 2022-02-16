@@ -71,6 +71,16 @@ public class BlockUtils {
         return "owo?";
     }
 
+    public static boolean isBlockBedRock(double x, double y, double z) {
+        Block block = getBlockAt(x, y, z);
+        return block.getUnlocalizedName().toLowerCase().contains("bedrock");
+    }
+
+    public static boolean isBlockWater(double x, double y, double z) {
+        Block block = getBlockAt(x, y, z);
+        return block.getUnlocalizedName().toLowerCase().contains("water");
+    }
+
     public static boolean isBlockAir(float x, float y, float z) {
         Block block = getBlockAt(x, y, z);
         return block.getUnlocalizedName().toLowerCase().contains("air");
