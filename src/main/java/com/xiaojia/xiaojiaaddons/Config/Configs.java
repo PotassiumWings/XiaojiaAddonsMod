@@ -651,6 +651,12 @@ public class Configs {
                     "§8Dark Gray", "§9Blue"})
     public static int StarredMobESPColor = 1;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Outline Fix", parent = "Starred Mob ESP",
+            description = "Show a Bounding Box around the starred mob\n" +
+                    "when corresponding mob is not found,\n" +
+                    "in outline mode.")
+    public static boolean ShowBoxWhenBoundingNotWork = false;
+
     // TrapChestESP
     @Property(type = Property.Type.FOLDER, name = "Trap Chest ESP", parent = "Dungeons")
     public static boolean TrapChestESPEnable = false;

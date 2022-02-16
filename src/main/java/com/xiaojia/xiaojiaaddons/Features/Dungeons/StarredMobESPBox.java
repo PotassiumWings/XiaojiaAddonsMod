@@ -39,7 +39,7 @@ public class StarredMobESPBox extends RenderEntityESP {
             hashMap.put("a", color.getAlpha());
             hashMap.put("entity", entity);
             hashMap.put("yOffset", 1F);
-            hashMap.put("kind", "Starrred");
+            hashMap.put("kind", "Starred");
             hashMap.put("fontColor", 0);
             hashMap.put("drawString", EntityInfo.EnumDraw.DONT_DRAW_STRING);
             hashMap.put("width", 0.45F);

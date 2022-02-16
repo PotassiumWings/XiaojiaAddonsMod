@@ -20,17 +20,15 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public abstract class RenderEntityESP {
-    private ArrayList<EntityInfo> renderEntities = new ArrayList<>();
+    private List<EntityInfo> renderEntities = new ArrayList<>();
 
     @SubscribeEvent
     public final void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
-        World world = getWorld();
-        if (world == null) return;
+        if (getWorld() == null) return;
         try {
-            ArrayList<EntityInfo> newEntities = new ArrayList<>();
-            List<Entity> list = world.loadedEntityList;
-            for (Entity entity : list) {
+            List<EntityInfo> newEntities = new ArrayList<>();
+            for (Entity entity : getEntities()) {
                 EntityInfo info = getEntityInfo(entity);
                 if (info == null) continue;
                 newEntities.add(info);
@@ -39,6 +37,10 @@ public abstract class RenderEntityESP {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Entity> getEntities() {
+        return getWorld().loadedEntityList;
     }
 
     @SubscribeEvent

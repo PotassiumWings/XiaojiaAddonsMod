@@ -4,8 +4,11 @@ import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Data;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
@@ -20,6 +23,7 @@ import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.MinecraftUtils;
 import com.xiaojia.xiaojiaaddons.utils.ShortbowUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TabUtils;
@@ -64,6 +68,7 @@ public class Command extends CommandBase {
             ChatLib.chat(getUsage());
             return;
         }
+        int x, y, z;
         String arg = strings[0];
         String allArg = strings.length == 1 ? "" : String.join(" ", Arrays.copyOfRange(strings, 1, strings.length));
         switch (arg) {
@@ -121,6 +126,17 @@ public class Command extends CommandBase {
                 System.out.println(AutoBlaze.log.toString());
 //                AutoBlaze.test();
                 break;
+            case "core":
+                x = MathUtils.floor(MathUtils.getX(MinecraftUtils.getPlayer()));
+                z = MathUtils.floor(MathUtils.getZ(MinecraftUtils.getPlayer()));
+                ChatLib.chat(String.format("core for current (%d %d) is: %d", x, z,
+                        new Room(x, z, new Data(
+                                "unknown", "", 0, null
+                        )).core));
+                break;
+            case "star":
+                StarredMobESP.show();
+                break;
 //            case "term":
 //                ShortbowUtils.testTerminator();
 //                break;
@@ -144,9 +160,9 @@ public class Command extends CommandBase {
                 Dungeon.showMap();
                 break;
             case "p3":
-                int x = Integer.parseInt(strings[1]);
-                int y = Integer.parseInt(strings[2]);
-                int z = Integer.parseInt(strings[3]);
+                x = Integer.parseInt(strings[1]);
+                y = Integer.parseInt(strings[2]);
+                z = Integer.parseInt(strings[3]);
                 AutoItemFrame.setPosition(x, y, z);
                 break;
             case "golem":
