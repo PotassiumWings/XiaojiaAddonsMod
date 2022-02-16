@@ -117,9 +117,9 @@ public class Command extends CommandBase {
                 new Thread(() -> {
                     try {
                         Thread.sleep(100);
+                        ControlUtils.etherWarp(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
                     } catch (Exception ignored) {
                     }
-                    ControlUtils.etherWarp(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
                 }).start();
                 break;
             case "blaze":

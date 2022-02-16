@@ -147,19 +147,14 @@ public class ControlUtils {
         }
     }
 
-    public static void etherWarp(double x, double y, double z) {
+    public static void etherWarp(double x, double y, double z) throws Exception {
         // shift click
-        try {
-            ControlUtils.sneak();
-            ControlUtils.faceSlowly(x, y, z);
-            Thread.sleep(getPing() + 50);
-            ControlUtils.rightClick();
-            Thread.sleep(getPing() + 100);
-            ControlUtils.unSneak();
-            Thread.sleep(getPing() + 100);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ControlUtils.sneak();
+        ControlUtils.faceSlowly(x, y, z);
+        Thread.sleep(getPing() + 50);
+        ControlUtils.rightClick();
+        Thread.sleep(getPing() + 100);
+        ControlUtils.unSneak();
     }
 
     public static void checkDirection(float yaw, float pitch, boolean shouldThrow) throws InterruptedException {

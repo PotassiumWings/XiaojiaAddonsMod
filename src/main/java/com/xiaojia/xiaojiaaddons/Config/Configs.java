@@ -629,6 +629,22 @@ public class Configs {
                     "Requires Auto Blaze.")
     public static boolean AutoBlazeSecret = false;
 
+    @Property(type = Property.Type.NUMBER, name = "Etherwarp Delay", parent = "Solvers",
+            description = "Delay after receiving a packet from etherwarp.\n" +
+                    "Not recommend to set this too low!", min = 100, max = 600, step = 5)
+    public static int EtherWarpDelayAfter = 400;
+
+    @Property(type = Property.Type.NUMBER, name = "Turn-Shoot Delay", parent = "Solvers",
+            description = "Delay between a turn and a shot.\n" +
+                    "Higher delay = Lower chance to fail.", min = 50, max = 500, step = 5)
+    public static int TurnShootDelay = 200;
+
+    @Property(type = Property.Type.NUMBER, name = "Blaze Scale", parent = "Solvers", suffix = "%",
+            description = "Scale for blaze in calculation, 100% = 0.6width * 2height.\n" +
+                    "Arrows can be inaccurate, this is mc feature (random noise).\n" +
+                    "Bigger scale = Lower chance to fail but more tp.", min = 100, max = 500, step = 5)
+    public static int BlazeScale = 200;
+
     // StarredMobESP
     @Property(type = Property.Type.FOLDER, name = "Starred Mob ESP", parent = "Dungeons")
     public static boolean StarredMobESPEnable = false;

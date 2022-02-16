@@ -371,7 +371,7 @@ public class AutoBlaze {
                 double distance = Math.sqrt(MathUtils.distanceSquareFromPlayer(todo.entity));
                 long estimate = MathUtils.floor(distance * 50 / 1.7);
                 log.append(String.format("distance: %.2f, estimate: %d\n", distance, estimate));
-                Thread.sleep(200);
+                Thread.sleep(Configs.TurnShootDelay);
                 while (TimeUtils.curTime() + estimate < lastBlazeHitTime + 50 && should)
                     Thread.sleep(20);
                 ControlUtils.leftClick();
@@ -487,7 +487,7 @@ public class AutoBlaze {
             }
         }
 
-        Thread.sleep(100);
+        Thread.sleep(Configs.EtherWarpDelayAfter);
         if (MathUtils.distanceSquareFromPlayer(toWarp.x, toWarp.y + 0.25, toWarp.z) > 1) {
             ChatLib.chat("Failed to etherwarp!");
             log.append(String.format("Player is at %.2f %.2f %.2f", getX(getPlayer()), getY(getPlayer()), getZ(getPlayer()))).append("\n");
@@ -731,9 +731,7 @@ public class AutoBlaze {
         Entity hpEntity;
 
         public BlazeInfo(double x, double y, double z, int hp, Entity entity) {
-            // width: tho it's 0.3, set it to 0.5 to reduce errors
-            // height: 1 -> 1.2
-            cube = new Cube(x, y, z, 1.2, 0.5);
+            cube = new Cube(x, y, z, 1 * Configs.BlazeScale / 100F, 0.3 * Configs.BlazeScale / 100F);
             this.hp = hp;
             this.hpEntity = entity;
         }
