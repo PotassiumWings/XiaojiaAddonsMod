@@ -20,9 +20,9 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class ShortbowUtils {
-    public static boolean enabled = false;
     private static final double g = 1.0;
     private static final double k = 0.049;
+    public static boolean enabled = false;
 
     private static double getV0(boolean isMiddle) {
         return isMiddle ? 13.75 : 13.8;
@@ -56,7 +56,7 @@ public class ShortbowUtils {
     }
 
     public static Vector2d[] getLeftRightYawPitchByMiddle(Vector2d yawAndPitch) {
-        double yaw = yawAndPitch.x,pitch = yawAndPitch.y;
+        double yaw = yawAndPitch.x, pitch = yawAndPitch.y;
         double newPitch = getNewPitch(pitch);
         double dYaw = getDYaw(pitch);
         return new Vector2d[]{
@@ -80,7 +80,7 @@ public class ShortbowUtils {
     }
 
     public static Vector2d[] getLeftMiddleYawPitchByRight(Vector2d yawAndPitch) {
-        double yaw = yawAndPitch.x,pitch = yawAndPitch.y;
+        double yaw = yawAndPitch.x, pitch = yawAndPitch.y;
         double rawPitch = getRawPitch(pitch);
         double dYaw = getDYaw(rawPitch);
         double rawYaw = MathUtils.validYaw(yaw - dYaw);
@@ -98,7 +98,7 @@ public class ShortbowUtils {
     }
 
     public static Vector2d[] getMiddleRightYawPitchByLeft(Vector2d yawAndPitch) {
-        double yaw = yawAndPitch.x,pitch = yawAndPitch.y;
+        double yaw = yawAndPitch.x, pitch = yawAndPitch.y;
         double rawPitch = getRawPitch(pitch);
         double dYaw = getDYaw(rawPitch);
         double rawYaw = MathUtils.validYaw(yaw + dYaw);
@@ -259,7 +259,7 @@ public class ShortbowUtils {
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!enabled) return;
-        for (Entity entity: getWorld().loadedEntityList) {
+        for (Entity entity : getWorld().loadedEntityList) {
             if (entity instanceof EntityArrow) {
                 Cube arrowCube = new Cube(
                         getX(entity), getY(entity) - 0.1F, getZ(entity),

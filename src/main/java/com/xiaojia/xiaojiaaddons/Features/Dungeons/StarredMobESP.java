@@ -26,11 +26,17 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class StarredMobESP extends RenderEntityESP {
     private static final HashMap<Entity, Color> highlightedEntities = new HashMap<>();
-    private final HashSet<Entity> checkedEntities = new HashSet<>();
     public static HashSet<Entity> fixEntities = new HashSet<>();
+    private final HashSet<Entity> checkedEntities = new HashSet<>();
 
     private static void highlightEntity(Entity entity, Color c) {
         highlightedEntities.put(entity, c);
+    }
+
+    public static void show() {
+        for (Entity entity : fixEntities) {
+            ChatLib.chat(entity.getCustomNameTag() + ": " + entity.isDead + ", " + MathUtils.getPosString(entity));
+        }
     }
 
     @SubscribeEvent
@@ -76,18 +82,12 @@ public class StarredMobESP extends RenderEntityESP {
 
         List<Entity> list = getWorld().loadedEntityList;
         ArrayList<Entity> res = new ArrayList<>();
-        for (Entity entity: list) {
+        for (Entity entity : list) {
             if (fixEntities.contains(entity)) {
                 res.add(entity);
             }
         }
         return res;
-    }
-
-    public static void show() {
-        for (Entity entity : fixEntities) {
-            ChatLib.chat( entity.getCustomNameTag() + ": " + entity.isDead + ", " + MathUtils.getPosString(entity));
-        }
     }
 
     @Override

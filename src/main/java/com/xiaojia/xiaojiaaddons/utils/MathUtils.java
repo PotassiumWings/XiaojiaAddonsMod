@@ -179,7 +179,7 @@ public class MathUtils {
             // tan(alpha) = 0, y = 0
             return Math.abs(x);
         }
-        Vector2d v1 = new Vector2d(1 / Math.tan(alpha),  1);
+        Vector2d v1 = new Vector2d(1 / Math.tan(alpha), 1);
         Vector2d v2 = new Vector2d(x, y);
         return cross(v1, v2) / v1.length();
     }

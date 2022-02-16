@@ -109,7 +109,7 @@ public class Configs {
                     "&c&lPlease use this friendly and respect other players!")
     public static boolean AutoShootCrystal = false;
 
-    @Property(type = Property.Type.NUMBER, name = "CD between shootings (ms)", parent = "Dragon",
+    @Property(type = Property.Type.NUMBER, name = "CD between shootings", parent = "Dragon", suffix = " ms",
             description = "Cool down between shootings.\n" +
                     "Not suggested to set too low.",
             min = 50, max = 500, step = 5)
@@ -226,7 +226,8 @@ public class Configs {
                     "Can be done while in combat.")
     public static boolean AutoSellEnable = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Sell CD", parent = "Auto Sell", suffix = "ms", min = 50, max = 500, step = 5,
+    @Property(type = Property.Type.NUMBER, name = "Auto Sell CD", parent = "Auto Sell", suffix = " ms",
+            min = 50, max = 500, step = 5,
             description = "Cool down between selling two items.")
     public static int AutoSellCD = 200;
 
@@ -358,15 +359,15 @@ public class Configs {
             description = "Use (right click) items automatically with cool downs of each item.")
     public static boolean AutoUseItem = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Plasmaflux CD (s)", parent = "Auto Use Item",
+    @Property(type = Property.Type.NUMBER, name = "Plasmaflux CD", parent = "Auto Use Item", suffix = " s",
             min = 0, max = 120)
     public static int PlasmaFluxCD = 0;
 
-    @Property(type = Property.Type.NUMBER, name = "Healing Wand CD (s)", parent = "Auto Use Item",
+    @Property(type = Property.Type.NUMBER, name = "Healing Wand CD", parent = "Auto Use Item", suffix = " s",
             min = 0, max = 30)
     public static int HealingWandCD = 0;
 
-    @Property(type = Property.Type.NUMBER, name = "Gyrokinetic Wand CD (s)", parent = "Auto Use Item",
+    @Property(type = Property.Type.NUMBER, name = "Gyrokinetic Wand CD", parent = "Auto Use Item", suffix = " s",
             min = 0, max = 120)
     public static int GyroCD = 0;
 
@@ -446,7 +447,7 @@ public class Configs {
             description = "Act like the players dont exist, can click through")
     public static boolean HidePlayers = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Hide Nearby Players radius", parent = "Hide Entity Features",
+    @Property(type = Property.Type.NUMBER, name = "Hide Nearby Players radius", parent = "Hide Entity Features", suffix = " blocks",
             min = 0, max = 30)
     public static int HidePlayerRadius = 4;
 
@@ -629,17 +630,17 @@ public class Configs {
                     "Requires Auto Blaze.")
     public static boolean AutoBlazeSecret = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Etherwarp Delay", parent = "Solvers",
+    @Property(type = Property.Type.NUMBER, name = "Etherwarp Delay", parent = "Solvers", suffix = " ms",
             description = "Delay after receiving a packet from etherwarp.\n" +
                     "Not recommend to set this too low!", min = 100, max = 600, step = 5)
     public static int EtherWarpDelayAfter = 400;
 
-    @Property(type = Property.Type.NUMBER, name = "Turn-Shoot Delay", parent = "Solvers",
+    @Property(type = Property.Type.NUMBER, name = "Turn-Shoot Delay", parent = "Solvers", suffix = " ms",
             description = "Delay between a turn and a shot.\n" +
                     "Higher delay = Lower chance to fail.", min = 50, max = 500, step = 5)
     public static int TurnShootDelay = 200;
 
-    @Property(type = Property.Type.NUMBER, name = "Blaze Scale", parent = "Solvers", suffix = "%",
+    @Property(type = Property.Type.NUMBER, name = "Blaze Scale", parent = "Solvers", suffix = " %",
             description = "Scale for blaze in calculation, 100% = 0.6width * 2height.\n" +
                     "Arrows can be inaccurate, this is mc feature (random noise).\n" +
                     "Bigger scale = Lower chance to fail but more tp.", min = 100, max = 500, step = 5)
@@ -796,7 +797,7 @@ public class Configs {
             description = "Number of clicks in advance. Suggest to be 10.")
     public static int TerminalClicksInAdvance = 10;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Terminal CD", parent = "Terminals",
+    @Property(type = Property.Type.NUMBER, name = "Auto Terminal CD", parent = "Terminals", suffix = " ms",
             min = 80, max = 500, step = 10,
             description = "Cool down between clicks.")
     public static int AutoTerminalCD = 150;
@@ -814,12 +815,12 @@ public class Configs {
                     "automatically rotate the arrows to pass.")
     public static boolean AutoItemFrameArrows = false;
 
-    @Property(type = Property.Type.NUMBER, name = "P3 Arrows CD", parent = "Auto Devices",
+    @Property(type = Property.Type.NUMBER, name = "P3 Arrows CD", parent = "Auto Devices", suffix = " ms",
             min = 20, max = 500, step = 10,
             description = "Cool down between 2 clicks.")
     public static int ArrowCD = 100;
 
-    @Property(type = Property.Type.NUMBER, name = "P3 Arrows CD Between ItemFrames", parent = "Auto Devices",
+    @Property(type = Property.Type.NUMBER, name = "P3 Arrows CD Between ItemFrames", parent = "Auto Devices", suffix = " ms",
             min = 100, max = 500, step = 10,
             description = "Cooldown between calculations. \n" +
                     "Not suggested to be lower than your ping.")
@@ -837,7 +838,7 @@ public class Configs {
             min = 0, max = 20, description = "Higher ping, higher offset!")
     public static int AutoBloodYoffset = 0;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Blood CD (ms)", parent = "Auto Blood", illegal = true,
+    @Property(type = Property.Type.NUMBER, name = "Auto Blood CD", parent = "Auto Blood", illegal = true, suffix = " ms",
             min = 40, max = 200, step = 10, description = "Cool down between rotating and clicking.")
     public static int AutoBloodCD = 60;
 
@@ -1005,7 +1006,8 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Include Glass Panes", parent = "Gemstone ESP")
     public static boolean IncludeGlassPanes = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Scan Radius", parent = "Gemstone ESP", suffix = " blocks", min = 5, max = 30,
+    @Property(type = Property.Type.NUMBER, name = "Scan Radius", parent = "Gemstone ESP", suffix = " blocks",
+            min = 5, max = 30,
             description = "Don't suggest setting radius too large.")
     public static int GemstoneRadius = 15;
 
@@ -1040,7 +1042,7 @@ public class Configs {
             description = "Turn on Nearby Chest ESP in QOL/OtherQOL!")
     public static boolean JadeCrystal = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Treasure CD", parent = "Jade Crystal Helper",
+    @Property(type = Property.Type.NUMBER, name = "Treasure CD", parent = "Jade Crystal Helper", suffix = " ms",
             description = "To ensure current position corresponds with current distance",
             min = 200, max = 600, step = 20)
     public static int JadeCrystalCD = 400;
@@ -1051,7 +1053,7 @@ public class Configs {
                     "Conflicts with other solvers, and OldAnimation mod.")
     public static boolean ExperimentationTable = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Experimentation Table CD", parent = "Auto Experimentation Table",
+    @Property(type = Property.Type.NUMBER, name = "Auto Experimentation Table CD", parent = "Auto Experimentation Table", suffix = " ms",
             min = 50, max = 800, step = 50)
     public static int ExperimentClickCoolDown = 300;
 
@@ -1090,7 +1092,7 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Map Scale", parent = "Map", min = 1, max = 10)
     public static int MapScale = 5;
 
-    @Property(type = Property.Type.NUMBER, name = "Player Head Scale (%)", parent = "Map",
+    @Property(type = Property.Type.NUMBER, name = "Player Head Scale", parent = "Map", suffix = " %",
             min = 1, max = 100)
     public static int HeadScale = 50;
 
