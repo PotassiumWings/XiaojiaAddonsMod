@@ -15,7 +15,7 @@ public class NBTUtils {
         return itemStack.getSubCompound("ExtraAttributes", false);
     }
 
-    private static String getStringFromExtraAttributes(ItemStack itemStack, String property) {
+    public static String getStringFromExtraAttributes(ItemStack itemStack, String property) {
         NBTTagCompound nbtTagCompound = getExtraAttributes(itemStack);
         if (nbtTagCompound == null || !nbtTagCompound.hasKey(property)) return "";
         return nbtTagCompound.getString(property);
@@ -25,6 +25,12 @@ public class NBTUtils {
         NBTTagCompound nbtTagCompound = getExtraAttributes(itemStack);
         if (nbtTagCompound == null || !nbtTagCompound.hasKey(property)) return 0;
         return nbtTagCompound.getInteger(property);
+    }
+
+    public static boolean getBooleanFromExtraAttributes(ItemStack itemStack, String property) {
+        NBTTagCompound nbtTagCompound = getExtraAttributes(itemStack);
+        if (nbtTagCompound == null || !nbtTagCompound.hasKey(property)) return false;
+        return nbtTagCompound.getBoolean(property);
     }
 
     public static List<String> getLore(ItemStack itemStack) {

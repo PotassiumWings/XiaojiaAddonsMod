@@ -169,9 +169,15 @@ public class Command extends CommandBase {
                 GolemAlert.golemWarn();
                 break;
             case "block":
-                x = Integer.parseInt(strings[1]);
-                y = Integer.parseInt(strings[2]);
-                z = Integer.parseInt(strings[3]);
+                if (strings.length == 1) {
+                    x = MathUtils.floor(MathUtils.getX(MinecraftUtils.getPlayer()));
+                    y = MathUtils.floor(MathUtils.getY(MinecraftUtils.getPlayer()));
+                    z = MathUtils.floor(MathUtils.getZ(MinecraftUtils.getPlayer()));
+                } else {
+                    x = Integer.parseInt(strings[1]);
+                    y = Integer.parseInt(strings[2]);
+                    z = Integer.parseInt(strings[3]);
+                }
                 IBlockState iBlockState = BlockUtils.getBlockStateAt(new BlockPos(x, y, z));
                 if (iBlockState == null) return;
                 int meta = iBlockState.getBlock().getMetaFromState(iBlockState);

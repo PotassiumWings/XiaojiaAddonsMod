@@ -617,28 +617,7 @@ public class AutoBlaze {
     // exact coords
     private boolean noBlocksBetween(Vector3d from, Vector3d to) {
         // calculate from from to to
-        Vector3d v = new Vector3d();
-        v.normalize(MathUtils.diff(from, to));
-        double epsilon = 1e-5;
-        Vector3d curV = from;
-        while (true) {
-            double xScale = (epsilon + MathUtils.ceil(curV.x) - curV.x) / v.x;
-            double yScale = (epsilon + MathUtils.ceil(curV.y) - curV.y) / v.y;
-            double zScale = (epsilon + MathUtils.ceil(curV.z) - curV.z) / v.z;
-            if (v.x < 0) xScale = (MathUtils.floor(curV.x) - epsilon - curV.x) / v.x;
-            if (v.y < 0) yScale = (MathUtils.floor(curV.y) - epsilon - curV.y) / v.y;
-            if (v.z < 0) zScale = (MathUtils.floor(curV.z) - epsilon - curV.z) / v.z;
-
-            double scale = xScale;
-            if (yScale < scale) scale = yScale;
-            if (zScale < scale) scale = zScale;
-            curV = MathUtils.add(curV, MathUtils.mul(scale, v));
-            if (MathUtils.floor(curV.x) == MathUtils.floor(to.x) &&
-                    MathUtils.floor(curV.y) == MathUtils.floor(to.y) &&
-                    MathUtils.floor(curV.z) == MathUtils.floor(to.z)) break;
-            if (!BlockUtils.isBlockAir(curV.x, curV.y, curV.z)) return false;
-        }
-        return true;
+        return BlockUtils.getNearestBlock(from, to) == null;
     }
 
     public void calculateBlazes() {

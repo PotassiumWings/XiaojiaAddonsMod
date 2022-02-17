@@ -60,6 +60,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.NearbyChestESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.OneTick;
 import com.xiaojia.xiaojiaaddons.Features.QOL.RemoveBlindness;
+import com.xiaojia.xiaojiaaddons.Features.QOL.ShowEtherwarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
@@ -225,6 +226,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new InCombatQOL());
         MinecraftForge.EVENT_BUS.register(new NoSlowdown());
         MinecraftForge.EVENT_BUS.register(new OneTick());
+        MinecraftForge.EVENT_BUS.register(new ShowEtherwarp());
         MinecraftForge.EVENT_BUS.register(new SwordSwap());
         MinecraftForge.EVENT_BUS.register(new RemoveBlindness());
         MinecraftForge.EVENT_BUS.register(new HoldRightClick());

@@ -335,6 +335,21 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Display Scale", parent = "Information Display", min = 5, max = 100)
     public static int DisplayScale = 20;
 
+    // ShowEtherwarp
+    @Property(type = Property.Type.FOLDER, name = "Show Etherwarp Point", parent = "QOL")
+    public static boolean ShowEtherwarpEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Etherwarp Point Enable", parent = "Show Etherwarp Point")
+    public static boolean ShowEtherwarp = false;
+
+    @Property(type = Property.Type.SELECT, name = "Etherwarp Point Color", parent = "Show Etherwarp Point",
+            options = {"Tiffany Blue", "LCM Blue", "Storm Blue", "NINJA"})
+    public static int EtherwarpPointColor = 0;
+
+    @Property(type = Property.Type.NUMBER, name = "Etherwarp Point Color Alpha", parent = "Show Etherwarp Point",
+            min = 0, max = 255)
+    public static int EtherwarpPointColorAlpha = 0xd0;
+
     // OneTick
     @Property(type = Property.Type.FOLDER, name = "One Tick", parent = "QOL",
             description = "Swap to something, right click it, and swap back.\n" +
