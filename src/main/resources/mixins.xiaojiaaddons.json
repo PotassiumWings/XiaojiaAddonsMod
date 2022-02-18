@@ -14,6 +14,7 @@
         "MixinMinecraft",
         "MixinModList",
         "MixinItemStack",
-        "MixinEntity"
+        "MixinEntity",
+        "MixinRenderItem"
     ]
 }

@@ -75,4 +75,13 @@ public class NBTUtils {
         }
         return res;
     }
+
+    public static boolean isBookUltimate(ItemStack itemStack) {
+        try {
+            System.out.println(getLore(itemStack).get(1));
+            return getLore(itemStack).get(1).contains("\u00a79\u00a7d\u00a7l");
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

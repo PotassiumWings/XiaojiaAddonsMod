@@ -113,6 +113,10 @@ public class RenderUtils {
         return mc.fontRendererObj.getStringWidth(str);
     }
 
+    public static int getStringHeight(String str) {
+        return mc.fontRendererObj.FONT_HEIGHT;
+    }
+
     public static int getScreenWidth() {
         return new ScaledResolution(mc).getScaledWidth();
     }

@@ -21,4 +21,9 @@ public abstract class MixinGuiContainer {
     private void onDrawSlotPost(Slot slot, CallbackInfo ci) {
         if (MinecraftForge.EVENT_BUS.post(new GuiContainerEvent.DrawSlotEvent.Post(slot))) ci.cancel();
     }
+
+    @Inject(method = "drawScreen", at = @At("RETURN"), cancellable = true)
+    private void onScreenDrawn(CallbackInfo ci) {
+        if (MinecraftForge.EVENT_BUS.post(new GuiContainerEvent.ScreenDrawnEvent())) ci.cancel();
+    }
 }

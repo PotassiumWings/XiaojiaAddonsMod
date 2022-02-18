@@ -60,6 +60,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.NearbyChestESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.OneTick;
 import com.xiaojia.xiaojiaaddons.Features.QOL.RemoveBlindness;
+import com.xiaojia.xiaojiaaddons.Features.QOL.ShowBookName;
 import com.xiaojia.xiaojiaaddons.Features.QOL.ShowEtherwarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
@@ -110,7 +111,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.1.3";
+    public static final String VERSION = "2.4.1.4";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -226,6 +227,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new InCombatQOL());
         MinecraftForge.EVENT_BUS.register(new NoSlowdown());
         MinecraftForge.EVENT_BUS.register(new OneTick());
+        MinecraftForge.EVENT_BUS.register(new ShowBookName());
         MinecraftForge.EVENT_BUS.register(new ShowEtherwarp());
         MinecraftForge.EVENT_BUS.register(new SwordSwap());
         MinecraftForge.EVENT_BUS.register(new RemoveBlindness());

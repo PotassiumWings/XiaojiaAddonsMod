@@ -335,6 +335,14 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Display Scale", parent = "Information Display", min = 5, max = 100)
     public static int DisplayScale = 20;
 
+    // ShowBookName
+    @Property(type = Property.Type.FOLDER, name = "Show Book Name", parent = "QOL",
+            description = "Shows the book's short name in containers except for AH.")
+    public static boolean ShowBookNameEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Book Name Enable", parent = "Show Book Name")
+    public static boolean ShowBookName = false;
+
     // ShowEtherwarp
     @Property(type = Property.Type.FOLDER, name = "Show Etherwarp Point", parent = "QOL")
     public static boolean ShowEtherwarpEnabled = false;

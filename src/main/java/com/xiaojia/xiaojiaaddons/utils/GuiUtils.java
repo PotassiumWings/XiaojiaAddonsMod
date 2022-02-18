@@ -42,10 +42,8 @@ public class GuiUtils {
     }
 
     public static void drawScaledString(String string, float scale, int x, int y, boolean shadow) {
-        GlStateManager.pushMatrix();
         GlStateManager.scale(scale, scale, scale);
         drawString(string, (int) (x / scale), (int) (y / scale), shadow);
-        GlStateManager.popMatrix();
     }
 
     // drawString in Gui
@@ -88,6 +86,16 @@ public class GuiUtils {
         GL11.glTranslated(0, 0, 1);
         drawString(name, x, y, false, color);
         GL11.glTranslated(0, 0, -1);
+    }
+
+    public static void drawStringOnSlot(String name, int size, int xSlotPos, int ySlotPos, float scale, int offsetX, int offsetY) {
+        Vector2i v = getXYForSlot(size, xSlotPos, ySlotPos);
+        int x = v.x + offsetX, y = v.y + offsetY;
+        GlStateManager.translate(0, 0, 1);
+        GlStateManager.pushMatrix();
+        drawScaledString(name, scale, x, y, false);
+        GlStateManager.popMatrix();
+        GlStateManager.translate(0, 0, -1);
     }
 
     public static void showTitle(String title, String subtitle, int fadeIn, int time, int fadeOut) {
