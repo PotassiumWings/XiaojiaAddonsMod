@@ -29,6 +29,7 @@ public class GuiContainerEvent extends Event {
 
     @Cancelable
     public static class ScreenDrawnEvent extends GuiContainerEvent {
-        public ScreenDrawnEvent() {}
+        public ScreenDrawnEvent() {
+        }
     }
 }

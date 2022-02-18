@@ -22,13 +22,6 @@ import java.util.HashSet;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class ShowEtherwarp {
-    private static Color[] colors = new Color[]{
-            new Color(129, 216, 207, 0xd0),
-            new Color(0,120,215, 0xd0),
-            new Color(0x1c, 0xd4, 0xe4, 0xd0),
-            new Color(0, 0, 0, 0xd0)
-    };
-
     private static final HashSet<Block> invalidBlocks = new HashSet<>(Arrays.asList(
             Blocks.air,
             Blocks.skull,
@@ -59,6 +52,12 @@ public class ShowEtherwarp {
 
             Blocks.rail, Blocks.activator_rail, Blocks.detector_rail, Blocks.golden_rail
     ));
+    private static final Color[] colors = new Color[]{
+            new Color(129, 216, 207, 0xd0),
+            new Color(0, 120, 215, 0xd0),
+            new Color(0x1c, 0xd4, 0xe4, 0xd0),
+            new Color(0, 0, 0, 0xd0)
+    };
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {

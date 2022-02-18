@@ -39,6 +39,10 @@ public class StarredMobESP extends RenderEntityESP {
         }
     }
 
+    public static int getSetSize() {
+        return fixEntities.size();
+    }
+
     @SubscribeEvent
     public void onRenderEntityModel(RenderEntityModelEvent event) {
         if (!Checker.enabled) return;

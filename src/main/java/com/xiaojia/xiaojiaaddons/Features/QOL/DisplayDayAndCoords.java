@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
@@ -51,9 +52,15 @@ public class DisplayDayAndCoords {
             display.addLine(line);
         }
         if (SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) {
-            DisplayLine line = new DisplayLine("Cache size: " + ColorName.getCacheSize());
+            DisplayLine line = new DisplayLine("Name Cache size: " + ColorName.getCacheSize());
             line.setScale(Configs.DisplayScale / 20F);
             display.addLine(line);
+            DisplayLine bookCacheLine = new DisplayLine("Book Cache size: " + ShowBookName.getCacheSize());
+            bookCacheLine.setScale(Configs.DisplayScale / 20F);
+            display.addLine(bookCacheLine);
+            DisplayLine fixCacheLine = new DisplayLine("Fix Entity size: " + StarredMobESP.getSetSize());
+            fixCacheLine.setScale(Configs.DisplayScale / 20F);
+            display.addLine(fixCacheLine);
             DisplayLine line1 = new DisplayLine("yaw: " + MathUtils.getYaw());
             line1.setScale(Configs.DisplayScale / 20F);
             display.addLine(line1);
