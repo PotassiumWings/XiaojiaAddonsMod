@@ -292,6 +292,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Bait", parent = "Auto Sell Fishing Stuff")
     public static boolean AutoSellBait = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Magnet VI Book", parent = "Auto Sell Fishing Stuff")
+    public static boolean AutoSellMagnet = false;
+
     @Property(type = Property.Type.FOLDER, name = "Auto Sell Mining Stuff", parent = "Auto Sell")
     public static boolean AutoSellMining = false;
 

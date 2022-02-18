@@ -118,6 +118,8 @@ public class InCombatQOL {
                     (levelString.equals("VI") || levelString.equals("VII"))) return true;
             if (bookName.equals("Bank") && Configs.AutoSellBank) return true;
             if (bookName.equals("No Pain No Gain") && Configs.AutoSellNoPainNoGain) return true;
+            if (bookName.equals("Magnet") && Configs.AutoSellMagnet &&
+                    (levelString.equals("VI"))) return true;
             return bookName.equals("Ultimate Jerry") && Configs.AutoSellUltimateJerry;
         }
         return false;
