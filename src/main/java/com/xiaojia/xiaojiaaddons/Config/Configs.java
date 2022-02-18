@@ -343,6 +343,16 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Show Book Name Enable", parent = "Show Book Name")
     public static boolean ShowBookName = false;
 
+    // DisableAnimations
+    @Property(type = Property.Type.FOLDER, name = "Disable Entity Renders", parent = "QOL")
+    public static boolean DisableAnimations = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Disable Lightnings", parent = "Disable Entity Renders")
+    public static boolean DisableLightnings = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Dying Mobs", parent = "Disable Entity Renders")
+    public static boolean DisableDying = false;
+
     // ShowEtherwarp
     @Property(type = Property.Type.FOLDER, name = "Show Etherwarp Point", parent = "QOL")
     public static boolean ShowEtherwarpEnabled = false;

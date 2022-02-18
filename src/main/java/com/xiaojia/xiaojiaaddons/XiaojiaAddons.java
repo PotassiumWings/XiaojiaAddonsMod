@@ -49,6 +49,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoLobby;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoUseItem;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
+import com.xiaojia.xiaojiaaddons.Features.QOL.DisableEntityRender;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisplayDayAndCoords;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostBlock;
@@ -218,6 +219,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoIsland());
         MinecraftForge.EVENT_BUS.register(new AutoUseItem());
         MinecraftForge.EVENT_BUS.register(new BlockAbility());
+        MinecraftForge.EVENT_BUS.register(new DisableEntityRender());
         MinecraftForge.EVENT_BUS.register(new DisplayDayAndCoords());
         MinecraftForge.EVENT_BUS.register(new EntityQOL());
         MinecraftForge.EVENT_BUS.register(new GhostBlock());
