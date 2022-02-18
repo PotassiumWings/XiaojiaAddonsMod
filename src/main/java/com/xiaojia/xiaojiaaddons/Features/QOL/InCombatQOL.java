@@ -89,6 +89,14 @@ public class InCombatQOL {
         }
         // fishing stuff
         if (Configs.AutoSellIceRod && name.contains("ice rod")) return true;
+        if (Configs.AutoSellMusicDisc && name.contains("music disc")) return true;
+        if (Configs.AutoSellFairySet && !isRecomed) {
+            if (name.equals("fairy's fedora") || name.equals("fairy's polo") ||
+                    name.equals("fairy's trousers") || name.equals("fairy's galoshes"))
+                return true;
+        }
+        if (Configs.AutoSellSeaLantern && name.equals("sea lantern")) return true;
+        if (Configs.AutoSellBait && name.endsWith(" bait")) return true;
         // mining stuff
         if (Configs.AutoSellAscensionRope && name.contains("ascension rope")) return true;
         if (Configs.AutoSellWishingCompass && name.contains("wishing compass")) return true;

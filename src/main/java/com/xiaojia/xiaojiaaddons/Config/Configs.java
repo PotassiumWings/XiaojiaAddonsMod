@@ -280,6 +280,18 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Ice Rod", parent = "Auto Sell Fishing Stuff")
     public static boolean AutoSellIceRod = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Music Disc", parent = "Auto Sell Fishing Stuff")
+    public static boolean AutoSellMusicDisc = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Non-recomed Fairy Set", parent = "Auto Sell Fishing Stuff")
+    public static boolean AutoSellFairySet = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Sea Lantern", parent = "Auto Sell Fishing Stuff")
+    public static boolean AutoSellSeaLantern = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Bait", parent = "Auto Sell Fishing Stuff")
+    public static boolean AutoSellBait = false;
+
     @Property(type = Property.Type.FOLDER, name = "Auto Sell Mining Stuff", parent = "Auto Sell")
     public static boolean AutoSellMining = false;
 

@@ -43,7 +43,7 @@ public class ShowEtherwarp {
             Blocks.vine, Blocks.reeds, Blocks.melon_stem, Blocks.pumpkin_stem,
             Blocks.carrots, Blocks.wheat, Blocks.potatoes, Blocks.nether_wart,
             Blocks.deadbush, Blocks.brown_mushroom, Blocks.red_mushroom, Blocks.cocoa,
-            Blocks.tallgrass,
+            Blocks.tallgrass, Blocks.waterlily,
 
             Blocks.stone_button, Blocks.wooden_button, Blocks.lever,
             Blocks.powered_comparator, Blocks.powered_repeater, Blocks.powered_repeater, Blocks.unpowered_comparator,
