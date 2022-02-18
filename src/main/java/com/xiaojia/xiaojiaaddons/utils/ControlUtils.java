@@ -134,7 +134,9 @@ public class ControlUtils {
         if (yaw < 0) yaw += 360;  // yaw \in [0, 360]
         if (yaw - curyaw > 180) yaw -= 360;  // yaw = 359, curyaw = 1 -> yaw = -1, curyaw = 1
         if (curyaw - yaw > 180) curyaw -= 360;  // yaw = 1, curyaw = 359 -> yaw = 1, curyaw = -1
-        int rotate_times = MathUtils.floor(Math.abs(curyaw - yaw) / 18) + 1;
+        int rotate_times = MathUtils.floor(
+                Math.sqrt(Math.pow(curyaw - yaw, 2) + Math.pow(curpitch - pitch, 2)) / 50
+        ) + 1;
         System.err.printf("curyaw %.2f, yaw %.2f%n", curyaw, yaw);
         for (int j = 1; j <= rotate_times; j++) {
             float toturn_yaw = curyaw + (yaw - curyaw) / rotate_times * j;
