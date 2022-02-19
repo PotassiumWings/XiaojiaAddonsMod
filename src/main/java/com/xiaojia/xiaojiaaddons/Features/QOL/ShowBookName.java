@@ -41,18 +41,23 @@ public class ShowBookName {
             nameString = p.split(" ")[0];
             levelString = p.split(" ")[1];
         } else {
-            ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
-            boolean isUltimate = NBTUtils.isBookUltimate(itemStack);
+            try {
+                ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
+                boolean isUltimate = NBTUtils.isBookUltimate(itemStack);
 
-            String colorPrefix = (isUltimate ? "\u00a7d\u00a7l" : "");
-            String bookName = nameAndLevel.get(0);
-            String compactName = bookName.substring(0, Math.min(bookName.length(), 3));
-            if (isUltimate) compactName = bookName.replaceAll("[a-z ]", "");
-            nameString = colorPrefix + compactName;
-            levelString = StringUtils.getNumberFromRoman(nameAndLevel.get(1)) + "";
-            cachedStrings.put(itemStack, nameString + " " + levelString);
-            if (cachedStrings.size() > 1000)
-                cachedStrings.clear();
+                String colorPrefix = (isUltimate ? "\u00a7d\u00a7l" : "");
+                String bookName = nameAndLevel.get(0);
+                String compactName = bookName.substring(0, Math.min(bookName.length(), 3));
+                if (isUltimate) compactName = bookName.replaceAll("[a-z ]", "");
+                nameString = colorPrefix + compactName;
+                levelString = StringUtils.getNumberFromRoman(nameAndLevel.get(1)) + "";
+                cachedStrings.put(itemStack, nameString + " " + levelString);
+                if (cachedStrings.size() > 1000)
+                    cachedStrings.clear();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
         }
 
         GlStateManager.disableLighting();

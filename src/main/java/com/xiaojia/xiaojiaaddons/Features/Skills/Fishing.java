@@ -115,6 +115,7 @@ public class Fishing {
                     float theta = 0;
                     float DELTAYAW = 0.1F;
                     float DELTAPITCH = 0.2F;
+                    float rawYaw = MathUtils.getYaw(), rawPitch = MathUtils.getPitch();
                     while (theta < 2 * Math.PI && shouldMove) {
                         float yaw = MathUtils.getYaw(), pitch = MathUtils.getPitch();
                         yaw += Math.sin(theta) * DELTAYAW + (Math.random() * DELTAYAW * 2 - DELTAYAW) / 4;
@@ -129,6 +130,10 @@ public class Fishing {
                         Thread.sleep(20);
                         ControlUtils.checkDirection(yaw, pitch, true);
                     }
+                    ControlUtils.changeDirection(
+                            rawYaw + DELTAYAW - 2 * DELTAYAW * (float) Math.random(),
+                            rawPitch + DELTAPITCH - 2 * DELTAPITCH * (float) Math.random()
+                    );
 
                     if (!shouldMove)
                         ControlUtils.unSneak();

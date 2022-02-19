@@ -58,7 +58,10 @@ public class InCombatQOL {
     private int wardrobeSlot = -1;
 
     private static boolean canSell(ItemStack itemStack) {
+        String stackSizeSuf = " x" + itemStack.stackSize;
         String name = ChatLib.removeFormatting(itemStack.getDisplayName()).toLowerCase();
+        if (name.endsWith(stackSizeSuf))
+            name = name.substring(0, name.length() - stackSizeSuf.length());
         boolean isRecomed = NBTUtils.isItemRecombobulated(itemStack);
         boolean isFullQuality = NBTUtils.isItemFullQuality(itemStack);
         boolean isStarred = NBTUtils.isItemStarred(itemStack);
