@@ -31,13 +31,13 @@ public class ConfigGuiNew extends GuiScreen {
     private static final int titleHeight = 30;
     private static final int firstCategoryHeight = 23;
     private static final int secondCategoryWidth = 150;
+    public static String searchText = "";
     // settings
     private static ArrayList<Setting> settings;
     private static ArrayList<Setting> firstCategory;
     private static ArrayList<Setting> secondCategory;
     private static Setting selectedFirstCategory = null;
     private static Setting selectedSecondCategory = null;
-    public static String searchText = "";
     // search bar
     private static GuiTextField searchBar = null;
     // first line

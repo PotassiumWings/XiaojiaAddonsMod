@@ -4,17 +4,14 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
-import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Keyboard;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class CoordsGB {
-//    private static final KeyBind keyBind = new KeyBind("Coords Ghost Block", Keyboard.KEY_NONE);
+    //    private static final KeyBind keyBind = new KeyBind("Coords Ghost Block", Keyboard.KEY_NONE);
     private final BlockPos[] blockCoords = new BlockPos[]{
             new BlockPos(275, 220, 231),
             new BlockPos(275, 220, 232),

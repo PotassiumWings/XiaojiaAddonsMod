@@ -681,8 +681,7 @@ public class Configs {
     public static boolean CoordsGBEnable = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Coords Ghost Block Enable", parent = "Coords Ghost Block",
-            description = "Creates Ghost Block on F7 from Phase 2 to Phase 3,\n" +
-                    "&cNeed keybinding to toggle to work every launch of game.")
+            description = "Creates Ghost Block on F7 from Phase 2 to Phase 3.")
     public static boolean CoordsGB = false;
 
     // LividESP
