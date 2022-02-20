@@ -14,7 +14,7 @@ import org.lwjgl.input.Keyboard;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class CoordsGB {
-    private static final KeyBind keyBind = new KeyBind("Coords Ghost Block", Keyboard.KEY_NONE);
+//    private static final KeyBind keyBind = new KeyBind("Coords Ghost Block", Keyboard.KEY_NONE);
     private final BlockPos[] blockCoords = new BlockPos[]{
             new BlockPos(275, 220, 231),
             new BlockPos(275, 220, 232),
@@ -59,17 +59,17 @@ public class CoordsGB {
             new BlockPos(294, 166, 240),
             new BlockPos(295, 166, 240)
     };
-    private boolean should = false;
+//    private boolean should = false;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.CoordsGB) return;
-        if (keyBind.isPressed()) {
-            should = !should;
-            ChatLib.chat(should ? "Coords GB &aactivated" : "Coords GB &cdeactivated");
-        }
-        if (!should) return;
+//        if (keyBind.isPressed()) {
+//            should = !should;
+//            ChatLib.chat(should ? "Coords GB &aactivated" : "Coords GB &cdeactivated");
+//        }
+//        if (!should) return;
         if (!SkyblockUtils.isInDungeon()) return;
         if (Dungeon.floorInt != 7) return;
         for (BlockPos pos : blockCoords) {

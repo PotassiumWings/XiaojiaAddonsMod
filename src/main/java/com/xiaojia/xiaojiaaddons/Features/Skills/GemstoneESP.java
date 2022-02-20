@@ -140,7 +140,7 @@ public class GemstoneESP {
         this.lastChecked = null;
     }
 
-    enum Gemstone {
+    public enum Gemstone {
         RUBY(new Color(188, 3, 29), EnumDyeColor.RED),
         AMETHYST(new Color(137, 0, 201), EnumDyeColor.PURPLE),
         JADE(new Color(157, 249, 32), EnumDyeColor.LIME),

@@ -8,6 +8,13 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Chat Copy", parent = "Misc")
     public static boolean ChatCopyEnabled = false;
 
+    @Property(type = Property.Type.FOLDER, name = "Old Animations", parent = "Misc")
+    public static boolean OldAnimationsEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Old Block Break", parent = "Old Animations",
+            description = "Can use item right click when hitting blocks.")
+    public static boolean OldBlockBreak = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Chat Copy Enable", parent = "Chat Copy",
             description = "Append &8[&0C&8C]&r to every message.\n" +
                     "Click &8[&0C&r copies the unformatted message without color code,\n" +
@@ -274,6 +281,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Superboom TNT", parent = "Auto Sell Miscellaneous")
     public static boolean AutoSellSuperboom = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Blaze Hat", parent = "Auto Sell Miscellaneous")
+    public static boolean AutoSellBlazeHat = false;
+
     @Property(type = Property.Type.FOLDER, name = "Auto Sell Fishing Stuff", parent = "Auto Sell")
     public static boolean AutoSellFishing = false;
 
@@ -498,6 +508,41 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Hide Nearby Players radius", parent = "Hide Entity Features", suffix = " blocks",
             min = 0, max = 30)
     public static int HidePlayerRadius = 4;
+
+    // FindFairy
+    @Property(type = Property.Type.FOLDER, name = "Find Fairy Grotto", parent = "QOL",
+            description = "Bind a key to toggle.\n" +
+                    "Automatically scans all loaded blocks.\n" +
+                    "The map shows where you are and where is already scanned.\n" +
+                    "When it detects a Jasper Gemstone, the map will stop\n" +
+                    "rendering and it will highlight the gemstone.\n" +
+                    "&cWill drop your fps while scanning.\n" +
+                    "So only use when you're finding fairy grottos!")
+    public static boolean FindFairyGrottoEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Find Fairy Grotto Map Enable", parent = "Find Fairy Grotto",
+            description = "You don't have to turn this on for it to work.\n" +
+                    "This is just for your better visualize.")
+    public static boolean FindFairyGrottoMap = false;
+
+    @Property(type = Property.Type.NUMBER, name = "(Fairy) Map Scale", parent = "Find Fairy Grotto", min = 1, max = 10)
+    public static int CHMapScale = 7;
+
+    @Property(type = Property.Type.NUMBER, name = "(Fairy) Player Head Scale", parent = "Find Fairy Grotto", suffix = " %",
+            min = 1, max = 100)
+    public static int CHHeadScale = 50;
+
+    @Property(type = Property.Type.NUMBER, name = "(Fairy) Map X", parent = "Find Fairy Grotto",
+            min = 0, max = 1000, step = 5)
+    public static int CHMapX = 55;
+
+    @Property(type = Property.Type.NUMBER, name = "(Fairy) Map Y", parent = "Find Fairy Grotto",
+            min = 0, max = 1000, step = 5)
+    public static int CHMapY = 20;
+
+    @Property(type = Property.Type.NUMBER, name = "(Fairy) Background Alpha", parent = "Find Fairy Grotto",
+            min = 0, max = 255, step = 5)
+    public static int CHBackgroundAlpha = 140;
 
     // HideCreepers
     @Property(type = Property.Type.BOOLEAN, name = "Hide Creepers", parent = "Hide Entity Features", illegal = true,

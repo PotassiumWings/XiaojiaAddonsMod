@@ -51,6 +51,11 @@ public class DisplayDayAndCoords {
             line.setScale(Configs.DisplayScale / 20F);
             display.addLine(line);
         }
+        if (Configs.FindFairyGrottoMap) {
+            DisplayLine line3 = new DisplayLine("Jasper: " + FindFairy.getBlock());
+            line3.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line3);
+        }
         if (SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) {
             DisplayLine line = new DisplayLine("Name Cache size: " + ColorName.getCacheSize());
             line.setScale(Configs.DisplayScale / 20F);
@@ -67,6 +72,12 @@ public class DisplayDayAndCoords {
             DisplayLine line2 = new DisplayLine("pitch: " + MathUtils.getPitch());
             line2.setScale(Configs.DisplayScale / 20F);
             display.addLine(line2);
+//            DisplayLine line4 = new DisplayLine("Jade: " + FindFairy.getBlock2());
+//            line4.setScale(Configs.DisplayScale / 20F);
+//            display.addLine(line4);
+            DisplayLine line5 = new DisplayLine("scan: " + FindFairy.getMessage());
+            line5.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line5);
 //            DisplayLine line3 = new DisplayLine("v/m: " + SkyblockUtils.getVelocity() / SkyblockUtils.getMotionY());
 //            line3.setScale(Configs.DisplayScale / 20F);
 //            display.addLine(line3);

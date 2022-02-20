@@ -37,6 +37,7 @@ public class ConfigGuiNew extends GuiScreen {
     private static ArrayList<Setting> secondCategory;
     private static Setting selectedFirstCategory = null;
     private static Setting selectedSecondCategory = null;
+    public static String searchText = "";
     // search bar
     private static GuiTextField searchBar = null;
     // first line
@@ -388,7 +389,7 @@ public class ConfigGuiNew extends GuiScreen {
             );
             searchBar.setMaxStringLength(10);
             searchBar.setEnableBackgroundDrawing(false);
-            searchBar.setText("");
+            searchBar.setText(searchText);
             searchBar.setFocused(true);
             lastWidth = width;
             lastHeight = height;
@@ -398,6 +399,7 @@ public class ConfigGuiNew extends GuiScreen {
     protected void mouseClicked(int x, int y, int btn) throws IOException {
         super.mouseClicked(x, y, btn);
         searchBar.mouseClicked(x, y, btn);
+        searchText = searchBar.getText();
         for (TextInput textInput : textInputs) {
             textInput.mouseClicked(x, y, btn);
         }
@@ -409,6 +411,7 @@ public class ConfigGuiNew extends GuiScreen {
             selectedFirstCategory = selectedSecondCategory = null;
             thirdScroll = secondScroll = 0;
             searchBar.textboxKeyTyped(c, i);
+            searchText = searchBar.getText();
             getSettings();
             initGui();
         }

@@ -52,6 +52,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisableEntityRender;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisplayDayAndCoords;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
+import com.xiaojia.xiaojiaaddons.Features.QOL.FindFairy;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostBlock;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.HideCreepers;
@@ -222,6 +223,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new DisableEntityRender());
         MinecraftForge.EVENT_BUS.register(new DisplayDayAndCoords());
         MinecraftForge.EVENT_BUS.register(new EntityQOL());
+        MinecraftForge.EVENT_BUS.register(new FindFairy());
         MinecraftForge.EVENT_BUS.register(new GhostBlock());
         MinecraftForge.EVENT_BUS.register(new GhostQOL());
         MinecraftForge.EVENT_BUS.register(new HideCreepers());

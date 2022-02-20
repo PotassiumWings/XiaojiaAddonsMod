@@ -90,6 +90,7 @@ public class InCombatQOL {
                 if (name.contains(shit.toLowerCase()))
                     return true;
         }
+        if (Configs.AutoSellBlazeHat && name.equals("blaze hat")) return true;
         // fishing stuff
         if (Configs.AutoSellIceRod && name.contains("ice rod")) return true;
         if (Configs.AutoSellMusicDisc && name.contains("music disc")) return true;

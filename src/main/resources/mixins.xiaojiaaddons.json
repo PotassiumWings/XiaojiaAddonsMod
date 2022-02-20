@@ -17,6 +17,7 @@
         "MixinEntity",
         "MixinRenderItem",
         "MixinRenderManager",
-        "MixinRenderLightningBolt"
+        "MixinRenderLightningBolt",
+        "MixinPlayerControllerMP"
     ]
 }
