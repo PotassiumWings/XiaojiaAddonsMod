@@ -46,7 +46,7 @@ public class FindFairy {
     private boolean should = false;
     private Thread scanThread = null;
 
-    private BufferedImage map = new BufferedImage(78, 78, BufferedImage.TYPE_4BYTE_ABGR);
+    private static BufferedImage map = new BufferedImage(78, 78, BufferedImage.TYPE_4BYTE_ABGR);
     public static Image defaultIcon = new Image("defaultPlayerIcon.png");
 
     public static String getBlock() {
@@ -94,6 +94,7 @@ public class FindFairy {
             if (color == GemstoneESP.Gemstone.JASPER.dyeColor) {
                 v = new Vector3i(pos.getX(), pos.getY(), pos.getZ());
                 ChatLib.chat("Found jasper gemstone!");
+                map.setRGB((px - 202) / 8, (pz - 202) / 8, new Color(214, 15, 150).getRGB());
             }
             if (color == GemstoneESP.Gemstone.JADE.dyeColor) {
                 v2 = new Vector3i(pos.getX(), pos.getY(), pos.getZ());
@@ -118,16 +119,16 @@ public class FindFairy {
             should = !should;
             ChatLib.chat(should ? "Find Fairy &aactivated" : "Find Fairy &cdeactivated");
         }
-        if (!enabled()) return;
+        if (!enabled() || v != null) return;
         if (scanThread == null || !scanThread.isAlive()) {
             scanThread = new Thread(() -> {
                 try {
-                    while (enabled()) {
+                    while (enabled() && v == null) {
                         int x = MathUtils.floor(getX(getPlayer())), z = MathUtils.floor(getZ(getPlayer()));
                         for (r = 0; r < 400; r ++) {
                             for (int i = 0; i < 4; i++) {
                                 for (int sy = 40; sy <= 130; sy += 2) {
-                                    if (!enabled()) return;
+                                    if (!enabled() || v != null) return;
                                     int cx = MathUtils.floor(getX(getPlayer())), cz = MathUtils.floor(getZ(getPlayer()));
                                     if (Math.abs(cx - x) > 10 || Math.abs(cz - z) > 10) return;
                                     for (int sx = x - r; sx <= x + r; sx++) {
@@ -160,15 +161,6 @@ public class FindFairy {
     }
 
     @SubscribeEvent
-    public void onBlockChange(BlockChangeEvent event) {
-        if (!enabled()) return;
-        if (event.oldBlock.getBlock() == Blocks.air) {
-            checkBlock(event.newBlock, event.position);
-            changed++;
-        }
-    }
-
-    @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         blockSet.clear();
         v = null;
@@ -178,6 +170,6 @@ public class FindFairy {
     }
 
     private boolean enabled() {
-        return Checker.enabled && should && SkyblockUtils.isInCrystalHollows() && v == null;
+        return Checker.enabled && should && SkyblockUtils.isInCrystalHollows();
     }
 }
