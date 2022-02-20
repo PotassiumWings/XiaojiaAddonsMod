@@ -56,6 +56,7 @@ public class FindFairy {
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Pre event) {
         if (!enabled()) return;
+        if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
         RenderUtils.start();
         RenderUtils.drawRect(new Color(0F, 0F, 0F, Configs.CHBackgroundAlpha / 255F).getRGB(),
                 Configs.CHMapX, Configs.CHMapY,
