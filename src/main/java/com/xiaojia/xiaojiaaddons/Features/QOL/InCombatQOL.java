@@ -99,6 +99,9 @@ public class InCombatQOL {
                     name.equals("fairy's trousers") || name.equals("fairy's galoshes"))
                 return true;
         }
+        if (Configs.AutoSellEnchantedFeather && name.equals("enchanted feather")) return true;
+        if (Configs.AutoSellEnchantedGoldenApple && name.equals("enchanted golden apple")) return true;
+        if (Configs.AutoSellGoldenApple && name.equals("golden apple")) return true;
         if (Configs.AutoSellSeaLantern && name.equals("sea lantern")) return true;
         if (Configs.AutoSellBait && name.endsWith(" bait")) return true;
         // mining stuff

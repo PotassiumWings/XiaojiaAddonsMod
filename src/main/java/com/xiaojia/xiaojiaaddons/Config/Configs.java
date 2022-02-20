@@ -299,6 +299,15 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Sea Lantern", parent = "Auto Sell Fishing Stuff")
     public static boolean AutoSellSeaLantern = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Enchanted Feather", parent = "Auto Sell Fishing Stuff")
+    public static boolean AutoSellEnchantedFeather = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Enchanted Golden Apple", parent = "Auto Sell Fishing Stuff")
+    public static boolean AutoSellEnchantedGoldenApple = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Golden Apple", parent = "Auto Sell Fishing Stuff")
+    public static boolean AutoSellGoldenApple = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Auto Sell Bait", parent = "Auto Sell Fishing Stuff")
     public static boolean AutoSellBait = false;
 
