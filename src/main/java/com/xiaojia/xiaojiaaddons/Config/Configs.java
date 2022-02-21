@@ -9,7 +9,7 @@ public class Configs {
     public static boolean PriceRelated = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Fetch Lowest Bin", parent = "Price Related")
-    public static boolean FetchLowestBin = false;
+    public static boolean FetchLowestBin = true;
 
     @Property(type = Property.Type.BOOLEAN, name = "Display Lowest Bin", parent = "Price Related",
             description = "Display a line in tooltips to show items' lowest bin.")
@@ -1064,6 +1064,7 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Powder Enabled", parent = "Powder Relevant", illegal = true,
             description = "AFK mine hardstone and open chests. Low efficiency!\n" +
                     "Toggleable through keybindings.\n" +
+                    "&cThis feature is just for testing and won't be updated.\n" +
                     "&c&lDONT FULLY AFK!")
     public static boolean AutoPowder = false;
 
@@ -1218,6 +1219,13 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Map Bounding Thickness", parent = "Map",
             min = 0, max = 10)
     public static int MapBoundingThickness = 2;
+
+    @Property(type = Property.Type.SELECT, name = "Map Bounding Color", parent = "Map",
+            options = {"§aGreen", "§bAqua", "§cRed", "§dPink", "§eYellow", "§fWhite",
+                    "§0Black", "§1Dark Blue", "§2Dark Green", "§3Cyan",
+                    "§4Dark Red", "§5Purple", "§6Gold", "§7Gray",
+                    "§8Dark Gray", "§9Blue"})
+    public static int MapBoundingColor = 0;
 
     @Property(type = Property.Type.NUMBER, name = "Background Alpha", parent = "Map",
             min = 0, max = 255, step = 5)

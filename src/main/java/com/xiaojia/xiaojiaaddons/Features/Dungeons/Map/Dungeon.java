@@ -9,6 +9,7 @@ import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
@@ -751,20 +752,21 @@ public class Dungeon {
                 Configs.MapX, Configs.MapY,
                 mapSize.x * Configs.MapScale, mapSize.y * Configs.MapScale);
         // bounding line
-        RenderUtils.drawRect(new Color(0, 255, 0).getRGB(),
+        Color color = ColorUtils.realColors[Configs.MapBoundingColor];
+        RenderUtils.drawRect(color.getRGB(),
                 Configs.MapX - Configs.MapBoundingThickness, Configs.MapY - Configs.MapBoundingThickness,
                 Configs.MapBoundingThickness, Configs.MapBoundingThickness + Configs.MapScale * mapSize.y
         );
-        RenderUtils.drawRect(new Color(0, 255, 0).getRGB(),
+        RenderUtils.drawRect(color.getRGB(),
                 Configs.MapX - Configs.MapBoundingThickness, Configs.MapY + Configs.MapScale * mapSize.y,
                 Configs.MapBoundingThickness + Configs.MapScale * mapSize.x,
                 Configs.MapBoundingThickness
         );
-        RenderUtils.drawRect(new Color(0, 255, 0).getRGB(),
+        RenderUtils.drawRect(color.getRGB(),
                 Configs.MapX + Configs.MapScale * mapSize.x, Configs.MapY,
                 Configs.MapBoundingThickness, Configs.MapBoundingThickness + Configs.MapScale * mapSize.y
         );
-        RenderUtils.drawRect(new Color(0, 255, 0).getRGB(),
+        RenderUtils.drawRect(color.getRGB(),
                 Configs.MapX, Configs.MapY - Configs.MapBoundingThickness,
                 Configs.MapBoundingThickness + Configs.MapScale * mapSize.x,
                 Configs.MapBoundingThickness
