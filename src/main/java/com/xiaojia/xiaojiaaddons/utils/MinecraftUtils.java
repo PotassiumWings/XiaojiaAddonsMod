@@ -18,10 +18,13 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class MinecraftUtils {
+    private static final HashMap<String, String> cachedUuids = new HashMap<>();
+
     public static EntityPlayerSP getPlayer() {
         return mc.thePlayer;
     }
@@ -68,10 +71,20 @@ public class MinecraftUtils {
     }
 
     public static String getUUIDFromName(String name) {
+        if (cachedUuids.containsKey(name)) {
+            return cachedUuids.get(name);
+        }
         String url = "https://api.mojang.com/users/profiles/minecraft/" + name;
         String response = RemoteUtils.get(url, new ArrayList<>(), false);
         JsonObject apiRet = new Gson().fromJson(response, JsonObject.class);
         String uuid = apiRet.get("id").getAsString();
+        if (uuid == null || uuid.length() != 32) {
+            if (SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) {
+                ChatLib.chat("url: " + url + ", response: " + response + ", uuid: " + uuid);
+            }
+        } else {
+            cachedUuids.put(name, uuid);
+        }
         System.err.println("Got uuid for name " + name + ": " + uuid);
         return uuid;
     }

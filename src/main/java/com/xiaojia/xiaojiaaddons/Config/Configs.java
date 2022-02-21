@@ -5,6 +5,15 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;
 
+    @Property(type = Property.Type.FOLDER, name = "Dupe Display", parent = "Misc")
+    public static boolean DupeDisplay = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Duped Items", parent = "Dupe Display",
+            description = "Show &c&lDup&r when rendering duped items.\n" +
+                    "Not guaranteed to be 100% accurate cause there's\n" +
+                    "limited resource to know which ones are duped.")
+    public static boolean ShowDupedItems = false;
+
     @Property(type = Property.Type.FOLDER, name = "Price Related", parent = "Misc")
     public static boolean PriceRelated = false;
 
