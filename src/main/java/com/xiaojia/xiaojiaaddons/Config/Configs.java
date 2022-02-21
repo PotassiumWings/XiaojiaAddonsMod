@@ -5,6 +5,16 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;
 
+    @Property(type = Property.Type.FOLDER, name = "Price Related", parent = "Misc")
+    public static boolean PriceRelated = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Fetch Lowest Bin", parent = "Price Related")
+    public static boolean FetchLowestBin = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Display Lowest Bin", parent = "Price Related",
+            description = "Display a line in tooltips to show items' lowest bin.")
+    public static boolean DisplayLowestBin = false;
+
     @Property(type = Property.Type.FOLDER, name = "Chat Copy", parent = "Misc")
     public static boolean ChatCopyEnabled = false;
 
@@ -739,7 +749,7 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Turn-Shoot Delay", parent = "Solvers", suffix = " ms",
             description = "Delay between a turn and a shot.\n" +
                     "Higher delay = Lower chance to fail.", min = 50, max = 500, step = 5)
-    public static int TurnShootDelay = 200;
+    public static int TurnShootDelay = 250;
 
     @Property(type = Property.Type.NUMBER, name = "Blaze Scale", parent = "Solvers", suffix = " %",
             description = "Scale for blaze in calculation, 100% = 0.6width * 2height.\n" +

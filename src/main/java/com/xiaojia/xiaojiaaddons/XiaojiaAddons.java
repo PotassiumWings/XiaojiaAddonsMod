@@ -43,6 +43,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChatCopy;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
@@ -68,6 +69,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.DungeonLoot;
+import com.xiaojia.xiaojiaaddons.Features.Remote.LowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoCloseCrystalHollowsChest;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowder;
@@ -212,6 +214,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new ChatCopy());
         MinecraftForge.EVENT_BUS.register(new ColorName());
         MinecraftForge.EVENT_BUS.register(new KeepSprint());
+        MinecraftForge.EVENT_BUS.register(new ShowLowestBin());
 
         // QOL
         MinecraftForge.EVENT_BUS.register(new AutoCombine());
@@ -258,6 +261,7 @@ public class XiaojiaAddons {
 
         // Remote
         MinecraftForge.EVENT_BUS.register(new DungeonLoot());
+        MinecraftForge.EVENT_BUS.register(new LowestBin());
 
         for (KeyBind keyBind : KeyBindUtils.keyBinds) {
             ClientRegistry.registerKeyBinding(keyBind.mcKeyBinding());

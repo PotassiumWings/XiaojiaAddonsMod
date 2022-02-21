@@ -1,11 +1,13 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.Objects.Pair;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
@@ -13,6 +15,22 @@ public class NBTUtils {
     private static NBTTagCompound getExtraAttributes(ItemStack itemStack) {
         if (itemStack == null) return null;
         return itemStack.getSubCompound("ExtraAttributes", false);
+    }
+
+    public static Pair<String, Integer> getFirstEnchantment(ItemStack itemStack) {
+        NBTTagCompound extra = getExtraAttributes(itemStack);
+        NBTTagCompound enchantments = extra.getCompoundTag("enchantments");
+        Set<String> enc = enchantments.getKeySet();
+        for (String s : enc) return new Pair<>(s, enchantments.getInteger(s));
+        return null;
+    }
+
+    public static Pair<String, Integer> getFirstRune(ItemStack itemStack) {
+        NBTTagCompound extra = getExtraAttributes(itemStack);
+        NBTTagCompound runes = extra.getCompoundTag("runes");
+        Set<String> runeNames = runes.getKeySet();
+        for (String s : runeNames) return new Pair<>(s, runes.getInteger(s));
+        return null;
     }
 
     public static String getStringFromExtraAttributes(ItemStack itemStack, String property) {

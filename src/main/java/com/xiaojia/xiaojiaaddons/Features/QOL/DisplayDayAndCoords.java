@@ -3,12 +3,15 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
+import com.xiaojia.xiaojiaaddons.Features.Remote.LowestBin;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -72,15 +75,9 @@ public class DisplayDayAndCoords {
             DisplayLine line2 = new DisplayLine("pitch: " + MathUtils.getPitch());
             line2.setScale(Configs.DisplayScale / 20F);
             display.addLine(line2);
-//            DisplayLine line4 = new DisplayLine("Jade: " + FindFairy.getBlock2());
-//            line4.setScale(Configs.DisplayScale / 20F);
-//            display.addLine(line4);
-            DisplayLine line5 = new DisplayLine("scan: " + FindFairy.getMessage());
+            DisplayLine line5 = new DisplayLine("lastFetch: " + LowestBin.getLastUpdate() + "s");
             line5.setScale(Configs.DisplayScale / 20F);
             display.addLine(line5);
-//            DisplayLine line3 = new DisplayLine("v/m: " + SkyblockUtils.getVelocity() / SkyblockUtils.getMotionY());
-//            line3.setScale(Configs.DisplayScale / 20F);
-//            display.addLine(line3);
         }
     }
 }

@@ -14,6 +14,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
+import com.xiaojia.xiaojiaaddons.Features.Remote.RemoteUtils;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
@@ -136,6 +137,10 @@ public class Command extends CommandBase {
                 break;
             case "star":
                 StarredMobESP.show();
+                break;
+            case "get":
+                String url = strings[1];
+                ChatLib.chat(RemoteUtils.get(url, new ArrayList<>(), false));
                 break;
 //            case "term":
 //                ShortbowUtils.testTerminator();
