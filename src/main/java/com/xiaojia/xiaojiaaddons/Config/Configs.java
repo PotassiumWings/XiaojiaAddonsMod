@@ -9,9 +9,10 @@ public class Configs {
     public static boolean DupeDisplay = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Duped Items", parent = "Dupe Display",
-            description = "Show &c&lDup&r when rendering duped items.\n" +
-                    "Not guaranteed to be 100% accurate cause there's\n" +
-                    "limited resource to know which ones are duped.")
+            description = "Show &c&lDup&r when rendering 'duped' items.\n" +
+                    "&cNot guaranteed to be 100% accurate cause there's\n" +
+                    "&climited resource to know which ones are duped.\n" +
+                    "&cOrigin items are marked too.")
     public static boolean ShowDupedItems = false;
 
     @Property(type = Property.Type.FOLDER, name = "Price Related", parent = "Misc")
@@ -23,6 +24,10 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Display Lowest Bin", parent = "Price Related",
             description = "Display a line in tooltips to show items' lowest bin.")
     public static boolean DisplayLowestBin = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Chest Profit", parent = "Price Related",
+            description = "Display dungeon loot chest profit.")
+    public static boolean ShowChestProfit = false;
 
     @Property(type = Property.Type.FOLDER, name = "Chat Copy", parent = "Misc")
     public static boolean ChatCopyEnabled = false;
@@ -1294,6 +1299,10 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Darken Unexplored", parent = "Rooms")
     public static boolean DarkenUnexplored = true;
+
+    @Property(type = Property.Type.NUMBER, name = "Darken Unexplored Factor", parent = "Rooms",
+            description = "Determine how dark unexplored rooms are.", suffix = "%", min = 0, max = 100)
+    public static int DarkenUnexploredPercent = 34;
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Trap Room Name", parent = "Rooms")
     public static boolean ShowTrapName = true;

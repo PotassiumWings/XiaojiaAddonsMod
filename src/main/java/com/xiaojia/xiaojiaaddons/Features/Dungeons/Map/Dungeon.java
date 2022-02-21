@@ -140,16 +140,24 @@ public class Dungeon {
             Room room = rooms.get(i);
             Color color = room.getColor();
             if (room.name.equals("Unknown")) color = new Color(255, 176, 31);
-            else if (!room.explored && Configs.DarkenUnexplored) color = color.darker().darker().darker();
+            else if (!room.explored && Configs.DarkenUnexplored) color = darker(color);
             setPixels(newMap, MathUtils.floor(room.x / 16) * 2 + 1, MathUtils.floor(room.z / 16) * 2 + 1, 3, 3, color);
         }
         for (int i = 0; i < doors.size(); i++) {
             Door door = doors.get(i);
             Color color = door.getColor();
-            if (!door.explored && Configs.DarkenUnexplored) color = color.darker().darker().darker();
+            if (!door.explored && Configs.DarkenUnexplored) color = darker(color);
             setPixels(newMap, MathUtils.floor(door.x / 16) * 2 + 2, MathUtils.floor(door.z / 16) * 2 + 2, 1, 1, color);
         }
         map = newMap;
+    }
+
+    private static Color darker(Color color) {
+        return new Color(
+                color.getRed() * Configs.DarkenUnexploredPercent / 100,
+                color.getGreen() * Configs.DarkenUnexploredPercent / 100,
+                color.getBlue() * Configs.DarkenUnexploredPercent / 100
+        );
     }
 
     private static void setPixels(BufferedImage map, int x1, int y1, int wid, int height, Color color) {

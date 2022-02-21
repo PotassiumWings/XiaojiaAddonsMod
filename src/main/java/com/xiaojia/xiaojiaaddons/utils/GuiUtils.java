@@ -72,6 +72,17 @@ public class GuiUtils {
         return new Vector2i(x, y);
     }
 
+    public static void drawStringAtRightUpOfDoubleChest(String string) {
+        ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+        int guiRight = (sr.getScaledWidth() + 176) / 2;
+        int guiTop = (sr.getScaledHeight() - 222) / 2;
+        int x = guiRight - 8 - RenderUtils.getStringWidth(string);
+        int y = guiTop + 6;
+        GL11.glTranslated(0, 0, 1);
+        mc.fontRendererObj.drawString(string, x, y, 0xffffffff, false);
+        GL11.glTranslated(0, 0, -1);
+    }
+
     public static void drawOnSlot(int size, int xSlotPos, int ySlotPos, int colour) {
         Vector2i v = getXYForSlot(size, xSlotPos, ySlotPos);
         int x = v.x, y = v.y;

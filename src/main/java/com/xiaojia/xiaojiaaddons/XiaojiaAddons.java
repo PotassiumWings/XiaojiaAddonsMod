@@ -40,6 +40,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESPBox;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.TrapChestESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChatCopy;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestProfit;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
@@ -116,7 +117,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.2";
+    public static final String VERSION = "2.4.2.1";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -265,6 +266,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new DungeonLoot());
         MinecraftForge.EVENT_BUS.register(new LowestBin());
         MinecraftForge.EVENT_BUS.register(new DupedItems());
+        MinecraftForge.EVENT_BUS.register(new ChestProfit());
 
         for (KeyBind keyBind : KeyBindUtils.keyBinds) {
             ClientRegistry.registerKeyBinding(keyBind.mcKeyBinding());
