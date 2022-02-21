@@ -102,6 +102,7 @@ public class GemstoneESP {
 
     @SubscribeEvent
     public void onBlockChange(BlockChangeEvent event) {
+        if (!isEnabled()) return;
         if (event.newBlock.getBlock() == Blocks.air)
             this.gemstones.remove(event.position);
         if (event.oldBlock.getBlock() == Blocks.air) {

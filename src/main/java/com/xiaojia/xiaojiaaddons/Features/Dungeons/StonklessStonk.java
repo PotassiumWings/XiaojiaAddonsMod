@@ -207,6 +207,8 @@ public class StonklessStonk {
 
     @SubscribeEvent
     public void onBlockChange(BlockChangeEvent event) {
+        if (!Checker.enabled) return;
+        if (!SkyblockUtils.isInDungeon()) return;
         if (getPlayer() == null || getWorld() == null) return;
         if (event.position.distanceSq(getPlayer().getPosition()) > 20.0) return;
         if (doneSecretsPos.containsKey(event.position)) return;

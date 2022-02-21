@@ -387,7 +387,7 @@ public class ConfigGuiNew extends GuiScreen {
                     getStartY() + titleHeight + secondGap + 2,
                     searchWidth - searchHeight, searchHeight - 1
             );
-            searchBar.setMaxStringLength(10);
+            searchBar.setMaxStringLength(20);
             searchBar.setEnableBackgroundDrawing(false);
             searchBar.setText(searchText);
             searchBar.setFocused(true);
