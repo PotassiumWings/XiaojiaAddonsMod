@@ -750,6 +750,25 @@ public class Dungeon {
         RenderUtils.drawRect(new Color(0F, 0F, 0F, Configs.BackgroundAlpha / 255F).getRGB(),
                 Configs.MapX, Configs.MapY,
                 mapSize.x * Configs.MapScale, mapSize.y * Configs.MapScale);
+        // bounding line
+        RenderUtils.drawRect(new Color(0, 255, 0).getRGB(),
+                Configs.MapX - Configs.MapBoundingThickness, Configs.MapY - Configs.MapBoundingThickness,
+                Configs.MapBoundingThickness, Configs.MapBoundingThickness + Configs.MapScale * mapSize.y
+        );
+        RenderUtils.drawRect(new Color(0, 255, 0).getRGB(),
+                Configs.MapX - Configs.MapBoundingThickness, Configs.MapY + Configs.MapScale * mapSize.y,
+                Configs.MapBoundingThickness + Configs.MapScale * mapSize.x,
+                Configs.MapBoundingThickness
+        );
+        RenderUtils.drawRect(new Color(0, 255, 0).getRGB(),
+                Configs.MapX + Configs.MapScale * mapSize.x, Configs.MapY,
+                Configs.MapBoundingThickness, Configs.MapBoundingThickness + Configs.MapScale * mapSize.y
+        );
+        RenderUtils.drawRect(new Color(0, 255, 0).getRGB(),
+                Configs.MapX, Configs.MapY - Configs.MapBoundingThickness,
+                Configs.MapBoundingThickness + Configs.MapScale * mapSize.x,
+                Configs.MapBoundingThickness
+        );
     }
 
     private void renderMap() {

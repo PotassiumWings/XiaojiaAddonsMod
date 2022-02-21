@@ -53,10 +53,10 @@ public class Configs {
                     "&cRestart after changing required.")
     public static boolean HideModID = true;
 
-    @Property(type = Property.Type.NUMBER, name = "Box Line Width", parent = "General XJA Setting",
+    @Property(type = Property.Type.NUMBER, name = "Box Line Thickness", parent = "General XJA Setting",
             min = 1, max = 20, step = 1,
-            description = "Line width of every bounding box in this mod.")
-    public static int BoxLineWidth = 5;
+            description = "Line thickness of every bounding box in this mod.")
+    public static int BoxLineThickness = 5;
 
     // ColorName
     @Property(type = Property.Type.FOLDER, name = "Color Name", parent = "Misc",
@@ -1204,6 +1204,10 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Map Y", parent = "Map",
             min = 0, max = 1000, step = 5)
     public static int MapY = 0;
+
+    @Property(type = Property.Type.NUMBER, name = "Map Bounding Thickness", parent = "Map",
+            min = 0, max = 10)
+    public static int MapBoundingThickness = 2;
 
     @Property(type = Property.Type.NUMBER, name = "Background Alpha", parent = "Map",
             min = 0, max = 255, step = 5)

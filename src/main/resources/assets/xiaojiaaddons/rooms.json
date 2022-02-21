@@ -1128,6 +1128,14 @@
       "cores": [
         633179672
       ]
+    },
+    {
+      "name": "Mini Rail Track",
+      "type": "rare",
+      "secrets": 3,
+      "cores": [
+        -701175845
+      ]
     }
   ]
 }

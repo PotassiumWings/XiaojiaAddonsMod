@@ -295,7 +295,7 @@ public class GuiUtils {
         GL11.glPushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
-        GL11.glLineWidth(Configs.BoxLineWidth);
+        GL11.glLineWidth(Configs.BoxLineThickness);
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         RenderManager renderManager = mc.getRenderManager();
         GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ);

@@ -76,7 +76,7 @@ public class BloodAssist {
             GuiUtils.drawLine(
                     (float) skull.posX, (float) skull.posY + 2, (float) skull.posZ,
                     info.endX, info.endY + 2, info.endZ,
-                    new Color(255, 0, 0), Configs.BoxLineWidth
+                    new Color(255, 0, 0), Configs.BoxLineThickness
             );
             GuiUtils.disableESP();
         }
