@@ -97,7 +97,7 @@ public class AutoCombine extends StepEvent {
                 // "Feather Falling"
                 String bookName = nameAndLevel.get(0);
                 String levelString = nameAndLevel.get(1);
-                int level = getEnchantLevel(levelString);
+                int level = Integer.parseInt(levelString);
                 if (booksLevel.containsKey(bookName) &&
                         level < booksLevel.get(bookName) &&
                         checkKindEnable(bookName)

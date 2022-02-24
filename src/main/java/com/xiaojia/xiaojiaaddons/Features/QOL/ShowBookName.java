@@ -50,7 +50,7 @@ public class ShowBookName {
                 String compactName = bookName.substring(0, Math.min(bookName.length(), 3));
                 if (isUltimate) compactName = bookName.replaceAll("[a-z ]", "");
                 nameString = colorPrefix + compactName;
-                levelString = StringUtils.getNumberFromRoman(nameAndLevel.get(1)) + "";
+                levelString = nameAndLevel.get(1);
                 cachedStrings.put(itemStack, nameString + " " + levelString);
                 if (cachedStrings.size() > 1000)
                     cachedStrings.clear();

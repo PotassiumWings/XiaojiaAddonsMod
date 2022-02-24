@@ -117,16 +117,16 @@ public class InCombatQOL {
             ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
             // "Feather Falling"
             String bookName = nameAndLevel.get(0);
-            // "VI"
+            // "6"
             String levelString = nameAndLevel.get(1);
             if (bookName.equals("Feather Falling") && Configs.AutoSellFeatherFalling &&
-                    (levelString.equals("VI") || levelString.equals("VII"))) return true;
+                    (levelString.equals("6") || levelString.equals("7"))) return true;
             if (bookName.equals("Infinite Quiver") && Configs.AutoSellInfiniteQuiver &&
-                    (levelString.equals("VI") || levelString.equals("VII"))) return true;
+                    (levelString.equals("6") || levelString.equals("7"))) return true;
             if (bookName.equals("Bank") && Configs.AutoSellBank) return true;
             if (bookName.equals("No Pain No Gain") && Configs.AutoSellNoPainNoGain) return true;
             if (bookName.equals("Magnet") && Configs.AutoSellMagnet &&
-                    (levelString.equals("VI"))) return true;
+                    (levelString.equals("6"))) return true;
             return bookName.equals("Ultimate Jerry") && Configs.AutoSellUltimateJerry;
         }
         return false;

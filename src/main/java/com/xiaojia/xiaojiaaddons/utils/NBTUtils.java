@@ -85,6 +85,8 @@ public class NBTUtils {
             // "VI" -> 6
             String levelString = bookNameSplit.get(bookNameSplit.size() - 1);
             String book = bookName.substring(0, bookName.length() - levelString.length() - 1);
+            int level = StringUtils.getNumberFromRoman(levelString);
+            levelString = level + "";
             res.add(book);
             res.add(levelString);
             return res;

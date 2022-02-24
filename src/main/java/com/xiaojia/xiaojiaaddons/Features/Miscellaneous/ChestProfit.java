@@ -59,7 +59,7 @@ public class ChestProfit {
                 }
             }
             // Color
-            String colorPrefix = "\u00a74";
+            String colorPrefix = "\u00a7c";
             if (profit > 700000) colorPrefix = "\u00a7a";
             else if (profit > 0) colorPrefix = "\u00a72";
             String displayString = colorPrefix + getStringProfit(profit);
