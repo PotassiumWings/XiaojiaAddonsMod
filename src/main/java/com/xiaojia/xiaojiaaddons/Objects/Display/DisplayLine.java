@@ -50,11 +50,13 @@ public class DisplayLine {
             xOffset = baseX + (totalWidth - getTextWidth());
         }
 
+        RenderUtils.start();
         if (background == Background.FULL)
             RenderUtils.drawRect(backgroundColor, baseX - 1, y - 1, totalWidth + 1, getHeight());
         else if (background == Background.PER_LINE && !text.equals(""))
             RenderUtils.drawRect(backgroundColor, xOffset - 1, y - 1, getTextWidth() + 1, getHeight());
 
         RenderUtils.drawString(text, scale, xOffset, y, new Color(textColor), shadow);
+        RenderUtils.end();
     }
 }

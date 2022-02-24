@@ -1100,6 +1100,11 @@ public class Configs {
                     "lava fishing will be added later.")
     public static boolean AutoPullRod = false;
 
+    @Property(type = Property.Type.NUMBER, name = "Auto Pulling Rod CD", parent = "Fishing",
+            description = "Cooldown between particles approaching and pulling.",
+            min = 50, max = 500, step = 5, suffix = "ms")
+    public static int AutoPullRodCD = 150;
+
     @Property(type = Property.Type.BOOLEAN, name = "Auto Move Randomly", parent = "Fishing", illegal = true,
             description = "Move around and rotate to bypass afk test \n" +
                     "and gain fishing exp while afk.\n" +

@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Remote.LowestBin;
+import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
@@ -58,6 +59,12 @@ public class DisplayDayAndCoords {
             DisplayLine line3 = new DisplayLine("Jasper: " + FindFairy.getBlock());
             line3.setScale(Configs.DisplayScale / 20F);
             display.addLine(line3);
+        }
+        String timer = Fishing.timer();
+        if (!timer.equals("")) {
+            DisplayLine line = new DisplayLine("&cFishing Timer: " + timer);
+            line.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line);
         }
         if (SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) {
             DisplayLine line = new DisplayLine("Name Cache size: " + ColorName.getCacheSize());

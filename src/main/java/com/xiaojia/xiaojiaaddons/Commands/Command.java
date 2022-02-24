@@ -17,6 +17,7 @@ import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.RemoteUtils;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
+import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
@@ -127,6 +128,9 @@ public class Command extends CommandBase {
                 System.out.println(AutoBlaze.log.toString());
 //                AutoBlaze.test();
                 break;
+//            case "clear":
+//                Fishing.clearBubbles();
+//                break;
             case "core":
                 x = MathUtils.floor(MathUtils.getX(MinecraftUtils.getPlayer()));
                 z = MathUtils.floor(MathUtils.getZ(MinecraftUtils.getPlayer()));
