@@ -82,6 +82,11 @@ public class Configs {
             description = "Line thickness of every bounding box in this mod.")
     public static int BoxLineThickness = 5;
 
+    @Property(type = Property.Type.SELECT, name = "Change Direction Mode", parent = "General XJA Setting",
+            options = {"Fast Mode", "Mid Mode", "Slow Mode"}
+    )
+    public static int ChangeDirectionMode = 0;
+
     // ColorName
     @Property(type = Property.Type.FOLDER, name = "Color Name", parent = "Misc",
             description = "Replace all ranked name, like &b[MVP+] Xiaojia,\n" +

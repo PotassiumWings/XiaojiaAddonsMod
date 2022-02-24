@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
@@ -134,8 +135,11 @@ public class ControlUtils {
         if (yaw < 0) yaw += 360;  // yaw \in [0, 360]
         if (yaw - curyaw > 180) yaw -= 360;  // yaw = 359, curyaw = 1 -> yaw = -1, curyaw = 1
         if (curyaw - yaw > 180) curyaw -= 360;  // yaw = 1, curyaw = 359 -> yaw = 1, curyaw = -1
+
+        int[] factors = new int[]{50, 20, 7};
+        int factor = factors[Configs.ChangeDirectionMode];
         int rotate_times = MathUtils.floor(
-                Math.sqrt(Math.pow(curyaw - yaw, 2) + Math.pow(curpitch - pitch, 2)) / 50
+                Math.sqrt(Math.pow(curyaw - yaw, 2) + Math.pow(curpitch - pitch, 2)) / factor
         ) + 1;
         System.err.printf("curyaw %.2f, yaw %.2f%n", curyaw, yaw);
         for (int j = 1; j <= rotate_times; j++) {

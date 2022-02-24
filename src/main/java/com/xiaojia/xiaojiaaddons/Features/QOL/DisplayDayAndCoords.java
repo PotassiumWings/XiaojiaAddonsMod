@@ -31,7 +31,8 @@ public class DisplayDayAndCoords {
     }
 
     @SubscribeEvent
-    public void renderString(RenderGameOverlayEvent event) {
+    public void renderString(RenderGameOverlayEvent.Pre event) {
+        if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
         if (!Checker.enabled) return;
 //        if (!SkyblockUtils.isInSkyblock()) return;
         EntityPlayer player = getPlayer();
