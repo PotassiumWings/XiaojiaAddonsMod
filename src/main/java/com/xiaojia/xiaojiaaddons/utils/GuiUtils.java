@@ -9,11 +9,13 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -183,6 +185,55 @@ public class GuiUtils {
                 color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
                 width, height
         );
+    }
+
+    public static void drawSelectionFilledBoxAtBlock(BlockPos pos, Color color) {
+        AxisAlignedBB box = BlockUtils.getAABBOfBlock(pos);
+        if (box == null) return;
+        drawFilledBoundingBoxRelative(
+                (float) box.minX, (float) box.minY, (float) box.minZ,
+                (float) box.maxX, (float) box.maxY, (float) box.maxZ,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()
+        );
+    }
+
+    public static void drawSelectionBoundingBoxAtBlock(BlockPos pos, Color color) {
+        AxisAlignedBB box = BlockUtils.getAABBOfBlock(pos);
+        if (box == null) return;
+//        float mx = (float) box.minX, my = (float) box.minY, mz = (float) box.minZ;
+//        float Mx = (float) box.maxX, My = (float) box.maxY, Mz = (float) box.maxZ;
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GL11.glLineWidth(Configs.EtherwarpPointBoundingThickness);
+        GlStateManager.color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, color.getAlpha() / 255F);
+        RenderGlobal.drawSelectionBoundingBox(box);
+//        worldRenderer.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
+//        worldRenderer.pos(Mx, My, Mz).endVertex();
+//        worldRenderer.pos(Mx, My, mz).endVertex();
+//        worldRenderer.pos(mx, My, mz).endVertex();
+//        worldRenderer.pos(mx, My, Mz).endVertex();
+//        worldRenderer.pos(Mx, My, Mz).endVertex();
+//        worldRenderer.pos(Mx, my, Mz).endVertex();
+//        worldRenderer.pos(Mx, my, mz).endVertex();
+//        worldRenderer.pos(mx, my, mz).endVertex();
+//        worldRenderer.pos(mx, my, Mz).endVertex();
+//        worldRenderer.pos(mx, my, mz).endVertex();
+//        worldRenderer.pos(mx, My, mz).endVertex();
+//        worldRenderer.pos(mx, my, mz).endVertex();
+//        worldRenderer.pos(Mx, my, mz).endVertex();
+//        worldRenderer.pos(Mx, My, mz).endVertex();
+//        worldRenderer.pos(Mx, my, mz).endVertex();
+//        worldRenderer.pos(Mx, my, Mz).endVertex();
+//        worldRenderer.pos(mx, my, Mz).endVertex();
+//        worldRenderer.pos(mx, My, Mz).endVertex();
+//        worldRenderer.pos(Mx, My, Mz).endVertex();
+//        tessellator.draw();
+        GL11.glLineWidth(Configs.BoxLineThickness);
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
     }
 
     public static void drawLine(float sx, float sy, float sz, float tx, float ty, float tz, Color color, int lineWidth) {

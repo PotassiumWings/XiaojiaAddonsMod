@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Mixins;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.RenderEntityModelEvent;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
@@ -10,6 +11,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 @Mixin({RendererLivingEntity.class})
 public abstract class MixinRenderLivingEntity {
@@ -26,5 +30,12 @@ public abstract class MixinRenderLivingEntity {
                 entity, limbSwing, limbSwingAmount, ageInTicks,
                 netHeadYaw, headPitch, scaleFactor, this.mainModel)))
             callbackInfo.cancel();
+    }
+
+    @Inject(method = "canRenderName", at = @At("HEAD"), cancellable = true)
+    public void canRenderName(EntityLivingBase base, CallbackInfoReturnable<Boolean> cir) {
+        if (Configs.RenderSelfName && base.getName().equals(getPlayer().getName())) {
+            cir.setReturnValue(true);
+        }
     }
 }

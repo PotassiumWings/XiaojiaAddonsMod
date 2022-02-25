@@ -87,6 +87,12 @@ public class Configs {
     )
     public static int ChangeDirectionMode = 0;
 
+    @Property(type = Property.Type.FOLDER, name = "Render Name Related", parent = "Misc")
+    public static boolean RenderName = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Render Self Name", parent = "Render Name Related")
+    public static boolean RenderSelfName = true;
+
     // ColorName
     @Property(type = Property.Type.FOLDER, name = "Color Name", parent = "Misc",
             description = "Replace all ranked name, like &b[MVP+] Xiaojia,\n" +
@@ -423,13 +429,17 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Show Etherwarp Point Enable", parent = "Show Etherwarp Point")
     public static boolean ShowEtherwarp = false;
 
-    @Property(type = Property.Type.SELECT, name = "Etherwarp Point Color", parent = "Show Etherwarp Point",
-            options = {"Tiffany Blue", "LCM Blue", "Storm Blue", "NINJA"})
-    public static int EtherwarpPointColor = 0;
+    @Property(type = Property.Type.TEXT, name = "Etherwarp Point Color", parent = "Show Etherwarp Point",
+            description = "Hex code of color (argb). Example: FFFF1234")
+    public static String EtherwarpPointColor = "581cd4e4";
 
-    @Property(type = Property.Type.NUMBER, name = "Etherwarp Point Color Alpha", parent = "Show Etherwarp Point",
-            min = 0, max = 255)
-    public static int EtherwarpPointColorAlpha = 0xd0;
+    @Property(type = Property.Type.TEXT, name = "Etherwarp Point Bounding Color", parent = "Show Etherwarp Point",
+            description = "Color of the bounding of the block.\n" +
+                    "Hex code of color (argb). Example: FFFF1234")
+    public static String EtherwarpPointBoundingColor = "ff1cd4e4";
+
+    @Property(type = Property.Type.NUMBER, name = "Etherwarp Point Bounding Thickness", parent = "Show Etherwarp Point")
+    public static int EtherwarpPointBoundingThickness = 0;
 
     // OneTick
     @Property(type = Property.Type.FOLDER, name = "One Tick", parent = "QOL",

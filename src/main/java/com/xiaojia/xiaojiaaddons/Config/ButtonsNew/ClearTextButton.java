@@ -13,7 +13,7 @@ public class ClearTextButton extends Button {
 
     public ClearTextButton(ConfigGuiNew gui, TextSetting setting, int x, int y) {
         super(gui, setting, x, y);
-        sx = x + setting.width - 5 - 150 - 15;
+        sx = x + setting.width - 5 - TextInput.width - 15;
         sy = y + 4;
     }
 

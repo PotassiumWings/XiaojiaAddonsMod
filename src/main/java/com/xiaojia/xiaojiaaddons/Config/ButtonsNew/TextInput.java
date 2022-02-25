@@ -12,23 +12,22 @@ public class TextInput {
     public GuiTextField textField;
     public int x;
     public int y;
-    public int width;
+    public static int width = 130;
     public int height;
     public GuiButton button;
     public ConfigGuiNew gui;
 
     public TextInput(ConfigGuiNew gui, TextSetting setting, int x, int y) {
         this.setting = setting;
-        this.x = x + setting.width - 5 - 150;
-        this.y = y + 5;
-        this.width = 150;
         this.height = 10;
+        this.x = x + setting.width - 5 - width;
+        this.y = y + 5;
         this.gui = gui;
 
         textField = new GuiTextField(
                 0, XiaojiaAddons.mc.fontRendererObj,
                 this.x, this.y,
-                this.width, this.height
+                width, this.height
         );
         textField.setEnableBackgroundDrawing(false);
         textField.setMaxStringLength(255);
@@ -59,7 +58,7 @@ public class TextInput {
 
     public void draw() {
         textField.drawTextBox();
-        Gui.drawRect(this.x, this.y + 9, this.x + this.width, this.y + 10, -1);
+        Gui.drawRect(this.x, this.y + 9, this.x + width, this.y + 10, -1);
     }
 
     public void clearText() {

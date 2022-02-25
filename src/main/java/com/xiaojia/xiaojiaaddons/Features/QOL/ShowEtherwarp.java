@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
+import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
@@ -12,6 +13,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -52,12 +54,6 @@ public class ShowEtherwarp {
 
             Blocks.rail, Blocks.activator_rail, Blocks.detector_rail, Blocks.golden_rail
     ));
-    private static final Color[] colors = new Color[]{
-            new Color(129, 216, 207, 0xd0),
-            new Color(0, 120, 215, 0xd0),
-            new Color(0x1c, 0xd4, 0xe4, 0xd0),
-            new Color(0, 0, 0, 0xd0)
-    };
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
@@ -75,12 +71,11 @@ public class ShowEtherwarp {
         if (!valid(pos)) return;
         // render
         GuiUtils.enableESP();
-        Color color = colors[Configs.EtherwarpPointColor];
-        color = new Color(color.getRed(), color.getGreen(), color.getBlue(), Configs.EtherwarpPointColorAlpha);
-        GuiUtils.drawBoxAtBlock(
-                pos, color,
-                1, 1, 0.0020000000949949026F
-        );
+        Color color = ColorUtils.getColorFromString(Configs.EtherwarpPointColor, new Color(0, 0, 0, 255));
+        Color outColor = ColorUtils.getColorFromString(Configs.EtherwarpPointBoundingColor, new Color(0, 0, 0, 255));
+        GuiUtils.drawSelectionFilledBoxAtBlock(pos, color);
+        if (Configs.EtherwarpPointBoundingThickness != 0)
+            GuiUtils.drawSelectionBoundingBoxAtBlock(pos, outColor);
         GuiUtils.disableESP();
     }
 

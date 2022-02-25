@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class ConfigGuiNew extends GuiScreen {
     // wid, height
@@ -56,7 +57,7 @@ public class ConfigGuiNew extends GuiScreen {
     // color
     private final Color descriptionColor = new Color(0xaa, 0xaa, 0xaa, 240);
     // text inputs
-    private final ArrayList<TextInput> textInputs = new ArrayList<>();
+    private final ConcurrentLinkedDeque<TextInput> textInputs = new ConcurrentLinkedDeque<>();
     // close icon
     private final int closeIconSize = 12;
     // GUI scale

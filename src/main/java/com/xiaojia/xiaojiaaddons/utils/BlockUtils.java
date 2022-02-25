@@ -6,13 +6,18 @@ import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
 import javax.vecmath.Vector3d;
 
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class BlockUtils {
@@ -143,5 +148,25 @@ public class BlockUtils {
     public static boolean isBlockTeleportPad(int x, int y, int z) {
         Block block = getBlockAt(x, y, z);
         return block != null && Block.getIdFromBlock(block) == 120;
+    }
+
+    public static AxisAlignedBB getAABBOfBlock(BlockPos blockPos) {
+        Block block = getBlockAt(blockPos);
+        if (block == null) return null;
+        return block.getSelectedBoundingBox(
+                getWorld(),
+                blockPos
+        ).offset(
+                -(mc.getRenderManager()).viewerPosX,
+                -(mc.getRenderManager()).viewerPosY,
+                -(mc.getRenderManager()).viewerPosZ
+        ).expand(0.0010000000474974513D,
+                0.0010000000474974513D,
+                0.0010000000474974513D
+        );
+    }
+
+    public static MovingObjectPosition watchingAt() {
+        return getPlayer().rayTrace(mc.playerController.getBlockReachDistance(), 0F);
     }
 }

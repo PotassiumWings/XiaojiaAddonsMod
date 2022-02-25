@@ -1,5 +1,7 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import org.lwjgl.Sys;
+
 import java.awt.Color;
 
 public class ColorUtils {
@@ -25,4 +27,20 @@ public class ColorUtils {
             new Color(0x555555),
             new Color(0x5555FF)
     };
+
+    public static Color getColorFromLong(long color) {
+        return new Color(
+                (int) ((color >> 16) & 0xFF), (int) ((color >> 8) & 0xFF),
+                (int) (color & 0xFF), (int) ((color >> 24) & 0xFF)
+        );
+    }
+
+    public static Color getColorFromString(String str, Color defaultColor) {
+        try {
+            return getColorFromLong(Long.parseLong(str, 16));
+        } catch (Exception e) {
+            System.out.println("/" + str + "/");
+            return defaultColor;
+        }
+    }
 }
