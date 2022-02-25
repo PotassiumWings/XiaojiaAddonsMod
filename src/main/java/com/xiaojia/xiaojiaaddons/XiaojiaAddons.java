@@ -45,6 +45,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestProfit;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
@@ -218,6 +219,7 @@ public class XiaojiaAddons {
         // Miscellaneous
         MinecraftForge.EVENT_BUS.register(new ChatCopy());
         MinecraftForge.EVENT_BUS.register(new ColorName());
+        MinecraftForge.EVENT_BUS.register(new RenderRank());
         MinecraftForge.EVENT_BUS.register(new KeepSprint());
         MinecraftForge.EVENT_BUS.register(new ShowLowestBin());
 

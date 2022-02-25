@@ -374,6 +374,7 @@ public class AutoBlaze {
                 Thread.sleep(Configs.TurnShootDelay);
                 while (TimeUtils.curTime() + estimate < lastBlazeHitTime + 50 && should)
                     Thread.sleep(20);
+                if (!should) break;
                 ControlUtils.leftClick();
 
                 int cnt = 0;

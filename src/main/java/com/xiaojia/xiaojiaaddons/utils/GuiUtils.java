@@ -200,8 +200,6 @@ public class GuiUtils {
     public static void drawSelectionBoundingBoxAtBlock(BlockPos pos, Color color) {
         AxisAlignedBB box = BlockUtils.getAABBOfBlock(pos);
         if (box == null) return;
-//        float mx = (float) box.minX, my = (float) box.minY, mz = (float) box.minZ;
-//        float Mx = (float) box.maxX, My = (float) box.maxY, Mz = (float) box.maxZ;
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
@@ -209,27 +207,7 @@ public class GuiUtils {
         GL11.glLineWidth(Configs.EtherwarpPointBoundingThickness);
         GlStateManager.color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, color.getAlpha() / 255F);
         RenderGlobal.drawSelectionBoundingBox(box);
-//        worldRenderer.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
-//        worldRenderer.pos(Mx, My, Mz).endVertex();
-//        worldRenderer.pos(Mx, My, mz).endVertex();
-//        worldRenderer.pos(mx, My, mz).endVertex();
-//        worldRenderer.pos(mx, My, Mz).endVertex();
-//        worldRenderer.pos(Mx, My, Mz).endVertex();
-//        worldRenderer.pos(Mx, my, Mz).endVertex();
-//        worldRenderer.pos(Mx, my, mz).endVertex();
-//        worldRenderer.pos(mx, my, mz).endVertex();
-//        worldRenderer.pos(mx, my, Mz).endVertex();
-//        worldRenderer.pos(mx, my, mz).endVertex();
-//        worldRenderer.pos(mx, My, mz).endVertex();
-//        worldRenderer.pos(mx, my, mz).endVertex();
-//        worldRenderer.pos(Mx, my, mz).endVertex();
-//        worldRenderer.pos(Mx, My, mz).endVertex();
-//        worldRenderer.pos(Mx, my, mz).endVertex();
-//        worldRenderer.pos(Mx, my, Mz).endVertex();
-//        worldRenderer.pos(mx, my, Mz).endVertex();
-//        worldRenderer.pos(mx, My, Mz).endVertex();
-//        worldRenderer.pos(Mx, My, Mz).endVertex();
-//        tessellator.draw();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glLineWidth(Configs.BoxLineThickness);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();

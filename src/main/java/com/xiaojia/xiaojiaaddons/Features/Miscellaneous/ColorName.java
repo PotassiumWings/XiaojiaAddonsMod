@@ -30,6 +30,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
@@ -48,6 +49,17 @@ public class ColorName {
 //        for (String str: rankMap.keySet()) {
 //            ChatLib.chat(str + ": " + rankMap.get(str) + " " + colorMap.get(str) + str);
 //        }
+    }
+
+    public static void showCache() {
+        HashMap<String, String> map = new HashMap<>(cachedColorName);
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            System.err.println(entry.getKey() + " -> " + entry.getValue());
+        }
+        System.err.println();
+        for (Map.Entry<String, String> entry : rankMap.entrySet()) {
+            System.err.println(entry.getKey() + ": " + entry.getValue());
+        }
     }
 
     public static IChatComponent convert(IChatComponent message) {
@@ -176,13 +188,14 @@ public class ColorName {
     public static String addColorName(String message) {
         if (message == null) return null;
         if (colorMap == null) return message;
+        String originMessage = message;
         if (cachedColorName.containsKey(message)) return cachedColorName.get(message);
 
 //        System.err.println("msg: " + message);
         for (String name : colorMap.keySet()) {
             String color = colorMap.get(name);
 
-            String reg = "(\u00a77|\u00a7.\\[(MVP|VIP)] |\u00a7.\\[(MVP|VIP)(\u00a7.)*\\++(\u00a7.)*] )" + name;
+            String reg = "(\u00a77|\u00a7.\\[(MVP|VIP)] |\u00a7.\\[(MVP|VIP)(\u00a7.)*\\++(\u00a7.)*] )(\u00a7.)*" + name;
 //            System.err.println("reg: " + reg);
 
             message = message.replaceAll(reg, "\u1105");
@@ -195,7 +208,7 @@ public class ColorName {
             message = message.replace("\u1105", dst);
         }
         String res = ChatLib.addColor(message);
-        addToCache(message, res);
+        addToCache(originMessage, res);
         return res;
     }
 

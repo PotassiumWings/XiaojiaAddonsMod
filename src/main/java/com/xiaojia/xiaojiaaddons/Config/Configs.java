@@ -93,6 +93,10 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Render Self Name", parent = "Render Name Related")
     public static boolean RenderSelfName = true;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Render Rank", parent = "Render Name Related",
+            description = "Render rank on top of heads.")
+    public static boolean RenderRank = true;
+
     // ColorName
     @Property(type = Property.Type.FOLDER, name = "Color Name", parent = "Misc",
             description = "Replace all ranked name, like &b[MVP+] Xiaojia,\n" +

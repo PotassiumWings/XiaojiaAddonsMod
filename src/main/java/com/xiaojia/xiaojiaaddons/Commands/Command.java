@@ -10,6 +10,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
@@ -127,6 +128,9 @@ public class Command extends CommandBase {
             case "blaze":
                 System.out.println(AutoBlaze.log.toString());
 //                AutoBlaze.test();
+                break;
+            case "cache":
+                ColorName.showCache();
                 break;
 //            case "clear":
 //                Fishing.clearBubbles();
