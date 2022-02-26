@@ -151,7 +151,8 @@ public class AutoPowderChest {
         if (Configs.AutoPowder) return;
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null || !inventory.getName().contains("Treasure")) return;
-        getPlayer().closeScreen();
+        if (Configs.AutoPowderChestClose)
+            getPlayer().closeScreen();
         if (closestChest != null) solved.add(closestChest);
     }
 }

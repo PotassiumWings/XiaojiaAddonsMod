@@ -105,7 +105,8 @@ public class ControlUtils {
             return;
         }
         System.err.println("changed dir! " + yaw + ", " + pitch);
-        getPlayer().closeScreen();
+        if (Configs.CloseInvWhenChangingDirection)
+            getPlayer().closeScreen();
         getPlayer().rotationYaw += MathHelper.wrapAngleTo180_float(yaw - getPlayer().rotationYaw);
         getPlayer().rotationPitch += MathHelper.wrapAngleTo180_float(pitch - getPlayer().rotationPitch);
     }

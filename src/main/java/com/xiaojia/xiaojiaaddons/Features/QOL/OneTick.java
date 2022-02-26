@@ -8,7 +8,9 @@ import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 public class OneTick {
@@ -17,13 +19,14 @@ public class OneTick {
     private boolean should = false;
 
     @SubscribeEvent
-    public void onTick(TickEndEvent event) {
+    public void onTick(TickEvent event) {
         if (!Checker.enabled) return;
         if (keyBind.isPressed()) {
             should = !should;
             ChatLib.chat(should ? "Left Click One Tick &aactivated" : "Left Click One Tick &cdeactivated");
         }
-        if (useKeyBind.isPressed()) {
+        // 40 cps
+        if (useKeyBind.isKeyDown()) {
             oneTick();
         }
     }

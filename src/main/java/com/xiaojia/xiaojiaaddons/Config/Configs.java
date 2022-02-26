@@ -68,6 +68,9 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "General XJA Setting", parent = "Misc")
     public static boolean GeneralSetting = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Close Gui When Changing Direction", parent = "General XJA Setting")
+    public static boolean  CloseInvWhenChangingDirection = true;
+
     @Property(type = Property.Type.BOOLEAN, name = "Show XJA Message", parent = "General XJA Setting",
             description = "Show the messages starting with \"XJA >\".")
     public static boolean ShowXJAMessage = true;
@@ -1105,6 +1108,11 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Crystal Hollows Chest", parent = "Powder Relevant", illegal = true,
             description = "Automatically opens powder chests. Toggleable through keybindings.")
     public static boolean AutoPowderChest = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Crystal Hollows Chest - Close", parent = "Powder Relevant",
+            description = "Automatically closes powder chests opened by " +
+                    "Auto Crystal Hollows Chest.")
+    public static boolean AutoPowderChestClose = true;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Close Loot Chests in Crystal Hollows", parent = "Powder Relevant")
     public static boolean AutoCloseCrystalHollowsChest = false;
