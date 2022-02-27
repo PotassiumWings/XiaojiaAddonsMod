@@ -59,6 +59,7 @@ public class DupedItems {
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
+        if (!Configs.ShowDupedItems) return;
         if (TimeUtils.curTime() - lastFetch > 1000 * 60 * 10) {
             lastFetch = TimeUtils.curTime();
             new Thread(() -> {
