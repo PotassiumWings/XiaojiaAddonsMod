@@ -452,7 +452,7 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "One Tick", parent = "QOL",
             description = "Swap to something, right click it, and swap back.\n" +
                     "One swap is in 1 tick.\n" +
-                    "Can be triggered by left click or keybinding press.\n" +
+                    "Can be triggered by left click or keybinding press (40 cps).\n" +
                     "&6Both requires keybinding to work!!!\n" +
                     "&cLeft click ability of current item can't be done normally.\n" +
                     "Auto disabled when holding Gyrokinetic Wand or Gloomlock Grimoire.\n" +
@@ -464,8 +464,12 @@ public class Configs {
     public static boolean AotsWithAnything = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Soul Whip With Anything", parent = "One Tick",
-            description = "One Tick with item which has a display name contains'Soul Whip'.")
+            description = "One Tick with item which has a display name contains 'Soul Whip'.")
     public static boolean SoulWhipWithAnything = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Terminator With Anything", parent = "One Tick",
+            description = "One Tick with item which has a display name contains 'Terminator'.")
+    public static boolean TerminatorWithAnything = false;
 
     // AutoUseItem
     @Property(type = Property.Type.FOLDER, name = "Auto Use Item", parent = "QOL",

@@ -836,20 +836,23 @@ public class Dungeon {
         int completedR = bloodDone ? completedRooms : completedRooms + 1;
         completedR += (bossEntry > runStarted) ? 0 : 1;
 
-        skillScore = MathUtils.floor(100 - (14 * puzzleCount) + (14 * puzzleDone) - deathPenalty);
-        skillScore = Math.max(skillScore, 20);
+        skillScore = MathUtils.floor(100
+                - (10 * (puzzleCount - puzzleDone))
+                - deathPenalty
+                - 80F * (totalRooms - completedR) / totalRooms
+        );
+        skillScore = Double.isNaN(skillScore) ? 20 : Math.max(skillScore, 20);
 
         exploreScore = MathUtils.floor((60F * (Math.min(completedR, totalRooms))) / totalRooms) +
                 MathUtils.floor(((40F * (secretsFound - overflowSecrets)) / secretsForMax));
         exploreScore = totalRooms == 0 || totalSecrets == 0 ? 0 : exploreScore;
 
-        // Not worth calculating. If you can't get 100 speed score then you shouldn't be playing Dungeons.
         int speedScore = 100;
 
         bonusScore = (Math.min(crypts, 5)) + (isMimicDead ? 2 : 0) + (Configs.AssumePaul ? 10 : 0);
         score = skillScore + exploreScore + speedScore + bonusScore;
-        score = floorInt < 3 || trapDone ? score : score - 5;
-        score = yellowDone ? score : score - 5;
+//        score = floorInt < 3 || trapDone ? score : score - 5;
+//        score = yellowDone ? score : score - 5;
 
         if (XiaojiaAddons.isDebug()) {
             ChatLib.chat("completedR: " + completedR);

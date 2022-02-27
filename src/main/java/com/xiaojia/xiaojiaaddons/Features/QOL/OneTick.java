@@ -45,6 +45,7 @@ public class OneTick {
         int cur = ControlUtils.getHeldItemIndex();
         int whipSlot = HotbarUtils.soulwhipSlot;
         int aotsSlot = HotbarUtils.aotsSlot;
+        int termSlot = HotbarUtils.terminatorSlot;
         if (Configs.SoulWhipWithAnything && whipSlot != -1) {
             ControlUtils.setHeldItemIndex(whipSlot);
             ControlUtils.rightClick();
@@ -56,6 +57,12 @@ public class OneTick {
             ControlUtils.rightClick();
             ControlUtils.setHeldItemIndex(cur);
             ChatLib.debug("using aots, index at " + aotsSlot);
+        }
+        if (Configs.TerminatorWithAnything && termSlot != -1) {
+            ControlUtils.setHeldItemIndex(termSlot);
+            ControlUtils.rightClick();
+            ControlUtils.setHeldItemIndex(cur);
+            ChatLib.debug("using term, index at " + termSlot);
         }
     }
 }
