@@ -1,7 +1,5 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
-import org.lwjgl.Sys;
-
 import java.awt.Color;
 
 public class ColorUtils {
@@ -30,8 +28,8 @@ public class ColorUtils {
 
     public static Color getColorFromLong(long color) {
         return new Color(
-                (int) ((color >> 16) & 0xFF), (int) ((color >> 8) & 0xFF),
-                (int) (color & 0xFF), (int) ((color >> 24) & 0xFF)
+                ((int) ((color >> 16) & 0xFF)) / 255.0F, ((int) ((color >> 8) & 0xFF)) / 255.0F,
+                ((int) (color & 0xFF)) / 255.0F, (int) (((color >> 24) & 0xFF)) / 255.0F
         );
     }
 

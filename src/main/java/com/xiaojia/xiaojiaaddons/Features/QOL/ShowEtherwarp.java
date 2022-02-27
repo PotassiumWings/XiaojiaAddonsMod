@@ -13,7 +13,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -86,11 +85,15 @@ public class ShowEtherwarp {
                     for (int z = -r; z <= r; z++) {
                         BlockPos blockPos = pos.add(x, y, z);
                         if (blockPos == null) continue;
-                        ArrayList<Vec3> faces = BlockUtils.getSurfaceMid(eye, blockPos);
-                        if (valid(blockPos) && faces.stream().anyMatch(e -> BlockUtils.getNearestBlock(eye, e) == null)) {
+                        ArrayList<BlockUtils.Face> faces = BlockUtils.getSurfaceMid(eye, blockPos);
+                        if (valid(blockPos)) {
                             GuiUtils.enableESP();
-                            Color color = ColorUtils.getColorFromString(Configs.PossibleEtherwarpPointColor, new Color(0, 0, 0, 255));
-                            GuiUtils.drawSelectionFilledBoxAtBlock(blockPos, color);
+                            faces.forEach(e -> {
+                                if (BlockUtils.getNearestBlock(eye, e.mid) == null) {
+                                    Color color = ColorUtils.getColorFromString(Configs.PossibleEtherwarpPointColor, new Color(0, 0, 0, 255));
+                                    GuiUtils.drawFilledFace(e, color);
+                                }
+                            });
                             GuiUtils.disableESP();
                         }
                     }

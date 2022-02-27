@@ -170,23 +170,46 @@ public class BlockUtils {
         return getPlayer().rayTrace(mc.playerController.getBlockReachDistance(), 0F);
     }
 
-    public static ArrayList<Vec3> getSurfaceMid(Vec3 from, BlockPos pos) {
-        ArrayList<Vec3> res = new ArrayList<>();
+    public static ArrayList<Face> getSurfaceMid(Vec3 from, BlockPos pos) {
+        ArrayList<Face> res = new ArrayList<>();
+        int px = pos.getX(), py = pos.getY(), pz = pos.getZ();
+        double eps = 1e-6;
         // y
-        if (from.yCoord < pos.getY())
-            res.add(new Vec3(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F));
-        if (from.yCoord > pos.getY() + 1)
-            res.add(new Vec3(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F));
+        if (from.yCoord < py)
+            res.add(new Face(px, py + eps, pz, px + 1, py + eps, pz + 1));
+        if (from.yCoord > py + 1)
+            res.add(new Face(px, py + 1 - eps, pz, px + 1, py + 1 - eps, pz + 1));
         // x
-        if (from.xCoord < pos.getX())
-            res.add(new Vec3(pos.getX(), pos.getY() + 0.5F, pos.getZ() + 0.5F));
-        if (from.xCoord > pos.getX() + 1)
-            res.add(new Vec3(pos.getX() + 1F, pos.getY() + 0.5F, pos.getZ() + 0.5F));
+        if (from.xCoord < px)
+            res.add(new Face(px + eps, py, pz, px + eps, py + 1, pz + 1));
+        if (from.xCoord > px + 1)
+            res.add(new Face(px + 1 - eps, py, pz, px + 1 - eps, py + 1, pz + 1));
         // z
-        if (from.zCoord < pos.getZ())
-            res.add(new Vec3(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ()));
-        if (from.zCoord > pos.getZ() + 1)
-            res.add(new Vec3(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 1F));
+        if (from.zCoord < pz)
+            res.add(new Face(px, py, pz + eps, px + 1, py + 1, pz + eps));
+        if (from.zCoord > pz + 1)
+            res.add(new Face(px, py, pz + 1 - eps, px + 1, py + 1, pz + 1 - eps));
         return res;
+    }
+
+    public static class Face {
+        public Vec3 mid;
+        public Vec3 v1, v2, v3, v4;
+        double sx, sy, sz;
+        double tx, ty, tz;
+
+        public Face(double sx, double sy, double sz, double tx, double ty, double tz) {
+            this.sx = sx;
+            this.sy = sy;
+            this.sz = sz;
+            this.tx = tx;
+            this.ty = ty;
+            this.tz = tz;
+            this.mid = new Vec3((sx + tx) / 2, (sy + ty) / 2, (sz + tz) / 2);
+        }
+
+        public String toString() {
+            return mid.toString();
+        }
     }
 }

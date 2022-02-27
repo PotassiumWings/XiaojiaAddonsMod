@@ -8,11 +8,11 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 
 public class TextInput {
+    public static int width = 130;
     public TextSetting setting;
     public GuiTextField textField;
     public int x;
     public int y;
-    public static int width = 130;
     public int height;
     public GuiButton button;
     public ConfigGuiNew gui;

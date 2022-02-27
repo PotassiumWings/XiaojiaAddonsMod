@@ -69,7 +69,7 @@ public class Configs {
     public static boolean GeneralSetting = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Close Gui When Changing Direction", parent = "General XJA Setting")
-    public static boolean  CloseInvWhenChangingDirection = true;
+    public static boolean CloseInvWhenChangingDirection = true;
 
     @Property(type = Property.Type.BOOLEAN, name = "Show XJA Message", parent = "General XJA Setting",
             description = "Show the messages starting with \"XJA >\".")
@@ -442,23 +442,24 @@ public class Configs {
 
     @Property(type = Property.Type.NUMBER, name = "Nearby Etherwarp Point Radius", parent = "Show Etherwarp Point",
             description = "Show nearby possible etherwarp points.", min = 0, max = 5)
-    public static int NearbyEtherwarpRadius = 3;
+    public static int NearbyEtherwarpRadius = 2;
 
     @Property(type = Property.Type.TEXT, name = "Etherwarp Point Color", parent = "Show Etherwarp Point",
             description = "Hex code of color (argb). Example: FFFF1234")
-    public static String EtherwarpPointColor = "581cd4e4";
+    public static String EtherwarpPointColor = "381cd4e4";
 
     @Property(type = Property.Type.TEXT, name = "Possible Etherwarp Points Color", parent = "Show Etherwarp Point",
             description = "Hex code of color (argb). Example: FFFF1234")
-    public static String PossibleEtherwarpPointColor = "5800ff00";
+    public static String PossibleEtherwarpPointColor = "3a22ff22";
 
     @Property(type = Property.Type.TEXT, name = "Etherwarp Point Bounding Color", parent = "Show Etherwarp Point",
             description = "Color of the bounding of the block.\n" +
                     "Hex code of color (argb). Example: FFFF1234")
     public static String EtherwarpPointBoundingColor = "ff1cd4e4";
 
-    @Property(type = Property.Type.NUMBER, name = "Etherwarp Point Bounding Thickness", parent = "Show Etherwarp Point")
-    public static int EtherwarpPointBoundingThickness = 0;
+    @Property(type = Property.Type.NUMBER, name = "Etherwarp Point Bounding Thickness", parent = "Show Etherwarp Point",
+            max = 10)
+    public static int EtherwarpPointBoundingThickness = 3;
 
     // OneTick
     @Property(type = Property.Type.FOLDER, name = "One Tick", parent = "QOL",

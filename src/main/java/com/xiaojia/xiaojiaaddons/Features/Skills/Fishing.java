@@ -7,27 +7,20 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
-import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
-
-import javax.vecmath.Vector3d;
-import javax.vecmath.Vector3f;
-
-import java.awt.Color;
-import java.util.ArrayList;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.floor;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class Fishing {
+    private static long startTime = 0;
     private final KeyBind autoMoveKeyBind = new KeyBind("Auto Move", Keyboard.KEY_NONE);
     private long lastReeledIn = 0;
     private long lastBobberEnterLiquid = 0;
@@ -36,7 +29,14 @@ public class Fishing {
     private boolean shouldMove = false;
     private long lastMove = 0;
 
-    private static long startTime = 0;
+    public static String timer() {
+        if (startTime == 0) return "";
+        int ms = (int) (TimeUtils.curTime() - startTime);
+        int sec = ms / 1000;
+        int min = sec / 60;
+        int remSec = sec % 60;
+        return String.format("%02d:%02d", min, remSec);
+    }
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -71,17 +71,6 @@ public class Fishing {
         }
     }
 
-    private void reelIn() {
-        try {
-            Thread.sleep(Configs.AutoPullRodCD);
-            ControlUtils.rightClick();
-            Thread.sleep(200);
-            ControlUtils.rightClick();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 //    private static final ArrayList<Vector3d> bubbles = new ArrayList<>();
 //
 //    @SubscribeEvent
@@ -94,6 +83,21 @@ public class Fishing {
 //                );
 //            }
 //        }
+//    }
+
+    private void reelIn() {
+        try {
+            Thread.sleep(Configs.AutoPullRodCD);
+            ControlUtils.rightClick();
+            Thread.sleep(200);
+            ControlUtils.rightClick();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public static void clearBubbles() {
+//        bubbles.clear();
 //    }
 
     @SubscribeEvent
@@ -122,19 +126,6 @@ public class Fishing {
 //                packet.getXOffset(), packet.getYOffset(), packet.getZOffset(),
 //                packet.getParticleCount(), packet.getParticleSpeed()
 //        ));
-    }
-
-//    public static void clearBubbles() {
-//        bubbles.clear();
-//    }
-
-    public static String timer() {
-        if (startTime == 0) return "";
-        int ms = (int) (TimeUtils.curTime() - startTime);
-        int sec = ms / 1000;
-        int min = sec / 60;
-        int remSec = sec % 60;
-        return String.format("%02d:%02d", min, remSec);
     }
 
     @SubscribeEvent

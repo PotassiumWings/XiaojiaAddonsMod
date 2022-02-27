@@ -263,6 +263,14 @@ public class GuiUtils {
         drawFilledBoundingBoxRelative(sx, sy, sz, tx, ty, tz, r, g, b, a);
     }
 
+    public static void drawFilledFace(BlockUtils.Face face, Color color) {
+        drawFilledBoundingBoxAbsolute(
+                (float) face.sx, (float) face.sy, (float) face.sz,
+                (float) face.tx, (float) face.ty, (float) face.tz,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()
+        );
+    }
+
     private static void drawFilledBoundingBoxRelative(float sx, float sy, float sz, float tx, float ty, float tz, int r, int g, int b, int a) {
         GL11.glPushMatrix();
         GlStateManager.enableBlend();

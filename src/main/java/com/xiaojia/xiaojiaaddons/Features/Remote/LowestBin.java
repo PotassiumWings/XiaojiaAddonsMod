@@ -3,12 +3,10 @@ package com.xiaojia.xiaojiaaddons.Features.Remote;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Pair;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.item.ItemStack;
@@ -21,36 +19,12 @@ import java.util.Map;
 
 public class LowestBin {
     private static final String url = "https://whoknew.sbe-stole-skytils.design/api/auctions/lowestbins";
+    private static final HashMap<String, Double> prices = new HashMap<>();
     private static long lastCheckedTime = 0;
     private static long lastSuccessTime = 0;
-    private static final HashMap<String, Double> prices = new HashMap<>();
 
     public static int getLastUpdate() {
         return (int) ((TimeUtils.curTime() - lastSuccessTime) / 1000);
-    }
-
-    @SubscribeEvent
-    public void onTick(TickEndEvent event) {
-        if (!Checker.enabled) return;
-        long cur = TimeUtils.curTime();
-        if (cur - lastCheckedTime >= 60000) {
-            lastCheckedTime = cur;
-            new Thread(() -> {
-                try {
-                    if (Configs.FetchLowestBin) {
-                        String lbData = RemoteUtils.get(url, new ArrayList<>(), false);
-                        Type type = (new TypeToken<HashMap<String, String>>() {}).getType();
-                        HashMap<String, String> settingsFromConfig = (new Gson()).fromJson(lbData, type);
-                        for (Map.Entry<String, String> fromConfig : settingsFromConfig.entrySet()) {
-                            prices.put(fromConfig.getKey(), Double.valueOf(fromConfig.getValue()));
-                        }
-                        lastSuccessTime = TimeUtils.curTime();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }
     }
 
     public static double getItemValue(ItemStack itemStack) throws Exception {
@@ -87,5 +61,30 @@ public class LowestBin {
             return prices.get(res);
         }
         throw new Exception();
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        long cur = TimeUtils.curTime();
+        if (cur - lastCheckedTime >= 60000) {
+            lastCheckedTime = cur;
+            new Thread(() -> {
+                try {
+                    if (Configs.FetchLowestBin) {
+                        String lbData = RemoteUtils.get(url, new ArrayList<>(), false);
+                        Type type = (new TypeToken<HashMap<String, String>>() {
+                        }).getType();
+                        HashMap<String, String> settingsFromConfig = (new Gson()).fromJson(lbData, type);
+                        for (Map.Entry<String, String> fromConfig : settingsFromConfig.entrySet()) {
+                            prices.put(fromConfig.getKey(), Double.valueOf(fromConfig.getValue()));
+                        }
+                        lastSuccessTime = TimeUtils.curTime();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
     }
 }
