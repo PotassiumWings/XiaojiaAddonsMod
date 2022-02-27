@@ -6,7 +6,6 @@ import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.AxisAlignedBB;
@@ -15,6 +14,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
 import javax.vecmath.Vector3d;
+import java.util.ArrayList;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
@@ -168,5 +168,25 @@ public class BlockUtils {
 
     public static MovingObjectPosition watchingAt() {
         return getPlayer().rayTrace(mc.playerController.getBlockReachDistance(), 0F);
+    }
+
+    public static ArrayList<Vec3> getSurfaceMid(Vec3 from, BlockPos pos) {
+        ArrayList<Vec3> res = new ArrayList<>();
+        // y
+        if (from.yCoord < pos.getY())
+            res.add(new Vec3(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F));
+        if (from.yCoord > pos.getY() + 1)
+            res.add(new Vec3(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F));
+        // x
+        if (from.xCoord < pos.getX())
+            res.add(new Vec3(pos.getX(), pos.getY() + 0.5F, pos.getZ() + 0.5F));
+        if (from.xCoord > pos.getX() + 1)
+            res.add(new Vec3(pos.getX() + 1F, pos.getY() + 0.5F, pos.getZ() + 0.5F));
+        // z
+        if (from.zCoord < pos.getZ())
+            res.add(new Vec3(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ()));
+        if (from.zCoord > pos.getZ() + 1)
+            res.add(new Vec3(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 1F));
+        return res;
     }
 }

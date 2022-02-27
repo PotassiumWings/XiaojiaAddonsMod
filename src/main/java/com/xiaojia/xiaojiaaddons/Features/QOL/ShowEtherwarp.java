@@ -18,6 +18,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -68,15 +69,34 @@ public class ShowEtherwarp {
         Vec3 look = player.getLook(event.partialTicks);
         Vec3 farthest = eye.addVector(look.xCoord * dist, look.yCoord * dist, look.zCoord * dist);
         BlockPos pos = BlockUtils.getNearestBlock(eye, farthest);
-        if (!valid(pos)) return;
-        // render
-        GuiUtils.enableESP();
-        Color color = ColorUtils.getColorFromString(Configs.EtherwarpPointColor, new Color(0, 0, 0, 255));
-        Color outColor = ColorUtils.getColorFromString(Configs.EtherwarpPointBoundingColor, new Color(0, 0, 0, 255));
-        GuiUtils.drawSelectionFilledBoxAtBlock(pos, color);
-        if (Configs.EtherwarpPointBoundingThickness != 0)
-            GuiUtils.drawSelectionBoundingBoxAtBlock(pos, outColor);
-        GuiUtils.disableESP();
+        if (valid(pos)) {
+            // render
+            GuiUtils.enableESP();
+            Color color = ColorUtils.getColorFromString(Configs.EtherwarpPointColor, new Color(0, 0, 0, 255));
+            Color outColor = ColorUtils.getColorFromString(Configs.EtherwarpPointBoundingColor, new Color(0, 0, 0, 255));
+            GuiUtils.drawSelectionFilledBoxAtBlock(pos, color);
+            if (Configs.EtherwarpPointBoundingThickness != 0)
+                GuiUtils.drawSelectionBoundingBoxAtBlock(pos, outColor);
+            GuiUtils.disableESP();
+        }
+        if (pos != null && Configs.ShowNearbyEtherwarp) {
+            int r = Configs.NearbyEtherwarpRadius;
+            for (int x = -r; x <= r; x++) {
+                for (int y = -r; y <= r; y++) {
+                    for (int z = -r; z <= r; z++) {
+                        BlockPos blockPos = pos.add(x, y, z);
+                        if (blockPos == null) continue;
+                        ArrayList<Vec3> faces = BlockUtils.getSurfaceMid(eye, blockPos);
+                        if (valid(blockPos) && faces.stream().anyMatch(e -> BlockUtils.getNearestBlock(eye, e) == null)) {
+                            GuiUtils.enableESP();
+                            Color color = ColorUtils.getColorFromString(Configs.PossibleEtherwarpPointColor, new Color(0, 0, 0, 255));
+                            GuiUtils.drawSelectionFilledBoxAtBlock(blockPos, color);
+                            GuiUtils.disableESP();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // TODO no optimize currently

@@ -436,9 +436,21 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Show Etherwarp Point Enable", parent = "Show Etherwarp Point")
     public static boolean ShowEtherwarp = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Show Nearby Etherwarp Point", parent = "Show Etherwarp Point",
+            description = "Show nearby possible etherwarp points.")
+    public static boolean ShowNearbyEtherwarp = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Nearby Etherwarp Point Radius", parent = "Show Etherwarp Point",
+            description = "Show nearby possible etherwarp points.", min = 0, max = 5)
+    public static int NearbyEtherwarpRadius = 3;
+
     @Property(type = Property.Type.TEXT, name = "Etherwarp Point Color", parent = "Show Etherwarp Point",
             description = "Hex code of color (argb). Example: FFFF1234")
     public static String EtherwarpPointColor = "581cd4e4";
+
+    @Property(type = Property.Type.TEXT, name = "Possible Etherwarp Points Color", parent = "Show Etherwarp Point",
+            description = "Hex code of color (argb). Example: FFFF1234")
+    public static String PossibleEtherwarpPointColor = "5800ff00";
 
     @Property(type = Property.Type.TEXT, name = "Etherwarp Point Bounding Color", parent = "Show Etherwarp Point",
             description = "Color of the bounding of the block.\n" +
