@@ -17,7 +17,7 @@ public class OneTick {
     private boolean should = false;
 
     @SubscribeEvent
-    public void onTick(TickEvent event) {
+    public void onTick(TickEvent.ClientTickEvent event) {
         if (!Checker.enabled) return;
         if (keyBind.isPressed()) {
             should = !should;

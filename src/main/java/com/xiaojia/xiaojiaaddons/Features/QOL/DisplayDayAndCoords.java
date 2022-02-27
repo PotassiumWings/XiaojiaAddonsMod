@@ -54,7 +54,7 @@ public class DisplayDayAndCoords {
             line.setScale(Configs.DisplayScale / 20F);
             display.addLine(line);
         }
-        if (Configs.FindFairyGrottoMap) {
+        if (Configs.FindFairyGrottoMap && SkyblockUtils.isInCrystalHollows()) {
             DisplayLine line3 = new DisplayLine("Jasper: " + FindFairy.getBlock());
             line3.setScale(Configs.DisplayScale / 20F);
             display.addLine(line3);
