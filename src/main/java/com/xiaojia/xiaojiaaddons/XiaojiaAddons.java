@@ -45,6 +45,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestProfit;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.NoRotate;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
@@ -119,7 +120,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.2.3";
+    public static final String VERSION = "2.4.2.4";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -219,6 +220,7 @@ public class XiaojiaAddons {
         // Miscellaneous
         MinecraftForge.EVENT_BUS.register(new ChatCopy());
         MinecraftForge.EVENT_BUS.register(new ColorName());
+        MinecraftForge.EVENT_BUS.register(new NoRotate());
         MinecraftForge.EVENT_BUS.register(new RenderRank());
         MinecraftForge.EVENT_BUS.register(new KeepSprint());
         MinecraftForge.EVENT_BUS.register(new ShowLowestBin());

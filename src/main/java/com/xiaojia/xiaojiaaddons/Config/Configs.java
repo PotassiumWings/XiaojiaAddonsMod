@@ -5,6 +5,13 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;
 
+    @Property(type = Property.Type.FOLDER, name = "Dangerous Features", parent = "Misc",
+            description = "DO NOT USE THESE FEATURES.")
+    public static boolean DangerousFeatures = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "nO RotAtE", parent = "Dangerous Features")
+    public static boolean NoRotate = false;
+
     @Property(type = Property.Type.FOLDER, name = "Dupe Display", parent = "Misc")
     public static boolean DupeDisplay = false;
 

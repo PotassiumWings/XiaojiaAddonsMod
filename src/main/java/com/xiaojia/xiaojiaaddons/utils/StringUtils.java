@@ -20,7 +20,7 @@ public class StringUtils {
         try {
             return Integer.parseInt(s);
         } catch (NumberFormatException e) {
-            return romanToInteger.get(s);
+            return romanToInteger.getOrDefault(s, 0);
         }
     }
 }

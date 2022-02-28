@@ -14,6 +14,7 @@ import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.PacketUtils;
 import com.xiaojia.xiaojiaaddons.utils.ShortbowUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
@@ -674,14 +675,7 @@ public class AutoBlaze {
         if (event.packet instanceof S08PacketPlayerPosLook) {
             S08PacketPlayerPosLook packet = (S08PacketPlayerPosLook) event.packet;
             tpPacketReceived = true;
-            log.append(String.format("received packet! %.2f, %.2f; %.2f, %.2f, %.2f: ",
-                    packet.getYaw(), packet.getPitch(), packet.getX(), packet.getY(), packet.getZ()));
-            if (packet.func_179834_f().contains(S08PacketPlayerPosLook.EnumFlags.X)) log.append("X");
-            if (packet.func_179834_f().contains(S08PacketPlayerPosLook.EnumFlags.Y)) log.append("Y");
-            if (packet.func_179834_f().contains(S08PacketPlayerPosLook.EnumFlags.Z)) log.append("Z");
-            if (packet.func_179834_f().contains(S08PacketPlayerPosLook.EnumFlags.X_ROT)) log.append(" XR");
-            if (packet.func_179834_f().contains(S08PacketPlayerPosLook.EnumFlags.Y_ROT)) log.append(" YR");
-            log.append("\n");
+            log.append(PacketUtils.getPosLookPacket(packet));
         }
     }
 

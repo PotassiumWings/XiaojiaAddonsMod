@@ -94,6 +94,7 @@ public class AutoCombine extends StepEvent {
                 if (!itemName.equals("enchanted book")) continue;
                 // Feather Falling VI
                 ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(item);
+                if (nameAndLevel.size() != 2) continue;
                 // "Feather Falling"
                 String bookName = nameAndLevel.get(0);
                 String levelString = nameAndLevel.get(1);

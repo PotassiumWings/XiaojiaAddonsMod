@@ -91,9 +91,8 @@ public class NBTUtils {
             res.add(levelString);
             return res;
         } catch (Exception e) {
-            e.printStackTrace();
+            return res;
         }
-        return res;
     }
 
     public static boolean isBookUltimate(ItemStack itemStack) {

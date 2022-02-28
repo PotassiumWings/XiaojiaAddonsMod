@@ -42,6 +42,7 @@ public class ShowBookName {
         } else {
             try {
                 ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
+                if (nameAndLevel.size() != 2) return;
                 boolean isUltimate = NBTUtils.isBookUltimate(itemStack);
 
                 String colorPrefix = (isUltimate ? "\u00a7d\u00a7l" : "");

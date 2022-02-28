@@ -115,6 +115,8 @@ public class InCombatQOL {
         // books
         if (name.startsWith("enchanted book")) {
             ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
+            // WARN: return from this!
+            if (nameAndLevel.size() != 2) return false;
             // "Feather Falling"
             String bookName = nameAndLevel.get(0);
             // "6"

@@ -609,7 +609,7 @@ public class Dungeon {
         }
         try {
             ArrayList<String> tab = TabUtils.getNames();
-            if (!isInDungeon || tab.isEmpty() || !tab.get(0).contains("Party (")) return;
+            if (!isInDungeon || tab.size() < 52 || !tab.get(0).contains("Party (")) return;
             puzzles = new ArrayList<>(
                     Arrays.asList(Arrays.stream(new int[]{48, 49, 50, 51, 52})
                             .mapToObj(tab::get).filter(line -> !line.equals(""))
