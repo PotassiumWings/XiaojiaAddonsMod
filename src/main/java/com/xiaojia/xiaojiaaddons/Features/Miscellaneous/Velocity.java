@@ -21,7 +21,7 @@ public class Velocity {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             ItemStack item = ControlUtils.getHeldItemStack();
             String sbId = NBTUtils.getSkyBlockID(item);
-            if (sbId.equals("BONZO_STAFF") || sbId.equals("JERRY_STAFF")) {
+            if (sbId.equals("BONZO_STAFF") || sbId.equals("JERRY_STAFF") || sbId.equals("STARRED_BONZO_STAFF")) {
                 lastShot = TimeUtils.curTime();
             }
         }

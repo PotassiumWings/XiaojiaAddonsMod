@@ -18,7 +18,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 @Mixin(NetHandlerPlayClient.class)
-public class MixinNetHandlerPlayClient {
+public abstract class MixinNetHandlerPlayClient {
     @Inject(method = "handleEntityVelocity", cancellable = true,
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setVelocity(DDD)V"))
     public void handleEntityVelocity(S12PacketEntityVelocity packet, CallbackInfo ci) {
@@ -30,7 +30,7 @@ public class MixinNetHandlerPlayClient {
         ci.cancel();
     }
 
-    @Inject(method = "handleExplosion", cancellable = true, remap = false,
+    @Inject(method = "func_147283_a", cancellable = true, remap = false,
             at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/Explosion;doExplosionB(B)V"))
     public void handleExplosion(S27PacketExplosion packet, CallbackInfo ci) {
         EntityPlayer player = getPlayer();

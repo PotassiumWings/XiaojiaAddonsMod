@@ -18,10 +18,10 @@ public class Configs {
                     "within 1s, this feature will be automatically disabled.")
     public static boolean Velocity = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Velocity XZ Scale", parent = "Dangerous Features", min = 0, max = 100, suffix = "%")
+    @Property(type = Property.Type.NUMBER, name = "Velocity XZ Scale", parent = "Velocity", min = 0, max = 100, suffix = "%")
     public static int VelocityXZ = 100;
 
-    @Property(type = Property.Type.NUMBER, name = "Velocity Y Scale", parent = "Dangerous Features", min = 0, max = 100, suffix = "%")
+    @Property(type = Property.Type.NUMBER, name = "Velocity Y Scale", parent = "Velocity", min = 0, max = 100, suffix = "%")
     public static int VelocityY = 100;
 
     @Property(type = Property.Type.FOLDER, name = "Dupe Display", parent = "Misc")
