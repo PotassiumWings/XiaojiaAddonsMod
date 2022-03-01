@@ -1,19 +1,35 @@
 package com.xiaojia.xiaojiaaddons.Features.Miscellaneous;
 
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.input.Keyboard;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class Velocity {
     private static long lastShot = 0;
+    private final KeyBind keyBind = new KeyBind("Velocity", Keyboard.KEY_NONE);
+    private static boolean enabled = true;
+
+    @SubscribeEvent
+    public void onTick(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (keyBind.isPressed()) {
+            enabled = !enabled;
+            ChatLib.chat(enabled ? "Velocity &aactivated" : "Velocity &cdeactivated");
+        }
+    }
 
     public static boolean canDisableKnockBack() {
-        return TimeUtils.curTime() - lastShot > 1000 && !getPlayer().isInLava();
+        return TimeUtils.curTime() - lastShot > 1000 && !getPlayer().isInLava() && enabled;
     }
 
     @SubscribeEvent

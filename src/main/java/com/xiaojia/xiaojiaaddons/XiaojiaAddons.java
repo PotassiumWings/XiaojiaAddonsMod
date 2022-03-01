@@ -21,6 +21,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoLeap;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoSalvage;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoTerminal;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoTerminalNew;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BatESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.CoordsGB;
@@ -198,6 +199,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoLeap());
         MinecraftForge.EVENT_BUS.register(new AutoSalvage());
         MinecraftForge.EVENT_BUS.register(new AutoTerminal());
+        MinecraftForge.EVENT_BUS.register(new AutoTerminalNew());
         MinecraftForge.EVENT_BUS.register(new BatESP());
         MinecraftForge.EVENT_BUS.register(new BloodAssist());
         MinecraftForge.EVENT_BUS.register(new CoordsGB());

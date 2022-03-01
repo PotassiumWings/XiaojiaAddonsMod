@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
+import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -29,6 +31,9 @@ enum EnumTerminal {
 }
 
 public class AutoTerminal {
+    private final KeyBind keyBind = new KeyBind("Auto Terminal", Keyboard.KEY_NONE);
+    private boolean enabled = false;
+
     private final Deque<Integer> clickQueue = new ArrayDeque<>();
     private EnumTerminal enumTerminal = EnumTerminal.NONE;
     private boolean recalculate = false;
@@ -42,6 +47,11 @@ public class AutoTerminal {
     @SubscribeEvent
     public void onTickCheck(TickEndEvent event) {
         Inventory inventory = ControlUtils.getOpenedInventory();
+        if (keyBind.isPressed()) {
+            enabled = !enabled;
+            ChatLib.chat(enabled ? "Auto Terminal &aactivated" : "Auto Terminal &cdeactivated");
+        }
+        if (!enabled) return;
         if (inventory != null && inventory.getName().equals("container")) {
             if (XiaojiaAddons.isDebug() && !clickQueue.isEmpty()) ChatLib.chat("clearing");
             clickQueue.clear();
