@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +25,7 @@ import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 enum EnumTerminal {
-    NONE, ORDER, MAZE, CORRECT, START, COLOR
+    NONE, ORDER, MAZE, CORRECT, START, COLOR, COLORPAD, BUTTONS
 }
 
 public class AutoTerminal {
@@ -74,7 +75,9 @@ public class AutoTerminal {
             Pattern pattern = Pattern.compile("Select all the (.*) items!");
             Matcher matcher = pattern.matcher(invName);
             if (matcher.find()) color = matcher.group(1).toUpperCase();
-        }
+        } else if (invName.startsWith("Change all to same color!")) enumTerminal = EnumTerminal.COLORPAD;
+//        else if (invName.startsWith("Click the button on time!")) enumTerminal = EnumTerminal.BUTTONS;
+
         if (enumTerminal == EnumTerminal.NONE) {
             clickQueue.clear();
             return;
@@ -212,6 +215,22 @@ public class AutoTerminal {
                                     (color.equals("BLUE") && itemName.contains("LAPIS"))
                             )) {
                         clickQueue.add(i);
+                    }
+                }
+                return false;
+            case COLORPAD:
+                if (itemStacks.size() < 54) return true;
+                int[] pads = new int[]{12, 13, 14, 21, 22, 23, 30, 31, 32};
+                HashMap<Integer, Integer> map = new HashMap<>();
+                map.put(4, 4);
+                map.put(13, 3);
+                map.put(11, 2);
+                map.put(14, 1);
+                for (int i : pads) {
+                    if (itemStacks.get(i) != null) {
+                        int damage = itemStacks.get(i).getItemDamage();
+                        int count = map.getOrDefault(damage, 0);
+                        for (int x = 0; x < count; x++) clickQueue.add(i);
                     }
                 }
                 return false;
