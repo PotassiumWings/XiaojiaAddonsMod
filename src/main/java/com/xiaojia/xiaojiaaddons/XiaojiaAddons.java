@@ -48,6 +48,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.NoRotate;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
@@ -220,6 +221,7 @@ public class XiaojiaAddons {
         // Miscellaneous
         MinecraftForge.EVENT_BUS.register(new ChatCopy());
         MinecraftForge.EVENT_BUS.register(new ColorName());
+        MinecraftForge.EVENT_BUS.register(new Velocity());
         MinecraftForge.EVENT_BUS.register(new NoRotate());
         MinecraftForge.EVENT_BUS.register(new RenderRank());
         MinecraftForge.EVENT_BUS.register(new KeepSprint());

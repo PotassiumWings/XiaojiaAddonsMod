@@ -12,6 +12,18 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "nO RotAtE", parent = "Dangerous Features")
     public static boolean NoRotate = false;
 
+    @Property(type = Property.Type.FOLDER, name = "Velocity", parent = "Dangerous Features",
+            description = "Only works in SkyBlock.\n" +
+                    "If you are in lava or used bonzo's staff / jerrychine gun\n" +
+                    "within 1s, this feature will be automatically disabled.")
+    public static boolean Velocity = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Velocity XZ Scale", parent = "Dangerous Features", min = 0, max = 100, suffix = "%")
+    public static int VelocityXZ = 100;
+
+    @Property(type = Property.Type.NUMBER, name = "Velocity Y Scale", parent = "Dangerous Features", min = 0, max = 100, suffix = "%")
+    public static int VelocityY = 100;
+
     @Property(type = Property.Type.FOLDER, name = "Dupe Display", parent = "Misc")
     public static boolean DupeDisplay = false;
 
@@ -1147,8 +1159,7 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Pulling Rod", parent = "Fishing", illegal = true,
             description = "Auto Pull Rod When fishing.\n" +
-                    "Only support water fishing currently, \n" +
-                    "lava fishing will be added later.")
+                    "Water / lava fishing are supported.")
     public static boolean AutoPullRod = false;
 
     @Property(type = Property.Type.NUMBER, name = "Auto Pulling Rod CD", parent = "Fishing",

@@ -15,6 +15,7 @@
         "MixinModList",
         "MixinItemStack",
         "MixinEntity",
+        "MixinNetHandlerPlayClient",
         "MixinRenderItem",
         "MixinRenderManager",
         "MixinRenderLightningBolt",

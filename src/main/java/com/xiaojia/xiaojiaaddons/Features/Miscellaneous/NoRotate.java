@@ -19,14 +19,15 @@ public class NoRotate {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onPosLookPacket(PacketReceivedEvent event) {
         if (!Checker.enabled) return;
-        if (!Configs.NoRotate) return;
         if (!(event.packet instanceof S08PacketPlayerPosLook)) return;
         S08PacketPlayerPosLook packet = (S08PacketPlayerPosLook) event.packet;
+//        ChatLib.chat("Received " + PacketUtils.getPosLookPacket(packet));
         EntityPlayer player = getPlayer();
+        if (!Configs.NoRotate || player == null) return;
         this.doneLoadingTerrain = true;
         // 0 pitch
-//        ChatLib.chat("Received " + PacketUtils.getPosLookPacket(packet));
         if (packet.getPitch() == 0.0D) return;
+
         event.setCanceled(true);
         double x = packet.getX(), y = packet.getY(), z = packet.getZ();
         float yaw = packet.getYaw(), pitch = packet.getPitch();
