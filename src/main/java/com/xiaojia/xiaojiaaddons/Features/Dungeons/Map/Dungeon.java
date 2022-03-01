@@ -75,8 +75,8 @@ public class Dungeon {
     public static long bossEntry = 0;
     public static long runEnded = 0;
     public static int openedWitherDoors = 0;
-    public static int startX = 15;
-    public static int startZ = 15;
+    public static int startX = 15 - 200;
+    public static int startZ = 15 - 200;
     public static int endX = 190;
     public static int endZ = 190;
     public static int roomSize = 31;
@@ -141,13 +141,13 @@ public class Dungeon {
             Color color = room.getColor();
             if (room.name.equals("Unknown")) color = new Color(255, 176, 31);
             else if (!room.explored && Configs.DarkenUnexplored) color = darker(color);
-            setPixels(newMap, MathUtils.floor(room.x / 16) * 2 + 1, MathUtils.floor(room.z / 16) * 2 + 1, 3, 3, color);
+            setPixels(newMap, MathUtils.floor((room.x + 200) / 16) * 2 + 1, MathUtils.floor((room.z + 200) / 16) * 2 + 1, 3, 3, color);
         }
         for (int i = 0; i < doors.size(); i++) {
             Door door = doors.get(i);
             Color color = door.getColor();
             if (!door.explored && Configs.DarkenUnexplored) color = darker(color);
-            setPixels(newMap, MathUtils.floor(door.x / 16) * 2 + 2, MathUtils.floor(door.z / 16) * 2 + 2, 1, 1, color);
+            setPixels(newMap, MathUtils.floor((door.x + 200) / 16) * 2 + 2, MathUtils.floor((door.z + 200) / 16) * 2 + 2, 1, 1, color);
         }
         map = newMap;
     }
@@ -286,8 +286,8 @@ public class Dungeon {
         for (int i = Map.startCorner.x + (Map.roomSize / 2); i < 128; i += Map.roomSize / 2 + 2) {
             for (int j = Map.startCorner.y + (Map.roomSize / 2); j < 128; j += Map.roomSize / 2 + 2) {
                 Vector2i coords = Lookup.getRoomCenterCoords(
-                        new Vector2i(MathUtils.floor((i - Map.startCorner.x) * (190F / 128)),
-                                MathUtils.floor((j - Map.startCorner.y) * (190F / 128))));
+                        new Vector2i(MathUtils.floor((i - Map.startCorner.x) * (190F / 128)) - 200,
+                                MathUtils.floor((j - Map.startCorner.y) * (190F / 128)) - 200));
                 if (coords == null) continue;
                 byte color = colors[i + j * 128];
                 byte secondColor = colors[(i - 3) + j * 128];
@@ -532,11 +532,11 @@ public class Dungeon {
                     player.inRender = false;
                     continue;
                 }
-                if (MathUtils.isBetween((int) entityPlayer.posX, 0, 190) &&
-                        MathUtils.isBetween((int) entityPlayer.posZ, 0, 190)) {
+                if (MathUtils.isBetween((int) entityPlayer.posX + 200, 0, 190) &&
+                        MathUtils.isBetween((int) entityPlayer.posZ + 200, 0, 190)) {
                     player.inRender = true;
-                    player.realX = entityPlayer.posX;
-                    player.realZ = entityPlayer.posZ;
+                    player.realX = entityPlayer.posX + 200;
+                    player.realZ = entityPlayer.posZ + 200;
                     player.iconX = (player.realX * (0.1225 * 5) - 2) * 0.2 * Configs.MapScale + Configs.MapScale / 2f;
                     player.iconY = (player.realZ * (0.1225 * 5) - 2) * 0.2 * Configs.MapScale + Configs.MapScale / 2f;
                     player.yaw = entityPlayer.rotationYaw + 180;
@@ -679,9 +679,11 @@ public class Dungeon {
                  z <= startZ + (roomSize + 1) * (Math.floor((endZ / 31F) - 1));
                  z += Math.floor((roomSize + 1) / 2F)) {
                 // Center of where a room should be
-                if (x % (roomSize + 1) == Math.floor(roomSize / 2F) &&
-                        z % (roomSize + 1) == Math.floor(roomSize / 2F)) {
+//                ChatLib.chat("checking " + x + ", " + z);
+                if ((x - (Math.floor(roomSize / 2F) + 24)) % (roomSize + 1) == 0 &&
+                        (z - (Math.floor(roomSize / 2F) + 24)) % (roomSize + 1) == 0) {
                     if (!MapUtils.chunkLoaded(new Vector3i(x, 100, z))) {
+//                        ChatLib.chat(x + ", " + z + " not loaded.");
                         allLoaded = false;
                     }
                     if (MapUtils.isColumnAir(x, z)) continue;
@@ -700,8 +702,10 @@ public class Dungeon {
                     if (room.type.equals("puzzle")) scannedPuzzles.add(room.name);
                 }
                 // Door or part of a larger room
-                else if (((x % (roomSize + 1) == roomSize && z % (roomSize + 1) == Math.floor(roomSize / 2F)) ||
-                        (x % (roomSize + 1) == Math.floor(roomSize / 2F) && z % (roomSize + 1) == roomSize)) &&
+                else if ((((x - (roomSize + 24)) % (roomSize + 1) == 0 &&
+                        (z - (Math.floor(roomSize / 2F) + 24)) % (roomSize + 1) == 0) ||
+                        ((x - (Math.floor(roomSize / 2F) + 24)) % (roomSize + 1) == 0 &&
+                        (z - (roomSize + 24)) % (roomSize + 1) == 0)) &&
                         !MapUtils.isColumnAir(x, z)) {
                     // Door
                     if (MapUtils.isDoor(x, z)) {
@@ -736,8 +740,8 @@ public class Dungeon {
                     }
                 }
                 // Middle of a 2x2 room
-                else if (x % (roomSize + 1) == roomSize &&
-                        z % (roomSize + 1) == roomSize &&
+                else if ((x - (roomSize + 24)) % (roomSize + 1) == 0 &&
+                        (z - (roomSize + 24)) % (roomSize + 1) == 0 &&
                         !MapUtils.isColumnAir(x, z)) {
                     Room newRoom = new Room(x, z, Data.blankRoom);
                     for (int i = 0; i < rooms.size(); i++) {
@@ -795,8 +799,8 @@ public class Dungeon {
             Room room = rooms.get(i);
             if (!names.contains(room.name) && !room.type.equals("entrance")) {
 
-                float x = room.x * 1.25F + Configs.MapScale * 1.25F - checkSize / 2F;
-                float y = room.z * 1.25F - checkSize / 4F;
+                float x = (room.x + 200) * 1.25F + Configs.MapScale * 1.25F - checkSize / 2F;
+                float y = (room.z + 200) * 1.25F - checkSize / 4F;
 
                 if (room.checkmark.equals("green")) {
                     if (Configs.DrawCheckMode == 1) RenderUtils.drawImage(greenCheck, x, y, 25, 25);
@@ -923,8 +927,8 @@ public class Dungeon {
         runEnded = 0;
 
         // Misc stuff
-        startX = 15;
-        startZ = 15;
+        startX = 15 - 200;
+        startZ = 15 - 200;
 
         endX = 190;
         endZ = 190;

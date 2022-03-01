@@ -71,8 +71,8 @@ public class Room {
         for (int i = 0; i < split.length; i++) {
             RenderUtils.drawStringWithShadow(
                     ColorUtils.colors[Configs.RoomNameColor] + split[i],
-                    this.x * 1.25F + Configs.MapScale - (RenderUtils.getStringWidth(split[i]) / 2F),
-                    this.z * 1.25F - Math.abs(split.length - 1) * 3 + (i * 8)
+                    (this.x + 200) * 1.25F + Configs.MapScale - (RenderUtils.getStringWidth(split[i]) / 2F),
+                    (this.z + 200) * 1.25F - Math.abs(split.length - 1) * 3 + (i * 8)
             );
         }
         RenderUtils.retainTransforms(false);
@@ -85,8 +85,8 @@ public class Room {
             RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
             RenderUtils.drawStringWithShadow(
                     "&7" + this.secrets,
-                    this.x * 1.25F - Configs.MapScale * 1.25F,
-                    this.z * 1.25F - Configs.MapScale * 1.25F
+                    (this.x + 200) * 1.25F - Configs.MapScale * 1.25F,
+                    (this.z + 200) * 1.25F - Configs.MapScale * 1.25F
             );
         } else {
 //            RenderUtils.scale(0.2F * Configs.MapScale, 0.2F * Configs.MapScale);
