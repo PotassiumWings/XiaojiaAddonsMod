@@ -62,7 +62,7 @@ public class BloodAssist {
 //            GuiUtils.drawBoxAtEntity(skull, 0, 0, 255, 255, 0.5F, 2F, 0);
 //            GuiUtils.disableESP();
 
-            if (info == null || info.endX < 0) continue;
+            if (info == null || info.endX < -10000) continue;
             Color color = new Color(0, 255, 0);
             if (info.shouldAttack) color = new Color(0, 0, 255);
             GuiUtils.enableESP();
@@ -169,7 +169,7 @@ public class BloodAssist {
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         newArmorStands.clear();
-        bloodTrunk = new Vector2i(-1, -1);
+        bloodTrunk = new Vector2i(-100000, -100000);
         if (getWorld() == null) return;
         spawnId = 0;
         infos.clear();
@@ -192,13 +192,15 @@ public class BloodAssist {
         ChatLib.debug("detected " + name);
 
         if (!bloodTrunk.equals(new Vector2i(-100000, -100000))) {
-            if (new Vector2i(entityArmorStand.chunkCoordX / 2, entityArmorStand.chunkCoordZ / 2).equals(bloodTrunk)) {
+            if (new Vector2i(((int) entityArmorStand.posX + 8) / 16 / 2,
+                    ((int) entityArmorStand.posZ + 8) / 16 / 2).equals(bloodTrunk)) {
                 skulls.add(entityArmorStand);
                 ChatLib.debug("added " + name + ", " + entityArmorStand.getUniqueID().toString());
             }
         } else {
             if (name.endsWith(getPlayer().getName() + "'s Head") || name.endsWith(getPlayer().getName() + "' Head")) {
-                bloodTrunk = new Vector2i(entityArmorStand.chunkCoordX / 2, entityArmorStand.chunkCoordZ / 2);
+                bloodTrunk = new Vector2i(((int) entityArmorStand.posX + 8) / 16 / 2,
+                        ((int) entityArmorStand.posZ + 8) / 16 / 2);
                 ChatLib.debug("Head: " + name + ", trunk: " + bloodTrunk);
                 for (Entity entity : getWorld().loadedEntityList) {
                     if (!(entity instanceof EntityArmorStand)) continue;
@@ -212,21 +214,21 @@ public class BloodAssist {
     }
 
     public static class BloodMobInfo {
-        public long startTime = -1;
-        public double startX = -1;
-        public double startY = -1;
-        public double startZ = -1;
+        public long startTime = -100000;
+        public double startX = -100000;
+        public double startY = -100000;
+        public double startZ = -100000;
 
-        public double lastX = -1;
-        public double lastY = -1;
-        public double lastZ = -1;
+        public double lastX = -100000;
+        public double lastY = -100000;
+        public double lastZ = -100000;
         public boolean isDead = false;
 
         public boolean shouldAttack = false;
 
-        public float endX = -1;
-        public float endY = -1;
-        public float endZ = -1;
+        public float endX = -100000;
+        public float endY = -100000;
+        public float endZ = -100000;
 
         public BloodMobInfo(long startTime, double startX, double startY, double startZ) {
             this.startTime = startTime;
