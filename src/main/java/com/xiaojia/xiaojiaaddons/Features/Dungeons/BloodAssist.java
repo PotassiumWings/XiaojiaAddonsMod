@@ -29,7 +29,7 @@ public class BloodAssist {
     private static final HashMap<String, BloodMobInfo> infos = new HashMap<>();
     private static final HashSet<EntityArmorStand> skulls = new HashSet<>();
     private static final ArrayDeque<EntityArmorStand> newArmorStands = new ArrayDeque<>();
-    private static Vector2i bloodTrunk = new Vector2i(-1, -1);
+    private static Vector2i bloodTrunk = new Vector2i(-100000, -100000);
 
     private int spawnId = 0;
 
@@ -191,7 +191,7 @@ public class BloodAssist {
         String name = ChatLib.removeFormatting(helm.getDisplayName()).trim();
         ChatLib.debug("detected " + name);
 
-        if (!bloodTrunk.equals(new Vector2i(-1, -1))) {
+        if (!bloodTrunk.equals(new Vector2i(-100000, -100000))) {
             if (new Vector2i(entityArmorStand.chunkCoordX / 2, entityArmorStand.chunkCoordZ / 2).equals(bloodTrunk)) {
                 skulls.add(entityArmorStand);
                 ChatLib.debug("added " + name + ", " + entityArmorStand.getUniqueID().toString());

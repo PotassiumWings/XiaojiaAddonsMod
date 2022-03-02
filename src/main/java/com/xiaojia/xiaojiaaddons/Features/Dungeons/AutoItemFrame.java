@@ -35,8 +35,8 @@ enum Type {
 public class AutoItemFrame {
     private static final HashSet<MazeGrid> grid = new HashSet<>();
     private static final HashMap<Vector2i, Integer> neededRotation = new HashMap<>();
-    private static BlockPos topLeft = new BlockPos(197, 125, 278);
-    private static BlockPos bottomRight = new BlockPos(197, 121, 274);
+    private static BlockPos topLeft = new BlockPos(-2, 125, 79);
+    private static BlockPos bottomRight = new BlockPos(-2, 121, 75);
     private static Iterable<BlockPos> iterableBox = BlockPos.getAllInBox(topLeft, bottomRight);
     private static ArrayList<BlockPos> box = new ArrayList<BlockPos>() {{
         iterableBox.forEach(this::add);

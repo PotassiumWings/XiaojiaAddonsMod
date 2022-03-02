@@ -27,13 +27,10 @@ import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 enum EnumTerminal {
-    NONE, ORDER, MAZE, CORRECT, START, COLOR, COLORPAD, BUTTONS
+    NONE, ORDER, MAZE, CORRECT, START, COLOR, COLORPAD
 }
 
 public class AutoTerminal {
-    private final KeyBind keyBind = new KeyBind("Auto Terminal", Keyboard.KEY_NONE);
-    private boolean enabled = false;
-
     private final Deque<Integer> clickQueue = new ArrayDeque<>();
     private EnumTerminal enumTerminal = EnumTerminal.NONE;
     private boolean recalculate = false;
@@ -47,11 +44,6 @@ public class AutoTerminal {
     @SubscribeEvent
     public void onTickCheck(TickEndEvent event) {
         Inventory inventory = ControlUtils.getOpenedInventory();
-        if (keyBind.isPressed()) {
-            enabled = !enabled;
-            ChatLib.chat(enabled ? "Auto Terminal &aactivated" : "Auto Terminal &cdeactivated");
-        }
-        if (!enabled) return;
         if (inventory != null && inventory.getName().equals("container")) {
             if (XiaojiaAddons.isDebug() && !clickQueue.isEmpty()) ChatLib.chat("clearing");
             clickQueue.clear();
@@ -86,7 +78,6 @@ public class AutoTerminal {
             Matcher matcher = pattern.matcher(invName);
             if (matcher.find()) color = matcher.group(1).toUpperCase();
         } else if (invName.startsWith("Change all to same color!")) enumTerminal = EnumTerminal.COLORPAD;
-//        else if (invName.startsWith("Click the button on time!")) enumTerminal = EnumTerminal.BUTTONS;
 
         if (enumTerminal == EnumTerminal.NONE) {
             clickQueue.clear();
@@ -232,17 +223,25 @@ public class AutoTerminal {
                 if (itemStacks.size() < 54) return true;
                 int[] pads = new int[]{12, 13, 14, 21, 22, 23, 30, 31, 32};
                 HashMap<Integer, Integer> map = new HashMap<>();
-                map.put(4, 4);
-                map.put(13, 3);
-                map.put(11, 2);
-                map.put(14, 1);
-                for (int i : pads) {
-                    if (itemStacks.get(i) != null) {
-                        int damage = itemStacks.get(i).getItemDamage();
-                        int count = map.getOrDefault(damage, 0);
-                        for (int x = 0; x < count; x++) clickQueue.add(i);
+                ArrayList<Integer> bestOrder = new ArrayList<>();
+                for (int i = 0; i < 5; i++) {
+                    map.put(4, (4 + i) % 5);
+                    map.put(13, (3 + i) % 5);
+                    map.put(11, (2 + i) % 5);
+                    map.put(14, (1 + i) % 5);
+                    map.put(1, (0 + i) % 5);
+                    ArrayList<Integer> curOrder = new ArrayList<>();
+                    for (int j : pads) {
+                        if (itemStacks.get(j) != null) {
+                            int damage = itemStacks.get(j).getItemDamage();
+                            int count = map.getOrDefault(damage, 0);
+                            for (int x = 0; x < count; x++) curOrder.add(j);
+                        }
                     }
+                    if (bestOrder.size() == 0 || bestOrder.size() > curOrder.size())
+                        bestOrder = curOrder;
                 }
+                clickQueue.addAll(bestOrder);
                 return false;
             default:
                 return true;
