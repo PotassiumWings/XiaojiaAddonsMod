@@ -21,6 +21,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
+import net.minecraft.util.Vec3;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -57,6 +59,7 @@ public class AutoBlaze {
     private boolean tpPacketReceived = false;
     private boolean arrowShot = false;
     private double facingYaw = 10000;
+    private double facingPitch = 10000;
 
     // slot
     private int aotvSlot;
@@ -369,6 +372,7 @@ public class AutoBlaze {
                 ControlUtils.setHeldItemIndex(slot);
                 ControlUtils.faceSlowly(todo.yaw, todo.pitch);
                 facingYaw = todo.yaw;
+                facingPitch = todo.pitch;
                 double distance = Math.sqrt(MathUtils.distanceSquareFromPlayer(todo.entity));
                 long estimate = MathUtils.floor(distance * 50 / 1.7);
                 log.append(String.format("distance: %.2f, estimate: %d\n", distance, estimate));
@@ -541,7 +545,7 @@ public class AutoBlaze {
                 ArrayList<BlazeOrder> seq = getOrderSequence(usingTerminator);
                 executeOrder(shootSlot, seq);
 
-                if (Configs.AutoBlazeSecret) {
+                if (Configs.AutoBlazeSecret && should) {
                     grabSecret();
                 }
             } catch (Exception e) {
@@ -686,14 +690,24 @@ public class AutoBlaze {
             double dis2 = MathUtils.distanceSquareFromPlayer(entity.posX, entity.posY, entity.posZ);
             if (dis2 < 5 * 5) {
                 log.append(String.format("entity join: " + entity.toString() + ", %.2f", dis2)).append("\n");
+                Vec3 vArrow = new Vec3(entity.posX - getX(getPlayer()), entity.posY - getY(getPlayer()), entity.posZ - getZ(getPlayer()));
+                double facingAlpha = (facingYaw + 90) * Math.PI / 180;
+                double facingBeta = -facingPitch * Math.PI / 180;
+                Vec3 vFacing = new Vec3(
+                        Math.cos(facingBeta) * Math.cos(facingAlpha),
+                        Math.sin(facingBeta),
+                        Math.cos(facingBeta) * Math.sin(facingAlpha)
+                );
+                double diff = Math.acos(vArrow.dotProduct(vFacing) / vArrow.lengthVector() / vFacing.lengthVector());
+
                 double dz = entity.posZ - getZ(getPlayer());
                 double dx = entity.posX - getX(getPlayer());
                 double arrowAlpha = Math.atan2(dz, dx);
-                double facingAlpha = (facingYaw + 90) * Math.PI / 180;
-                double diff = Math.abs(arrowAlpha - facingAlpha);
-                diff = Math.min(diff, 2 * Math.PI - diff);
-                log.append(String.format("arrow: %.2f, facing: %.2f, diff: %.2f\n", arrowAlpha, facingAlpha, diff));
-                if (diff < 0.1)
+                double diffAlpha = Math.abs(arrowAlpha - facingAlpha);
+                diffAlpha = Math.min(diffAlpha, 2 * Math.PI - diffAlpha);
+
+                log.append(String.format("diff: %.2f, diffAlpha: %.2f\n", diff, diffAlpha));
+                if (diff < 0.5 && diffAlpha < 0.1)
                     arrowShot = true;
             }
         }
