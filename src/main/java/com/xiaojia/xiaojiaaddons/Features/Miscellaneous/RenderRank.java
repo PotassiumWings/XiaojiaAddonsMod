@@ -29,7 +29,6 @@ public class RenderRank {
             method.setAccessible(true);
             method.invoke(event.renderer, event.entity, rank, x, y, z, 64);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

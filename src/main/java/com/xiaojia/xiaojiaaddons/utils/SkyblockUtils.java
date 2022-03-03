@@ -15,6 +15,10 @@ import java.util.regex.Pattern;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class SkyblockUtils {
+    private static final ArrayList<String> m7ScoreBoards = new ArrayList<>(Arrays.asList(
+            "Soul Dragon", "Ice Dragon", "Apex Dragon", "Flame Dragon", "Power Dragon", "No Alive Dragons"
+    ));
+
     private static final ArrayList<String> maps = new ArrayList<>(Arrays.asList(
             "Ruins", "Forest", "Mountain", "High Level", "Wilderness",
             "Dungeon Hub",
@@ -57,6 +61,13 @@ public class SkyblockUtils {
         ChatLib.debug(line);
         line = removeSkippingChar.toString();
         ChatLib.debug(line);
+
+        for (String str : m7ScoreBoards) {
+            if (line.contains(str)) {
+                dungeon = "M7";
+                return "The Catacombs";
+            }
+        }
 
         String result = "Others";
         for (String map : maps) {
