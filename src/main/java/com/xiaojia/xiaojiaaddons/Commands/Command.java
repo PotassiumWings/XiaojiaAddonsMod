@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Commands;
 import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoTerminal;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Data;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
@@ -20,6 +21,7 @@ import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Tests.TestM7;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -218,6 +220,9 @@ public class Command extends CommandBase {
                 break;
             case "shoot":
                 ShortbowUtils.testEnderCrystals(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
+                break;
+            case "m7":
+                TestM7.m7();
                 break;
 //            case "click":
 //                ClickTest.setEnabled();

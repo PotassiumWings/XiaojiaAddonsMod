@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.HashMap;
 
 public class LividESP extends RenderEntityESP {
-    public BlockPos pos = new BlockPos(205, 109, 243);
+    public BlockPos pos = new BlockPos(5, 109, 43);
     private EnumChatFormatting colorChat = null;
 
     @SubscribeEvent

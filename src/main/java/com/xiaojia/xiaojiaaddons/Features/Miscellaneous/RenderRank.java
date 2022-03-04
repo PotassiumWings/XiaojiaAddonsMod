@@ -19,6 +19,7 @@ public class RenderRank {
         if (!Checker.enabled || !Configs.RenderRank) return;
         String name = ChatLib.removeFormatting(event.entity.getName());
         if (!ColorName.rankMap.containsKey(name)) return;
+        if (!(event.renderer instanceof RenderPlayer)) return;
         double x = event.x, y = event.y, z = event.z;
         String rank = ChatLib.addColor(ColorName.rankMap.get(name));
         y += mc.fontRendererObj.FONT_HEIGHT * 1.15F * 0.02666667F * 2;

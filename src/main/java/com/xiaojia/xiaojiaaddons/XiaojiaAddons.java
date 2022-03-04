@@ -98,6 +98,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayHandler;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.Objects.TestCubeGUI;
+import com.xiaojia.xiaojiaaddons.Tests.TestM7;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CipherUtils;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
@@ -277,6 +278,9 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new LowestBin());
         MinecraftForge.EVENT_BUS.register(new DupedItems());
         MinecraftForge.EVENT_BUS.register(new ChestProfit());
+
+        // Tests
+        MinecraftForge.EVENT_BUS.register(new TestM7());
 
         for (KeyBind keyBind : KeyBindUtils.keyBinds) {
             ClientRegistry.registerKeyBinding(keyBind.mcKeyBinding());
