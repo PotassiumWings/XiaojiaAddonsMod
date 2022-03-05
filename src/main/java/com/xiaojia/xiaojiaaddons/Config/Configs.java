@@ -930,7 +930,7 @@ public class Configs {
     public static boolean dragonInfoDisplay = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Dragon Info Display Test", parent = "Dragon Info Display",
-            description = "Display a single line to show where the display is at.")
+            description = "Display a lines to show where the display is at.")
     public static boolean dragonInfoTest = true;
 
     @Property(type = Property.Type.NUMBER, name = "Dragon Info Display X", parent = "Dragon Info Display")

@@ -10,15 +10,22 @@ public class DisplayUtils {
     }
 
     public static String hpToString(double hp) {
+        return hpToString(hp, false);
+    }
+
+    public static String hpToString(double hp, boolean toInt) {
         String res = "";
         if (hp >= 1000000) {
             double x = hp / 1000000;
-            res = String.format("%.2f", x) + "M";
+            if (toInt) res = String.format("%.0f", x) + "M";
+            else res = String.format("%.2f", x) + "M";
         } else if (hp >= 1000) {
             double x = hp / 1000;
-            res = String.format("%.2f", x) + "K";
+            if (toInt) res = String.format("%.0f", x) + "K";
+            else res = String.format("%.2f", x) + "K";
         } else {
-            res = String.format("%.2f", hp);
+            if (toInt) res = String.format("%.0f", hp);
+            else res = String.format("%.2f", hp);
         }
         return res;
     }

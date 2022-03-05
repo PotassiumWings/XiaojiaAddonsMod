@@ -1,10 +1,10 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.client.renderer.GlStateManager;
@@ -12,13 +12,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
@@ -39,6 +38,7 @@ public class M7Dragon {
         put(new BlockPos(85, 14, 94), "&bCyan Dragon&r: ");
         put(new BlockPos(85, 14, 56), "&6Orange Dragon&r: ");
     }};
+    private static final HashSet<BlockPos> done = new HashSet<>();
 
     private final Display display = new Display();
 
@@ -79,32 +79,65 @@ public class M7Dragon {
         return value;
     }
 
+    private static float getScale(float distance) {
+        if (distance > 30) return 1;
+        if (distance > 15) return 1 + (30 - distance) / 15 * 0.1F;
+        return 1.3F - distance / 15 * 0.2F;
+    }
+
     @SubscribeEvent
-    public void renderLivingPost(RenderGameOverlayEvent.Pre event) {
+    public void renderLivingPost(TickEndEvent event) {
         if (!Checker.enabled) return;
-        if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
         if (getWorld() == null) return;
         display.clearLines();
         display.setRenderLoc(Configs.dragonInfoX, Configs.dragonInfoY);
-        if (Configs.dragonInfoTest)
+        if (Configs.dragonInfoTest) {
             display.addLine("dragon Info is here");
-        for (Entity entity: getWorld().loadedEntityList) {
-            if (entity instanceof EntityDragon ) {
+            DisplayLine line1 = new DisplayLine("&aGreen Dragon&r: &a400M, &c7");
+            line1.setScale(Configs.dragonInfoScale / 20F * getScale(7));
+            display.addLine(line1);
+
+            DisplayLine line2 = new DisplayLine("&cRed Dragon&r: &c512K, &a40");
+            line2.setScale(Configs.dragonInfoScale / 20F * getScale(45));
+            display.addLine(line2);
+
+            DisplayLine line3 = new DisplayLine("&6Orange Dragon&r: &cDONE");
+            line3.setScale(Configs.dragonInfoScale / 20F * 0.9F);
+            display.addLine(line3);
+
+            DisplayLine line4 = new DisplayLine("&5Purple Dragon&r: &6150M, &620");
+            line4.setScale(Configs.dragonInfoScale / 20F * getScale(20));
+            display.addLine(line4);
+
+            DisplayLine line5 = new DisplayLine("&bCyan Dragon&r: &6200M, &c13");
+            line5.setScale(Configs.dragonInfoScale / 20F * getScale(13));
+            display.addLine(line5);
+        }
+        for (Entity entity : getWorld().loadedEntityList) {
+            if (entity instanceof EntityDragon) {
                 String hpPrefix = "&a";
                 double hp = ((EntityDragon) entity).getHealth();
                 if (hp <= 100000000) hpPrefix = "&c";
                 else if (hp <= 300000000) hpPrefix = "&6";
-                String hpString = hpPrefix + DisplayUtils.hpToString(hp);
+                String hpString = hpPrefix + DisplayUtils.hpToString(hp, true);
 
                 BlockPos blockPos = nearestBlockPosMap.get(entity);
+                if (hp <= 1) done.add(blockPos);
                 double dis = Math.sqrt(entity.getDistanceSq(blockPos));
                 String disPrefix = "&a";
-                if (dis < 20) disPrefix = "&c";
-                else if (dis < 40) disPrefix = "&6";
-                String str = prefixMap.get(blockPos) + hpString + "&r HP, " + disPrefix + String.format("%.2f&r Blocks", dis);
+
+                float scale = getScale((float) dis);
+                if (dis < 15) disPrefix = "&c";
+                else if (dis < 30) disPrefix = "&6";
+
+                String str = prefixMap.get(blockPos) + hpString + "&r, " + disPrefix + String.format("%.2f", dis);
+                if (done.contains(blockPos)) {
+                    str = prefixMap.get(blockPos) + "&cDONE";
+                    scale = 0.9F;
+                }
 
                 DisplayLine line = new DisplayLine(str);
-                line.setScale(Configs.dragonInfoScale / 20F);
+                line.setScale(Configs.dragonInfoScale / 20F * scale);
                 display.addLine(line);
             }
         }
@@ -113,6 +146,7 @@ public class M7Dragon {
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         nearestBlockPosMap.clear();
+        done.clear();
     }
 }
 

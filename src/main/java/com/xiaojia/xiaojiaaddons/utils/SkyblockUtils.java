@@ -243,7 +243,7 @@ public class SkyblockUtils {
         Matcher matcher = pattern.matcher(message);
         if (matcher.find()) {
             currentServer = matcher.group(1);
+            set = false;
         }
-        set = false;
     }
 }

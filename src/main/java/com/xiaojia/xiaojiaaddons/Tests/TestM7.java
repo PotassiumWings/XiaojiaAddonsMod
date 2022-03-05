@@ -33,6 +33,7 @@ public class TestM7 {
     @SubscribeEvent
     public void onEntityJoin(EntityJoinWorldEvent event) {
         if (!SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) return;
+        if (SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) return;
         Entity entity = event.entity;
         if (entity instanceof EntityDragon) {
             ChatLib.chat(String.format("spawning dragon at %.2f %.2f %.2f", entity.posX, entity.posY, entity.posZ));
