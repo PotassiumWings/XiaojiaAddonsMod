@@ -18,6 +18,8 @@
         "MixinNetHandlerPlayClient",
         "MixinRenderItem",
         "MixinRenderManager",
+        "MixinRenderDragon",
+        "MixinWorld",
         "MixinRenderLightningBolt",
         "MixinPlayerControllerMP"
     ]

@@ -916,6 +916,33 @@ public class Configs {
                     "§8Dark Gray", "§9Blue"})
     public static int BloodKeyColor = 2;
 
+    // M7Dragon
+    @Property(type = Property.Type.FOLDER, name = "M7 Phase 5", parent = "Dungeons")
+    public static boolean M7P5 = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Dragon Color", parent = "M7 Phase 5",
+            description = "Render the dragons in M7 P5 with their colors.\n" +
+                    "Decrease hurt alpha to 0.03.")
+    public static boolean ShowM7DragonColor = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Dragon Info Display", parent = "M7 Phase 5",
+            description = "Display Dragon HP and their distance to statues.")
+    public static boolean dragonInfoDisplay = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Dragon Info Display Test", parent = "Dragon Info Display",
+            description = "Display a single line to show where the display is at.")
+    public static boolean dragonInfoTest = true;
+
+    @Property(type = Property.Type.NUMBER, name = "Dragon Info Display X", parent = "Dragon Info Display")
+    public static int dragonInfoX = 400;
+
+    @Property(type = Property.Type.NUMBER, name = "Dragon Info Display Y", parent = "Dragon Info Display")
+    public static int dragonInfoY = 160;
+
+    @Property(type = Property.Type.NUMBER, name = "Dragon Info Display Scale", parent = "Dragon Info Display",
+            min = 5, max = 100)
+    public static int dragonInfoScale = 20;
+
     // M4ESP
     @Property(type = Property.Type.FOLDER, name = "M4 ESP", parent = "Dungeons")
     public static boolean M4ESPEnable = false;

@@ -1,15 +1,20 @@
 package com.xiaojia.xiaojiaaddons.Mixins;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.M7Dragon;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.play.server.S0FPacketSpawnMob;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.network.play.server.S27PacketExplosion;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -19,6 +24,9 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 @Mixin(NetHandlerPlayClient.class)
 public abstract class MixinNetHandlerPlayClient {
+    @Shadow
+    private WorldClient clientWorldController;
+
     @Inject(method = "handleEntityVelocity", cancellable = true,
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setVelocity(DDD)V"))
     public void handleEntityVelocity(S12PacketEntityVelocity packet, CallbackInfo ci) {
@@ -48,5 +56,13 @@ public abstract class MixinNetHandlerPlayClient {
 
     private boolean enabled() {
         return Checker.enabled && Velocity.canDisableKnockBack() && SkyblockUtils.isInSkyblock();
+    }
+
+    @Inject(method = "handleSpawnMob", at = @At("TAIL"))
+    public void onHandleSpawnMobTail(S0FPacketSpawnMob packet, CallbackInfo ci) {
+        Entity entity = clientWorldController.getEntityByID(packet.getEntityID());
+        if (entity instanceof EntityDragon) {
+            M7Dragon.onSpawnDragon((EntityDragon) entity);
+        }
     }
 }
