@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Objects;
 
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.Slot;
@@ -55,20 +56,25 @@ public class Inventory {
     public void click(int slot, boolean shift, String buttonString, int incrementWindowId) {
         int windowId = getWindowId() + incrementWindowId;
         int button;
+        int mode = 0;
         switch (buttonString) {
             case "MIDDLE":
                 button = 2;
+                if (shift) mode = 1;
                 break;
             case "RIGHT":
                 button = 1;
+                mode = 3;
+                break;
+            case "SWAP":
+                button = ControlUtils.getHeldItemIndex();
+                mode = 2;
                 break;
             default:
                 button = 0;
+                if (shift) mode = 1;
                 break;
         }
-        int mode = 0;
-        if (button == 1) mode = 3;
-        else if (shift) mode = 1;
         mc.playerController.windowClick(
                 windowId, slot, button, mode, getPlayer()
         );

@@ -1,5 +1,7 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
+import net.minecraft.item.ItemStack;
+
 public class DisplayUtils {
     public static String getHPDisplayFromArmorStandName(String name, String kind) {
         int startIndex = name.indexOf(kind) + kind.length() + 3;
@@ -19,5 +21,13 @@ public class DisplayUtils {
             res = String.format("%.2f", hp);
         }
         return res;
+    }
+
+    public static String getDisplayString(ItemStack itemStack) {
+        String stackSizeSuf = " x" + itemStack.stackSize;
+        String name = ChatLib.removeFormatting(itemStack.getDisplayName());
+        if (name.endsWith(stackSizeSuf))
+            name = name.substring(0, name.length() - stackSizeSuf.length());
+        return name;
     }
 }

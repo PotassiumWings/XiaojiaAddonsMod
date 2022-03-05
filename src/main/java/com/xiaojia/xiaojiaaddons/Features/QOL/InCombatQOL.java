@@ -8,6 +8,7 @@ import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -58,10 +59,7 @@ public class InCombatQOL {
     private int wardrobeSlot = -1;
 
     private static boolean canSell(ItemStack itemStack) {
-        String stackSizeSuf = " x" + itemStack.stackSize;
-        String name = ChatLib.removeFormatting(itemStack.getDisplayName()).toLowerCase();
-        if (name.endsWith(stackSizeSuf))
-            name = name.substring(0, name.length() - stackSizeSuf.length());
+        String name = DisplayUtils.getDisplayString(itemStack).toLowerCase();
         boolean isRecomed = NBTUtils.isItemRecombobulated(itemStack);
         boolean isFullQuality = NBTUtils.isItemFullQuality(itemStack);
         boolean isStarred = NBTUtils.isItemStarred(itemStack);

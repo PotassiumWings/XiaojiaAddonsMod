@@ -224,6 +224,9 @@ public class Command extends CommandBase {
             case "m7":
                 TestM7.m7();
                 break;
+            case "armorstand":
+                TestM7.show();
+                break;
 //            case "click":
 //                ClickTest.setEnabled();
 //                break;

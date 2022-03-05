@@ -41,6 +41,7 @@ public class ControlUtils {
 
     private static final KeyBind sneakKeyBind = new KeyBind(mc.gameSettings.keyBindSneak);
     private static final KeyBind sprintKeyBind = new KeyBind(mc.gameSettings.keyBindSprint);
+    private static final KeyBind jumpKeyBind = new KeyBind(mc.gameSettings.keyBindJump);
 
     private static Inventory openedInventory = null;
 
@@ -345,6 +346,22 @@ public class ControlUtils {
         KeyBinding.setKeyBindState(moveForwardKeyBind.mcKeyBinding().getKeyCode(), false);
     }
 
+    public static void releaseBackward() {
+        KeyBinding.setKeyBindState(moveBackwardKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
+    public static void releaseLeft() {
+        KeyBinding.setKeyBindState(moveLeftKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
+    public static void releaseRight() {
+        KeyBinding.setKeyBindState(moveRightKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
+    public static void releaseJump() {
+        KeyBinding.setKeyBindState(jumpKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
     public static void moveForward(long delta) throws InterruptedException {
         KeyBinding.setKeyBindState(moveForwardKeyBind.mcKeyBinding().getKeyCode(), true);
         Thread.sleep(delta);
@@ -367,6 +384,15 @@ public class ControlUtils {
         KeyBinding.setKeyBindState(moveRightKeyBind.mcKeyBinding().getKeyCode(), true);
         Thread.sleep(delta);
         KeyBinding.setKeyBindState(moveRightKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
+    public static void stopMoving() {
+        releaseForward();
+        releaseBackward();
+        releaseLeft();
+        releaseRight();
+        releaseJump();
+        unSneak();
     }
 
     @SubscribeEvent

@@ -53,6 +53,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
+import com.xiaojia.xiaojiaaddons.Features.QOL.AutoJerryBox;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoLobby;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoUseItem;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
@@ -233,6 +234,7 @@ public class XiaojiaAddons {
         // QOL
         MinecraftForge.EVENT_BUS.register(new AutoCombine());
         MinecraftForge.EVENT_BUS.register(new AutoHarp());
+        MinecraftForge.EVENT_BUS.register(new AutoJerryBox());
         MinecraftForge.EVENT_BUS.register(new AutoLobby());
         MinecraftForge.EVENT_BUS.register(new AutoIsland());
         MinecraftForge.EVENT_BUS.register(new AutoUseItem());
