@@ -6,7 +6,6 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
@@ -178,7 +177,7 @@ public class Dungeon {
 
     public static void showPlayers() {
         for (Player player : players) {
-            System.out.println(player.name + ": " + player.className);
+            System.err.println(player.name + ": " + player.className);
         }
     }
 
@@ -190,31 +189,33 @@ public class Dungeon {
             for (int x = 0; x < 128; x++) {
                 res.append(String.format("%3d", colors[x + y * 128])).append(" ");
             }
-            System.out.println(res.toString());
+            System.err.println(res.toString());
         }
 
         for (int i = Map.startCorner.x + (Map.roomSize / 2); i < 128; i += Map.roomSize / 2 + 2) {
             for (int j = Map.startCorner.y + (Map.roomSize / 2); j < 128; j += Map.roomSize / 2 + 2) {
                 byte color = colors[i + j * 128];
                 byte secondColor = colors[(i - 3) + j * 128];
-                System.out.println(i + ", " + j + ", " + color + ", " + secondColor);
+                System.err.println(i + ", " + j + ", " + color + ", " + secondColor);
             }
         }
     }
 
     public static void showDungeonInfo() {
         if (!isInDungeon && isFullyScanned) return;
-        System.out.println("Dungeon floor: " + floorInt);
-        System.out.println("Total Rooms: " + totalRooms);
-        System.out.println("Start Corner: " + Map.startCorner);
-        System.out.println("Room Size: " + Map.roomSize);
-        System.out.println("Total Secrets: " + totalSecrets);
-        System.out.println("Secrets Found: " + secretsFound);
-        System.out.println("Skill Score: " + skillScore);
-        System.out.println("Explore Score: " + exploreScore);
-        System.out.println("Score: " + score);
+        System.err.println("Dungeon Log:");
+        System.err.println("Dungeon floor: " + floorInt);
+        System.err.println("Total Rooms: " + totalRooms);
+        System.err.println("Start Corner: " + Map.startCorner);
+        System.err.println("Room Size: " + Map.roomSize);
+        System.err.println("Total Secrets: " + totalSecrets);
+        System.err.println("Secrets Found: " + secretsFound);
+        System.err.println("Skill Score: " + skillScore);
+        System.err.println("Explore Score: " + exploreScore);
+        System.err.println("Score: " + score);
         showMap();
         showPlayers();
+        System.err.println();
     }
 
     public static void updatePlayers() {
@@ -333,9 +334,6 @@ public class Dungeon {
     }
 
     private static void setExplored(String name, boolean explored) {
-        if (XiaojiaAddons.isDebug()) {
-            ChatLib.chat("set " + name + " to " + explored);
-        }
         for (int i = 0; i < rooms.size(); i++) {
             Room room = rooms.get(i);
             if (room.name.equals(name))
@@ -390,15 +388,6 @@ public class Dungeon {
         }
         for (Door door : toRemove) {
             doors.remove(door);
-        }
-    }
-
-    public static void showRooms() {
-        for (Room room : rooms) {
-            ChatLib.chat(room.name + " is at " + room.x + ", " + room.z + ", core: " + room.core);
-        }
-        for (Room room : unknownRooms) {
-            ChatLib.chat("unknown " + room.name + " is at " + room.x + ", " + room.z + ", core: " + room.core);
         }
     }
 
@@ -579,7 +568,6 @@ public class Dungeon {
             return;
         }
         int x = MathUtils.floor(getX(getPlayer())), z = MathUtils.floor(getZ(getPlayer()));
-        if (XiaojiaAddons.isDebug()) ChatLib.chat("x: " + x + ", z: " + z);
         for (Room room : rooms) {
             if (MathUtils.isBetween(x, room.x - 16, room.x + 16) &&
                     MathUtils.isBetween(z, room.z - 16, room.z + 16)) {
@@ -680,11 +668,9 @@ public class Dungeon {
                  z <= startZ + (roomSize + 1) * (Math.floor((endZ / 31F) - 1));
                  z += Math.floor((roomSize + 1) / 2F)) {
                 // Center of where a room should be
-//                ChatLib.chat("checking " + x + ", " + z);
                 if ((x - (Math.floor(roomSize / 2F) + 24)) % (roomSize + 1) == 0 &&
                         (z - (Math.floor(roomSize / 2F) + 24)) % (roomSize + 1) == 0) {
                     if (!MapUtils.chunkLoaded(new Vector3i(x, 100, z))) {
-//                        ChatLib.chat(x + ", " + z + " not loaded.");
                         allLoaded = false;
                     }
                     if (MapUtils.isColumnAir(x, z)) continue;
@@ -697,7 +683,6 @@ public class Dungeon {
                     }
                     totalRooms++;
                     addRoom(room);
-                    ChatLib.debug(room.name);
 
                     if (room.type.equals("trap")) trapType = room.name.split(" ")[0];
                     if (room.type.equals("puzzle")) scannedPuzzles.add(room.name);
@@ -706,7 +691,7 @@ public class Dungeon {
                 else if ((((x - (roomSize + 24)) % (roomSize + 1) == 0 &&
                         (z - (Math.floor(roomSize / 2F) + 24)) % (roomSize + 1) == 0) ||
                         ((x - (Math.floor(roomSize / 2F) + 24)) % (roomSize + 1) == 0 &&
-                        (z - (roomSize + 24)) % (roomSize + 1) == 0)) &&
+                                (z - (roomSize + 24)) % (roomSize + 1) == 0)) &&
                         !MapUtils.isColumnAir(x, z)) {
                     // Door
                     if (MapUtils.isDoor(x, z)) {
@@ -856,20 +841,6 @@ public class Dungeon {
 
         bonusScore = (Math.min(crypts, 5)) + (isMimicDead ? 2 : 0) + (Configs.AssumePaul ? 10 : 0);
         score = skillScore + exploreScore + speedScore + bonusScore;
-//        score = floorInt < 3 || trapDone ? score : score - 5;
-//        score = yellowDone ? score : score - 5;
-
-        if (XiaojiaAddons.isDebug()) {
-            ChatLib.chat("completedR: " + completedR);
-            ChatLib.chat("total rooms: " + totalRooms);
-            ChatLib.chat("secrets max: " + secretsForMax);
-            ChatLib.chat("total secrets: " + totalSecrets);
-            ChatLib.chat("found secrets: " + secretsFound);
-            ChatLib.chat("calculated secrets: " + calculatedTotalSecrets);
-            ChatLib.chat("secrets percent: " + secretsPercent);
-            ChatLib.chat("secrets needed: " + secretsNeeded);
-            ChatLib.chat("skill: " + skillScore + ", explore: " + exploreScore);
-        }
 
         int secrets = calculatedTotalSecrets > 0 ? calculatedTotalSecrets : totalSecrets;
         // Line 1

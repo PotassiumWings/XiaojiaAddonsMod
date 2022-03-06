@@ -3,7 +3,6 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
-import com.xiaojia.xiaojiaaddons.Features.Remote.LowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
@@ -65,7 +64,7 @@ public class DisplayDayAndCoords {
             line.setScale(Configs.DisplayScale / 20F);
             display.addLine(line);
         }
-        if (SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) {
+        if (SessionUtils.isDev()) {
             DisplayLine line = new DisplayLine("Name Cache size: " + ColorName.getCacheSize());
             line.setScale(Configs.DisplayScale / 20F);
             display.addLine(line);
@@ -81,9 +80,6 @@ public class DisplayDayAndCoords {
             DisplayLine line2 = new DisplayLine("pitch: " + MathUtils.getPitch());
             line2.setScale(Configs.DisplayScale / 20F);
             display.addLine(line2);
-            DisplayLine line5 = new DisplayLine("lastFetch: " + LowestBin.getLastUpdate() + "s");
-            line5.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line5);
         }
     }
 }

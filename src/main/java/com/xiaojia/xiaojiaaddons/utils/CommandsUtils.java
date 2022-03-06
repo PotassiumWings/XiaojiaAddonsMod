@@ -16,6 +16,11 @@ public class CommandsUtils {
         commandsQueue.offerLast(command);
     }
 
+    public static void addCommand(String command, int limit) {
+        if (commandsQueue.size() > limit) return;
+        addCommand(command);
+    }
+
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;

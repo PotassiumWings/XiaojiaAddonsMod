@@ -4,7 +4,6 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Vector2i;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -42,8 +41,8 @@ public class AutoItemFrame {
         iterableBox.forEach(this::add);
         sort((a, b) -> a.getY() == b.getY() ? b.getZ() - a.getZ() : b.getY() - a.getY());
     }};
-    private Thread thread = null;
     private static StringBuilder log = new StringBuilder();
+    private Thread thread = null;
 
     public static void setPosition(int x, int y, int z) {
         topLeft = new BlockPos(x, y, z);
@@ -99,6 +98,12 @@ public class AutoItemFrame {
             }
         }
         return new HashMap<>();
+    }
+
+    public static void printLog() {
+        System.err.println("AutoItemFrame Log:");
+        System.err.println(log);
+        System.err.println();
     }
 
     @SubscribeEvent
@@ -234,10 +239,6 @@ public class AutoItemFrame {
         grid.clear();
         neededRotation.clear();
         log = new StringBuilder();
-    }
-
-    public static void printLog() {
-        System.err.println(log);
     }
 }
 

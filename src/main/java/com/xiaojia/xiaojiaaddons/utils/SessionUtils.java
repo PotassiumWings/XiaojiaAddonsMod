@@ -10,4 +10,8 @@ public class SessionUtils {
     public static String getName() {
         return mc.getSession().getUsername();
     }
+
+    public static boolean isDev() {
+        return getUUID().equals("1c6d48a96cb3465681382590ec82fa68");
+    }
 }

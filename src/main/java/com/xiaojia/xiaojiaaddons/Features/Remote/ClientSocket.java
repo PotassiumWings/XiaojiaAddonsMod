@@ -45,7 +45,6 @@ public class ClientSocket {
                         if (recv == -1) break;
                         if (first) {
                             first = false;
-                            ChatLib.debug("Connected to xc server!");
                         }
 
                         // linux, '\n' at last char
@@ -57,7 +56,6 @@ public class ClientSocket {
 
                         String s = sb.toString();
                         s = XiaojiaAddons.cipherUtils.decrypt(s);
-                        ChatLib.debug(s);
 
                         // type 0-2, normal chat / puzzle fail / death;
                         Pattern pattern = Pattern.compile("^\\{" +
@@ -112,7 +110,6 @@ public class ClientSocket {
                             int type = Integer.parseInt(matcher.group(3));
                             String ver = matcher.group(4);
                             assert (type == 4);
-                            ChatLib.debug("Received ack.");
                             continue;
                         }
 
@@ -176,7 +173,6 @@ public class ClientSocket {
     }
 
     public static void disconnect() {
-        ChatLib.debug("Disconnected from xc server. This may be caused by server updating. Trying to reconnect...");
         connected = false;
         connect();
     }

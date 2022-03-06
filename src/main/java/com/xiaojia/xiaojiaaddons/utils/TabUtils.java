@@ -38,10 +38,12 @@ public class TabUtils {
     }
 
     public static void printTab() {
+        System.err.println("Tab:");
         ArrayList<String> tabs = getNames();
         for (int i = 0; i < tabs.size(); i++) {
-            ChatLib.chat(i + ": " + tabs.get(i));
+            System.err.println(i + ": " + tabs.get(i));
         }
+        System.err.println();
     }
 
     public static final class PlayerComparator implements Comparator<NetworkPlayerInfo> {

@@ -22,7 +22,6 @@ import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;

@@ -7,7 +7,6 @@ import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraft.block.BlockStainedGlass;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -46,8 +45,6 @@ public class LividESP extends RenderEntityESP {
         else if (val == EnumDyeColor.BLUE) colorChat = EnumChatFormatting.BLUE;
         else if (val == EnumDyeColor.PURPLE) colorChat = EnumChatFormatting.DARK_PURPLE;
         else if (val == EnumDyeColor.YELLOW) colorChat = EnumChatFormatting.YELLOW;
-        ChatLib.debug("val: " + val.getName());
-        ChatLib.debug("colorChat: " + colorChat.toString());
     }
 
     @Override

@@ -9,10 +9,6 @@ import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
-import net.minecraft.client.model.ModelDragon;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderDragon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.util.AxisAlignedBB;
@@ -24,7 +20,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.Color;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,16 +27,20 @@ import java.util.HashSet;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class M7Dragon {
+    private static final DragonInfo redDragon = new DragonInfo(new BlockPos(27, 14, 59), "&cRed Dragon&r: ", new Color(1F, 0F, 0F), "dragon_power.png");
+    private static final DragonInfo greenDragon = new DragonInfo(new BlockPos(27, 14, 94), "&aGreen Dragon&r: ", new Color(0F, 1F, 0F), "dragon_apex.png");
+    private static final DragonInfo purpleDragon = new DragonInfo(new BlockPos(56, 14, 125), "&cRed Dragon&r: ", new Color(0.5019608f, 0.0f, 0.5019608f), "dragon_soul.png");
+    private static final DragonInfo blueDragon = new DragonInfo(new BlockPos(84, 14, 94), "&5Purple Dragon&r: ", new Color(0.0f, 1.0f, 1.0f), "dragon_ice.png");
+    private static final DragonInfo orangeDragon = new DragonInfo(new BlockPos(85, 14, 56), "&6Orange Dragon&r: ", new Color(1.0f, 0.64705884f, 0.0f), "dragon_flame.png");
     private static final ArrayList<DragonInfo> dragonInfos = new ArrayList<DragonInfo>() {{
-        add(new DragonInfo(new BlockPos(27, 14, 59), "&cRed Dragon&r: ", new Color(1F, 0F, 0F), "dragon_power.png"));
-        add(new DragonInfo(new BlockPos(27, 14, 94), "&aGreen Dragon&r: ", new Color(0F, 1F, 0F), "dragon_apex.png"));
-        add(new DragonInfo(new BlockPos(56, 14, 125), "&cRed Dragon&r: ", new Color(0.5019608f, 0.0f, 0.5019608f), "dragon_soul.png"));
-        add(new DragonInfo(new BlockPos(84, 14, 94), "&5Purple Dragon&r: ", new Color(0.0f, 1.0f, 1.0f), "dragon_ice.png"));
-        add(new DragonInfo(new BlockPos(85, 14, 56), "&6Orange Dragon&r: ", new Color(1.0f, 0.64705884f, 0.0f), "dragon_flame.png"));
+        add(redDragon);
+        add(greenDragon);
+        add(purpleDragon);
+        add(blueDragon);
+        add(orangeDragon);
     }};
     private static final HashMap<EntityDragon, DragonInfo> nearestBlockPosMap = new HashMap<>();
     private static final HashSet<BlockPos> done = new HashSet<>();
-
     private final Display display = new Display();
 
     public M7Dragon() {
@@ -49,6 +48,14 @@ public class M7Dragon {
         display.setBackground("full");
         display.setBackgroundColor(0);
         display.setAlign("left");
+    }
+
+    private static DragonInfo getDragonInfoFromHP(float health) {
+        if (health > 199) return greenDragon;
+        if (health > 180) return orangeDragon;
+//        if (health > 300000000) return "dragon_apex.png";
+//        if (health > 100000000) return "dragon_flame.png";
+        return redDragon;
     }
 
     public static void onSpawnDragon(EntityDragon entity) {
@@ -67,77 +74,19 @@ public class M7Dragon {
         nearestBlockPosMap.put(entity, dragonInfo);
     }
 
-    public static void onRenderMainModel(EntityDragon entity) {
-        if (!Checker.enabled) return;
-        if (!Configs.ShowM7DragonColor) return;
-        if (!nearestBlockPosMap.containsKey(entity)) return;
-        Color color = nearestBlockPosMap.get(entity).color;
-        if (color != null)
-            GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue());
-    }
-
     public static void getEntityTexture(EntityDragon entity, CallbackInfoReturnable<ResourceLocation> cir) {
         if (!Checker.enabled) return;
-        if (!Configs.ReplaceDragonTexture) return;
-        if (!nearestBlockPosMap.containsKey(entity)) return;
-        String location = nearestBlockPosMap.get(entity).textureName;
-        ResourceLocation ret = new ResourceLocation(XiaojiaAddons.MODID + ":" + location);
+        if (Configs.ReplaceDragonTexture == 0) return;
+        ResourceLocation ret;
+        String location;
+        if (Configs.ReplaceDragonTexture == 1) {
+            if (!nearestBlockPosMap.containsKey(entity)) return;
+            location = nearestBlockPosMap.get(entity).textureName;
+        } else {
+            location = getDragonInfoFromHP(entity.getHealth()).textureName;
+        }
+        ret = new ResourceLocation(XiaojiaAddons.MODID + ":" + location);
         cir.setReturnValue(ret);
-    }
-
-    public static float replaceHurtOpacity(RenderDragon renderer, EntityDragon entity, float value) {
-        if (Configs.ShowM7DragonColor && nearestBlockPosMap.containsKey(entity)) {
-            ModelDragon model = (ModelDragon) renderer.getMainModel();
-            try {
-                Field bodyField, wingField;
-                try {
-                    bodyField = ModelDragon.class.getDeclaredField("body");
-                } catch (NoSuchFieldException e) {
-                    bodyField = ModelDragon.class.getDeclaredField("field_78217_d");
-                }
-                try {
-                    wingField = ModelDragon.class.getDeclaredField("wing");
-                } catch (NoSuchFieldException e) {
-                    wingField = ModelDragon.class.getDeclaredField("field_78225_k");
-                }
-                bodyField.setAccessible(true);
-                wingField.setAccessible(true);
-                ModelRenderer body = (ModelRenderer) bodyField.get(model);
-                ModelRenderer wing = (ModelRenderer) wingField.get(model);
-                body.isHidden = true;
-                wing.isHidden = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return value;
-            }
-            return 0.01F;
-        }
-        return value;
-    }
-
-    public static void afterRenderHurtFrame(RenderDragon renderer) {
-        try {
-            ModelDragon model = (ModelDragon) renderer.getMainModel();
-            Field bodyField, wingField;
-            try {
-                bodyField = ModelDragon.class.getDeclaredField("body");
-            } catch (NoSuchFieldException e) {
-                bodyField = ModelDragon.class.getDeclaredField("field_78217_d");
-            }
-            try {
-                wingField = ModelDragon.class.getDeclaredField("wing");
-            } catch (NoSuchFieldException e) {
-                wingField = ModelDragon.class.getDeclaredField("field_78225_k");
-            }
-            bodyField.setAccessible(true);
-            wingField.setAccessible(true);
-            ModelRenderer body = (ModelRenderer) bodyField.get(model);
-            ModelRenderer wing = (ModelRenderer) wingField.get(model);
-            body.isHidden = false;
-            wing.isHidden = false;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private static float getScale(float distance) {
@@ -164,6 +113,7 @@ public class M7Dragon {
     @SubscribeEvent
     public void renderLivingPost(TickEndEvent event) {
         if (!Checker.enabled) return;
+        if (!Configs.dragonInfoDisplay) return;
         if (getWorld() == null) return;
         display.clearLines();
         display.setRenderLoc(Configs.dragonInfoX, Configs.dragonInfoY);

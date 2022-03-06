@@ -16,8 +16,12 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class Velocity {
     private static long lastShot = 0;
-    private final KeyBind keyBind = new KeyBind("Velocity", Keyboard.KEY_NONE);
     private static boolean enabled = true;
+    private final KeyBind keyBind = new KeyBind("Velocity", Keyboard.KEY_NONE);
+
+    public static boolean canDisableKnockBack() {
+        return TimeUtils.curTime() - lastShot > 1000 && !getPlayer().isInLava() && enabled;
+    }
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -26,10 +30,6 @@ public class Velocity {
             enabled = !enabled;
             ChatLib.chat(enabled ? "Velocity &aactivated" : "Velocity &cdeactivated");
         }
-    }
-
-    public static boolean canDisableKnockBack() {
-        return TimeUtils.curTime() - lastShot > 1000 && !getPlayer().isInLava() && enabled;
     }
 
     @SubscribeEvent

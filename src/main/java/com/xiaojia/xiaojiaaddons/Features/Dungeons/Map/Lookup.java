@@ -1,7 +1,5 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 
 import java.util.ArrayList;
@@ -21,10 +19,7 @@ public class Lookup {
 
     public static Room getRoomFromCoords(Vector2i coords) {
         Vector2i newCoords = getRoomCenterCoords(coords);
-        if (newCoords == null) {
-            if (XiaojiaAddons.isDebug()) ChatLib.chat("Non");
-            return null;
-        }
+        if (newCoords == null) return null;
         Room room = new Room(newCoords.x, newCoords.y,
                 new Data("Unknown", "normal", 0, new ArrayList<>()));
         Room foundRoom = getRoomDataFromHash(room.core);

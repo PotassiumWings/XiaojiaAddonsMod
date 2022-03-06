@@ -6,7 +6,6 @@ import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Vector2i;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
@@ -79,20 +78,13 @@ public class TeleportMaze {
                         }
                     }
             }
-            ChatLib.debug("possiblePad: ");
-            for (BlockPos possiblePad : possiblePads) ChatLib.debug(possiblePad.toString());
 
             if (possible.size() == 0) {
                 possible = possiblePads;
             } else {
                 possible = possible.stream().filter(possiblePads::contains).collect(Collectors.toCollection(HashSet::new));
-                if (possible.size() == 0) {
-                    ChatLib.debug("owo");
-                    shouldCheckPossible = true;
-                }
+                if (possible.size() == 0) shouldCheckPossible = true;
             }
-            ChatLib.debug("possible: ");
-            for (BlockPos possiblePad : possible) ChatLib.debug(possiblePad.toString());
         }
 
         y = floor(getY(getPlayer()) - 0.5);

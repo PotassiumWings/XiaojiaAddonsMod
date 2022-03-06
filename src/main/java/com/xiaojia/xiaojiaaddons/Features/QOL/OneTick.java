@@ -48,19 +48,16 @@ public class OneTick {
             ControlUtils.setHeldItemIndex(whipSlot);
             ControlUtils.rightClick();
             ControlUtils.setHeldItemIndex(cur);
-            ChatLib.debug("using soulwhip, index at " + whipSlot);
         }
         if (Configs.AotsWithAnything && aotsSlot != -1) {
             ControlUtils.setHeldItemIndex(aotsSlot);
             ControlUtils.rightClick();
             ControlUtils.setHeldItemIndex(cur);
-            ChatLib.debug("using aots, index at " + aotsSlot);
         }
         if (Configs.TerminatorWithAnything && termSlot != -1) {
             ControlUtils.setHeldItemIndex(termSlot);
             ControlUtils.rightClick();
             ControlUtils.setHeldItemIndex(cur);
-            ChatLib.debug("using term, index at " + termSlot);
         }
     }
 }

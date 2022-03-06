@@ -29,25 +29,32 @@ public class BloodAssist {
     private static final HashMap<String, BloodMobInfo> infos = new HashMap<>();
     private static final HashSet<EntityArmorStand> skulls = new HashSet<>();
     private static final ArrayDeque<EntityArmorStand> newArmorStands = new ArrayDeque<>();
+    public static StringBuilder log = new StringBuilder();
     private static Vector2i bloodTrunk = new Vector2i(-100000, -100000);
-
     private int spawnId = 0;
 
     public static void showBloodMobs() {
-        ChatLib.chat("-------------------------------------------------------");
+        System.err.println("-------------------------------------------------------");
         for (EntityArmorStand entity : skulls) {
-            ChatLib.chat("skulls: " + entity.getUniqueID().toString());
-            if (entity.getEquipmentInSlot(4) != null) ChatLib.chat(entity.getEquipmentInSlot(4).getDisplayName());
+            System.err.println("skulls: " + entity.getUniqueID().toString());
+            if (entity.getEquipmentInSlot(4) != null) System.err.println(entity.getEquipmentInSlot(4).getDisplayName());
         }
         for (Entity entity : getWorld().loadedEntityList) {
             if (entity instanceof EntityArmorStand) {
-                ChatLib.chat("entity: " + entity.getUniqueID().toString());
+                System.err.println("entity: " + entity.getUniqueID().toString());
                 if (((EntityArmorStand) entity).getEquipmentInSlot(4) != null)
-                    ChatLib.chat(((EntityArmorStand) entity).getEquipmentInSlot(4).getDisplayName());
-                ChatLib.chat(String.format("pos: (%.2f %.2f %.2f)", entity.posX, entity.posY, entity.posZ));
+                    System.err.println(((EntityArmorStand) entity).getEquipmentInSlot(4).getDisplayName());
+                System.err.println(String.format("pos: (%.2f %.2f %.2f)", entity.posX, entity.posY, entity.posZ));
             }
         }
-        ChatLib.chat("-------------------------------------------------------");
+        System.err.println("-------------------------------------------------------");
+    }
+
+    public static void printLog() {
+        System.err.println("BloodAssist Log:");
+        System.err.println(log);
+        showBloodMobs();
+        System.err.println();
     }
 
     @SubscribeEvent
@@ -112,11 +119,11 @@ public class BloodAssist {
             }
             // moving
             if (xSpeed != 0 || ySpeed != 0 || zSpeed != 0) {
-                ChatLib.debug(String.format("%s speed: (%.2f %.2f %.2f)", uuid, xSpeed, ySpeed, zSpeed));
+                log.append(String.format("%s speed: (%.2f %.2f %.2f)", uuid, xSpeed, ySpeed, zSpeed));
                 if (info == null) {
                     info = new BloodMobInfo(TimeUtils.curTime(), skull.posX, skull.posY, skull.posZ);
                     infos.put(uuid, info);
-                    ChatLib.debug("new info: " + uuid + ", " + info);
+                    log.append("new info: " + uuid + ", " + info);
                 }
 
                 if (info.lastX == skull.posX && info.lastY == skull.posY && info.lastZ == skull.posZ) {
@@ -163,11 +170,12 @@ public class BloodAssist {
     private void setDead(String uuid, BloodMobInfo info, int from) {
         info.isDead = true;
         spawnId++;
-        ChatLib.debug("set dead: " + uuid + ", " + info + ", from: " + from);
+        log.append("set dead: ").append(uuid).append(", ").append(info).append(", from: ").append(from);
     }
 
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
+        log = new StringBuilder();
         newArmorStands.clear();
         bloodTrunk = new Vector2i(-100000, -100000);
         if (getWorld() == null) return;
@@ -178,7 +186,7 @@ public class BloodAssist {
             for (Entity entity : getWorld().loadedEntityList) {
                 if (!(entity instanceof EntityArmorStand)) continue;
                 newArmorStands.offerLast((EntityArmorStand) entity);
-                ChatLib.debug("worldload, " + entity.getDisplayName());
+                log.append("worldload, ").append(entity.getDisplayName());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,19 +197,19 @@ public class BloodAssist {
         ItemStack helm = entityArmorStand.getEquipmentInSlot(4);
         if (helm == null) return;
         String name = ChatLib.removeFormatting(helm.getDisplayName()).trim();
-        ChatLib.debug("detected " + name);
+        log.append("detected ").append(name);
 
         if (!bloodTrunk.equals(new Vector2i(-100000, -100000))) {
             if (new Vector2i(((int) entityArmorStand.posX + 8) / 16 / 2,
                     ((int) entityArmorStand.posZ + 8) / 16 / 2).equals(bloodTrunk)) {
                 skulls.add(entityArmorStand);
-                ChatLib.debug("added " + name + ", " + entityArmorStand.getUniqueID().toString());
+                log.append("added ").append(name).append(", ").append(entityArmorStand.getUniqueID().toString());
             }
         } else {
             if (name.endsWith(getPlayer().getName() + "'s Head") || name.endsWith(getPlayer().getName() + "' Head")) {
                 bloodTrunk = new Vector2i(((int) entityArmorStand.posX + 8) / 16 / 2,
                         ((int) entityArmorStand.posZ + 8) / 16 / 2);
-                ChatLib.debug("Head: " + name + ", trunk: " + bloodTrunk);
+                log.append("Head: ").append(name).append(", trunk: ").append(bloodTrunk);
                 for (Entity entity : getWorld().loadedEntityList) {
                     if (!(entity instanceof EntityArmorStand)) continue;
                     helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);

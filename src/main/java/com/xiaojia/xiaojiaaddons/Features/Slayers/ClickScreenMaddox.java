@@ -27,7 +27,6 @@ public class ClickScreenMaddox {
             for (IChatComponent sibling : listOfSiblings) {
                 if (sibling.getUnformattedText().contains("[OPEN MENU]")) {
                     lastMaddoxCommand = sibling.getChatStyle().getChatClickEvent().getValue();
-                    ChatLib.debug("last command: " + lastMaddoxCommand);
                     lastMaddoxTime = TimeUtils.curTime();
                 }
             }

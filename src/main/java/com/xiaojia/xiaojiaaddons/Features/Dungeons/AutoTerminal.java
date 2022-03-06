@@ -4,7 +4,6 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -43,7 +42,6 @@ public class AutoTerminal {
     public void onTickCheck(TickEndEvent event) {
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory != null && inventory.getName().equals("container")) {
-            if (XiaojiaAddons.isDebug() && !clickQueue.isEmpty()) ChatLib.chat("clearing");
             clickQueue.clear();
             enumTerminal = EnumTerminal.NONE;
             recalculate = false;
@@ -86,10 +84,6 @@ public class AutoTerminal {
         try {
             if (clickQueue.size() == 0 || recalculate) {
                 recalculate = calculate(inventory.getItemStacks());
-                if (XiaojiaAddons.isDebug()) {
-                    ChatLib.chat(clickQueue.size() + "");
-                    for (int x : clickQueue) ChatLib.chat(x + "");
-                }
             }
 
             if (clickQueue.size() > 20 && Configs.QuitWhenLongMaze) {
@@ -114,8 +108,6 @@ public class AutoTerminal {
                         windowClicks++;
                         clickQueue.pollFirst();
                     }
-                    if (XiaojiaAddons.isDebug())
-                        ChatLib.chat(String.format("(%d %d), %d", windowID, windowClicks, slot));
                 }
             }
         } catch (Exception e) {
@@ -124,7 +116,6 @@ public class AutoTerminal {
     }
 
     private boolean calculate(ArrayList<ItemStack> itemStacks) {
-        if (XiaojiaAddons.isDebug()) ChatLib.chat("calculate");
         clickQueue.clear();
         switch (enumTerminal) {
             case MAZE:
@@ -192,7 +183,6 @@ public class AutoTerminal {
                     if (itemStacks.get(i) == null) continue;
                     String itemName = ChatLib.removeFormatting(itemStacks.get(i).getDisplayName());
                     if (itemName == null || itemName.length() < 1) continue;
-                    if (XiaojiaAddons.isDebug()) ChatLib.chat(itemName + ", " + startChar);
                     if (itemName.charAt(0) == startChar &&
                             !itemStacks.get(i).isItemEnchanted()) {
                         clickQueue.add(i);
@@ -204,7 +194,6 @@ public class AutoTerminal {
                 for (int i = 0; i < 54; i++) {
                     if (itemStacks.get(i) == null) continue;
                     String itemName = ChatLib.removeFormatting(itemStacks.get(i).getDisplayName()).toUpperCase();
-                    if (XiaojiaAddons.isDebug()) ChatLib.chat(itemName + ", " + color);
                     if (itemName.contains(color) ||
                             (color.equals("SILVER") && itemName.contains("LIGHT GRAY") ||
                                     (color.equals("WHITE") && itemName.equals("WOOL")) ||

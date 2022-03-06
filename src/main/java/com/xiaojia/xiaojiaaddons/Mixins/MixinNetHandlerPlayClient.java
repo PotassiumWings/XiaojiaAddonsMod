@@ -34,7 +34,7 @@ public abstract class MixinNetHandlerPlayClient {
         Entity entity = getWorld().getEntityByID(packet.getEntityID());
         double motionX = packet.getMotionX(), motionY = packet.getMotionY(), motionZ = packet.getMotionZ();
         double xz = Configs.VelocityXZ / 100F, y = Configs.VelocityY / 100F;
-        if (Configs.VelocityXZ != 0 || Configs.VelocityY != 0)  {
+        if (Configs.VelocityXZ != 0 || Configs.VelocityY != 0) {
             entity.setVelocity(motionX * xz / 8000.0D, motionY * y / 8000.0D, motionZ * xz / 8000.0D);
         }
         ci.cancel();
@@ -45,7 +45,7 @@ public abstract class MixinNetHandlerPlayClient {
     public void handleExplosion(S27PacketExplosion packet, CallbackInfo ci) {
         EntityPlayer player = getPlayer();
         if (player == null || !enabled()) return;
-        if (Configs.VelocityXZ != 0 || Configs.VelocityY != 0)  {
+        if (Configs.VelocityXZ != 0 || Configs.VelocityY != 0) {
             double xz = Configs.VelocityXZ / 100F, y = Configs.VelocityY / 100F;
             player.motionX += packet.func_149149_c() * xz;
             player.motionY += packet.func_149144_d() * y;

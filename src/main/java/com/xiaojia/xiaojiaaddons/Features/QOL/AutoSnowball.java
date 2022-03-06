@@ -23,7 +23,7 @@ public class AutoSnowball {
         if (!Checker.enabled) return;
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null || inventory.getSize() != 45) return;
-        if (keyBind.isPressed() && (snowballThread == null || !snowballThread.isAlive())) {
+        if (keyBind.isKeyDown() && (snowballThread == null || !snowballThread.isAlive())) {
             snowballThread = new Thread(() -> {
                 int index = ControlUtils.getHeldItemIndex();
                 List<ItemStack> items = inventory.getItemStacks().subList(36, 45);
@@ -37,7 +37,7 @@ public class AutoSnowball {
                         ControlUtils.rightClick();
                 }
                 ControlUtils.setHeldItemIndex(index);
-                CommandsUtils.addCommand("/pickupstash");
+                CommandsUtils.addCommand("/pickupstash", 3);
             });
             snowballThread.start();
         }

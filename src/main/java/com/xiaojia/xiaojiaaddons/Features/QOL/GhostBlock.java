@@ -3,9 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.block.Block;
@@ -42,7 +40,6 @@ public class GhostBlock {
                         lastSwing = TimeUtils.curTime();
                     }
                     event.setCanceled(true);
-                    if (XiaojiaAddons.isDebug()) ChatLib.chat("Created ghost block!");
                 }
             }
         } catch (Exception e) {

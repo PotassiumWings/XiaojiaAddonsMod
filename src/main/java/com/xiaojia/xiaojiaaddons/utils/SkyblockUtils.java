@@ -58,9 +58,7 @@ public class SkyblockUtils {
                     || c == '(' || c == ')' || c == 'û')
                 removeSkippingChar.append(c);
         }
-        ChatLib.debug(line);
         line = removeSkippingChar.toString();
-        ChatLib.debug(line);
 
         for (String str : m7ScoreBoards) {
             if (line.contains(str)) {
@@ -100,6 +98,10 @@ public class SkyblockUtils {
         return dungeon;
     }
 
+    public static void setDungeon(String dungeon1) {
+        dungeon = dungeon1;
+    }
+
     public static String getCurrentMap() {
         return currentMap;
     }
@@ -107,10 +109,6 @@ public class SkyblockUtils {
     public static void setCurrentMap(String map) {
         currentMap = map;
         set = true;
-    }
-
-    public static void setDungeon(String dungeon1) {
-        dungeon = dungeon1;
     }
 
     public static boolean isInSpiderDen() {

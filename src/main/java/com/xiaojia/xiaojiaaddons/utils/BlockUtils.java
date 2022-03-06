@@ -2,7 +2,6 @@ package com.xiaojia.xiaojiaaddons.utils;
 
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.properties.Property;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
 import net.minecraft.block.state.IBlockState;
@@ -76,7 +75,6 @@ public class BlockUtils {
             Property property = Iterables.getFirst(tile.getPlayerProfile().getProperties().get("textures"), null);
             if (property != null) {
                 String result = property.getValue();
-                if (XiaojiaAddons.isDebug()) ChatLib.chat(result);
                 return result;
             } else return "owo!";
         }

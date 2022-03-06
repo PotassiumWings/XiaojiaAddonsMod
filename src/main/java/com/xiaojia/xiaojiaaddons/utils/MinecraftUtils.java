@@ -78,11 +78,7 @@ public class MinecraftUtils {
         String response = RemoteUtils.get(url, new ArrayList<>(), false);
         JsonObject apiRet = new Gson().fromJson(response, JsonObject.class);
         String uuid = apiRet.get("id").getAsString();
-        if (uuid == null || uuid.length() != 32) {
-            if (SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) {
-                ChatLib.chat("url: " + url + ", response: " + response + ", uuid: " + uuid);
-            }
-        } else {
+        if (uuid != null && uuid.length() == 32) {
             cachedUuids.put(name, uuid);
         }
         System.err.println("Got uuid for name " + name + ": " + uuid);

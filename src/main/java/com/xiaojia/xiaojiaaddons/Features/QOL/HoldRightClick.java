@@ -3,8 +3,6 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.client.Minecraft;
@@ -46,7 +44,6 @@ public class HoldRightClick {
         if (!Configs.TerminatorAutoRightClick) return;
         if (useKeyBind.isKeyDown() && ControlUtils.checkHoldingItem(terminatorNames)) {
             ControlUtils.rightClick();
-            if (XiaojiaAddons.isDebug()) ChatLib.chat("rightClick!");
         }
     }
 
@@ -60,7 +57,6 @@ public class HoldRightClick {
             }
             if (currentSpeed < Configs.MaxSpeed) {
                 ControlUtils.rightClick();
-                if (XiaojiaAddons.isDebug()) ChatLib.chat("rightClick!");
                 currentSpeed += SkyblockUtils.isInDungeon() ? 3.33 : 10;
             }
         } else {

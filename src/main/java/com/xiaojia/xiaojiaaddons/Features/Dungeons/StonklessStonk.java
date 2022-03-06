@@ -7,7 +7,6 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
@@ -212,8 +211,6 @@ public class StonklessStonk {
         if (getPlayer() == null || getWorld() == null) return;
         if (event.position.distanceSq(getPlayer().getPosition()) > 20.0) return;
         if (doneSecretsPos.containsKey(event.position)) return;
-        if (XiaojiaAddons.isDebug()) ChatLib.chat("Block change in Stonkless stonk! From "
-                + event.oldBlock.getBlock().toString() + " to " + event.newBlock.getBlock().toString());
         if (!isSecret(event.oldBlock.getBlock(), event.position) && isSecret(event.newBlock.getBlock(), event.position))
             blockHashMap.put(event.position, event.newBlock.getBlock());
         if (isSecret(event.oldBlock.getBlock(), event.position) && !isSecret(event.newBlock.getBlock(), event.position))

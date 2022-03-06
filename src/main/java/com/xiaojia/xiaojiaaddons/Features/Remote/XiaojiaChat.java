@@ -23,14 +23,12 @@ public class XiaojiaChat {
     public static void chat(String message, int type) {
         String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"msg\": \"%s\", \"type\": \"%d\"}",
                 getUUID(), getPlayer().getName(), message, type);
-        ChatLib.debug("body: " + body + ", type: " + type + ".");
         new Thread(() -> ClientSocket.chat(body)).start();
     }
 
     public static void chat(String nbt, String displayName, int type) {
         String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"dis\": \"%s\", \"type\": \"%d\", \"nbt\": \"%s\"}",
                 getUUID(), getPlayer().getName(), displayName, type, nbt);
-        ChatLib.debug("body: " + body + ", type: " + type + ".");
         new Thread(() -> ClientSocket.chat(body)).start();
     }
 

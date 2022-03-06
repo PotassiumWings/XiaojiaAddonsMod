@@ -924,21 +924,28 @@ public class Configs {
             description = "Render statues bounding box in M7 P5 with their colors.")
     public static boolean ShowStatueBox = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Replace Dragon Texture", parent = "M7 Phase 5",
-            description = "Replace dragons' texture in M7 P5 with their colors.")
-    public static boolean ReplaceDragonTexture = false;
+    @Property(type = Property.Type.SELECT, name = "Replace Dragon Texture", parent = "M7 Phase 5",
+            description = "Replace dragons' texture in M7 P5 with their colors.\n" +
+                    "&6COLOR&r mode: Show the dragons' corresponding color.\n" +
+                    "&4HP&r mode: Show &cRed&r, &6Orange&r, or &aGreen&r based on health.\n" +
+                    "  &aGreen&r: >300M hp\n" +
+                    "  &6Orange&r: 100~300M hp\n" +
+                    "  &cRed&r: <100M hp",
+            options = {"NONE", "COLOR", "HP"}
+    )
+    public static int ReplaceDragonTexture = 1;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Show Dragon Color", parent = "M7 Phase 5",
-            description = "Render the dragons in M7 P5 with their colors.\n" +
-                    "Decrease hurt alpha to 0.03.")
-    public static boolean ShowM7DragonColor = false;
+    @Property(type = Property.Type.BOOLEAN, name = "Remove Dragon Hurt Render", parent = "M7 Phase 5",
+            description = "So you can see its color more easily."
+    )
+    public static boolean RemoveDragonHurtRender = true;
 
     @Property(type = Property.Type.FOLDER, name = "Dragon Info Display", parent = "M7 Phase 5",
             description = "Display Dragon HP and their distance to statues.")
-    public static boolean dragonInfoDisplay = false;
+    public static boolean dragonInfoDisplayEnable = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Dragon Info Display Test", parent = "Dragon Info Display",
-            description = "Display a lines to show where the display is at.")
+            description = "Display lines to show where the display is at.")
     public static boolean dragonInfoTest = true;
 
     @Property(type = Property.Type.NUMBER, name = "Dragon Info Display X", parent = "Dragon Info Display")
@@ -950,6 +957,10 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Dragon Info Display Scale", parent = "Dragon Info Display",
             min = 5, max = 100)
     public static int dragonInfoScale = 20;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Dragon Info Display Enable", parent = "Dragon Info Display",
+            description = "Display Dragon HP and their distance to statues.")
+    public static boolean dragonInfoDisplay = false;
 
     // M4ESP
     @Property(type = Property.Type.FOLDER, name = "M4 ESP", parent = "Dungeons")

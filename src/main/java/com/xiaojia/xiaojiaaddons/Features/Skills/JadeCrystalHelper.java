@@ -3,7 +3,6 @@ package com.xiaojia.xiaojiaaddons.Features.Skills;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
@@ -76,11 +75,9 @@ public class JadeCrystalHelper {
         Matcher matcher = pattern.matcher(message);
         if (matcher.find()) {
             double distance = Double.parseDouble(matcher.group(1));
-            if (XiaojiaAddons.isDebug()) ChatLib.chat(distance + "");
             if (TimeUtils.curTime() - lastPositionTime > Configs.JadeCrystalCD &&
                     !distanceMap.containsKey(playerPos)) {
                 distanceMap.put(playerPos, distance);
-                if (XiaojiaAddons.isDebug()) ChatLib.chat("put " + playerPos.toString() + ", dis: " + distance);
                 // TODO: GUI
                 ChatLib.chat(String.format("Finished (%d / 3) points", distanceMap.size()));
                 if (distanceMap.size() == 3) {
@@ -93,9 +90,6 @@ public class JadeCrystalHelper {
                             return;
                         }
                         ChatLib.chat("Chest Found.");
-                        if (XiaojiaAddons.isDebug())
-                            for (BlockPos pos : result)
-                                ChatLib.chat(pos.toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                         ChatLib.chat("error calculating");

@@ -2,7 +2,6 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
@@ -29,7 +28,6 @@ public class BlockAbility {
                 if (name.contains("Pickaxe") || name.contains("Drill") || name.contains("Stonk")) {
                     List<String> lore = NBTUtils.getLore(heldItem);
                     for (String s : lore) {
-                        if (XiaojiaAddons.isDebug()) ChatLib.chat(s);
                         if (s.contains("Pickobulus")) {
                             event.setCanceled(true);
                             ChatLib.chat("&bBlocked Pickobulus Ability!");

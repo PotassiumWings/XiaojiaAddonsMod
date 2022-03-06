@@ -2,7 +2,6 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
 import com.xiaojia.xiaojiaaddons.utils.MinecraftUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
@@ -74,9 +73,7 @@ public class Player {
                     this.head = new Image(centerHead);
                 }
             } catch (Exception e) {
-                ChatLib.debug("Failed to load head of " + name);
                 e.printStackTrace();
-//                fetchHead();
             }
         }).start();
     }

@@ -30,10 +30,22 @@ public class TestM7 {
         }
     }
 
+    public static void show() {
+        for (Entity entity : getWorld().loadedEntityList) {
+            if (entity instanceof EntityArmorStand) {
+                String name = entity.getDisplayName().getFormattedText();
+                ItemStack helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);
+                String helmString = "";
+                if (helm != null) helmString = helm.getDisplayName();
+                ChatLib.chat(String.format("name %s, helm %s, %.2f %.2f %.2f", name, helmString, entity.posX, entity.posY, entity.posZ));
+            }
+        }
+    }
+
     @SubscribeEvent
     public void onEntityJoin(EntityJoinWorldEvent event) {
-        if (!SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) return;
-        if (SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) return;
+        if (!SessionUtils.isDev()) return;
+        if (SessionUtils.isDev()) return;
         Entity entity = event.entity;
         if (entity instanceof EntityDragon) {
             ChatLib.chat(String.format("spawning dragon at %.2f %.2f %.2f", entity.posX, entity.posY, entity.posZ));
@@ -46,18 +58,6 @@ public class TestM7 {
             if (helm == null) return;
             String name = ChatLib.removeFormatting(helm.getDisplayName()).trim();
             ChatLib.chat(String.format("spawning armorstand wearing helm %s at %.2f %.2f %.2f", name, entity.posX, entity.posY, entity.posZ));
-        }
-    }
-
-    public static void show() {
-        for (Entity entity : getWorld().loadedEntityList) {
-            if (entity instanceof EntityArmorStand) {
-                String name = entity.getDisplayName().getFormattedText();
-                ItemStack helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);
-                String helmString = "";
-                if (helm != null) helmString = helm.getDisplayName();
-                ChatLib.chat(String.format("name %s, helm %s, %.2f %.2f %.2f", name, helmString, entity.posX, entity.posY, entity.posZ));
-            }
         }
     }
 }

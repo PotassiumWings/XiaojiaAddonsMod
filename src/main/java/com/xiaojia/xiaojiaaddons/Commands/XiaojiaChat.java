@@ -43,7 +43,7 @@ public class XiaojiaChat extends CommandBase {
             com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat.queryOnline();
             return;
         }
-        if (strings[0].equals("addRank") && SessionUtils.getUUID().equals("1c6d48a96cb3465681382590ec82fa68")) {
+        if (strings[0].equals("addRank") && SessionUtils.isDev()) {
             String color = strings[strings.length - 1];
             String name = strings[1];
             String rank = String.join(" ", Arrays.copyOfRange(strings, 2, strings.length - 1));

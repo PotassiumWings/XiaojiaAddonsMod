@@ -128,6 +128,7 @@ public class ChatLib {
     }
 
     public static void debug(String message) {
+        if (!SessionUtils.isDev()) return;
         if (XiaojiaAddons.isDebug()) chat(message);
     }
 

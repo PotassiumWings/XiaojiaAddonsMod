@@ -44,8 +44,6 @@ public class AutoScatha {
                 y = MathUtils.floor(getY(player));
                 yaw = fit(getYaw());
                 pitch = 45;
-                ChatLib.debug("getYaw: " + getYaw() + ", pitch: " + getPitch());
-                ChatLib.debug("yaw: " + yaw + ", pitch: " + pitch);
                 ControlUtils.changeDirection(yaw, pitch);
                 thread = new Thread(() -> {
                     try {

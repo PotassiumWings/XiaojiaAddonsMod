@@ -63,7 +63,6 @@ public class DungeonLoot {
         if (matcher.find()) {
             String loot = matcher.group(1).replace("RARE REWARD! ", "");
             if (score != -1) loots.add(loot);
-            ChatLib.debug("found loot " + loot);
             return;
         }
 

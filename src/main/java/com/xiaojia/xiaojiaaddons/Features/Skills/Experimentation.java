@@ -4,7 +4,6 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
@@ -60,7 +59,6 @@ public class Experimentation {
                 int round = roundStack.stackSize;
                 int time = timeStack.stackSize;
                 String type = timeStack.getDisplayName();
-                if (XiaojiaAddons.isDebug()) ChatLib.chat(type);
                 if (type.contains("Timer:")) {
                     if (round != chronomatronLastRound) {
                         if (time == chronomatronLastRound + 3) {
@@ -81,7 +79,6 @@ public class Experimentation {
                 ItemStack timeStack = ControlUtils.getItemStackInSlot(49, false);
                 if (timeStack == null) return;
                 String type = timeStack.getDisplayName();
-                if (XiaojiaAddons.isDebug()) ChatLib.chat(type);
                 if (type.contains("Remember the pattern!")) {
                     getUltraSequence();
                     ultrasequenceCnt = 0;
@@ -114,7 +111,6 @@ public class Experimentation {
             if (items.get(i) != null &&
                     items.get(i).getItem() == Item.getItemFromBlock(Blocks.stained_hardened_clay)) {
                 chronomatronPatterns.add(i);
-                if (XiaojiaAddons.isDebug()) ChatLib.chat("added " + i);
                 return;
             }
         }
@@ -137,7 +133,6 @@ public class Experimentation {
             ItemStack item = inventory.getItemInSlot(i);
             if (item != null && !item.getItem().getRegistryName().contains("glass_pane")) {
                 ultrasequenceList.set(item.stackSize, i);
-                if (XiaojiaAddons.isDebug()) ChatLib.chat(item.stackSize + " " + i);
             }
         }
     }

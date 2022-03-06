@@ -1,7 +1,5 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
@@ -17,6 +15,13 @@ public class Map {
     public static boolean calibrated = false;
     public static Vector2i startCorner = new Vector2i(5, 5);
     public static int roomSize = 16;
+    private static StringBuilder log = new StringBuilder();
+
+    public static void printLog() {
+        System.err.println("Map Log:");
+        System.err.println(log);
+        System.err.println();
+    }
 
     public static void reset() {
         calibrated = false;
@@ -25,11 +30,8 @@ public class Map {
     }
 
     public static void calibrate() {
-        ChatLib.debug("in map: dungeon int " + Dungeon.floorInt);
-        if (Dungeon.floorInt == -1) {
-            if (XiaojiaAddons.isDebug()) ChatLib.chat("failed!");
-            return;
-        }
+        if (Dungeon.floorInt == -1) return;
+        log = new StringBuilder();
         if (Dungeon.totalRooms > 30) startCorner = new Vector2i(5, 5);
         else if (Dungeon.totalRooms == 30) startCorner = new Vector2i(16, 5);
         else if (Dungeon.totalRooms == 25) startCorner = new Vector2i(11, 11);
@@ -41,9 +43,9 @@ public class Map {
         else if (Dungeon.floorInt == 2 || Dungeon.floorInt == 3) startCorner = new Vector2i(11, 11);
         else if (Dungeon.floorInt == 4 && Dungeon.totalRooms > 25) startCorner = new Vector2i(5, 16);
 
-        ChatLib.debug("start corner: " + startCorner.x + ", " + startCorner.y);
-        ChatLib.debug("roomsize: " + roomSize);
-        ChatLib.debug("dungeon floor int: " + Dungeon.floorInt);
+        log.append("start corner: " + startCorner.x + ", " + startCorner.y);
+        log.append("roomsize: " + roomSize);
+        log.append("dungeon floor int: " + Dungeon.floorInt);
         calibrated = true;
     }
 
