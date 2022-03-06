@@ -6,12 +6,16 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
+import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
+import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -47,6 +51,19 @@ public class M7Dragon {
         display.setBackground("full");
         display.setBackgroundColor(0);
         display.setAlign("left");
+    }
+
+    @SubscribeEvent
+    public void onRenderWorld(RenderWorldLastEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.ShowStatueBox) return;
+        for (BlockPos blockPos : dragonLocations.keySet()) {
+            AxisAlignedBB box = new AxisAlignedBB(
+                    blockPos.add(-12.5, -2, -12.5),
+                    blockPos.add(12.5, 15.5, 12.5)
+            );
+            GuiUtils.drawBoundingBox(box, 5, dragonLocations.get(blockPos));
+        }
     }
 
     public static void onSpawnDragon(EntityDragon entity) {

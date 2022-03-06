@@ -920,6 +920,10 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "M7 Phase 5", parent = "Dungeons")
     public static boolean M7P5 = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Show Statue Box", parent = "M7 Phase 5",
+            description = "Render statues bounding box in M7 P5 with their colors.")
+    public static boolean ShowStatueBox = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Show Dragon Color", parent = "M7 Phase 5",
             description = "Render the dragons in M7 P5 with their colors.\n" +
                     "Decrease hurt alpha to 0.03.")

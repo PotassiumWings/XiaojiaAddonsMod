@@ -338,6 +338,26 @@ public class GuiUtils {
         return new Vector3f(x - MathUtils.getX(mc.thePlayer), y - MathUtils.getY(mc.thePlayer), z - MathUtils.getZ(mc.thePlayer));
     }
 
+    public static void drawBoundingBox(AxisAlignedBB box, int thickness, Color color) {
+        EntityPlayerSP player = getPlayer();
+        float px = getX(player), py = getY(player), pz = getZ(player);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(-px, -py, -pz);
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableLighting();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GL11.glLineWidth(thickness);
+        RenderGlobal.drawOutlinedBoundingBox(box, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        GlStateManager.translate(px, py, pz);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+        GlStateManager.popMatrix();
+    }
+
     private static void drawBoxAt(float x, float y, float z, int r, int g, int b, int a, float width, float height) {
 //        ChatLib.chat(String.format("%.2f %.2f %.2f %.2f %.2f %d %d %d %d", x, y, z, width, height, r,g,b,a));
         GL11.glPushMatrix();
