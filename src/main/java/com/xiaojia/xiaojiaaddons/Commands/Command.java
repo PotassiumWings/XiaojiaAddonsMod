@@ -233,6 +233,9 @@ public class Command extends CommandBase {
             case "sound":
                 XiaojiaAddons.mc.thePlayer.playSound(strings[1], 1000, 1);
                 break;
+            case "setDungeon":
+                SkyblockUtils.setDungeon(strings[1]);
+                break;
 //            case "click":
 //                ClickTest.setEnabled();
 //                break;

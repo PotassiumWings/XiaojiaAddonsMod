@@ -109,6 +109,10 @@ public class SkyblockUtils {
         set = true;
     }
 
+    public static void setDungeon(String dungeon1) {
+        dungeon = dungeon1;
+    }
+
     public static boolean isInSpiderDen() {
         return currentMap.equals("Spider's Den");
     }

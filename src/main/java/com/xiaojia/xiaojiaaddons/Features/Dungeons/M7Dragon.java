@@ -8,25 +8,26 @@ import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
-import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import net.minecraft.client.model.ModelDragon;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.RenderDragon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.Color;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
@@ -50,25 +51,11 @@ public class M7Dragon {
         display.setAlign("left");
     }
 
-    @SubscribeEvent
-    public void onRenderWorld(RenderWorldLastEvent event) {
-        if (!Checker.enabled) return;
-        if (!Configs.ShowStatueBox) return;
-        for (DragonInfo info : dragonInfos) {
-            BlockPos blockPos = info.blockPos;
-            AxisAlignedBB box = new AxisAlignedBB(
-                    blockPos.add(-12.5, -2, -12.5),
-                    blockPos.add(12.5, 15.5, 12.5)
-            );
-            GuiUtils.drawBoundingBox(box, 5, info.color);
-        }
-    }
-
     public static void onSpawnDragon(EntityDragon entity) {
         if (!SkyblockUtils.isInDungeon()) return;
         double distance = 1e9;
         DragonInfo dragonInfo = null;
-        for (DragonInfo info: dragonInfos) {
+        for (DragonInfo info : dragonInfos) {
             BlockPos pos = info.blockPos;
             double dis = entity.getDistanceSq(pos);
             if (dis < distance) {
@@ -98,16 +85,80 @@ public class M7Dragon {
         cir.setReturnValue(ret);
     }
 
-    public static float replaceHurtOpacity(EntityDragon entity, float value) {
-        if (Configs.ShowM7DragonColor && nearestBlockPosMap.containsKey(entity))
+    public static float replaceHurtOpacity(RenderDragon renderer, EntityDragon entity, float value) {
+        if (Configs.ShowM7DragonColor && nearestBlockPosMap.containsKey(entity)) {
+            ModelDragon model = (ModelDragon) renderer.getMainModel();
+            try {
+                Field bodyField, wingField;
+                try {
+                    bodyField = ModelDragon.class.getDeclaredField("body");
+                } catch (NoSuchFieldException e) {
+                    bodyField = ModelDragon.class.getDeclaredField("field_78217_d");
+                }
+                try {
+                    wingField = ModelDragon.class.getDeclaredField("wing");
+                } catch (NoSuchFieldException e) {
+                    wingField = ModelDragon.class.getDeclaredField("field_78225_k");
+                }
+                bodyField.setAccessible(true);
+                wingField.setAccessible(true);
+                ModelRenderer body = (ModelRenderer) bodyField.get(model);
+                ModelRenderer wing = (ModelRenderer) wingField.get(model);
+                body.isHidden = true;
+                wing.isHidden = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return value;
+            }
             return 0.01F;
+        }
         return value;
+    }
+
+    public static void afterRenderHurtFrame(RenderDragon renderer) {
+        try {
+            ModelDragon model = (ModelDragon) renderer.getMainModel();
+            Field bodyField, wingField;
+            try {
+                bodyField = ModelDragon.class.getDeclaredField("body");
+            } catch (NoSuchFieldException e) {
+                bodyField = ModelDragon.class.getDeclaredField("field_78217_d");
+            }
+            try {
+                wingField = ModelDragon.class.getDeclaredField("wing");
+            } catch (NoSuchFieldException e) {
+                wingField = ModelDragon.class.getDeclaredField("field_78225_k");
+            }
+            bodyField.setAccessible(true);
+            wingField.setAccessible(true);
+            ModelRenderer body = (ModelRenderer) bodyField.get(model);
+            ModelRenderer wing = (ModelRenderer) wingField.get(model);
+            body.isHidden = false;
+            wing.isHidden = false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static float getScale(float distance) {
         if (distance > 30) return 1;
         if (distance > 15) return 1 + (30 - distance) / 15 * 0.1F;
         return 1.3F - distance / 15 * 0.2F;
+    }
+
+    @SubscribeEvent
+    public void onRenderWorld(RenderWorldLastEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.ShowStatueBox) return;
+        if (!SkyblockUtils.isInDungeon() || !SkyblockUtils.getDungeon().equals("M7")) return;
+        for (DragonInfo info : dragonInfos) {
+            BlockPos blockPos = info.blockPos;
+            AxisAlignedBB box = new AxisAlignedBB(
+                    blockPos.add(-12.5, -2, -12.5),
+                    blockPos.add(12.5, 15.5, 12.5)
+            );
+            GuiUtils.drawBoundingBox(box, 5, info.color);
+        }
     }
 
     @SubscribeEvent
@@ -140,6 +191,8 @@ public class M7Dragon {
         }
         for (Entity entity : getWorld().loadedEntityList) {
             if (entity instanceof EntityDragon) {
+                if (!nearestBlockPosMap.containsKey(entity)) continue;
+
                 String hpPrefix = "&a";
                 double hp = ((EntityDragon) entity).getHealth();
                 if (hp <= 100000000) hpPrefix = "&c";
@@ -180,6 +233,7 @@ class DragonInfo {
     String prefix;
     Color color;
     String textureName;
+
     public DragonInfo(BlockPos blockPos, String prefix, Color color, String textureName) {
         this.blockPos = blockPos;
         this.prefix = prefix;

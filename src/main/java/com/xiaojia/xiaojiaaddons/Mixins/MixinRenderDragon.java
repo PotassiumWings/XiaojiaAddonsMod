@@ -43,11 +43,17 @@ public abstract class MixinRenderDragon extends RenderLiving<EntityDragon> {
             index = 3
     )
     private float replaceHurtOpacity(float value) {
-        return M7Dragon.replaceHurtOpacity(lastDragon, value);
+        return M7Dragon.replaceHurtOpacity((RenderDragon) (Object) this, lastDragon, value);
     }
+
     @Inject(method = "" +
             "getEntityTexture", at = @At("HEAD"), cancellable = true)
     private void replaceEntityTexture(EntityDragon entity, CallbackInfoReturnable<ResourceLocation> cir) {
         M7Dragon.getEntityTexture(entity, cir);
+    }
+
+    @Inject(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBase;render(Lnet/minecraft/entity/Entity;FFFFFF)V", ordinal = 2, shift = At.Shift.AFTER))
+    private void afterRenderHurtFrame(EntityDragon entitylivingbaseIn, float f, float g, float h, float i, float j, float scaleFactor, CallbackInfo ci) {
+        M7Dragon.afterRenderHurtFrame((RenderDragon) (Object) this);
     }
 }
