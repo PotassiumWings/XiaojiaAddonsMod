@@ -75,7 +75,7 @@ public class M7Dragon {
 
     public static float replaceHurtOpacity(EntityDragon entity, float value) {
         if (Configs.ShowM7DragonColor && nearestBlockPosMap.containsKey(entity))
-            return 0.03F;
+            return 0.01F;
         return value;
     }
 
@@ -122,9 +122,9 @@ public class M7Dragon {
                 String hpString = hpPrefix + DisplayUtils.hpToString(hp, true);
 
                 BlockPos blockPos = nearestBlockPosMap.get(entity);
-                if (hp <= 1) done.add(blockPos);
                 double dis = Math.sqrt(entity.getDistanceSq(blockPos));
                 String disPrefix = "&a";
+                if (hp <= 1 && dis < 15) done.add(blockPos);
 
                 float scale = getScale((float) dis);
                 if (dis < 15) disPrefix = "&c";

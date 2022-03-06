@@ -221,11 +221,17 @@ public class Command extends CommandBase {
             case "shoot":
                 ShortbowUtils.testEnderCrystals(Double.parseDouble(strings[1]), Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
                 break;
+            case "device":
+                AutoItemFrame.printLog();
+                break;
             case "m7":
                 TestM7.m7();
                 break;
             case "armorstand":
                 TestM7.show();
+                break;
+            case "sound":
+                XiaojiaAddons.mc.thePlayer.playSound(strings[1], 1000, 1);
                 break;
 //            case "click":
 //                ClickTest.setEnabled();

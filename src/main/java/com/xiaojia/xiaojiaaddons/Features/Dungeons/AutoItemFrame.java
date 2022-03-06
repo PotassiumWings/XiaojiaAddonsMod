@@ -35,14 +35,15 @@ enum Type {
 public class AutoItemFrame {
     private static final HashSet<MazeGrid> grid = new HashSet<>();
     private static final HashMap<Vector2i, Integer> neededRotation = new HashMap<>();
-    private static BlockPos topLeft = new BlockPos(-3, 125, 78);
-    private static BlockPos bottomRight = new BlockPos(-3, 121, 74);
+    private static BlockPos topLeft = new BlockPos(-2, 125, 79);
+    private static BlockPos bottomRight = new BlockPos(-2, 121, 75);
     private static Iterable<BlockPos> iterableBox = BlockPos.getAllInBox(topLeft, bottomRight);
     private static ArrayList<BlockPos> box = new ArrayList<BlockPos>() {{
         iterableBox.forEach(this::add);
         sort((a, b) -> a.getY() == b.getY() ? b.getZ() - a.getZ() : b.getY() - a.getY());
     }};
     private Thread thread = null;
+    private static StringBuilder log = new StringBuilder();
 
     public static void setPosition(int x, int y, int z) {
         topLeft = new BlockPos(x, y, z);
@@ -138,7 +139,7 @@ public class AutoItemFrame {
                         }
                         MazeGrid mazeGrid = new MazeGrid(blockPos, type, mazePos);
                         grid.add(mazeGrid);
-                        ChatLib.debug(mazeGrid.toString());
+                        log.append(mazeGrid.toString());
                     }
                 } else if (neededRotation.isEmpty()) {
                     // solve
@@ -150,12 +151,12 @@ public class AutoItemFrame {
                         endPositions.add(e);
                         endPositionMatched.add(false);
                     });
-                    ChatLib.debug("grid:");
-                    grid.forEach(e -> ChatLib.debug(e.toString()));
-                    ChatLib.debug("start:");
-                    startPositions.forEach(e -> ChatLib.debug(e.toString()));
-                    ChatLib.debug("end:");
-                    endPositions.forEach(e -> ChatLib.debug(e.toString()));
+                    log.append("grid:");
+                    grid.forEach(e -> log.append(e.toString()));
+                    log.append("start:");
+                    startPositions.forEach(e -> log.append(e.toString()));
+                    log.append("end:");
+                    endPositions.forEach(e -> log.append(e.toString()));
                     for (MazeGrid start : startPositions) {
                         int minDis = 1000;
                         MazeGrid correspondEnd = new MazeGrid(null, Type.EMPTY, new Vector2i(-1, -1));
@@ -167,8 +168,8 @@ public class AutoItemFrame {
                             int dis = arr.size();
                             if (dis == 0) continue;
                             if (dis < minDis || dis == minDis && correspondEnd.compareTo(end) < 0) {
-                                ChatLib.debug("end: " + end.gridPos + ", corr: " + correspondEnd.gridPos);
-                                ChatLib.debug("dis: " + dis + ", minDis: " + minDis);
+                                log.append("end: " + end.gridPos + ", corr: " + correspondEnd.gridPos);
+                                log.append("dis: " + dis + ", minDis: " + minDis);
                                 minDis = dis;
                                 correspondEnd = end;
                                 correspondEndIndex = i;
@@ -189,8 +190,8 @@ public class AutoItemFrame {
                             int dis = arr.size();
                             if (dis == 0) continue;
                             if (dis < minDis || dis == minDis && correspondStart.compareTo(end) < 0) {
-                                ChatLib.debug("start: " + end.gridPos + ", corr: " + correspondStart.gridPos);
-                                ChatLib.debug("dis: " + dis + ", minDis: " + minDis);
+                                log.append("start: " + end.gridPos + ", corr: " + correspondStart.gridPos);
+                                log.append("dis: " + dis + ", minDis: " + minDis);
                                 minDis = dis;
                                 correspondStart = end;
                                 correspondRotations = arr;
@@ -232,6 +233,11 @@ public class AutoItemFrame {
     public void onWorldLoad(WorldEvent.Load event) {
         grid.clear();
         neededRotation.clear();
+        log = new StringBuilder();
+    }
+
+    public static void printLog() {
+        System.err.println(log);
     }
 }
 
