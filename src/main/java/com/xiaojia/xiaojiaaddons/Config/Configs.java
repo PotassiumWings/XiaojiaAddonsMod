@@ -924,6 +924,10 @@ public class Configs {
             description = "Render statues bounding box in M7 P5 with their colors.")
     public static boolean ShowStatueBox = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Replace Dragon Texture", parent = "M7 Phase 5",
+            description = "Replace dragons' texture in M7 P5 with their colors.")
+    public static boolean ReplaceDragonTexture = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Show Dragon Color", parent = "M7 Phase 5",
             description = "Render the dragons in M7 P5 with their colors.\n" +
                     "Decrease hurt alpha to 0.03.")

@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
@@ -14,12 +15,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -27,21 +31,14 @@ import java.util.Map;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class M7Dragon {
-    private static final HashMap<EntityDragon, BlockPos> nearestBlockPosMap = new HashMap<>();
-    private static final HashMap<BlockPos, Color> dragonLocations = new HashMap<BlockPos, Color>() {{
-        put(new BlockPos(27, 14, 59), new Color(1F, 0F, 0F));
-        put(new BlockPos(27, 14, 94), new Color(0F, 1F, 0F));
-        put(new BlockPos(56, 14, 125), new Color(0.5019608f, 0.0f, 0.5019608f));
-        put(new BlockPos(85, 14, 94), new Color(0.0f, 1.0f, 1.0f));
-        put(new BlockPos(85, 14, 56), new Color(1.0f, 0.64705884f, 0.0f));
+    private static final ArrayList<DragonInfo> dragonInfos = new ArrayList<DragonInfo>() {{
+        add(new DragonInfo(new BlockPos(27, 14, 59), "&cRed Dragon&r: ", new Color(1F, 0F, 0F), "dragon_power.png"));
+        add(new DragonInfo(new BlockPos(27, 14, 94), "&aGreen Dragon&r: ", new Color(0F, 1F, 0F), "dragon_apex.png"));
+        add(new DragonInfo(new BlockPos(56, 14, 125), "&cRed Dragon&r: ", new Color(0.5019608f, 0.0f, 0.5019608f), "dragon_soul.png"));
+        add(new DragonInfo(new BlockPos(84, 14, 94), "&5Purple Dragon&r: ", new Color(0.0f, 1.0f, 1.0f), "dragon_ice.png"));
+        add(new DragonInfo(new BlockPos(85, 14, 56), "&6Orange Dragon&r: ", new Color(1.0f, 0.64705884f, 0.0f), "dragon_flame.png"));
     }};
-    private static final HashMap<BlockPos, String> prefixMap = new HashMap<BlockPos, String>() {{
-        put(new BlockPos(27, 14, 59), "&cRed Dragon&r: ");
-        put(new BlockPos(27, 14, 94), "&aGreen Dragon&r: ");
-        put(new BlockPos(56, 14, 125), "&5Purple Dragon&r: ");
-        put(new BlockPos(85, 14, 94), "&bCyan Dragon&r: ");
-        put(new BlockPos(85, 14, 56), "&6Orange Dragon&r: ");
-    }};
+    private static final HashMap<EntityDragon, DragonInfo> nearestBlockPosMap = new HashMap<>();
     private static final HashSet<BlockPos> done = new HashSet<>();
 
     private final Display display = new Display();
@@ -57,37 +54,48 @@ public class M7Dragon {
     public void onRenderWorld(RenderWorldLastEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.ShowStatueBox) return;
-        for (BlockPos blockPos : dragonLocations.keySet()) {
+        for (DragonInfo info : dragonInfos) {
+            BlockPos blockPos = info.blockPos;
             AxisAlignedBB box = new AxisAlignedBB(
                     blockPos.add(-12.5, -2, -12.5),
                     blockPos.add(12.5, 15.5, 12.5)
             );
-            GuiUtils.drawBoundingBox(box, 5, dragonLocations.get(blockPos));
+            GuiUtils.drawBoundingBox(box, 5, info.color);
         }
     }
 
     public static void onSpawnDragon(EntityDragon entity) {
-        BlockPos blockPos = null;
         if (!SkyblockUtils.isInDungeon()) return;
         double distance = 1e9;
-        for (Map.Entry<BlockPos, Color> entry : dragonLocations.entrySet()) {
-            BlockPos pos = entry.getKey();
+        DragonInfo dragonInfo = null;
+        for (DragonInfo info: dragonInfos) {
+            BlockPos pos = info.blockPos;
             double dis = entity.getDistanceSq(pos);
             if (dis < distance) {
                 distance = dis;
-                blockPos = pos;
+                dragonInfo = info;
             }
         }
 //        ChatLib.chat("dragon spawn " + entity + " at " + blockPos);
-        nearestBlockPosMap.put(entity, blockPos);
+        nearestBlockPosMap.put(entity, dragonInfo);
     }
 
     public static void onRenderMainModel(EntityDragon entity) {
         if (!Checker.enabled) return;
         if (!Configs.ShowM7DragonColor) return;
-        Color color = dragonLocations.get(nearestBlockPosMap.get(entity));
+        if (!nearestBlockPosMap.containsKey(entity)) return;
+        Color color = nearestBlockPosMap.get(entity).color;
         if (color != null)
             GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    public static void getEntityTexture(EntityDragon entity, CallbackInfoReturnable<ResourceLocation> cir) {
+        if (!Checker.enabled) return;
+        if (!Configs.ReplaceDragonTexture) return;
+        if (!nearestBlockPosMap.containsKey(entity)) return;
+        String location = nearestBlockPosMap.get(entity).textureName;
+        ResourceLocation ret = new ResourceLocation(XiaojiaAddons.MODID + ":" + location);
+        cir.setReturnValue(ret);
     }
 
     public static float replaceHurtOpacity(EntityDragon entity, float value) {
@@ -138,7 +146,7 @@ public class M7Dragon {
                 else if (hp <= 300000000) hpPrefix = "&6";
                 String hpString = hpPrefix + DisplayUtils.hpToString(hp, true);
 
-                BlockPos blockPos = nearestBlockPosMap.get(entity);
+                BlockPos blockPos = nearestBlockPosMap.get(entity).blockPos;
                 double dis = Math.sqrt(entity.getDistanceSq(blockPos));
                 String disPrefix = "&a";
                 if (hp <= 1 && dis < 15) done.add(blockPos);
@@ -147,9 +155,9 @@ public class M7Dragon {
                 if (dis < 15) disPrefix = "&c";
                 else if (dis < 30) disPrefix = "&6";
 
-                String str = prefixMap.get(blockPos) + hpString + "&r, " + disPrefix + String.format("%.2f", dis);
+                String str = nearestBlockPosMap.get(entity).prefix + hpString + "&r, " + disPrefix + String.format("%.2f", dis);
                 if (done.contains(blockPos)) {
-                    str = prefixMap.get(blockPos) + "&cDONE";
+                    str = nearestBlockPosMap.get(entity).prefix + "&cDONE";
                     scale = 0.9F;
                 }
 
@@ -164,6 +172,19 @@ public class M7Dragon {
     public void onWorldLoad(WorldEvent.Load event) {
         nearestBlockPosMap.clear();
         done.clear();
+    }
+}
+
+class DragonInfo {
+    BlockPos blockPos;
+    String prefix;
+    Color color;
+    String textureName;
+    public DragonInfo(BlockPos blockPos, String prefix, Color color, String textureName) {
+        this.blockPos = blockPos;
+        this.prefix = prefix;
+        this.color = color;
+        this.textureName = textureName;
     }
 }
 
