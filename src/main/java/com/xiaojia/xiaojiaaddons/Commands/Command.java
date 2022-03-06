@@ -166,12 +166,6 @@ public class Command extends CommandBase {
             case "setDungeon":
                 SkyblockUtils.setDungeon(strings[1]);
                 break;
-//            case "click":
-//                ClickTest.setEnabled();
-//                break;
-//            case "face":
-//                ControlUtils.face(0, 65, 0);
-//                break;
             default:
                 if (XiaojiaAddons.isDebug()) SkyblockUtils.setCurrentMap(String.join(" ", strings));
                 else ChatLib.chat(getUsage());

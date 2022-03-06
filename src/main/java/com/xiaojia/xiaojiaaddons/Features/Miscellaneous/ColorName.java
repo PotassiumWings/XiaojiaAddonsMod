@@ -109,10 +109,9 @@ public class ColorName {
     }
 
     private static void addToCache(String src, String dst) {
-        if (Checker.enabled) return; // TODO
         if (cachedColorName.size() > 10000) {
-            cachedColorName.clear();
             System.err.println("Color name cache too big! Clearing cache...");
+            cachedColorName.clear();
         }
         cachedColorName.put(src, dst);
     }
