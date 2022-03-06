@@ -3,7 +3,10 @@ package com.xiaojia.xiaojiaaddons.Features.Miscellaneous;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
@@ -23,10 +26,16 @@ public class NoRotate {
         S08PacketPlayerPosLook packet = (S08PacketPlayerPosLook) event.packet;
 //        ChatLib.chat("Received " + PacketUtils.getPosLookPacket(packet));
         EntityPlayer player = getPlayer();
-        if (!Configs.NoRotate || player == null) return;
         this.doneLoadingTerrain = true;
         // 0 pitch
         if (packet.getPitch() == 0.0D) return;
+
+        if (!Configs.NoRotate || player == null) return;
+        if (Configs.NoRotateDisableHoldingLeaps &&
+                NBTUtils.getSkyBlockID(ControlUtils.getHeldItemStack()).equals("SPIRIT_LEAP"))
+            return;
+        if (Configs.NoRotateDisableInMaze && Dungeon.currentRoom.equals("Teleport Maze"))
+            return;
 
         event.setCanceled(true);
         double x = packet.getX(), y = packet.getY(), z = packet.getZ();

@@ -446,6 +446,7 @@ public class Dungeon {
     @SubscribeEvent
     public void onRenderMap(RenderGameOverlayEvent.Pre event) {
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
+        if (!Configs.MapDisplay) return;
         if (!isInDungeon || !Configs.MapEnabled) return;
         RenderUtils.start();
         try {

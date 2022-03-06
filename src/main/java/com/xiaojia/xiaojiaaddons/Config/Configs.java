@@ -9,8 +9,18 @@ public class Configs {
             description = "DO NOT USE THESE FEATURES.")
     public static boolean DangerousFeatures = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "nO RotAtE", parent = "Dangerous Features")
+    @Property(type = Property.Type.FOLDER, name = "No Rotate", parent = "Dangerous Features")
+    public static boolean NoRotateEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "No Rotate Enabled", parent = "No Rotate")
     public static boolean NoRotate = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "No Rotate Disable When Holding Leaps", parent = "No Rotate")
+    public static boolean NoRotateDisableHoldingLeaps = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "No Rotate Disable When In Teleport Maze", parent = "No Rotate",
+            description = "Requires dungeon map enabled!")
+    public static boolean NoRotateDisableInMaze = false;
 
     @Property(type = Property.Type.FOLDER, name = "Velocity", parent = "Dangerous Features",
             description = "Only works in SkyBlock.\n" +
@@ -805,7 +815,8 @@ public class Configs {
     public static boolean TeleportMazeSolver = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Blaze", parent = "Solvers",
-            description = "Bind a key to use in blaze room!")
+            description = "Bind a key to use in blaze room!\n" +
+                    "Requires dungeon map enabled!")
     public static boolean AutoBlaze = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Blaze Secret", parent = "Solvers",
@@ -1318,6 +1329,10 @@ public class Configs {
     // Map
     @Property(type = Property.Type.FOLDER, name = "Map", parent = "Illegal Map")
     public static boolean MapPart = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Map Display Enabled", parent = "Map",
+            description = "Disable this if you don't want to see this shit.")
+    public static boolean MapDisplay = true;
 
     @Property(type = Property.Type.BOOLEAN, name = "Map Enabled", parent = "Map",
             description = "Need to be enabled to guarantee some dungeon features to work.")
