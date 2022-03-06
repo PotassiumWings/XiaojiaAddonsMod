@@ -35,6 +35,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.MapUpdater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.RoomLoader;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Quiz;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.TeleportMaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShadowAssassinESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShowHiddenMobs;
@@ -224,6 +225,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new Map());
         // puzzles
         MinecraftForge.EVENT_BUS.register(new TeleportMaze());
+        MinecraftForge.EVENT_BUS.register(new Quiz());
 
         // Miscellaneous
         MinecraftForge.EVENT_BUS.register(new ChatCopy());

@@ -65,9 +65,7 @@ public class ShowEtherwarp {
 
         int dist = 57 + NBTUtils.getIntFromExtraAttributes(held, "tuned_transmission");
         Vec3 eye = player.getPositionEyes(event.partialTicks);
-        Vec3 look = player.getLook(event.partialTicks);
-        Vec3 farthest = eye.addVector(look.xCoord * dist, look.yCoord * dist, look.zCoord * dist);
-        BlockPos pos = BlockUtils.getNearestBlock(eye, farthest);
+        BlockPos pos = BlockUtils.getLookingAtPos(dist);
         if (valid(pos)) {
             // render
             GuiUtils.enableESP();
@@ -90,7 +88,8 @@ public class ShowEtherwarp {
                             GuiUtils.enableESP();
                             faces.forEach(e -> {
                                 if (BlockUtils.getNearestBlock(eye, e.mid) == null) {
-                                    Color color = ColorUtils.getColorFromString(Configs.PossibleEtherwarpPointColor, new Color(0, 0, 0, 255));
+                                    Color color = ColorUtils.getColorFromString(Configs.PossibleEtherwarpPointColor,
+                                            new Color(0, 0, 0, 255));
                                     GuiUtils.drawFilledFace(e, color);
                                 }
                             });

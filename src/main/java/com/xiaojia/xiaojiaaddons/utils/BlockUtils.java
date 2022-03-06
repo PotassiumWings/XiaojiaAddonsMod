@@ -5,6 +5,7 @@ import com.mojang.authlib.properties.Property;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.AxisAlignedBB;
@@ -24,6 +25,14 @@ public class BlockUtils {
             Blocks.chest, Blocks.trapped_chest, Blocks.lever,
             Blocks.skull, Blocks.stone_button, Blocks.wooden_button
     };
+
+    public static BlockPos getLookingAtPos(int dist) {
+        EntityPlayer player = getPlayer();
+        Vec3 eye = player.getPositionEyes(MathUtils.partialTicks);
+        Vec3 look = player.getLook(MathUtils.partialTicks);
+        Vec3 farthest = eye.addVector(look.xCoord * dist, look.yCoord * dist, look.zCoord * dist);
+        return BlockUtils.getNearestBlock(eye, farthest);
+    }
 
     public static boolean isInteractive(Block block) {
         for (Block iblock : interactiveBlocks) if (iblock == block) return true;

@@ -119,11 +119,11 @@ public class BloodAssist {
             }
             // moving
             if (xSpeed != 0 || ySpeed != 0 || zSpeed != 0) {
-                log.append(String.format("%s speed: (%.2f %.2f %.2f)", uuid, xSpeed, ySpeed, zSpeed));
+                log.append(String.format("%s speed: (%.2f %.2f %.2f)", uuid, xSpeed, ySpeed, zSpeed)).append("\n");
                 if (info == null) {
                     info = new BloodMobInfo(TimeUtils.curTime(), skull.posX, skull.posY, skull.posZ);
                     infos.put(uuid, info);
-                    log.append("new info: " + uuid + ", " + info);
+                    log.append("new info: " + uuid + ", " + info).append("\n");
                 }
 
                 if (info.lastX == skull.posX && info.lastY == skull.posY && info.lastZ == skull.posZ) {
@@ -170,7 +170,7 @@ public class BloodAssist {
     private void setDead(String uuid, BloodMobInfo info, int from) {
         info.isDead = true;
         spawnId++;
-        log.append("set dead: ").append(uuid).append(", ").append(info).append(", from: ").append(from);
+        log.append("set dead: ").append(uuid).append(", ").append(info).append(", from: ").append(from).append("\n");
     }
 
     @SubscribeEvent
@@ -186,7 +186,7 @@ public class BloodAssist {
             for (Entity entity : getWorld().loadedEntityList) {
                 if (!(entity instanceof EntityArmorStand)) continue;
                 newArmorStands.offerLast((EntityArmorStand) entity);
-                log.append("worldload, ").append(entity.getDisplayName());
+                log.append("worldload, ").append(entity.getDisplayName()).append("\n");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,19 +197,19 @@ public class BloodAssist {
         ItemStack helm = entityArmorStand.getEquipmentInSlot(4);
         if (helm == null) return;
         String name = ChatLib.removeFormatting(helm.getDisplayName()).trim();
-        log.append("detected ").append(name);
+        log.append("detected ").append(name).append("\n");
 
         if (!bloodTrunk.equals(new Vector2i(-100000, -100000))) {
             if (new Vector2i(((int) entityArmorStand.posX + 8) / 16 / 2,
                     ((int) entityArmorStand.posZ + 8) / 16 / 2).equals(bloodTrunk)) {
                 skulls.add(entityArmorStand);
-                log.append("added ").append(name).append(", ").append(entityArmorStand.getUniqueID().toString());
+                log.append("added ").append(name).append(", ").append(entityArmorStand.getUniqueID().toString()).append("\n");
             }
         } else {
             if (name.endsWith(getPlayer().getName() + "'s Head") || name.endsWith(getPlayer().getName() + "' Head")) {
                 bloodTrunk = new Vector2i(((int) entityArmorStand.posX + 8) / 16 / 2,
                         ((int) entityArmorStand.posZ + 8) / 16 / 2);
-                log.append("Head: ").append(name).append(", trunk: ").append(bloodTrunk);
+                log.append("Head: ").append(name).append(", trunk: ").append(bloodTrunk).append("\n");
                 for (Entity entity : getWorld().loadedEntityList) {
                     if (!(entity instanceof EntityArmorStand)) continue;
                     helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);

@@ -814,6 +814,11 @@ public class Configs {
                     "Blue Pad = has a chance to be final tp.")
     public static boolean TeleportMazeSolver = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Quiz Solver", parent = "Solvers",
+            description = "Hide wrong answers, and block wrong clicks.\n" +
+                    "Fetch newest answer every 10 minutes.")
+    public static boolean QuizSolver = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Auto Blaze", parent = "Solvers",
             description = "Bind a key to use in blaze room!\n" +
                     "Requires dungeon map enabled!")

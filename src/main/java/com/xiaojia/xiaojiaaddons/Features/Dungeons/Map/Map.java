@@ -43,9 +43,9 @@ public class Map {
         else if (Dungeon.floorInt == 2 || Dungeon.floorInt == 3) startCorner = new Vector2i(11, 11);
         else if (Dungeon.floorInt == 4 && Dungeon.totalRooms > 25) startCorner = new Vector2i(5, 16);
 
-        log.append("start corner: " + startCorner.x + ", " + startCorner.y);
-        log.append("roomsize: " + roomSize);
-        log.append("dungeon floor int: " + Dungeon.floorInt);
+        log.append("start corner: " + startCorner.x + ", " + startCorner.y).append("\n");
+        log.append("roomsize: " + roomSize).append("\n");
+        log.append("dungeon floor int: " + Dungeon.floorInt).append("\n");
         calibrated = true;
     }
 

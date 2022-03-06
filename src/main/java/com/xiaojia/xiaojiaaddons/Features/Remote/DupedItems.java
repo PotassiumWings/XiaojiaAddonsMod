@@ -40,8 +40,7 @@ public class DupedItems {
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             JsonObject fullJson = parser.parse(reader).getAsJsonObject();
             update(fullJson);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
     }
 

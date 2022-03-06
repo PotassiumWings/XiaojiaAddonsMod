@@ -144,7 +144,7 @@ public class AutoItemFrame {
                         }
                         MazeGrid mazeGrid = new MazeGrid(blockPos, type, mazePos);
                         grid.add(mazeGrid);
-                        log.append(mazeGrid.toString());
+                        log.append(mazeGrid.toString()).append("\n");
                     }
                 } else if (neededRotation.isEmpty()) {
                     // solve
@@ -156,12 +156,12 @@ public class AutoItemFrame {
                         endPositions.add(e);
                         endPositionMatched.add(false);
                     });
-                    log.append("grid:");
-                    grid.forEach(e -> log.append(e.toString()));
-                    log.append("start:");
-                    startPositions.forEach(e -> log.append(e.toString()));
-                    log.append("end:");
-                    endPositions.forEach(e -> log.append(e.toString()));
+                    log.append("grid:\n");
+                    grid.forEach(e -> log.append(e.toString()).append("\n"));
+                    log.append("start:").append("\n");
+                    startPositions.forEach(e -> log.append(e.toString()).append("\n"));
+                    log.append("end:").append("\n");
+                    endPositions.forEach(e -> log.append(e.toString()).append("\n"));
                     for (MazeGrid start : startPositions) {
                         int minDis = 1000;
                         MazeGrid correspondEnd = new MazeGrid(null, Type.EMPTY, new Vector2i(-1, -1));
@@ -173,8 +173,8 @@ public class AutoItemFrame {
                             int dis = arr.size();
                             if (dis == 0) continue;
                             if (dis < minDis || dis == minDis && correspondEnd.compareTo(end) < 0) {
-                                log.append("end: " + end.gridPos + ", corr: " + correspondEnd.gridPos);
-                                log.append("dis: " + dis + ", minDis: " + minDis);
+                                log.append("end: " + end.gridPos + ", corr: " + correspondEnd.gridPos).append("\n");
+                                log.append("dis: " + dis + ", minDis: " + minDis).append("\n");
                                 minDis = dis;
                                 correspondEnd = end;
                                 correspondEndIndex = i;
@@ -195,8 +195,8 @@ public class AutoItemFrame {
                             int dis = arr.size();
                             if (dis == 0) continue;
                             if (dis < minDis || dis == minDis && correspondStart.compareTo(end) < 0) {
-                                log.append("start: " + end.gridPos + ", corr: " + correspondStart.gridPos);
-                                log.append("dis: " + dis + ", minDis: " + minDis);
+                                log.append("start: " + end.gridPos + ", corr: " + correspondStart.gridPos).append("\n");
+                                log.append("dis: " + dis + ", minDis: " + minDis).append("\n");
                                 minDis = dis;
                                 correspondStart = end;
                                 correspondRotations = arr;

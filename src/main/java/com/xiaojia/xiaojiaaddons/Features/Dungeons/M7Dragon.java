@@ -116,25 +116,25 @@ public class M7Dragon {
                 HashMap<EntityDragon, DragonInfo> newInfos = new HashMap<>();
                 boolean shouldPrintLog = false;
                 for (String name : relics.keySet()) {
-                    log.append("relic: ").append(name);
+                    log.append("relic: ").append(name).append("\n");
                     ArrayList<EntityArmorStand> armorStands =relics.get(name);
                     if (armorStands.size() != 8) {
                         shouldPrintLog = true;
-                        log.append("wtf size is not 8");
+                        log.append("wtf size is not 8").append("\n");
                     } else {
                         for (EntityDragon entity : dragonsMap.keySet()) {
                             if (entity.getHealth() <= 0 || entity.isDead) continue;
                             int cnt = 0;
-                            log.append(String.format("checking entity dragon: %.2f %.2f %.2f", getX(entity), getY(entity), getZ(entity)));
+                            log.append(String.format("checking entity dragon: %.2f %.2f %.2f", getX(entity), getY(entity), getZ(entity))).append("\n");
                             for (EntityArmorStand relic : armorStands) {
                                 double dis = relic.getDistanceSqToEntity(entity);
-                                log.append(String.format("relic: %.2f %.2f %.2f, %.2f", getX(relic), getY(relic), getZ(relic), dis));
+                                log.append(String.format("relic: %.2f %.2f %.2f, %.2f", getX(relic), getY(relic), getZ(relic), dis)).append("\n");
                                 if (dis > 3.65 && dis < 3.85) cnt++;
                             }
                             DragonInfo dragonInfo = getDragonInfoFromHelmName(name);
                             if (cnt == 8) {
                                 if (newInfos.containsKey(entity)) {
-                                    log.append(String.format("wtf this dragon is counted as %s and %s", newInfos.get(entity).headName, name));
+                                    log.append(String.format("wtf this dragon is counted as %s and %s", newInfos.get(entity).headName, name)).append("\n");
                                     shouldPrintLog = true;
                                 }
                                 newInfos.put(entity, dragonInfo);
