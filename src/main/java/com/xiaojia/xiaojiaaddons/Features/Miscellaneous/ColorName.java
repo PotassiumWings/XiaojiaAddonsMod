@@ -46,9 +46,6 @@ public class ColorName {
         rankMap = (new Gson()).fromJson(rank, type);
         colorMap = (new Gson()).fromJson(color, type);
         cachedColorName.clear();
-//        for (String str: rankMap.keySet()) {
-//            ChatLib.chat(str + ": " + rankMap.get(str) + " " + colorMap.get(str) + str);
-//        }
     }
 
     public static void showCache() {
@@ -83,12 +80,6 @@ public class ColorName {
 
             siblings = compactSiblings(siblings);
 
-//            System.err.println(message.getFormattedText() + ", owo!");
-//            for (IChatComponent component1 : siblings) {
-//                System.err.println(component1.getFormattedText());
-//            }
-//            System.err.println("owo!");
-
             IChatComponent res = null;
             for (IChatComponent component1 : siblings) {
                 if (res == null) res = convert(component1);
@@ -99,86 +90,32 @@ public class ColorName {
     }
 
     private static List<IChatComponent> compactSiblings(List<IChatComponent> siblings) {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         List<IChatComponent> res = new ArrayList<>();
         for (int i = 0; i < siblings.size(); i++) {
             IChatComponent component = siblings.get(i);
             ClickEvent clickEvent = component.getChatStyle().getChatClickEvent();
             HoverEvent hoverEvent = component.getChatStyle().getChatHoverEvent();
             if ((clickEvent == null || clickEvent.getAction() == ClickEvent.Action.SUGGEST_COMMAND) && hoverEvent == null) {
-                str += component.getFormattedText();
+                str.append(component.getFormattedText());
             } else {
-//                if (component.getChatStyle().getChatClickEvent() != null)
-//                    System.err.println(component + "click: " + component.getChatStyle().getChatClickEvent());
-//                if (component.getChatStyle().getChatHoverEvent() != null)
-//                    System.err.println(component + "hover: " + component.getChatStyle().getChatHoverEvent());
-                res.add(new ChatComponentText(str));
+                res.add(new ChatComponentText(str.toString()));
                 res.add(component);
-                str = "";
+                str = new StringBuilder();
             }
         }
-        if (!str.equals("")) res.add(new ChatComponentText(str));
+        if (!str.toString().equals("")) res.add(new ChatComponentText(str.toString()));
         return res;
     }
 
     private static void addToCache(String src, String dst) {
-        if (cachedColorName.size() > 50000) {
+        if (Checker.enabled) return; // TODO
+        if (cachedColorName.size() > 10000) {
             cachedColorName.clear();
-            ChatLib.chat("Color name cache too big! Clearing cache...");
+            System.err.println("Color name cache too big! Clearing cache...");
         }
         cachedColorName.put(src, dst);
     }
-
-    // colorname tab
-//    @SubscribeEvent
-//    public void onWorldLoad(WorldEvent.Load event) {
-//        if (!Checker.enabled) return;
-//        if (!Configs.ColorNameTab) return;
-//        if (true) return;
-//        NetworkPlayerInfo playerInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(SessionUtils.getUUID());
-//        if (playerInfo == null) {
-//            ChatLib.chat("player info is null!");
-//            return;
-//        }
-//        IChatComponent origin = playerInfo.getDisplayName();
-//        IChatComponent dst = convert(origin);
-//        ChatLib.chat("player info from " + origin + " to " + dst);
-//        playerInfo.setDisplayName(dst);
-//    }
-//
-//    @SubscribeEvent
-//    public void onPlayerJoin(EntityJoinWorldEvent event) {
-//        if (!Checker.enabled) return;
-//        if (!Configs.ColorNameTab) return;
-//        if (event.entity instanceof EntityPlayer) {
-//            ChatLib.chat(event.entity + " joined!");
-//            NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(event.entity.getUniqueID());
-//            if (playerInfo == null) {
-//                ChatLib.chat("player info is null for " + event.entity.getDisplayName());
-//                return;
-//            }
-//            ChatLib.chat(playerInfo + " owo");
-//            IChatComponent origin = playerInfo.getDisplayName();
-//            IChatComponent dst = convert(origin);
-//            ChatLib.chat("player info from " + origin + " to " + dst);
-//            playerInfo.setDisplayName(dst);
-//        }
-//    }
-//
-//    public static void getPlayerInfos() {
-//        for (EntityPlayer player: getWorld().playerEntities) {
-//            NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(player.getUniqueID());
-//            if (playerInfo == null || playerInfo.getDisplayName() == null) {
-//                ChatLib.chat("player info or displayName is null" + player.getDisplayName());
-//                return;
-//            }
-//            ChatLib.chat(playerInfo + " owo");
-//            IChatComponent origin = playerInfo.getDisplayName();
-//            IChatComponent dst = convert(origin);
-//            ChatLib.chat("player info from " + origin + " to " + dst);
-//            playerInfo.setDisplayName(dst);
-//        }
-//    }
 
     public static int getCacheSize() {
         return cachedColorName.size();

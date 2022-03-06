@@ -18,10 +18,10 @@ public class Configs {
                     "within 1s, this feature will be automatically disabled.")
     public static boolean Velocity = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Velocity XZ Scale", parent = "Velocity", min = 0, max = 100, suffix = "%")
+    @Property(type = Property.Type.NUMBER, name = "Velocity XZ Scale", parent = "Velocity", min = 0, max = 100, suffix = " %")
     public static int VelocityXZ = 100;
 
-    @Property(type = Property.Type.NUMBER, name = "Velocity Y Scale", parent = "Velocity", min = 0, max = 100, suffix = "%")
+    @Property(type = Property.Type.NUMBER, name = "Velocity Y Scale", parent = "Velocity", min = 0, max = 100, suffix = " %")
     public static int VelocityY = 100;
 
     @Property(type = Property.Type.FOLDER, name = "Dupe Display", parent = "Misc")
@@ -924,6 +924,10 @@ public class Configs {
             description = "Render statues bounding box in M7 P5 with their colors.")
     public static boolean ShowStatueBox = false;
 
+    @Property(type = Property.Type.NUMBER, name = "Dragon Check CD", parent = "M7 Phase 5", suffix = " ms",
+            description = "How often to check dragons' colors based on relics.")
+    public static int DragonCheckCD = 500;
+
     @Property(type = Property.Type.SELECT, name = "Replace Dragon Texture", parent = "M7 Phase 5",
             description = "Replace dragons' texture in M7 P5 with their colors.\n" +
                     "&6COLOR&r mode: Show the dragons' corresponding color.\n" +
@@ -1210,7 +1214,7 @@ public class Configs {
 
     @Property(type = Property.Type.NUMBER, name = "Auto Pulling Rod CD", parent = "Fishing",
             description = "Cooldown between particles approaching and pulling.",
-            min = 50, max = 500, step = 5, suffix = "ms")
+            min = 50, max = 500, step = 5, suffix = " ms")
     public static int AutoPullRodCD = 150;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Move Randomly", parent = "Fishing", illegal = true,
@@ -1414,7 +1418,7 @@ public class Configs {
     public static boolean DarkenUnexplored = true;
 
     @Property(type = Property.Type.NUMBER, name = "Darken Unexplored Factor", parent = "Rooms",
-            description = "Determine how dark unexplored rooms are.", suffix = "%", min = 0, max = 100)
+            description = "Determine how dark unexplored rooms are.", suffix = " %", min = 0, max = 100)
     public static int DarkenUnexploredPercent = 34;
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Trap Room Name", parent = "Rooms")

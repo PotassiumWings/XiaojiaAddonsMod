@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Mixins;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.M7Dragon;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderDragon;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -23,7 +24,7 @@ public abstract class MixinRenderDragon extends RenderLiving<EntityDragon> {
 
     @Inject(method = "renderModel(Lnet/minecraft/entity/boss/EntityDragon;FFFFFF)V", at = @At("HEAD"))
     private void onRenderModel(EntityDragon entity, float f, float g, float h, float i, float j, float scaleFactor, CallbackInfo ci) {
-        if (Configs.RemoveDragonHurtRender)
+        if (Configs.RemoveDragonHurtRender && SkyblockUtils.isInDungeon())
             entity.hurtTime = 0;
     }
 

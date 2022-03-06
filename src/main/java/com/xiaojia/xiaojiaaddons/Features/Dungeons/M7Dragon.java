@@ -6,11 +6,17 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
+import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
@@ -24,14 +30,37 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class M7Dragon {
-    private static final DragonInfo redDragon = new DragonInfo(new BlockPos(27, 14, 59), "&cRed Dragon&r: ", new Color(1F, 0F, 0F), "dragon_power.png");
-    private static final DragonInfo greenDragon = new DragonInfo(new BlockPos(27, 14, 94), "&aGreen Dragon&r: ", new Color(0F, 1F, 0F), "dragon_apex.png");
-    private static final DragonInfo purpleDragon = new DragonInfo(new BlockPos(56, 14, 125), "&cRed Dragon&r: ", new Color(0.5019608f, 0.0f, 0.5019608f), "dragon_soul.png");
-    private static final DragonInfo blueDragon = new DragonInfo(new BlockPos(84, 14, 94), "&5Purple Dragon&r: ", new Color(0.0f, 1.0f, 1.0f), "dragon_ice.png");
-    private static final DragonInfo orangeDragon = new DragonInfo(new BlockPos(85, 14, 56), "&6Orange Dragon&r: ", new Color(1.0f, 0.64705884f, 0.0f), "dragon_flame.png");
+    private static final DragonInfo redDragon = new DragonInfo(
+            new BlockPos(27, 14, 59), "&cRed Dragon&r: ",
+            new Color(1F, 0F, 0F), "dragon_power.png",
+            "Corrupted Red Relic"
+    );
+    private static final DragonInfo greenDragon = new DragonInfo(
+            new BlockPos(27, 14, 94), "&aGreen Dragon&r: ",
+            new Color(0F, 1F, 0F), "dragon_apex.png",
+            "Corrupted Green Relic"
+    );
+    private static final DragonInfo purpleDragon = new DragonInfo(
+            new BlockPos(56, 14, 125), "&cRed Dragon&r: ",
+            new Color(0.5019608f, 0.0f, 0.5019608f), "dragon_soul.png",
+            "Corrupted Purple Relic"
+    );
+    private static final DragonInfo blueDragon = new DragonInfo(
+            new BlockPos(84, 14, 94), "&5Purple Dragon&r: ",
+            new Color(0.0f, 1.0f, 1.0f), "dragon_ice.png",
+            "Corrupted Blue Relic"
+    );
+    private static final DragonInfo orangeDragon = new DragonInfo(
+            new BlockPos(85, 14, 56), "&6Orange Dragon&r: ",
+            new Color(1.0f, 0.64705884f, 0.0f), "dragon_flame.png",
+            "Corrupted Orange Relic"
+    );
     private static final ArrayList<DragonInfo> dragonInfos = new ArrayList<DragonInfo>() {{
         add(redDragon);
         add(greenDragon);
@@ -39,9 +68,11 @@ public class M7Dragon {
         add(blueDragon);
         add(orangeDragon);
     }};
-    private static final HashMap<EntityDragon, DragonInfo> nearestBlockPosMap = new HashMap<>();
+    private static final HashMap<EntityDragon, DragonInfo> dragonsMap = new HashMap<>();
     private static final HashSet<BlockPos> done = new HashSet<>();
     private final Display display = new Display();
+
+    private static long lastCheck = 0;
 
     public M7Dragon() {
         display.setShouldRender(true);
@@ -51,11 +82,73 @@ public class M7Dragon {
     }
 
     private static DragonInfo getDragonInfoFromHP(float health) {
-        if (health > 199) return greenDragon;
-        if (health > 180) return orangeDragon;
-//        if (health > 300000000) return "dragon_apex.png";
-//        if (health > 100000000) return "dragon_flame.png";
+        if (health > 300000000) return greenDragon;
+        if (health > 100000000) return orangeDragon;
         return redDragon;
+    }
+
+    private static DragonInfo getDragonInfoFromHelmName(String name) {
+        for (DragonInfo info : dragonInfos) if (info.headName.equals(name)) return info;
+        return null;
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (!SkyblockUtils.isInDungeon()) return;
+        if (getWorld() == null) return;
+        if (TimeUtils.curTime() - lastCheck > Configs.DragonCheckCD) {
+            lastCheck = TimeUtils.curTime();
+            new Thread(() -> {
+                HashMap<String, ArrayList<EntityArmorStand>> relics = new HashMap<>();
+                StringBuilder log = new StringBuilder();
+                for (Entity entity : getWorld().loadedEntityList) {
+                    if (entity instanceof EntityArmorStand) {
+                        ItemStack helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);
+                        if (helm == null) continue;
+                        String helmString = helm.getDisplayName();
+                        if (helmString.contains("Corrupted ")) {
+                            relics.putIfAbsent(helmString, new ArrayList<>());
+                            relics.get(helmString).add((EntityArmorStand) entity);
+                        }
+                    }
+                }
+                HashMap<EntityDragon, DragonInfo> newInfos = new HashMap<>();
+                boolean shouldPrintLog = false;
+                for (String name : relics.keySet()) {
+                    log.append("relic: ").append(name);
+                    ArrayList<EntityArmorStand> armorStands =relics.get(name);
+                    if (armorStands.size() != 8) {
+                        shouldPrintLog = true;
+                        log.append("wtf size is not 8");
+                    } else {
+                        for (EntityDragon entity : dragonsMap.keySet()) {
+                            if (entity.getHealth() <= 0 || entity.isDead) continue;
+                            int cnt = 0;
+                            log.append(String.format("checking entity dragon: %.2f %.2f %.2f", getX(entity), getY(entity), getZ(entity)));
+                            for (EntityArmorStand relic : armorStands) {
+                                double dis = relic.getDistanceSqToEntity(entity);
+                                log.append(String.format("relic: %.2f %.2f %.2f, %.2f", getX(relic), getY(relic), getZ(relic), dis));
+                                if (dis > 3.65 && dis < 3.85) cnt++;
+                            }
+                            DragonInfo dragonInfo = getDragonInfoFromHelmName(name);
+                            if (cnt == 8) {
+                                if (newInfos.containsKey(entity)) {
+                                    log.append(String.format("wtf this dragon is counted as %s and %s", newInfos.get(entity).headName, name));
+                                    shouldPrintLog = true;
+                                }
+                                newInfos.put(entity, dragonInfo);
+                            }
+                        }
+                    }
+                }
+                if (shouldPrintLog) {
+                    System.err.println(log);
+                    ChatLib.chat("&cAn error occurred in M7 Dragon Color Check. Please &c&l/xj report.");
+                }
+                dragonsMap.putAll(newInfos);
+            }).start();
+        }
     }
 
     public static void onSpawnDragon(EntityDragon entity) {
@@ -70,8 +163,7 @@ public class M7Dragon {
                 dragonInfo = info;
             }
         }
-//        ChatLib.chat("dragon spawn " + entity + " at " + blockPos);
-        nearestBlockPosMap.put(entity, dragonInfo);
+        dragonsMap.put(entity, dragonInfo);
     }
 
     public static void getEntityTexture(EntityDragon entity, CallbackInfoReturnable<ResourceLocation> cir) {
@@ -80,8 +172,8 @@ public class M7Dragon {
         ResourceLocation ret;
         String location;
         if (Configs.ReplaceDragonTexture == 1) {
-            if (!nearestBlockPosMap.containsKey(entity)) return;
-            location = nearestBlockPosMap.get(entity).textureName;
+            if (!dragonsMap.containsKey(entity)) return;
+            location = dragonsMap.get(entity).textureName;
         } else {
             location = getDragonInfoFromHP(entity.getHealth()).textureName;
         }
@@ -103,8 +195,8 @@ public class M7Dragon {
         for (DragonInfo info : dragonInfos) {
             BlockPos blockPos = info.blockPos;
             AxisAlignedBB box = new AxisAlignedBB(
-                    blockPos.add(-12.5, -2, -12.5),
-                    blockPos.add(12.5, 15.5, 12.5)
+                    blockPos.add(-12, -2, -12),
+                    blockPos.add(12, 15, 12)
             );
             GuiUtils.drawBoundingBox(box, 5, info.color);
         }
@@ -141,7 +233,7 @@ public class M7Dragon {
         }
         for (Entity entity : getWorld().loadedEntityList) {
             if (entity instanceof EntityDragon) {
-                if (!nearestBlockPosMap.containsKey(entity)) continue;
+                if (!dragonsMap.containsKey(entity)) continue;
 
                 String hpPrefix = "&a";
                 double hp = ((EntityDragon) entity).getHealth();
@@ -149,7 +241,7 @@ public class M7Dragon {
                 else if (hp <= 300000000) hpPrefix = "&6";
                 String hpString = hpPrefix + DisplayUtils.hpToString(hp, true);
 
-                BlockPos blockPos = nearestBlockPosMap.get(entity).blockPos;
+                BlockPos blockPos = dragonsMap.get(entity).blockPos;
                 double dis = Math.sqrt(entity.getDistanceSq(blockPos));
                 String disPrefix = "&a";
                 if (hp <= 1 && dis < 15) done.add(blockPos);
@@ -158,9 +250,9 @@ public class M7Dragon {
                 if (dis < 15) disPrefix = "&c";
                 else if (dis < 30) disPrefix = "&6";
 
-                String str = nearestBlockPosMap.get(entity).prefix + hpString + "&r, " + disPrefix + String.format("%.2f", dis);
+                String str = dragonsMap.get(entity).prefix + hpString + "&r, " + disPrefix + String.format("%.2f", dis);
                 if (done.contains(blockPos)) {
-                    str = nearestBlockPosMap.get(entity).prefix + "&cDONE";
+                    str = dragonsMap.get(entity).prefix + "&cDONE";
                     scale = 0.9F;
                 }
 
@@ -173,7 +265,7 @@ public class M7Dragon {
 
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
-        nearestBlockPosMap.clear();
+        dragonsMap.clear();
         done.clear();
     }
 }
@@ -183,12 +275,14 @@ class DragonInfo {
     String prefix;
     Color color;
     String textureName;
+    String headName;
 
-    public DragonInfo(BlockPos blockPos, String prefix, Color color, String textureName) {
+    public DragonInfo(BlockPos blockPos, String prefix, Color color, String textureName, String headName) {
         this.blockPos = blockPos;
         this.prefix = prefix;
         this.color = color;
         this.textureName = textureName;
+        this.headName = headName;
     }
 }
 
