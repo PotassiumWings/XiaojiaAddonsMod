@@ -633,21 +633,13 @@ public class Dungeon {
 
     private int getInt(String s, Pattern pattern) {
         Matcher matcher = pattern.matcher(s);
-        if (matcher.find()) {
-            int res = Integer.parseInt(matcher.group(1));
-            return res;
-        }
-        System.err.println("error getting int: " + s + ", " + pattern);
+        if (matcher.find()) return Integer.parseInt(matcher.group(1));
         return 0;
     }
 
     private float getFloat(String s, Pattern pattern) {
         Matcher matcher = pattern.matcher(s);
-        if (matcher.find()) {
-            float res = Float.parseFloat(matcher.group(1));
-            return res;
-        }
-        System.err.println("error getting float: " + s + ", " + pattern);
+        if (matcher.find()) return Float.parseFloat(matcher.group(1));
         return 0;
     }
 
