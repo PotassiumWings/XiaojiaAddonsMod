@@ -118,10 +118,7 @@ public class M7Dragon {
                 for (String name : relics.keySet()) {
                     log.append("relic: ").append(name).append("\n");
                     ArrayList<EntityArmorStand> armorStands =relics.get(name);
-                    if (armorStands.size() != 8) {
-                        shouldPrintLog = true;
-                        log.append("wtf size is not 8").append("\n");
-                    } else {
+                    if (armorStands.size() == 8) {
                         for (EntityDragon entity : dragonsMap.keySet()) {
                             if (entity.getHealth() <= 0 || entity.isDead) continue;
                             int cnt = 0;

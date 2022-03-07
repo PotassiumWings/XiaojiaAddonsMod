@@ -18,13 +18,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
@@ -51,13 +51,6 @@ public class Quiz {
                     for (JsonElement solution : arr) {
                         solutions.get(question).add(solution.getAsString());
                     }
-                }
-                for (String str : solutions.keySet()) {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(str).append(":");
-                    for (String solution : solutions.get(str))
-                        sb.append(solution).append(" ");
-                    System.err.println(sb);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -112,14 +105,15 @@ public class Quiz {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.QuizSolver) return;
-        if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
+        if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK &&
+                event.action != PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) return;
         Block block = BlockUtils.getBlockAt(event.pos);
-        if (block != Blocks.stone_button || answer == null) return;
+        if (block != Blocks.stone_button && block != Blocks.double_stone_slab || answer == null) return;
         if (!Dungeon.currentRoom.equals("Quiz")) return;
         EntityArmorStand answerEntity = null;
         for (Entity entity : getWorld().loadedEntityList) {
-            if (!(entity instanceof EntityArmorStand)) return;
-            if (!entity.hasCustomName()) return;
+            if (!(entity instanceof EntityArmorStand)) continue;
+            if (!entity.hasCustomName()) continue;
             String name = entity.getCustomNameTag();
             if (name.contains(answer) && (name.contains("ⓐ") || name.contains("ⓑ") || name.contains("ⓒ"))) {
                 answerEntity = (EntityArmorStand) entity;
@@ -134,14 +128,19 @@ public class Quiz {
     }
 
     @SubscribeEvent
-    public void onRenderArmorStandPre(RenderLivingEvent.Pre<EntityArmorStand> event) {
+    public void onTickRemove(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.QuizSolver) return;
-        if (!event.entity.hasCustomName()) return;
-        String name = event.entity.getCustomNameTag();
-        if (name.contains("ⓐ") || name.contains("ⓑ") || name.contains("ⓒ"))
-            if (answer != null && name.contains(answer))
-                event.setCanceled(true);
+        if (!SkyblockUtils.isInDungeon()) return;
+        List<Entity> allEntities = getWorld().loadedEntityList;
+        for (Entity entity : allEntities) {
+            if (!(entity instanceof EntityArmorStand)) continue;
+            if (!entity.hasCustomName()) continue;
+            String name = entity.getCustomNameTag();
+            if (name.contains("ⓐ") || name.contains("ⓑ") || name.contains("ⓒ"))
+                if (answer != null && !name.contains(answer))
+                    entity.posY = entity.lastTickPosY = 9999;
+        }
     }
 
     @SubscribeEvent
