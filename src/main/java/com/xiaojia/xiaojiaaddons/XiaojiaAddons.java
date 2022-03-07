@@ -39,6 +39,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Quiz;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.TeleportMaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShadowAssassinESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShowHiddenMobs;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.SimonSays;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESPBox;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
@@ -201,6 +202,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoBlood());
         MinecraftForge.EVENT_BUS.register(new AutoCloseSecretChest());
         MinecraftForge.EVENT_BUS.register(new AutoItemFrame());
+        MinecraftForge.EVENT_BUS.register(new SimonSays());
         MinecraftForge.EVENT_BUS.register(new AutoLeap());
         MinecraftForge.EVENT_BUS.register(new AutoSalvage());
         MinecraftForge.EVENT_BUS.register(new AutoTerminal());

@@ -1075,6 +1075,11 @@ public class Configs {
                     "Not suggested to be lower than your ping.")
     public static int ArrowCDBetween = 250;
 
+    // SimonSays
+    @Property(type = Property.Type.BOOLEAN, name = "Simon Says Solver", parent = "Auto Devices",
+            description = "Show where to click and block wrong clicks.")
+    public static boolean SimonSaysSolver = false;
+
     // AutoBlood
     @Property(type = Property.Type.FOLDER, name = "Auto Blood", parent = "Dungeons")
     public static boolean AutoBloodEnabled = false;
