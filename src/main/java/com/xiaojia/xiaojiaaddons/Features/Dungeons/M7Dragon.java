@@ -1,24 +1,26 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
-import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -26,7 +28,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.Color;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -70,9 +74,10 @@ public class M7Dragon {
     }};
     private static final HashMap<EntityDragon, DragonInfo> dragonsMap = new HashMap<>();
     private static final HashSet<BlockPos> done = new HashSet<>();
-    private final Display display = new Display();
-
+    private static final Deque<S2APacketParticles> particles = new ArrayDeque<>();
+    private static final HashMap<DragonInfo, Long> lastWarn = new HashMap<>();
     private static long lastCheck = 0;
+    private final Display display = new Display();
 
     public M7Dragon() {
         display.setShouldRender(true);
@@ -90,6 +95,67 @@ public class M7Dragon {
     private static DragonInfo getDragonInfoFromHelmName(String name) {
         for (DragonInfo info : dragonInfos) if (info.headName.equals(name)) return info;
         return null;
+    }
+
+    private static String getLog(S2APacketParticles packetParticles) {
+        StringBuilder s = new StringBuilder();
+        for (int x : packetParticles.getParticleArgs())
+            s.append(" ").append(x);
+
+        return packetParticles.getParticleType() +
+                String.format(" at %.2f %.2f %.2f, %.2f %.2f %.2f, %.2f, %d %b", packetParticles.getXCoordinate(),
+                        packetParticles.getYCoordinate(), packetParticles.getZCoordinate(),
+                        packetParticles.getXOffset(), packetParticles.getYOffset(), packetParticles.getZOffset(),
+                        packetParticles.getParticleSpeed(), packetParticles.getParticleCount(),
+                        packetParticles.isLongDistance()) +
+                s;
+    }
+
+    public static void print() {
+        ChatLib.chat("printing particles:");
+        synchronized (particles) {
+            for (S2APacketParticles packetParticles : particles)
+                ChatLib.chat(getLog(packetParticles));
+        }
+    }
+
+    public static void onSpawnDragon(EntityDragon entity) {
+        if (!SkyblockUtils.isInDungeon()) return;
+        double distance = 1e9;
+        DragonInfo dragonInfo = null;
+        for (DragonInfo info : dragonInfos) {
+            BlockPos pos = info.blockPos;
+            double dis = entity.getDistanceSq(pos);
+            if (dis < distance) {
+                distance = dis;
+                dragonInfo = info;
+            }
+        }
+        ChatLib.chat("spawning drag: " + dragonInfo.prefix + ", lastwarn diff " +
+                (TimeUtils.curTime() - lastWarn.getOrDefault(dragonInfo, 0L))
+        );
+        dragonsMap.put(entity, dragonInfo);
+    }
+
+    public static void getEntityTexture(EntityDragon entity, CallbackInfoReturnable<ResourceLocation> cir) {
+        if (!Checker.enabled) return;
+        if (Configs.ReplaceDragonTexture == 0) return;
+        ResourceLocation ret;
+        String location;
+        if (Configs.ReplaceDragonTexture == 1) {
+            if (!dragonsMap.containsKey(entity)) return;
+            location = dragonsMap.get(entity).textureName;
+        } else {
+            location = getDragonInfoFromHP(entity.getHealth()).textureName;
+        }
+        ret = new ResourceLocation(XiaojiaAddons.MODID + ":" + location);
+        cir.setReturnValue(ret);
+    }
+
+    private static float getScale(float distance) {
+        if (distance > 30) return 1;
+        if (distance > 15) return 1 + (30 - distance) / 15 * 0.1F;
+        return 1.3F - distance / 15 * 0.2F;
     }
 
     @SubscribeEvent
@@ -117,7 +183,7 @@ public class M7Dragon {
                 boolean shouldPrintLog = false;
                 for (String name : relics.keySet()) {
                     log.append("relic: ").append(name).append("\n");
-                    ArrayList<EntityArmorStand> armorStands =relics.get(name);
+                    ArrayList<EntityArmorStand> armorStands = relics.get(name);
                     for (EntityDragon entity : dragonsMap.keySet()) {
                         if (entity.getHealth() <= 0 || entity.isDead) continue;
                         int cnt = 0;
@@ -137,7 +203,8 @@ public class M7Dragon {
                         }
                     }
                 }
-                System.err.println(log);
+                if (!log.toString().equals(""))
+                    System.err.println(log + "\n");
                 if (shouldPrintLog) {
                     ChatLib.chat("&cAn error occurred in M7 Dragon Color Check. Please &c&l/xj report.");
                 }
@@ -146,40 +213,55 @@ public class M7Dragon {
         }
     }
 
-    public static void onSpawnDragon(EntityDragon entity) {
+    @SubscribeEvent
+    public void onReceive(PacketReceivedEvent event) {
+        if (!Checker.enabled) return;
         if (!SkyblockUtils.isInDungeon()) return;
-        double distance = 1e9;
-        DragonInfo dragonInfo = null;
-        for (DragonInfo info : dragonInfos) {
-            BlockPos pos = info.blockPos;
-            double dis = entity.getDistanceSq(pos);
-            if (dis < distance) {
-                distance = dis;
-                dragonInfo = info;
+        if (!SkyblockUtils.getDungeon().contains("7")) return;
+        if (event.packet instanceof S2APacketParticles) {
+            S2APacketParticles packet = (S2APacketParticles) event.packet;
+            if (packet.getParticleType() != EnumParticleTypes.SMOKE_LARGE) return;
+            if (packet.getYCoordinate() < 10 || packet.getYCoordinate() > 28) return;
+            DragonInfo res = null;
+            for (DragonInfo info : dragonInfos) {
+                if (info.blockPos.distanceSq(packet.getXCoordinate(),
+                        info.blockPos.getY(), packet.getZCoordinate()) < 1) {
+                    res = info;
+                }
+            }
+            if (res == null) return;
+
+            synchronized (particles) {
+                particles.offerLast(packet);
+                if (particles.size() > 50) {
+                    particles.pollFirst();
+                }
+            }
+            ChatLib.chat(getLog(packet));
+            if (TimeUtils.curTime() - lastWarn.getOrDefault(res, 0L) > 5000) {
+                lastWarn.put(res, TimeUtils.curTime());
+                CommandsUtils.addCommand("/pc " + res.prefix.substring(0, res.prefix.length() - 2));
             }
         }
-        dragonsMap.put(entity, dragonInfo);
     }
 
-    public static void getEntityTexture(EntityDragon entity, CallbackInfoReturnable<ResourceLocation> cir) {
+    @SubscribeEvent
+    public void onRenderWorldPar(RenderWorldLastEvent event) {
         if (!Checker.enabled) return;
-        if (Configs.ReplaceDragonTexture == 0) return;
-        ResourceLocation ret;
-        String location;
-        if (Configs.ReplaceDragonTexture == 1) {
-            if (!dragonsMap.containsKey(entity)) return;
-            location = dragonsMap.get(entity).textureName;
-        } else {
-            location = getDragonInfoFromHP(entity.getHealth()).textureName;
+        if (!SkyblockUtils.isInDungeon()) return;
+        if (!SkyblockUtils.getDungeon().contains("7")) return;
+        ArrayList<S2APacketParticles> temp;
+        synchronized (particles) {
+            temp = new ArrayList<>(particles);
         }
-        ret = new ResourceLocation(XiaojiaAddons.MODID + ":" + location);
-        cir.setReturnValue(ret);
-    }
-
-    private static float getScale(float distance) {
-        if (distance > 30) return 1;
-        if (distance > 15) return 1 + (30 - distance) / 15 * 0.1F;
-        return 1.3F - distance / 15 * 0.2F;
+        for (S2APacketParticles packet : temp) {
+            GuiUtils.enableESP();
+            GuiUtils.drawBoundingBoxAtPos(
+                    (float) packet.getXCoordinate(), (float) packet.getYCoordinate(), (float) packet.getZCoordinate(),
+                    new Color(0, 255, 0), 0.1F, 0.1F
+            );
+            GuiUtils.disableESP();
+        }
     }
 
     @SubscribeEvent
@@ -262,6 +344,9 @@ public class M7Dragon {
     public void onWorldLoad(WorldEvent.Load event) {
         dragonsMap.clear();
         done.clear();
+        synchronized (particles) {
+            particles.clear();
+        }
     }
 }
 

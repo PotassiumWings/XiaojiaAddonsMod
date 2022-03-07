@@ -2,7 +2,6 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.BlockChangeEvent;
-import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -38,19 +37,26 @@ public class SimonSays {
         if (pos.equals(startButton)) {
             if (newBlock == Blocks.air ||
                     newBlock == Blocks.stone_button &&
-                            event.newBlock.getValue(BlockButtonStone.POWERED)){
+                            event.newBlock.getValue(BlockButtonStone.POWERED)) {
                 clicks.clear();
                 clickIndex = 0;
             }
         }
         if (pos.getY() < 120 || pos.getY() > 123 || pos.getZ() < 92 || pos.getZ() > 95) return;
         if (pos.getX() == 111) { // background
-            if (newBlock == Blocks.sea_lantern && !clicks.contains(pos.west())) clicks.add(pos.west());
+            if (newBlock == Blocks.sea_lantern && !clicks.contains(pos.west())) {
+                clicks.add(pos.west());
+                ChatLib.chat(pos.west() + " added");
+            }
         } else if (pos.getX() == 110) { // buttons
-            if (newBlock == Blocks.air) clickIndex = 0;
-            else if (newBlock == Blocks.stone_button && oldBlock == Blocks.stone_button &&
-                    event.newBlock.getValue(BlockButtonStone.POWERED))
+            if (newBlock == Blocks.air) {
+                clickIndex = 0;
+                ChatLib.chat("owo reset");
+            } else if (newBlock == Blocks.stone_button && oldBlock == Blocks.stone_button &&
+                    event.newBlock.getValue(BlockButtonStone.POWERED) && pos.equals(clicks.get(clickIndex))) {
                 clickIndex++;
+                ChatLib.chat("now index at " + clickIndex);
+            }
         }
     }
 
@@ -73,8 +79,8 @@ public class SimonSays {
         if (clickIndex >= clicks.size()) return;
         Block block = BlockUtils.getBlockAt(event.pos);
         if (block != Blocks.stone_button) return;
-        if (!event.pos.equals(clicks.get(clickIndex))) {
-            ChatLib.chat("Blocked wrong button click in simon says!");
+        if (!event.pos.equals(clicks.get(clickIndex)) && !event.pos.equals(startButton)) {
+            ChatLib.chat(event.pos + ", " + clicks.get(clickIndex));
             event.setCanceled(true);
         }
     }

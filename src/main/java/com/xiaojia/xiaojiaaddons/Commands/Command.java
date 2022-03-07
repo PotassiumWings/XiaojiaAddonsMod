@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.M7Dragon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Data;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
@@ -28,7 +29,9 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -36,6 +39,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Command extends CommandBase {
@@ -111,7 +117,7 @@ public class Command extends CommandBase {
                 ColorName.showCache();
                 break;
             case "core":
-                x = MathUtils.floor(MathUtils.getX(MinecraftUtils.getPlayer()));
+                x = MathUtils.floor(getX(MinecraftUtils.getPlayer()));
                 z = MathUtils.floor(MathUtils.getZ(MinecraftUtils.getPlayer()));
                 ChatLib.chat(String.format("core for current (%d %d) is: %d", x, z,
                         new Room(x, z, new Data(
@@ -135,8 +141,8 @@ public class Command extends CommandBase {
                 break;
             case "block":
                 if (strings.length == 1) {
-                    x = MathUtils.floor(MathUtils.getX(MinecraftUtils.getPlayer()));
-                    y = MathUtils.floor(MathUtils.getY(MinecraftUtils.getPlayer()));
+                    x = MathUtils.floor(getX(MinecraftUtils.getPlayer()));
+                    y = MathUtils.floor(getY(MinecraftUtils.getPlayer()));
                     z = MathUtils.floor(MathUtils.getZ(MinecraftUtils.getPlayer()));
                 } else {
                     x = Integer.parseInt(strings[1]);
@@ -165,6 +171,17 @@ public class Command extends CommandBase {
                 break;
             case "setDungeon":
                 SkyblockUtils.setDungeon(strings[1]);
+                break;
+            case "par":
+                M7Dragon.print();
+                break;
+            case "sp":
+                XiaojiaAddons.mc.getNetHandler().handleParticles(new S2APacketParticles(
+                        EnumParticleTypes.SMOKE_LARGE, false,
+                        getX(MinecraftUtils.getPlayer()), getY(MinecraftUtils.getPlayer()), getZ(MinecraftUtils.getPlayer()),
+                        Float.parseFloat(strings[1]), Float.parseFloat(strings[2]), Float.parseFloat(strings[3]),
+                        1, 0
+                ));
                 break;
             default:
                 if (XiaojiaAddons.isDebug()) SkyblockUtils.setCurrentMap(String.join(" ", strings));
