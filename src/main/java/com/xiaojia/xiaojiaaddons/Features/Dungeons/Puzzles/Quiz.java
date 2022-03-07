@@ -122,7 +122,7 @@ public class Quiz {
         }
         if (answerEntity == null) return;
         if (answerEntity.getDistanceSq(event.pos) > 2 * 2) {
-            ChatLib.chat("Blocked wrong click in quiz.");
+            ChatLib.chat("Blocked wrong click in quiz!");
             event.setCanceled(true);
         }
     }

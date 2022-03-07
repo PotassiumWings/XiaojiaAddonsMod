@@ -23,7 +23,6 @@ import java.util.ArrayList;
 public class SimonSays {
     private static final ArrayList<BlockPos> clicks = new ArrayList<>();
     private static final BlockPos startButton = new BlockPos(110, 121, 91);
-    private static int clicksNeeded = 0;
     private static int clickIndex = 0;
 
     @SubscribeEvent
@@ -37,7 +36,6 @@ public class SimonSays {
         Block newBlock = event.newBlock.getBlock();
         Block oldBlock = event.oldBlock.getBlock();
         if (pos.equals(startButton)) {
-            ChatLib.chat("Block " + pos + " changed from " + oldBlock + " to " + newBlock);
             if (newBlock == Blocks.air ||
                     newBlock == Blocks.stone_button &&
                             event.newBlock.getValue(BlockButtonStone.POWERED)){
@@ -45,12 +43,10 @@ public class SimonSays {
                 clickIndex = 0;
             }
         }
-        if (pos.getY() <= 120 || pos.getY() >= 123 || pos.getZ() < 92 || pos.getZ() >= 95) return;
+        if (pos.getY() < 120 || pos.getY() > 123 || pos.getZ() < 92 || pos.getZ() > 95) return;
         if (pos.getX() == 111) { // background
-            ChatLib.chat("Block " + pos + " changed from " + oldBlock + " to " + newBlock);
-            if (newBlock == Blocks.sea_lantern && !clicks.contains(pos)) clicks.add(pos.west());
+            if (newBlock == Blocks.sea_lantern && !clicks.contains(pos.west())) clicks.add(pos.west());
         } else if (pos.getX() == 110) { // buttons
-            ChatLib.chat("Block " + pos + " changed from " + oldBlock + " to " + newBlock);
             if (newBlock == Blocks.air) clickIndex = 0;
             else if (newBlock == Blocks.stone_button && oldBlock == Blocks.stone_button &&
                     event.newBlock.getValue(BlockButtonStone.POWERED))
@@ -77,13 +73,15 @@ public class SimonSays {
         if (clickIndex >= clicks.size()) return;
         Block block = BlockUtils.getBlockAt(event.pos);
         if (block != Blocks.stone_button) return;
-        if (event.pos != clicks.get(clickIndex))
+        if (!event.pos.equals(clicks.get(clickIndex))) {
+            ChatLib.chat("Blocked wrong button click in simon says!");
             event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
-        clicksNeeded = clickIndex = 0;
+        clickIndex = 0;
         clicks.clear();
     }
 }
