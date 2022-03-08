@@ -5,6 +5,19 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;
 
+    @Property(type = Property.Type.FOLDER, name = "Protect Items", parent = "Misc",
+            description = "Protect items with high value when dropping, selling items.\n" +
+                    "&cRequires lowest bin.")
+    public static boolean ProtectItemsEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Protect Items Enable", parent = "Protect Items")
+    public static boolean ProtectItems = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Item Value", parent = "Protect Items", suffix = " K",
+            min = 0, max = 100000, step = 10,
+            description = "Any items with value greater than this will be protected.")
+    public static int ProtectItemValue = 1000;
+
     @Property(type = Property.Type.FOLDER, name = "Dangerous Features", parent = "Misc",
             description = "DO NOT USE THESE FEATURES.")
     public static boolean DangerousFeatures = false;

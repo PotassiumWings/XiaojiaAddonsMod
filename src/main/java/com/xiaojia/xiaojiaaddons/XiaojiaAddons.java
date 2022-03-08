@@ -50,6 +50,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.NoRotate;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ProtectItems;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
@@ -167,8 +168,6 @@ public class XiaojiaAddons {
         ClientCommandHandler.instance.registerCommand(new TransferBackCommand());
         ClientCommandHandler.instance.registerCommand(new com.xiaojia.xiaojiaaddons.Commands.XiaojiaChat());
         ClientCommandHandler.instance.registerCommand(new XiaojiaChatTest());
-//        ClientCommandHandler.instance.registerCommand(new TestGui());
-//        ClientCommandHandler.instance.registerCommand(new TestControl());
 
         MinecraftForge.EVENT_BUS.register(new XiaojiaChat());
 
@@ -231,6 +230,7 @@ public class XiaojiaAddons {
 
         // Miscellaneous
         MinecraftForge.EVENT_BUS.register(new ChatCopy());
+        MinecraftForge.EVENT_BUS.register(new ProtectItems());
         MinecraftForge.EVENT_BUS.register(new ColorName());
         MinecraftForge.EVENT_BUS.register(new Velocity());
         MinecraftForge.EVENT_BUS.register(new NoRotate());

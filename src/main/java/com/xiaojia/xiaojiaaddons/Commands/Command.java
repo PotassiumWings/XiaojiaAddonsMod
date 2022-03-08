@@ -167,7 +167,7 @@ public class Command extends CommandBase {
                 TestM7.show();
                 break;
             case "sound":
-                XiaojiaAddons.mc.thePlayer.playSound(strings[1], 1000, 1);
+                XiaojiaAddons.mc.thePlayer.playSound(strings[1], Float.parseFloat(strings[2]), Float.parseFloat(strings[3]));
                 break;
             case "setDungeon":
                 SkyblockUtils.setDungeon(strings[1]);

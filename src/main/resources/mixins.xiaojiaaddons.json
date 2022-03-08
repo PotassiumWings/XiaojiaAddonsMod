@@ -15,6 +15,7 @@
         "MixinModList",
         "MixinItemStack",
         "MixinEntity",
+        "MixinEntityPlayerSP",
         "MixinNetHandlerPlayClient",
         "MixinRenderItem",
         "MixinRenderManager",
