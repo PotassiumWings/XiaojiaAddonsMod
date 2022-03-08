@@ -2,10 +2,13 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.BlockChangeEvent;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
+import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButtonStone;
@@ -14,6 +17,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.Color;
@@ -23,6 +27,9 @@ public class SimonSays {
     private static final ArrayList<BlockPos> clicks = new ArrayList<>();
     private static final BlockPos startButton = new BlockPos(110, 121, 91);
     private static int clickIndex = 0;
+
+    private static boolean canStartClick = false;
+    private Thread thread = null;
 
     @SubscribeEvent
     public void onBlockChange(BlockChangeEvent event) {
@@ -46,17 +53,38 @@ public class SimonSays {
         if (pos.getX() == 111) { // background
             if (newBlock == Blocks.sea_lantern && !clicks.contains(pos.west())) {
                 clicks.add(pos.west());
-                ChatLib.chat(pos.west() + " added");
+//                ChatLib.chat(pos.west() + " added");
             }
         } else if (pos.getX() == 110) { // buttons
             if (newBlock == Blocks.air) {
                 clickIndex = 0;
-                ChatLib.chat("owo reset");
+                canStartClick = false;
             } else if (newBlock == Blocks.stone_button && oldBlock == Blocks.stone_button &&
-                    event.newBlock.getValue(BlockButtonStone.POWERED) && pos.equals(clicks.get(clickIndex))) {
+                    event.newBlock.getValue(BlockButtonStone.POWERED) && clickIndex < clicks.size() &&
+                    pos.equals(clicks.get(clickIndex))) {
                 clickIndex++;
-                ChatLib.chat("now index at " + clickIndex);
+                canStartClick = true;
+            } else if (newBlock == Blocks.stone_button && oldBlock == Blocks.air) {
+                canStartClick = true;
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEndEvent event) {
+        if (!Configs.SimonSaysAutoChangeDirection) return;
+        if (MathUtils.distanceSquareFromPlayer(109, 120, 93) > 3 * 3) return;
+        if (canStartClick && (thread == null || !thread.isAlive()) && clickIndex < clicks.size()) {
+            canStartClick = false;
+            thread = new Thread(() -> {
+                BlockPos pos = clicks.get(clickIndex).east();
+                try {
+                    ControlUtils.faceSlowly(pos.getX(), pos.getY() + 0.5, pos.getZ() + 0.5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
         }
     }
 
@@ -66,13 +94,14 @@ public class SimonSays {
         if (!Configs.SimonSaysSolver) return;
         if (clickIndex >= clicks.size()) return;
         BlockPos blockPos = clicks.get(clickIndex);
-        GuiUtils.drawBoxAtBlock(blockPos, new Color(0, 255, 0, 32), 1, 1, 0.0020000000949949026F);
+        GuiUtils.drawBoxAtBlock(blockPos, new Color(0, 255, 0, 80), 1, 1, 0.0020000000949949026F);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public void onRightClick(PlayerInteractEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.SimonSaysSolver) return;
+        if (!Configs.SimonSaysBlockWrongClicks) return;
         if (!SkyblockUtils.isInDungeon()) return;
         if (!SkyblockUtils.getDungeon().contains("7")) return;
         if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
@@ -80,7 +109,7 @@ public class SimonSays {
         Block block = BlockUtils.getBlockAt(event.pos);
         if (block != Blocks.stone_button) return;
         if (!event.pos.equals(clicks.get(clickIndex)) && !event.pos.equals(startButton)) {
-            ChatLib.chat(event.pos + ", " + clicks.get(clickIndex));
+            ChatLib.chat("Blocked wrong click in simon says!");
             event.setCanceled(true);
         }
     }
@@ -89,5 +118,6 @@ public class SimonSays {
     public void onWorldLoad(WorldEvent.Load event) {
         clickIndex = 0;
         clicks.clear();
+        canStartClick = false;
     }
 }

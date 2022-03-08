@@ -20,6 +20,7 @@ import net.minecraft.init.Blocks;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -101,7 +102,7 @@ public class Quiz {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.QuizSolver) return;
@@ -132,6 +133,7 @@ public class Quiz {
         if (!Checker.enabled) return;
         if (!Configs.QuizSolver) return;
         if (!SkyblockUtils.isInDungeon()) return;
+        if (getWorld() == null) return;
         List<Entity> allEntities = getWorld().loadedEntityList;
         for (Entity entity : allEntities) {
             if (!(entity instanceof EntityArmorStand)) continue;

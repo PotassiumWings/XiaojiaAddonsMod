@@ -7,6 +7,7 @@ import com.xiaojia.xiaojiaaddons.Features.Remote.LowestBin;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,6 +19,7 @@ public class ProtectItems {
     public void onItemDrop(ItemDropEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.ProtectItems) return;
+        if (SkyblockUtils.isInDungeon()) return;
         if (shouldProtect(event.itemStack))
             protect(event, "dropping");
     }
@@ -56,6 +58,6 @@ public class ProtectItems {
     private void protect(Event event, String reason) {
         event.setCanceled(true);
         ChatLib.chat("Stopped from " + reason + " that item.");
-        getPlayer().playSound("note.bass", 1000, 1);
+        getPlayer().playSound("note.bass", 1000, 0.5F);
     }
 }

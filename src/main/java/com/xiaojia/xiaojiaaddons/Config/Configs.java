@@ -1072,26 +1072,41 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Auto Devices", parent = "Dungeons")
     public static boolean AutoDevices = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto P3-3 Arrows", parent = "Auto Devices",
+    @Property(type = Property.Type.FOLDER, name = "Auto P3-3", parent = "Auto Devices")
+    public static boolean AutoDeviceThree = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto P3-3 Arrows", parent = "Auto P3-3",
             description = "When aiming at the itemframe in phase 3 - 3 arrows device,\n" +
                     "automatically rotate the arrows to pass.")
     public static boolean AutoItemFrameArrows = false;
 
-    @Property(type = Property.Type.NUMBER, name = "P3 Arrows CD", parent = "Auto Devices", suffix = " ms",
+    @Property(type = Property.Type.NUMBER, name = "P3 Arrows CD", parent = "Auto P3-3", suffix = " ms",
             min = 20, max = 500, step = 10,
             description = "Cool down between 2 clicks.")
     public static int ArrowCD = 100;
 
-    @Property(type = Property.Type.NUMBER, name = "P3 Arrows CD Between ItemFrames", parent = "Auto Devices", suffix = " ms",
+    @Property(type = Property.Type.NUMBER, name = "P3 Arrows CD Between ItemFrames", parent = "Auto P3-3", suffix = " ms",
             min = 100, max = 500, step = 10,
             description = "Cooldown between calculations. \n" +
                     "Not suggested to be lower than your ping.")
     public static int ArrowCDBetween = 250;
 
     // SimonSays
-    @Property(type = Property.Type.BOOLEAN, name = "Simon Says Solver", parent = "Auto Devices",
+    @Property(type = Property.Type.FOLDER, name = "Simon Says Solver", parent = "Auto Devices",
+            description = "Show where to click and block wrong clicks.")
+    public static boolean SimonSaysSolverEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Simon Says Solver Enable", parent = "Simon Says Solver",
             description = "Show where to click and block wrong clicks.")
     public static boolean SimonSaysSolver = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Simon Says Block Wrong Clicks", parent = "Simon Says Solver",
+            description = "Show where to click and block wrong clicks.")
+    public static boolean SimonSaysBlockWrongClicks = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Simon Says Auto Change Direction", parent = "Simon Says Solver",
+            description = "Auto Change Direction when you're doing simon says.")
+    public static boolean SimonSaysAutoChangeDirection = false;
 
     // AutoBlood
     @Property(type = Property.Type.FOLDER, name = "Auto Blood", parent = "Dungeons")

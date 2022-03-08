@@ -51,12 +51,12 @@ public class M7Dragon {
             "Corrupted Green Relic"
     );
     private static final DragonInfo purpleDragon = new DragonInfo(
-            new BlockPos(56, 14, 125), "&cRed Dragon&r: ",
+            new BlockPos(56, 14, 125), "&cPurple Dragon&r: ",
             new Color(0.5019608f, 0.0f, 0.5019608f), "dragon_soul.png",
             "Corrupted Purple Relic"
     );
     private static final DragonInfo blueDragon = new DragonInfo(
-            new BlockPos(84, 14, 94), "&5Purple Dragon&r: ",
+            new BlockPos(84, 14, 94), "&5Blue Dragon&r: ",
             new Color(0.0f, 1.0f, 1.0f), "dragon_ice.png",
             "Corrupted Blue Relic"
     );
@@ -117,6 +117,9 @@ public class M7Dragon {
             for (S2APacketParticles packetParticles : particles)
                 ChatLib.chat(getLog(packetParticles));
         }
+        for (DragonInfo info : lastWarn.keySet()) {
+            ChatLib.chat(info.prefix + ", " + lastWarn.get(info));
+        }
     }
 
     public static void onSpawnDragon(EntityDragon entity) {
@@ -131,7 +134,7 @@ public class M7Dragon {
                 dragonInfo = info;
             }
         }
-        ChatLib.chat("spawning drag: " + dragonInfo.prefix + ", lastwarn diff " +
+        ChatLib.debug("spawning drag: " + dragonInfo.prefix + ", lastwarn diff " +
                 (TimeUtils.curTime() - lastWarn.getOrDefault(dragonInfo, 0L))
         );
         dragonsMap.put(entity, dragonInfo);
@@ -189,7 +192,7 @@ public class M7Dragon {
                         int cnt = 0;
                         log.append(String.format("checking entity dragon: %.2f %.2f %.2f", getX(entity), getY(entity), getZ(entity))).append("\n");
                         for (EntityArmorStand relic : armorStands) {
-                            double dis = relic.getDistanceSqToEntity(entity);
+                            double dis = Math.sqrt(relic.getDistanceSqToEntity(entity));
                             log.append(String.format("relic: %.2f %.2f %.2f, %.2f", getX(relic), getY(relic), getZ(relic), dis)).append("\n");
                             if (dis > 3.65 && dis < 3.85) cnt++;
                         }
@@ -231,38 +234,38 @@ public class M7Dragon {
             }
             if (res == null) return;
 
-            synchronized (particles) {
-                particles.offerLast(packet);
-                if (particles.size() > 50) {
-                    particles.pollFirst();
-                }
-            }
-            ChatLib.chat(getLog(packet));
-            if (TimeUtils.curTime() - lastWarn.getOrDefault(res, 0L) > 5000) {
+//            synchronized (particles) {
+//                particles.offerLast(packet);
+//                if (particles.size() > 50) {
+//                    particles.pollFirst();
+//                }
+//            }
+            ChatLib.debug(getLog(packet));
+            if (TimeUtils.curTime() - lastWarn.getOrDefault(res, 0L) > 5500) {
                 lastWarn.put(res, TimeUtils.curTime());
-                CommandsUtils.addCommand("/pc " + res.prefix.substring(0, res.prefix.length() - 2));
+//                CommandsUtils.addCommand("/pc " + res.prefix.substring(0, res.prefix.length() - 2));
             }
         }
     }
 
-    @SubscribeEvent
-    public void onRenderWorldPar(RenderWorldLastEvent event) {
-        if (!Checker.enabled) return;
-        if (!SkyblockUtils.isInDungeon()) return;
-        if (!SkyblockUtils.getDungeon().contains("7")) return;
-        ArrayList<S2APacketParticles> temp;
-        synchronized (particles) {
-            temp = new ArrayList<>(particles);
-        }
-        for (S2APacketParticles packet : temp) {
-            GuiUtils.enableESP();
-            GuiUtils.drawBoundingBoxAtPos(
-                    (float) packet.getXCoordinate(), (float) packet.getYCoordinate(), (float) packet.getZCoordinate(),
-                    new Color(0, 255, 0), 0.1F, 0.1F
-            );
-            GuiUtils.disableESP();
-        }
-    }
+//    @SubscribeEvent
+//    public void onRenderWorldPar(RenderWorldLastEvent event) {
+//        if (!Checker.enabled) return;
+//        if (!SkyblockUtils.isInDungeon()) return;
+//        if (!SkyblockUtils.getDungeon().contains("7")) return;
+//        ArrayList<S2APacketParticles> temp;
+//        synchronized (particles) {
+//            temp = new ArrayList<>(particles);
+//        }
+//        for (S2APacketParticles packet : temp) {
+//            GuiUtils.enableESP();
+//            GuiUtils.drawBoundingBoxAtPos(
+//                    (float) packet.getXCoordinate(), (float) packet.getYCoordinate(), (float) packet.getZCoordinate(),
+//                    new Color(0, 255, 0), 0.1F, 0.1F
+//            );
+//            GuiUtils.disableESP();
+//        }
+//    }
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
@@ -281,11 +284,11 @@ public class M7Dragon {
 
     @SubscribeEvent
     public void renderLivingPost(TickEndEvent event) {
+        display.clearLines();
+        display.setRenderLoc(Configs.dragonInfoX, Configs.dragonInfoY);
         if (!Checker.enabled) return;
         if (!Configs.dragonInfoDisplay) return;
         if (getWorld() == null) return;
-        display.clearLines();
-        display.setRenderLoc(Configs.dragonInfoX, Configs.dragonInfoY);
         if (Configs.dragonInfoTest) {
             display.addLine("dragon Info is here");
             DisplayLine line1 = new DisplayLine("&aGreen Dragon&r: &a400M, &c7");
@@ -338,6 +341,18 @@ public class M7Dragon {
                 display.addLine(line);
             }
         }
+        for (DragonInfo info : lastWarn.keySet()) {
+            long last = lastWarn.get(info);
+            long diff = TimeUtils.curTime() - last;
+            diff = 5000 - diff;
+            if (diff > 0 && diff < 5000) {
+                String color = diff < 1500 ? "&c" : diff < 3000 ? "&6" : "&a";
+                String str = info.prefix + color + String.format("%.2fs", diff / 1000F);
+                DisplayLine line = new DisplayLine(str);
+                line.setScale(Configs.dragonInfoScale / 20F * 1.5F);
+                display.addLine(line);
+            }
+        }
     }
 
     @SubscribeEvent
@@ -363,6 +378,17 @@ class DragonInfo {
         this.color = color;
         this.textureName = textureName;
         this.headName = headName;
+    }
+
+    public int hashCode() {
+        return prefix.hashCode();
+    }
+
+    public boolean equals(Object o) {
+        if (o instanceof  DragonInfo) {
+            return o.hashCode() == hashCode();
+        }
+        return false;
     }
 }
 
