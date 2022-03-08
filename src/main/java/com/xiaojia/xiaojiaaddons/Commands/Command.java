@@ -16,6 +16,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Tests.CopyWorldInfo;
 import com.xiaojia.xiaojiaaddons.Tests.TestM7;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
@@ -182,6 +183,12 @@ public class Command extends CommandBase {
                         Float.parseFloat(strings[1]), Float.parseFloat(strings[2]), Float.parseFloat(strings[3]),
                         1, 0
                 ));
+                break;
+            case "cp":
+                CopyWorldInfo.copy(strings[1], strings[2], strings[3], strings[4], strings[5], strings[6]);
+                break;
+            case "paste":
+                CopyWorldInfo.paste();
                 break;
             default:
                 if (XiaojiaAddons.isDebug()) SkyblockUtils.setCurrentMap(String.join(" ", strings));
