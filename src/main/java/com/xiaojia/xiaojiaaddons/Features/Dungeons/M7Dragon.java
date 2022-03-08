@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
@@ -51,12 +52,12 @@ public class M7Dragon {
             "Corrupted Green Relic"
     );
     private static final DragonInfo purpleDragon = new DragonInfo(
-            new BlockPos(56, 14, 125), "&cPurple Dragon&r: ",
+            new BlockPos(56, 14, 125), "&5Purple Dragon&r: ",
             new Color(0.5019608f, 0.0f, 0.5019608f), "dragon_soul.png",
             "Corrupted Purple Relic"
     );
     private static final DragonInfo blueDragon = new DragonInfo(
-            new BlockPos(84, 14, 94), "&5Blue Dragon&r: ",
+            new BlockPos(84, 14, 94), "&bBlue Dragon&r: ",
             new Color(0.0f, 1.0f, 1.0f), "dragon_ice.png",
             "Corrupted Blue Relic"
     );
@@ -72,7 +73,7 @@ public class M7Dragon {
         add(blueDragon);
         add(orangeDragon);
     }};
-    private static final HashMap<EntityDragon, DragonInfo> dragonsMap = new HashMap<>();
+    private static final ConcurrentHashMap<EntityDragon, DragonInfo> dragonsMap = new ConcurrentHashMap<>();
     private static final HashSet<BlockPos> done = new HashSet<>();
     private static final Deque<S2APacketParticles> particles = new ArrayDeque<>();
     private static final HashMap<DragonInfo, Long> lastWarn = new HashMap<>();
@@ -313,6 +314,7 @@ public class M7Dragon {
         for (Entity entity : getWorld().loadedEntityList) {
             if (entity instanceof EntityDragon) {
                 if (!dragonsMap.containsKey(entity)) continue;
+                DragonInfo info = dragonsMap.get(entity);
 
                 String hpPrefix = "&a";
                 double hp = ((EntityDragon) entity).getHealth();
@@ -320,7 +322,7 @@ public class M7Dragon {
                 else if (hp <= 300000000) hpPrefix = "&6";
                 String hpString = hpPrefix + DisplayUtils.hpToString(hp, true);
 
-                BlockPos blockPos = dragonsMap.get(entity).blockPos;
+                BlockPos blockPos = info.blockPos;
                 double dis = Math.sqrt(entity.getDistanceSq(blockPos));
                 String disPrefix = "&a";
                 if (hp <= 1 && dis < 15) done.add(blockPos);
@@ -329,9 +331,9 @@ public class M7Dragon {
                 if (dis < 15) disPrefix = "&c";
                 else if (dis < 30) disPrefix = "&6";
 
-                String str = dragonsMap.get(entity).prefix + hpString + "&r, " + disPrefix + String.format("%.2f", dis);
+                String str = info.prefix + hpString + "&r, " + disPrefix + String.format("%.2f", dis);
                 if (done.contains(blockPos)) {
-                    str = dragonsMap.get(entity).prefix + "&cDONE";
+                    str = info.prefix + "&cDONE";
                     scale = 0.9F;
                 }
 
@@ -341,7 +343,7 @@ public class M7Dragon {
             }
         }
         for (DragonInfo info : lastWarn.keySet()) {
-            long last = lastWarn.get(info);
+            long last = lastWarn.getOrDefault(info, 0L);
             long diff = TimeUtils.curTime() - last;
             diff = 5000 - diff;
             if (diff > 0 && diff < 5000) {

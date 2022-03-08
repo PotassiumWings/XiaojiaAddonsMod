@@ -22,6 +22,13 @@ public class Configs {
             description = "DO NOT USE THESE FEATURES.")
     public static boolean DangerousFeatures = false;
 
+    @Property(type = Property.Type.FOLDER, name = "Remove Hurt Camera", parent = "Misc",
+            description = "Only works in SkyBlock.")
+    public static boolean RemoveHurtCamEnable = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Remove Hurt Camera Enable", parent = "Remove Hurt Camera")
+    public static boolean RemoveHurtCam = false;
+
     @Property(type = Property.Type.FOLDER, name = "No Rotate", parent = "Dangerous Features")
     public static boolean NoRotateEnabled = false;
 
