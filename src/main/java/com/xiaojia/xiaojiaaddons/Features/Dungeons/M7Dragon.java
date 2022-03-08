@@ -206,9 +206,8 @@ public class M7Dragon {
                         }
                     }
                 }
-                if (!log.toString().equals(""))
-                    System.err.println(log + "\n");
                 if (shouldPrintLog) {
+                    System.err.println(log + "\n");
                     ChatLib.chat("&cAn error occurred in M7 Dragon Color Check. Please &c&l/xj report.");
                 }
                 dragonsMap.putAll(newInfos);
