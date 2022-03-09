@@ -1,7 +1,11 @@
 package com.xiaojia.xiaojiaaddons.Tests;
 
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 
@@ -41,7 +45,10 @@ public class CopyWorldInfo {
             for (int i = x; i <= x + dx; i++) {
                 for (int j = y; j <= y + dy; j++) {
                     for (int k = z; k <= z + dz; k++) {
-                        getWorld().setBlockState(new BlockPos(i, j, k), blockStates.get(index));
+                        ChatLib.say(String.format("/setblock %d %d %d %s %d", i, j, k,
+                                Block.blockRegistry.getNameForObject(blockStates.get(index).getBlock()),
+                                blockStates.get(index).getBlock().getMetaFromState(blockStates.get(index))));
+//                        XiaojiaAddons.mc.thePlayer.getEntityWorld().setBlockState(new BlockPos(i, j, k), blockStates.get(index));
                         index++;
                     }
                 }

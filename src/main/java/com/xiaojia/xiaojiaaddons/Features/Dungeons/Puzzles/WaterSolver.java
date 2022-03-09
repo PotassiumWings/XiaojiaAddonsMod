@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Objects.Pair;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.event.world.WorldEvent;
@@ -11,10 +12,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
+
+// TODO: DELETE THIS FROM ROOM.JSON
 public class WaterSolver {
     private static final int width = 21;
-    private static final int height = 24;
+    private static final int height = 23;
     private static final ArrayList<Pair<Integer, Integer>> yToFlag = new ArrayList<Pair<Integer, Integer>>() {{
         add(new Pair<>(1, 0));
         add(new Pair<>(5, 1));
@@ -52,25 +56,28 @@ public class WaterSolver {
         if (BlockUtils.getBlockAt(room.x - 9, 68, room.z).equals(Blocks.stone_brick_stairs)) facing = EnumFacing.xn;
         if (BlockUtils.getBlockAt(room.x + 9, 68, room.z).equals(Blocks.stone_brick_stairs)) facing = EnumFacing.xp;
         if (facing == null) return;
+        System.err.println("facing: " + facing + ", x " + room.x + ", z " + room.z);
         // get board, piston
-        int sy = 60, ty = 83;
+        int sy = 60, ty = 82;
         int flag = 0;
         if (facing == EnumFacing.xn || facing == EnumFacing.xp) {
-            int z = facing == EnumFacing.xp ? room.z - 11 : room.z + 11;
-            int deviceZ = facing == EnumFacing.xp ? room.z - 12 : room.z + 12;
-            int sx = room.x - 10, tx = room.x + 10;
+            int x = facing == EnumFacing.xp ? room.x - 11 : room.x + 11;
+            int deviceX = facing == EnumFacing.xp ? room.x - 12 : room.x + 12;
+            int sz = room.z - 10, tz = room.z + 10;
             if (facing == EnumFacing.xn) flag = getFlag(room.x + 4, room.z + 2, room.x, room.z + 2);
             else flag = getFlag(room.x - 4, room.z + 2, room.x, room.z + 2);
-            for (int x = sx; x <= tx; x++)
-                for (int y = sy; y <= ty; y++)
-                    board[y - sy][x - sx] = getStateFromBlock(BlockUtils.getBlockAt(x, y, z), BlockUtils.getBlockAt(x, y, deviceZ));
-        } else {
-            int x = facing == EnumFacing.zp ? room.x - 11 : room.x + 11;
-            int deviceX = facing == EnumFacing.zp ? room.x - 12 : room.x + 12;
-            int sz = room.z - 10, tz = room.z + 10;
             for (int z = sz; z <= tz; z++)
                 for (int y = sy; y <= ty; y++)
                     board[y - sy][z - sz] = getStateFromBlock(BlockUtils.getBlockAt(x, y, z), BlockUtils.getBlockAt(deviceX, y, z));
+        } else {
+            int z = facing == EnumFacing.zp ? room.z - 11 : room.z + 11;
+            int deviceZ = facing == EnumFacing.zp ? room.z - 12 : room.z + 12;
+            int sx = room.z - 10, tx = room.z + 10;
+            if (facing == EnumFacing.zn) flag = getFlag(room.x + 2, room.z + 4, room.x + 2, room.z);
+            else flag = getFlag(room.x + 2, room.z - 4, room.x + 2, room.z);
+            for (int x = sx; x <= tx; x++)
+                for (int y = sy; y <= ty; y++)
+                    board[y - sy][x - sx] = getStateFromBlock(BlockUtils.getBlockAt(x, y, z), BlockUtils.getBlockAt(x, y, deviceZ));
         }
         ca.clear();
         ea.clear();
@@ -90,13 +97,25 @@ public class WaterSolver {
 
                 if (state == WaterSolver.state.c || state == WaterSolver.state.d || state == WaterSolver.state.e
                         || state == WaterSolver.state.q || state == WaterSolver.state.g || state == WaterSolver.state.cl)
-                    board[i][j] = WaterSolver.state.B;
+                    board[i][j] = WaterSolver.state.E;
             }
         }
-        board[23][10] = state.w;
+        for (int i = height - 1; i >= 0; i--) {
+            StringBuilder s = new StringBuilder();
+            for (int j = 0; j < width; j++) {
+                String cur = board[i][j].toString();
+                char c = cur.charAt(cur.length() - 1);
+                if (c == 'E') c = ' ';
+                s.append(c);
+            }
+            System.err.println(s);
+        }
         // calc
         bestTime = 1000;
         dfs(board, 0, new HashMap<>(), flag);
+        for (Map.Entry<Integer, EnumOperation> operation : operations.entrySet()) {
+            ChatLib.chat(operation.getKey() + ": " + operation.getValue());
+        }
     }
 
     private static void dfs(state[][] state, int time, HashMap<Integer, EnumOperation> order, int flag) {
@@ -201,11 +220,11 @@ public class WaterSolver {
                 } else {
                     // do the calculation stuff
                     if (waterAboveCurrentWaterFlow) {
-                        for (int k = j - 1; isWater(newState[i][k]); k--) {
+                        for (int k = j - 1; k >= 0 && isWater(newState[i][k]); k--) {
                             newState[i][k] = WaterSolver.state.w;
                         }
                     } else {
-                        for (int k = j - 1; isWater(newState[i][k]); k--) {
+                        for (int k = j - 1; k >= 0 && isWater(newState[i][k]); k--) {
                             newState[i][k] = getLowerFormOfWater(maxState);
                         }
                     }
