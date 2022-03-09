@@ -130,6 +130,7 @@ public class ChatLib {
     public static void debug(String message) {
         if (!SessionUtils.isDev()) return;
         if (XiaojiaAddons.isDebug()) chat(message);
+        else System.err.println(message);
     }
 
     public static void say(String message) {

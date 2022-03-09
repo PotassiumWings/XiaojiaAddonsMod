@@ -8,7 +8,6 @@ import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -135,6 +134,7 @@ public class M7Dragon {
                 dragonInfo = info;
             }
         }
+        if (dragonInfo == null) return;
         ChatLib.debug("spawning drag: " + dragonInfo.prefix + ", lastwarn diff " +
                 (TimeUtils.curTime() - lastWarn.getOrDefault(dragonInfo, 0L))
         );
@@ -198,7 +198,8 @@ public class M7Dragon {
                             if (dis > 3.65 && dis < 3.85) cnt++;
                         }
                         DragonInfo dragonInfo = getDragonInfoFromHelmName(name);
-                        if (cnt >= 8) {
+                        if (dragonInfo == null) shouldPrintLog = true;
+                        else if (cnt >= 8) {
                             if (newInfos.containsKey(entity)) {
                                 log.append(String.format("wtf this dragon is counted as %s and %s", newInfos.get(entity).headName, name)).append("\n");
                                 shouldPrintLog = true;
@@ -234,38 +235,12 @@ public class M7Dragon {
             }
             if (res == null) return;
 
-//            synchronized (particles) {
-//                particles.offerLast(packet);
-//                if (particles.size() > 50) {
-//                    particles.pollFirst();
-//                }
-//            }
             ChatLib.debug(getLog(packet));
-            if (TimeUtils.curTime() - lastWarn.getOrDefault(res, 0L) > 5500) {
+            if (TimeUtils.curTime() - lastWarn.getOrDefault(res, 0L) > 6000) {
                 lastWarn.put(res, TimeUtils.curTime());
-//                CommandsUtils.addCommand("/pc " + res.prefix.substring(0, res.prefix.length() - 2));
             }
         }
     }
-
-//    @SubscribeEvent
-//    public void onRenderWorldPar(RenderWorldLastEvent event) {
-//        if (!Checker.enabled) return;
-//        if (!SkyblockUtils.isInDungeon()) return;
-//        if (!SkyblockUtils.getDungeon().contains("7")) return;
-//        ArrayList<S2APacketParticles> temp;
-//        synchronized (particles) {
-//            temp = new ArrayList<>(particles);
-//        }
-//        for (S2APacketParticles packet : temp) {
-//            GuiUtils.enableESP();
-//            GuiUtils.drawBoundingBoxAtPos(
-//                    (float) packet.getXCoordinate(), (float) packet.getYCoordinate(), (float) packet.getZCoordinate(),
-//                    new Color(0, 255, 0), 0.1F, 0.1F
-//            );
-//            GuiUtils.disableESP();
-//        }
-//    }
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {

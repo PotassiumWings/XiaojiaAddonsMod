@@ -112,7 +112,7 @@ public class AutoJerryBox {
     @SubscribeEvent
     public void onReceiveOpenMessage(ClientChatReceivedEvent event) {
         if (event.type == 0 && ChatLib.removeFormatting(event.message.getUnformattedText())
-                .matches(" ☺ You claimed .* from the Jerry Box!")) {
+                .matches(" ☺ ")) {
             received = true;
         }
     }

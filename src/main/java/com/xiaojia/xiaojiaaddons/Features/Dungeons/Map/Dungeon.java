@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
@@ -398,6 +399,9 @@ public class Dungeon {
         }
         if (room.name.equals("Blaze")) {
             AutoBlaze.setRoom(room);
+        }
+        if (room.name.equals("Water Board")) {
+            WaterSolver.setRoom(room);
         }
         rooms.add(room);
     }
