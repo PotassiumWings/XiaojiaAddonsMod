@@ -135,9 +135,12 @@ public class WaterSolver {
     public void onTickAuto(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.WaterSolver) return;
-        if (keyBind.isKeyDown()) {
+        if (keyBind.isPressed()) {
             should = !should;
-            if (!Dungeon.currentRoom.equals("Water Board")) should = false;
+            if (!Dungeon.currentRoom.equals("Water Board")) {
+                should = false;
+                return;
+            }
             if (should) ChatLib.chat("Auto Water &aactivated");
             else ChatLib.chat("Auto Water &cdeactivated");
         }

@@ -505,7 +505,10 @@ public class AutoBlaze {
         if (!Configs.AutoBlaze) return;
         if (keyBind.isPressed()) {
             should = !should;
-            if (!Dungeon.currentRoom.equals("Blaze")) should = false;
+            if (!Dungeon.currentRoom.equals("Blaze")) {
+                should = false;
+                return;
+            }
             if (should) ChatLib.chat("Auto Blaze &aactivated");
             else ChatLib.chat("Auto Blaze &cdeactivated");
         }

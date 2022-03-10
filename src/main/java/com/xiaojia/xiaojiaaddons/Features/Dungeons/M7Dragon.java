@@ -176,7 +176,7 @@ public class M7Dragon {
                     if (entity instanceof EntityArmorStand) {
                         ItemStack helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);
                         if (helm == null) continue;
-                        String helmString = helm.getDisplayName();
+                        String helmString = ChatLib.removeFormatting(helm.getDisplayName());
                         if (helmString.contains("Corrupted ")) {
                             relics.putIfAbsent(helmString, new ArrayList<>());
                             relics.get(helmString).add((EntityArmorStand) entity);
