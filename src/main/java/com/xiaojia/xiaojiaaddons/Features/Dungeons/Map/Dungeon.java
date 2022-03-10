@@ -7,6 +7,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
@@ -584,7 +585,8 @@ public class Dungeon {
                 return;
             }
         }
-        currentRoom = "";
+        if (!XiaojiaAddons.isDebug())
+            currentRoom = "";
         StonklessStonk.setInPuzzle(false);
     }
 

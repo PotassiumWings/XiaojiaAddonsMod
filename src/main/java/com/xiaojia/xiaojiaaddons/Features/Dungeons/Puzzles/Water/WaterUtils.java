@@ -120,7 +120,7 @@ public class WaterUtils {
         } else {
             int z = facing == EnumFacing.zp ? room.z - 11 : room.z + 11;
             int deviceZ = facing == EnumFacing.zp ? room.z - 12 : room.z + 12;
-            int sx = room.z - 10, tx = room.z + 10;
+            int sx = room.x - 10, tx = room.x + 10;
             for (int x = sx; x <= tx; x++)
                 for (int y = sy; y <= ty; y++)
                     board[y - sy][x - sx] = WaterUtils.getStateFromBlock(BlockUtils.getBlockAt(x, y, z), BlockUtils.getBlockAt(x, y, deviceZ));
@@ -166,7 +166,7 @@ public class WaterUtils {
         System.err.println();
     }
 
-    private static void print(EnumState[][] board) {
+    public static void print(EnumState[][] board) {
         for (int i = height - 1; i >= 0; i--) {
             StringBuilder s = new StringBuilder();
             for (int j = 0; j < width; j++) {

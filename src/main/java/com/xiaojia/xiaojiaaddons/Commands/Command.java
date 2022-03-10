@@ -9,6 +9,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Data;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
@@ -172,6 +173,11 @@ public class Command extends CommandBase {
                 break;
             case "setDungeon":
                 SkyblockUtils.setDungeon(strings[1]);
+                break;
+            case "setwater":
+                Dungeon.currentRoom = "Water Board";
+                WaterSolver.setRoom(new Room(MathUtils.floor(getX(MinecraftUtils.getPlayer())),
+                        MathUtils.floor(getZ(MinecraftUtils.getPlayer())), Data.blankRoom));
                 break;
             case "par":
                 M7Dragon.print();

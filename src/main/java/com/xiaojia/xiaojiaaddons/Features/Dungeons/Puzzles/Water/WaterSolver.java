@@ -11,6 +11,7 @@ import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -50,6 +51,7 @@ public class WaterSolver {
         if (facing == null) return;
         System.err.println("facing: " + facing + ", x " + room.x + ", z " + room.z);
         board = WaterUtils.getBoard(room, facing);
+        WaterUtils.print(board);
         WaterUtils.calculateVectors(room, facing);
         int flag = WaterUtils.getFlag(room, facing);
         while (flag == 0) {
@@ -91,6 +93,7 @@ public class WaterSolver {
         if (!Configs.WaterSolver) return;
         room = waterRoom;
         if (room != null) {
+            ChatLib.chat("set room: " + room.x + ", " + room.z);
             solveThread =
                     new Thread(() -> {
                         try {
@@ -120,6 +123,11 @@ public class WaterSolver {
         if (solveThread == null || !solveThread.isAlive()) {
             solveThread = new Thread(() -> {
                 try {
+                    int aotvSlot = HotbarUtils.aotvSlot;
+                    if (aotvSlot == -1) {
+                        ChatLib.chat("Requires aotv in hotbar.");
+                        throw new Exception();
+                    }
                     long lastTime = TimeUtils.curTime();
                     int lastEntry = 0;
                     for (Map.Entry<Integer, EnumOperation> entry : WaterUtils.operations.entrySet()) {
