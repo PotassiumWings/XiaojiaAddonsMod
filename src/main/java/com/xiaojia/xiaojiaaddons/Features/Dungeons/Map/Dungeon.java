@@ -400,9 +400,6 @@ public class Dungeon {
         if (room.name.equals("Blaze")) {
             AutoBlaze.setRoom(room);
         }
-        if (room.name.equals("Water Board")) {
-            WaterSolver.setRoom(room);
-        }
         rooms.add(room);
     }
 
@@ -572,6 +569,7 @@ public class Dungeon {
             StonklessStonk.setInPuzzle(true);
             return;
         }
+        String lastRoom = currentRoom;
         int x = MathUtils.floor(getX(getPlayer())), z = MathUtils.floor(getZ(getPlayer()));
         for (Room room : rooms) {
             if (MathUtils.isBetween(x, room.x - 16, room.x + 16) &&
@@ -580,6 +578,9 @@ public class Dungeon {
                 StonklessStonk.setInPuzzle(room.type.equals("puzzle") &&
                         (room.name.equals("Water Board") || room.name.equals("Three Weirdos")) ||
                         room.name.equals("Unknown"));
+                if (currentRoom.equals("Water Board") && !lastRoom.equals(currentRoom)) {
+                    WaterSolver.setRoom(room);
+                }
                 return;
             }
         }
