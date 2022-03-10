@@ -26,7 +26,6 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Keyboard;
 
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
@@ -52,7 +51,7 @@ public class AutoBlaze {
     public static StringBuilder log = new StringBuilder();
     public static StringBuilder tempLog = new StringBuilder();
     private static boolean lowFirst = false;
-    private final KeyBind keyBind = new KeyBind("Auto Blaze", Keyboard.KEY_NONE);
+    private final KeyBind keyBind = AutoPuzzle.keyBind;
     public boolean should = false;
     private Thread shootingThread = null;
     private boolean tpPacketReceived = false;
@@ -503,12 +502,14 @@ public class AutoBlaze {
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
+        if (!Configs.AutoBlaze) return;
         if (keyBind.isPressed()) {
             should = !should;
-            ChatLib.chat(should ? "Auto Blaze &aactivated" : "Auto Blaze &cdeactivated");
+            if (!Dungeon.currentRoom.equals("Blaze")) should = false;
+            if (should) ChatLib.chat("Auto Blaze &aactivated");
+            else ChatLib.chat("Auto Blaze &cdeactivated");
         }
-        if (!Configs.AutoBlaze || !should || !Dungeon.isFullyScanned || room == null ||
-                !Dungeon.currentRoom.equals("Blaze")) {
+        if (!should || !Dungeon.isFullyScanned || room == null) {
             deactivate();
             return;
         }

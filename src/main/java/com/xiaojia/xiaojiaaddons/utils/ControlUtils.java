@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.Vector3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Field;
@@ -155,6 +156,10 @@ public class ControlUtils {
         }
     }
 
+    public static void etherWarp(javax.vecmath.Vector3d v) throws Exception {
+        etherWarp(v.x, v.y, v.z);
+    }
+
     public static void etherWarp(double x, double y, double z) throws Exception {
         // shift click
         ControlUtils.sneak();
@@ -190,6 +195,10 @@ public class ControlUtils {
 
     public static void faceSlowly(double tx, double ty, double tz) throws InterruptedException {
         faceSlowly((float) tx, (float) ty, (float) tz);
+    }
+
+    public static void faceSlowly(javax.vecmath.Vector3d v) throws InterruptedException {
+        faceSlowly((float) v.x, (float) v.y, (float) v.z);
     }
 
     public static void faceSlowly(BlockPos pos) throws InterruptedException {

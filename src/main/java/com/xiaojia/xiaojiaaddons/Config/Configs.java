@@ -839,27 +839,42 @@ public class Configs {
                     "Fetch newest answer every 10 minutes.")
     public static boolean QuizSolver = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Blaze", parent = "Solvers",
+    @Property(type = Property.Type.FOLDER, name = "Water Solver", parent = "Solvers",
+            description = "May behave bad at laggy servers.")
+    public static boolean WaterSolverEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Water Solver Enable", parent = "Solvers",
+            description = "Shows how and when to pull levers to one-flow water puzzle.")
+    public static boolean WaterSolver = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Water Solver", parent = "Solvers",
+            description = "Auto etherwarp and pull levers.")
+    public static boolean AutoWater = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Blaze Solver", parent = "Solvers")
+    public static boolean BlazeSolver = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Blaze", parent = "Blaze Solver",
             description = "Bind a key to use in blaze room!\n" +
                     "Requires dungeon map enabled!")
     public static boolean AutoBlaze = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Blaze Secret", parent = "Solvers",
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Blaze Secret", parent = "Blaze Solver",
             description = "Auto Etherwarp to secret after shooting blazes.\n" +
                     "Requires Auto Blaze.")
     public static boolean AutoBlazeSecret = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Etherwarp Delay", parent = "Solvers", suffix = " ms",
+    @Property(type = Property.Type.NUMBER, name = "Etherwarp Delay", parent = "Blaze Solver", suffix = " ms",
             description = "Delay after receiving a packet from etherwarp.\n" +
                     "Not recommend to set this too low!", min = 100, max = 600, step = 5)
     public static int EtherWarpDelayAfter = 400;
 
-    @Property(type = Property.Type.NUMBER, name = "Turn-Shoot Delay", parent = "Solvers", suffix = " ms",
+    @Property(type = Property.Type.NUMBER, name = "Turn-Shoot Delay", parent = "Blaze Solver", suffix = " ms",
             description = "Delay between a turn and a shot.\n" +
                     "Higher delay = Lower chance to fail.", min = 50, max = 500, step = 5)
     public static int TurnShootDelay = 250;
 
-    @Property(type = Property.Type.NUMBER, name = "Blaze Scale", parent = "Solvers", suffix = " %",
+    @Property(type = Property.Type.NUMBER, name = "Blaze Scale", parent = "Blaze Solver", suffix = " %",
             description = "Scale for blaze in calculation, 100% = 0.6width * 2height.\n" +
                     "Arrows can be inaccurate, this is mc feature (random noise).\n" +
                     "Bigger scale = Lower chance to fail but more tp.", min = 100, max = 500, step = 5)

@@ -68,6 +68,10 @@ public class MathUtils {
         return (tx - x) * (tx - x) + (ty - y) * (ty - y) + (tz - z) * (tz - z);
     }
 
+    public static double distanceSquaredFromPoints(Vector3d v1, Vector3d v2) {
+        return distanceSquaredFromPoints(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
+    }
+
     public static double distanceSquareFromPlayer(double x, double y, double z) {
         double tx = getX(getPlayer()), ty = getY(getPlayer()), tz = getZ(getPlayer());
         return distanceSquaredFromPoints(x, y, z, tx, ty, tz);
