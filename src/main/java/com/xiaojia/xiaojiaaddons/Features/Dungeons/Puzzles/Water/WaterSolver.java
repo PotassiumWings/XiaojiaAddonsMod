@@ -161,8 +161,8 @@ public class WaterSolver {
                     Vector3d lastEtherWarp = null;
                     for (Map.Entry<Integer, EnumOperation> entry : WaterUtils.operations.entrySet()) {
                         if (entry.getValue().equals(EnumOperation.empty)) continue;
-                        lastEntry = entry.getKey();
                         int delta = (entry.getKey() - lastEntry) * 250;
+                        lastEntry = entry.getKey();
                         EnumOperation operation = entry.getValue();
                         Vector3d etherWarp = WaterUtils.getEtherwarpPointFor(operation);
                         if (!etherWarp.equals(lastEtherWarp)) {
