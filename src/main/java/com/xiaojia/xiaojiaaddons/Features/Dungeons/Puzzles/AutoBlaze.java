@@ -503,12 +503,9 @@ public class AutoBlaze {
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.AutoBlaze) return;
+        if (!Dungeon.currentRoom.equals("Blaze")) return;
         if (keyBind.isPressed()) {
             should = !should;
-            if (!Dungeon.currentRoom.equals("Blaze")) {
-                should = false;
-                return;
-            }
             if (should) ChatLib.chat("Auto Blaze &aactivated");
             else ChatLib.chat("Auto Blaze &cdeactivated");
         }

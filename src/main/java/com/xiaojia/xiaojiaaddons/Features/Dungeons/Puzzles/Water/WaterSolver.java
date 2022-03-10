@@ -24,6 +24,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
+import javax.vecmath.Vector3d;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -111,9 +112,9 @@ public class WaterSolver {
         }
     }
 
-    private static void etherWarpTo(EnumOperation operation) throws Exception {
+    private static void etherWarpTo(Vector3d v) throws Exception {
         tpPacketReceived = false;
-        ControlUtils.etherWarp(WaterUtils.getEtherwarpPointFor(operation));
+        ControlUtils.etherWarp(v);
         int cnt = 0;
         while (!tpPacketReceived && should) {
             Thread.sleep(20);
@@ -135,12 +136,9 @@ public class WaterSolver {
     public void onTickAuto(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.WaterSolver) return;
+        if (!Dungeon.currentRoom.equals("Water Board")) return;
         if (keyBind.isPressed()) {
             should = !should;
-            if (!Dungeon.currentRoom.equals("Water Board")) {
-                should = false;
-                return;
-            }
             if (should) ChatLib.chat("Auto Water &aactivated");
             else ChatLib.chat("Auto Water &cdeactivated");
         }
@@ -160,13 +158,18 @@ public class WaterSolver {
                     ControlUtils.setHeldItemIndex(aotvSlot);
                     long lastTime = TimeUtils.curTime();
                     int lastEntry = 0;
+                    Vector3d lastEtherWarp = null;
                     for (Map.Entry<Integer, EnumOperation> entry : WaterUtils.operations.entrySet()) {
                         if (entry.getValue().equals(EnumOperation.empty)) continue;
+                        lastEntry = entry.getKey();
                         int delta = (entry.getKey() - lastEntry) * 250;
                         EnumOperation operation = entry.getValue();
-                        lastEntry = entry.getKey();
+                        Vector3d etherWarp = WaterUtils.getEtherwarpPointFor(operation);
+                        if (!etherWarp.equals(lastEtherWarp)) {
+                            etherWarpTo(etherWarp);
+                            lastEtherWarp = etherWarp;
+                        }
                         // etherwarp, change direction
-                        etherWarpTo(operation);
                         ControlUtils.faceSlowly(WaterUtils.getPosFor(operation));
                         // wait
                         long deltaTime = TimeUtils.curTime() - lastTime;

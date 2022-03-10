@@ -195,7 +195,7 @@ public class M7Dragon {
                         for (EntityArmorStand relic : armorStands) {
                             double dis = Math.sqrt(relic.getDistanceSqToEntity(entity));
                             log.append(String.format("relic: %.2f %.2f %.2f, %.2f", getX(relic), getY(relic), getZ(relic), dis)).append("\n");
-                            if (dis > 3.65 && dis < 3.85) cnt++;
+                            if (dis > 3 && dis < 4) cnt++;
                         }
                         DragonInfo dragonInfo = getDragonInfoFromHelmName(name);
                         if (dragonInfo == null) shouldPrintLog = true;
@@ -208,10 +208,10 @@ public class M7Dragon {
                         }
                     }
                 }
-                if (shouldPrintLog) {
-                    System.err.println(log + "\n");
-                    ChatLib.chat("&cAn error occurred in M7 Dragon Color Check. Please &c&l/xj report.");
-                }
+//                System.err.println(log + "\n");
+//                if (shouldPrintLog) {
+//                    ChatLib.chat("&cAn error occurred in M7 Dragon Color Check. Please &c&l/xj report.");
+//                }
                 dragonsMap.putAll(newInfos);
             }).start();
         }
