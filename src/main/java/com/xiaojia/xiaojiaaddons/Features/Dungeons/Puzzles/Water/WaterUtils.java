@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Objects.Pair;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -53,24 +54,24 @@ public class WaterUtils {
         if (facing == EnumFacing.xn || facing == EnumFacing.xp) {
             if (facing == EnumFacing.xp) {
                 trigV = new Vector3d(x + 10 + 0.5, 60.2, z + 0.5);
-                qv = new Vector3d(x - 5 + 0.5, 61.5, z + 5 - 0.2);
-                gv = new Vector3d(x + 0.5, 61.5, z + 5 - 0.2);
-                cv = new Vector3d(x + 5 + 0.5, 61.5, z + 5 - 0.2);
-                dv = new Vector3d(x - 5 + 0.5, 61.5, z - 5 + 0.2);
-                ev = new Vector3d(x + 0.5, 61.5, z - 5 + 0.2);
-                clv = new Vector3d(x + 5 + 0.5, 61.5, z - 5 + 0.2);
+                qv = new Vector3d(x - 5 + 0.5, 61.5, z + 5 + 0.2 + 0.5);
+                gv = new Vector3d(x + 0.5, 61.5, z + 5 + 0.2 + 0.5);
+                cv = new Vector3d(x + 5 + 0.5, 61.5, z + 5 + 0.2 + 0.5);
+                dv = new Vector3d(x - 5 + 0.5, 61.5, z - 5 - 0.2 - 0.5);
+                ev = new Vector3d(x + 0.5, 61.5, z - 5 - 0.2 - 0.5);
+                clv = new Vector3d(x + 5 + 0.5, 61.5, z - 5 - 0.2 - 0.5);
                 points.add(new Vector3d(x + 7 + 0.5, 59, z + 2 + 0.5));
                 points.add(new Vector3d(x + 7 + 0.5, 59, z - 2 + 0.5));
                 points.add(new Vector3d(x - 3 + 0.5, 59, z + 3 + 0.5));
                 points.add(new Vector3d(x - 3 + 0.5, 59, z - 3 + 0.5));
             } else {
                 trigV = new Vector3d(x - 10 + 0.5, 60.2, z + 0.5);
-                qv = new Vector3d(x + 5 + 0.5, 61.5, z - 5 + 0.2);
-                gv = new Vector3d(x + 0.5, 61.5, z - 5 + 0.2);
-                cv = new Vector3d(x - 5 + 0.5, 61.5, z - 5 + 0.2);
-                dv = new Vector3d(x + 5 + 0.5, 61.5, z + 5 - 0.2);
-                ev = new Vector3d(x + 0.5, 61.5, z + 5 - 0.2);
-                clv = new Vector3d(x - 5 + 0.5, 61.5, z + 5 - 0.2);
+                qv = new Vector3d(x + 5 + 0.5, 61.5, z - 5 - 0.2 - 0.5);
+                gv = new Vector3d(x + 0.5, 61.5, z - 5 - 0.2 - 0.5);
+                cv = new Vector3d(x - 5 + 0.5, 61.5, z - 5 - 0.2 - 0.5);
+                dv = new Vector3d(x + 5 + 0.5, 61.5, z + 5 + 0.2 + 0.5);
+                ev = new Vector3d(x + 0.5, 61.5, z + 5 + 0.2 + 0.5);
+                clv = new Vector3d(x - 5 + 0.5, 61.5, z + 5 + 0.2 + 0.5);
                 points.add(new Vector3d(x - 7 + 0.5, 59, z - 2 + 0.5));
                 points.add(new Vector3d(x - 7 + 0.5, 59, z + 2 + 0.5));
                 points.add(new Vector3d(x + 3 + 0.5, 59, z - 3 + 0.5));
@@ -79,24 +80,24 @@ public class WaterUtils {
         } else {
             if (facing == EnumFacing.zp) {
                 trigV = new Vector3d(x + 0.5, 60.2, z + 10 + 0.5);
-                qv = new Vector3d(x - 5 + 0.2, 61.5, z + 5 + 0.5);
-                gv = new Vector3d(x - 5 + 0.2, 61.5, z + 0.5);
-                cv = new Vector3d(x - 5 + 0.2, 61.5, z - 5 + 0.5);
-                dv = new Vector3d(x + 5 - 0.2, 61.5, z + 5 + 0.5);
-                ev = new Vector3d(x + 5 - 0.2, 61.5, z + 0.5);
-                clv = new Vector3d(x + 5 - 0.2, 61.5, z - 5 + 0.5);
+                qv = new Vector3d(x - 5 - 0.2 - 0.5, 61.5, z - 5 + 0.5);
+                gv = new Vector3d(x - 5 - 0.2 - 0.5, 61.5, z + 0.5);
+                cv = new Vector3d(x - 5 - 0.2 - 0.5, 61.5, z + 5 + 0.5);
+                dv = new Vector3d(x + 5 + 0.2 + 0.5, 61.5, z - 5 + 0.5);
+                ev = new Vector3d(x + 5 + 0.2 + 0.5, 61.5, z + 0.5);
+                clv = new Vector3d(x + 5 + 0.2 + 0.5, 61.5, z + 5 + 0.5);
                 points.add(new Vector3d(x + 2 + 0.5, 59, z + 7 + 0.5));
                 points.add(new Vector3d(x - 2 + 0.5, 59, z + 7 + 0.5));
                 points.add(new Vector3d(x + 3 + 0.5, 59, z - 3 + 0.5));
                 points.add(new Vector3d(x - 3 + 0.5, 59, z - 3 + 0.5));
             } else {
                 trigV = new Vector3d(x + 0.5, 60.2, z - 10 + 0.5);
-                qv = new Vector3d(x + 5 - 0.2, 61.5, z - 5 + 0.5);
-                gv = new Vector3d(x + 5 - 0.2, 61.5, z + 0.5);
-                cv = new Vector3d(x + 5 - 0.2, 61.5, z + 5 + 0.5);
-                dv = new Vector3d(x - 5 + 0.2, 61.5, z - 5 + 0.5);
-                ev = new Vector3d(x - 5 + 0.2, 61.5, z + 0.5);
-                clv = new Vector3d(x - 5 + 0.2, 61.5, z + 5 + 0.5);
+                qv = new Vector3d(x + 5 + 0.2 + 0.5, 61.5, z + 5 + 0.5);
+                gv = new Vector3d(x + 5 + 0.2 + 0.5, 61.5, z + 0.5);
+                cv = new Vector3d(x + 5 + 0.2 + 0.5, 61.5, z - 5 + 0.5);
+                dv = new Vector3d(x - 5 - 0.2 - 0.5, 61.5, z + 5 + 0.5);
+                ev = new Vector3d(x - 5 - 0.2 - 0.5, 61.5, z + 0.5);
+                clv = new Vector3d(x - 5 - 0.2 - 0.5, 61.5, z - 5 + 0.5);
                 points.add(new Vector3d(x + 2 + 0.5, 59, z - 7 + 0.5));
                 points.add(new Vector3d(x - 2 + 0.5, 59, z - 7 + 0.5));
                 points.add(new Vector3d(x + 3 + 0.5, 59, z + 3 + 0.5));
@@ -415,6 +416,7 @@ public class WaterUtils {
         if (operation == EnumOperation.d) return dv;
         if (operation == EnumOperation.g) return gv;
         if (operation == EnumOperation.trig) return trigV;
+        ChatLib.chat(operation + " ???");
         return null;
     }
 

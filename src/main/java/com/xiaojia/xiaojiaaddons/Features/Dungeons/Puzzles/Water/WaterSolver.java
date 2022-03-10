@@ -13,7 +13,6 @@ import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
-import com.xiaojia.xiaojiaaddons.utils.PacketUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -39,14 +38,13 @@ public class WaterSolver {
     private static int lastFlag;
     private static int process = 0;
     private static BufferedImage map = null;
-    // simulate
-    private final KeyBind devKeyBind = new KeyBind("Dev Water", Keyboard.KEY_NONE);
-    private final KeyBind keyBind = AutoPuzzle.keyBind;
     private static boolean should = false;
     private static boolean tpPacketReceived = false;
     private static long lastKey = 0;
-
     private static Thread solveThread = null;
+    // simulate
+    private final KeyBind devKeyBind = new KeyBind("Dev Water", Keyboard.KEY_NONE);
+    private final KeyBind keyBind = AutoPuzzle.keyBind;
 
     public static void solve() throws InterruptedException {
         process = 0;
@@ -113,6 +111,26 @@ public class WaterSolver {
         }
     }
 
+    private static void etherWarpTo(EnumOperation operation) throws Exception {
+        tpPacketReceived = false;
+        ControlUtils.etherWarp(WaterUtils.getEtherwarpPointFor(operation));
+        int cnt = 0;
+        while (!tpPacketReceived && should) {
+            Thread.sleep(20);
+            cnt++;
+            if (cnt >= 50) {
+                ChatLib.chat("Too long no packet, please try again.");
+                throw new Exception();
+            }
+        }
+        Thread.sleep(Configs.EtherWarpDelayAfter);
+    }
+
+    public static void reset() {
+        board = WaterUtils.getBoard(room, facing);
+        process = 0;
+    }
+
     @SubscribeEvent
     public void onTickAuto(TickEndEvent event) {
         if (!Checker.enabled) return;
@@ -136,10 +154,12 @@ public class WaterSolver {
                         ChatLib.chat("Requires aotv in hotbar.");
                         throw new Exception();
                     }
+                    ControlUtils.setHeldItemIndex(aotvSlot);
                     long lastTime = TimeUtils.curTime();
                     int lastEntry = 0;
                     for (Map.Entry<Integer, EnumOperation> entry : WaterUtils.operations.entrySet()) {
-                        int delta = entry.getKey() - lastEntry;
+                        if (entry.getValue().equals(EnumOperation.empty)) continue;
+                        int delta = (entry.getKey() - lastEntry) * 250;
                         EnumOperation operation = entry.getValue();
                         lastEntry = entry.getKey();
                         // etherwarp, change direction
@@ -163,21 +183,6 @@ public class WaterSolver {
             });
             solveThread.start();
         }
-    }
-
-    private static void etherWarpTo(EnumOperation operation) throws Exception {
-        tpPacketReceived = false;
-        ControlUtils.etherWarp(WaterUtils.getEtherwarpPointFor(operation));
-        int cnt = 0;
-        while (!tpPacketReceived && should) {
-            Thread.sleep(20);
-            cnt++;
-            if (cnt >= 50) {
-                ChatLib.chat("Too long no packet, please try again.");
-                throw new Exception();
-            }
-        }
-        Thread.sleep(Configs.EtherWarpDelayAfter);
     }
 
     @SubscribeEvent
@@ -229,11 +234,6 @@ public class WaterSolver {
             }
             map = newMap;
         }
-    }
-
-    public static void reset() {
-        board = WaterUtils.getBoard(room, facing);
-        process = 0;
     }
 
     @SubscribeEvent
