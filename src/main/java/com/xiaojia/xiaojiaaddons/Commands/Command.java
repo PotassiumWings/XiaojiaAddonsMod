@@ -179,6 +179,11 @@ public class Command extends CommandBase {
                 WaterSolver.setRoom(new Room(MathUtils.floor(getX(MinecraftUtils.getPlayer())),
                         MathUtils.floor(getZ(MinecraftUtils.getPlayer())), Data.blankRoom));
                 break;
+            case "flag":
+                new Thread(() -> {
+                    WaterSolver.reset();
+                    WaterSolver.calc(Integer.parseInt(strings[1]));
+                }).start();
             case "par":
                 M7Dragon.print();
                 break;

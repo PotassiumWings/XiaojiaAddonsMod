@@ -864,7 +864,7 @@ public class Configs {
                     "Requires Auto Blaze.")
     public static boolean AutoBlazeSecret = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Etherwarp Delay", parent = "Blaze Solver", suffix = " ms",
+    @Property(type = Property.Type.NUMBER, name = "Etherwarp Delay", parent = "Solvers", suffix = " ms",
             description = "Delay after receiving a packet from etherwarp.\n" +
                     "Not recommend to set this too low!", min = 100, max = 600, step = 5)
     public static int EtherWarpDelayAfter = 400;

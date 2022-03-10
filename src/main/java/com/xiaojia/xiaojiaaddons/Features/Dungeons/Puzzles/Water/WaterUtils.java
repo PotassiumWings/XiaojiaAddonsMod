@@ -113,22 +113,41 @@ public class WaterUtils {
         if (facing == EnumFacing.xn || facing == EnumFacing.xp) {
             int x = facing == EnumFacing.xp ? room.x - 11 : room.x + 11;
             int deviceX = facing == EnumFacing.xp ? room.x - 12 : room.x + 12;
-            int sz = room.z - 10, tz = room.z + 10;
-            for (int z = sz; z <= tz; z++)
-                for (int y = sy; y <= ty; y++)
-                    board[y - sy][z - sz] = WaterUtils.getStateFromBlock(BlockUtils.getBlockAt(x, y, z), BlockUtils.getBlockAt(deviceX, y, z));
+            int sz, tz;
+            if (facing == EnumFacing.xp) {
+                sz = room.z + 10;
+                tz = room.z - 10;
+                for (int z = sz; z >= tz; z--)
+                    for (int y = sy; y <= ty; y++)
+                        board[y - sy][sz - z] = WaterUtils.getStateFromBlock(BlockUtils.getBlockAt(x, y, z), BlockUtils.getBlockAt(deviceX, y, z));
+            } else {
+                sz = room.z - 10;
+                tz = room.z + 10;
+                for (int z = sz; z <= tz; z++)
+                    for (int y = sy; y <= ty; y++)
+                        board[y - sy][z - sz] = WaterUtils.getStateFromBlock(BlockUtils.getBlockAt(x, y, z), BlockUtils.getBlockAt(deviceX, y, z));
+            }
         } else {
             int z = facing == EnumFacing.zp ? room.z - 11 : room.z + 11;
             int deviceZ = facing == EnumFacing.zp ? room.z - 12 : room.z + 12;
-            int sx = room.x - 10, tx = room.x + 10;
-            for (int x = sx; x <= tx; x++)
-                for (int y = sy; y <= ty; y++)
-                    board[y - sy][x - sx] = WaterUtils.getStateFromBlock(BlockUtils.getBlockAt(x, y, z), BlockUtils.getBlockAt(x, y, deviceZ));
+            int sx, tx;
+            if (facing == EnumFacing.zn) {
+                sx = room.x + 10;
+                tx = room.x - 10;
+                for (int x = sx; x >= tx; x--)
+                    for (int y = sy; y <= ty; y++)
+                        board[y - sy][sx - x] = WaterUtils.getStateFromBlock(BlockUtils.getBlockAt(x, y, z), BlockUtils.getBlockAt(x, y, deviceZ));
+            } else {
+                sx = room.x - 10;
+                tx = room.x + 10;
+                for (int x = sx; x <= tx; x++)
+                    for (int y = sy; y <= ty; y++)
+                        board[y - sy][x - sx] = WaterUtils.getStateFromBlock(BlockUtils.getBlockAt(x, y, z), BlockUtils.getBlockAt(x, y, deviceZ));
+            }
         }
 
         board[23][10] = EnumState.w;
         print2(board);
-        System.err.println("flag: " + flag);
         // get board, piston
         ca.clear();
         ea.clear();
@@ -161,9 +180,9 @@ public class WaterUtils {
                 String cur = board[i][j].toString();
                 s.append(String.format("board[%d][%d]=awa.state.%s;", i, j, cur));
             }
-            System.err.print(s);
+            System.out.print(s);
         }
-        System.err.println();
+        System.out.println();
     }
 
     public static void print(EnumState[][] board) {
@@ -189,6 +208,7 @@ public class WaterUtils {
             if (facing == EnumFacing.zn) flag = WaterUtils.getFlag(room.x + 2, room.z + 4, room.x + 2, room.z);
             else flag = WaterUtils.getFlag(room.x + 2, room.z - 4, room.x + 2, room.z);
         }
+        System.out.println("flag: " + flag);
         return flag;
     }
 
@@ -300,10 +320,12 @@ public class WaterUtils {
             for (EnumOperation operation : EnumOperation.values()) {
                 if (operation == EnumOperation.trig || operation == EnumOperation.empty) continue;
                 EnumState[][] newState = getStatesFromOperation(state, operation);
+//                if (operation != EnumOperation.c) continue;
                 order.put(0, operation);
                 for (EnumOperation operation2 : EnumOperation.values()) {
                     if (operation2 == EnumOperation.trig || operation2 == EnumOperation.empty) continue;
                     if (operation == operation2) continue;
+//                    if (operation2 != EnumOperation.g) continue;
                     EnumState[][] newState2 = getStatesFromOperation(newState, operation2);
                     order.put(2, operation2);
 
@@ -348,6 +370,9 @@ public class WaterUtils {
             if ((operation != EnumOperation.trig && order.size() == (advancedDfs ? 2 : 0) ||
                     operation == EnumOperation.trig && order.size() > (advancedDfs ? 2 : 0))) continue;
             EnumState[][] newState = getStatesFromOperation(state, operation);
+//            if (operation != EnumOperation.empty && order.size() < 5) continue;
+//            if (operation != EnumOperation.g && order.size() == 6) continue;
+//            if (operation != EnumOperation.g && order.size() == 7) continue;
             order.put(time, operation);
             dfs(newState, time, order, flag, advancedDfs);
             order.remove(time);
@@ -434,7 +459,6 @@ public class WaterUtils {
             }
         }
         newState[23][10] = EnumState.w;
-//        print(newState);
         // determines where to flow
         for (int i = 1; i < height - 1; i++) {
             int beginJ = -1, endJ = -1;
@@ -453,42 +477,67 @@ public class WaterUtils {
                     // straight down
                     if (!WaterUtils.isBlock(newState[i - 1][j]))
                         newState[i - 1][j] = EnumState.w;
-                    // beside
                 } else {
                     if (beginJ != -1) {
-                        // calculate [x - startJ - endJ - y]
-
                         // beginJ: if left < right, then should go left
-                        int left = 0, right = 0;
-                        while (canExtendLeft(newState, i, beginJ - left)) left++;
-                        while (canExtendRight(newState, i, beginJ + right)) right++;
-                        if (left == 0) left = 1000;
-                        if (right == 0) right = 1000;
-                        if (left < right && canExtendLeft(newState, i, beginW))
+                        int l1 = 0, r1 = 0;
+                        boolean d1 = true, d2 = true; // if can flow down
+                        while (canExtendLeft(newState, i, beginJ - l1)) l1++;
+                        if (WaterUtils.isBlock(state[i - 1][beginJ - l1])) d1 = false;
+                        while (canExtendRight(newState, i, beginJ + r1)) r1++;
+                        if (WaterUtils.isBlock(state[i - 1][beginJ + r1])) d2 = false;
+                        if (l1 == 0) l1 = 1000;
+                        if (r1 == 0) r1 = 1000;
+                        if ((d1 && !d2 || d1 == d2 && l1 < r1) && canExtendLeft(newState, i, beginW))
                             newState[i][beginW - 1] = newState[i][beginW];
 
-                        left = 0;
-                        right = 0;
-                        while (canExtendLeft(newState, i, endJ - left)) left++;
-                        while (canExtendRight(newState, i, endJ + right)) right++;
-                        if (left == 0) left = 1000;
-                        if (right == 0) right = 1000;
-                        if (left > right && canExtendRight(newState, i, endW))
+                        int l2 = 0, r2 = 0;
+                        boolean d3 = true, d4 = true;
+                        while (canExtendLeft(newState, i, endJ - l2)) l2++;
+                        if (WaterUtils.isBlock(state[i - 1][endJ - l2])) d3 = false;
+                        while (canExtendRight(newState, i, endJ + r2)) r2++;
+                        if (WaterUtils.isBlock(state[i - 1][endJ + r2])) d4 = false;
+                        if (l2 == 0) l2 = 1000;
+                        if (r2 == 0) r2 = 1000;
+                        if ((d4 && !d3 || d3 == d4 && l2 > r2) && canExtendRight(newState, i, endW))
                             newState[i][endW + 1] = newState[i][endW];
+
+                        // special case: extends |   |
+                        //                      -------
+                        // same range, and same diffusion
+                        if (d1 == d4 && l1 == r2 && canExtendLeft(newState, i, beginW) && canExtendRight(newState, i, endW) &&
+                                beginJ - beginW == endW - endJ) {
+                            boolean noHoleBetween = true;
+                            for (int k = beginW; k <= endW; k++)
+                                if (!isBlock(newState[i - 1][k])) {
+                                    noHoleBetween = false;
+                                    break;
+                                }
+                            if (noHoleBetween)
+                                newState[i][beginW - 1] = newState[i][endW + 1] = newState[i][beginW];
+                        }
                     } else if (beginW != -1) {
                         // no upper, compare left / right
                         int left = 0, right = 0;
+                        boolean d1 = true, d2 = true;
                         while (canExtendLeft(newState, i, beginW - left)) left++;
+                        if (WaterUtils.isBlock(state[i - 1][beginW - left])) d1 = false;
                         while (canExtendRight(newState, i, endW + right)) right++;
+                        if (WaterUtils.isBlock(state[i - 1][endW + right])) d2 = false;
                         if (left == 0) left = 1000;
                         if (right == 0) right = 1000;
-                        if (left < right) {
-                            if (canExtendLeft(newState, i, beginW)) newState[i][beginW - 1] = newState[i][beginW];
-                        } else if (left != 1000 && left == right) {
-                            if (canExtendLeft(newState, i, beginW)) newState[i][beginW - 1] = newState[i][beginW];
-                            if (canExtendRight(newState, i, endW)) newState[i][endW + 1] = newState[i][beginW];
-                        } else if (left > right) {
-                            if (canExtendRight(newState, i, endW)) newState[i][endW + 1] = newState[i][beginW];
+                        for (int k = beginW; k <= endW; k++)
+                            if (!WaterUtils.isBlock(newState[i - 1][k]))
+                                left = right = 1000;
+                        if (left != right || left != 1000) {  // no hole between, and can extend
+                            if (d1 && !d2 || d1 == d2 && left < right) {
+                                if (canExtendLeft(newState, i, beginW)) newState[i][beginW - 1] = newState[i][beginW];
+                            } else if (!d1 && d2 || d1 == d2 && left > right) {
+                                if (canExtendRight(newState, i, endW)) newState[i][endW + 1] = newState[i][beginW];
+                            } else {
+                                if (canExtendLeft(newState, i, beginW)) newState[i][beginW - 1] = newState[i][beginW];
+                                if (canExtendRight(newState, i, endW)) newState[i][endW + 1] = newState[i][beginW];
+                            }
                         }
                     }
                     beginJ = endJ = -1;
@@ -496,7 +545,6 @@ public class WaterUtils {
                 }
             }
         }
-//        print(newState);
         // calculate decrease
         for (int i = 0; i < height - 1; i++) {
             boolean waterAboveCurrentWaterFlow = false;

@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
@@ -12,11 +13,13 @@ import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
+import com.xiaojia.xiaojiaaddons.utils.PacketUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.init.Blocks;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -39,7 +42,8 @@ public class WaterSolver {
     // simulate
     private final KeyBind devKeyBind = new KeyBind("Dev Water", Keyboard.KEY_NONE);
     private final KeyBind keyBind = AutoPuzzle.keyBind;
-    private boolean should = false;
+    private static boolean should = false;
+    private static boolean tpPacketReceived = false;
     private static long lastKey = 0;
 
     private static Thread solveThread = null;
@@ -58,6 +62,10 @@ public class WaterSolver {
             Thread.sleep(100);
             flag = WaterUtils.getFlag(room, facing);
         }
+        calc(flag);
+    }
+
+    public static void calc(int flag) {
         // calc
         ChatLib.chat("Calculating possible solutions...");
         long startTime = TimeUtils.curTime();
@@ -135,7 +143,7 @@ public class WaterSolver {
                         EnumOperation operation = entry.getValue();
                         lastEntry = entry.getKey();
                         // etherwarp, change direction
-                        ControlUtils.etherWarp(WaterUtils.getEtherwarpPointFor(operation));
+                        etherWarpTo(operation);
                         ControlUtils.faceSlowly(WaterUtils.getPosFor(operation));
                         // wait
                         long deltaTime = TimeUtils.curTime() - lastTime;
@@ -144,6 +152,7 @@ public class WaterSolver {
                         if (BlockUtils.getBlockAt(BlockUtils.getLookingAtPos(5)) != Blocks.lever)
                             throw new Exception("Not looking at levers");
                         ControlUtils.rightClick();
+                        Thread.sleep(200);
                         lastTime = TimeUtils.curTime();
                     }
                     deactivate();
@@ -153,6 +162,29 @@ public class WaterSolver {
                 }
             });
             solveThread.start();
+        }
+    }
+
+    private static void etherWarpTo(EnumOperation operation) throws Exception {
+        tpPacketReceived = false;
+        ControlUtils.etherWarp(WaterUtils.getEtherwarpPointFor(operation));
+        int cnt = 0;
+        while (!tpPacketReceived && should) {
+            Thread.sleep(20);
+            cnt++;
+            if (cnt >= 50) {
+                ChatLib.chat("Too long no packet, please try again.");
+                throw new Exception();
+            }
+        }
+        Thread.sleep(Configs.EtherWarpDelayAfter);
+    }
+
+    @SubscribeEvent
+    public void onPacketReceived(PacketReceivedEvent event) {
+        if (event.packet instanceof S08PacketPlayerPosLook) {
+            S08PacketPlayerPosLook packet = (S08PacketPlayerPosLook) event.packet;
+            tpPacketReceived = true;
         }
     }
 
@@ -174,7 +206,10 @@ public class WaterSolver {
                 board = WaterUtils.getStatesFromOperation(board, WaterUtils.operations.get(process));
             board = WaterUtils.simulate(board).getKey();
             process++;
-            if (process >= 100) process = 0;
+            if (process >= 100) {
+                board = WaterUtils.getBoard(room, facing);
+                process = 0;
+            }
 
             BufferedImage newMap = new BufferedImage(WaterUtils.width, WaterUtils.height, BufferedImage.TYPE_4BYTE_ABGR);
             for (int i = 0; i < WaterUtils.height; i++) {
@@ -194,6 +229,11 @@ public class WaterSolver {
             }
             map = newMap;
         }
+    }
+
+    public static void reset() {
+        board = WaterUtils.getBoard(room, facing);
+        process = 0;
     }
 
     @SubscribeEvent
