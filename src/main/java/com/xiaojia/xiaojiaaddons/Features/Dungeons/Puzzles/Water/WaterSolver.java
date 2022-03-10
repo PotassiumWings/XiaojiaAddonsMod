@@ -256,8 +256,14 @@ public class WaterSolver {
     public void onWorldLoad(WorldEvent.Load event) {
         setRoom(null);
         facing = null;
-        board = new EnumState[20][21];
+        board = new EnumState[WaterUtils.height][WaterUtils.width];
         lastFlag = -1;
         map = null;
+    }
+
+    public static void printLog() {
+        System.err.println("WaterSolver Log:");
+        System.err.println(WaterUtils.boardString);
+        System.err.println();
     }
 }

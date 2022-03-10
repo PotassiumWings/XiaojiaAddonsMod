@@ -98,6 +98,7 @@ public class Command extends CommandBase {
                 Dungeon.showDungeonInfo();
                 AutoItemFrame.printLog();
                 BloodAssist.printLog();
+                WaterSolver.printLog();
                 System.out.println(AutoBlaze.log.toString());
                 XiaojiaAddons.guiToOpen = new BugReport();
                 break;

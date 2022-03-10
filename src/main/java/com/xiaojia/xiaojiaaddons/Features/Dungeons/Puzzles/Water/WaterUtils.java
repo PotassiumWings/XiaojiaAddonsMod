@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class WaterUtils {
+    public static String boardString = "";
     public static final int width = 21;
     public static final int height = 24;
     public static final int gap = 15;
@@ -110,7 +111,6 @@ public class WaterUtils {
         EnumState[][] board = new EnumState[height][width];
         // get board, piston
         int sy = 60, ty = 83;
-        int flag = 0;
         if (facing == EnumFacing.xn || facing == EnumFacing.xp) {
             int x = facing == EnumFacing.xp ? room.x - 11 : room.x + 11;
             int deviceX = facing == EnumFacing.xp ? room.x - 12 : room.x + 12;
@@ -148,7 +148,7 @@ public class WaterUtils {
         }
 
         board[23][10] = EnumState.w;
-        print2(board);
+        getBoardString(board);
         // get board, piston
         ca.clear();
         ea.clear();
@@ -174,16 +174,15 @@ public class WaterUtils {
         return board;
     }
 
-    private static void print2(EnumState[][] board) {
+    private static void getBoardString(EnumState[][] board) {
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < height; i++) {
-            StringBuilder s = new StringBuilder();
             for (int j = 0; j < width; j++) {
                 String cur = board[i][j].toString();
                 s.append(String.format("board[%d][%d]=awa.state.%s;", i, j, cur));
             }
-            System.out.print(s);
         }
-        System.out.println();
+        boardString = s.toString();
     }
 
     public static void print(EnumState[][] board) {
@@ -321,12 +320,10 @@ public class WaterUtils {
             for (EnumOperation operation : EnumOperation.values()) {
                 if (operation == EnumOperation.trig || operation == EnumOperation.empty) continue;
                 EnumState[][] newState = getStatesFromOperation(state, operation);
-//                if (operation != EnumOperation.c) continue;
                 order.put(0, operation);
                 for (EnumOperation operation2 : EnumOperation.values()) {
                     if (operation2 == EnumOperation.trig || operation2 == EnumOperation.empty) continue;
                     if (operation == operation2) continue;
-//                    if (operation2 != EnumOperation.g) continue;
                     EnumState[][] newState2 = getStatesFromOperation(newState, operation2);
                     order.put(2, operation2);
 
@@ -349,7 +346,6 @@ public class WaterUtils {
         if (time >= bestTime) return;
 
         // simulate without further operations
-//        print(state);
         Pair<Integer, Integer> timeAndFlag = getTimeAndFlag(state);
         if (flag == timeAndFlag.getValue()) {
             bestTime = time;
@@ -371,9 +367,6 @@ public class WaterUtils {
             if ((operation != EnumOperation.trig && order.size() == (advancedDfs ? 2 : 0) ||
                     operation == EnumOperation.trig && order.size() > (advancedDfs ? 2 : 0))) continue;
             EnumState[][] newState = getStatesFromOperation(state, operation);
-//            if (operation != EnumOperation.empty && order.size() < 5) continue;
-//            if (operation != EnumOperation.g && order.size() == 6) continue;
-//            if (operation != EnumOperation.g && order.size() == 7) continue;
             order.put(time, operation);
             dfs(newState, time, order, flag, advancedDfs);
             order.remove(time);
@@ -577,7 +570,6 @@ public class WaterUtils {
                 }
             }
         }
-//        print(newState);
 
         // calc return value
         int flag = 0;
@@ -586,6 +578,4 @@ public class WaterUtils {
                 flag |= 1 << pr.getValue();
         return new Pair<>(newState, flag);
     }
-
-
 }

@@ -26,7 +26,7 @@ public class Configs {
             description = "Only works in SkyBlock.")
     public static boolean RemoveHurtCamEnable = false;
 
-    @Property(type = Property.Type.FOLDER, name = "Remove Hurt Camera Enable", parent = "Remove Hurt Camera")
+    @Property(type = Property.Type.BOOLEAN, name = "Remove Hurt Camera Enable", parent = "Remove Hurt Camera")
     public static boolean RemoveHurtCam = false;
 
     @Property(type = Property.Type.FOLDER, name = "No Rotate", parent = "Dangerous Features")
