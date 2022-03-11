@@ -27,6 +27,11 @@ public class BlockUtils {
     };
 
     public static BlockPos getLookingAtPos(int dist) {
+        Vector3d res = getLookingAtVector(dist);
+        return new BlockPos(res.x, res.y, res.z);
+    }
+
+    public static Vector3d getLookingAtVector(int dist) {
         EntityPlayer player = getPlayer();
         Vec3 eye = player.getPositionEyes(MathUtils.partialTicks);
         Vec3 look = player.getLook(MathUtils.partialTicks);
@@ -90,21 +95,26 @@ public class BlockUtils {
         return "owo?";
     }
 
-    public static BlockPos getNearestBlock(Vec3 from, Vec3 to) {
+    public static Vector3d getNearestBlock(Vec3 from, Vec3 to) {
         return getNearestBlock(
                 new Vector3d(from.xCoord, from.yCoord, from.zCoord),
                 new Vector3d(to.xCoord, to.yCoord, to.zCoord)
         );
     }
 
-    public static BlockPos getNearestBlock(Vector3d from, Vector3d to) {
+    public static BlockPos getNearestBlockPos(Vector3d from, Vector3d to) {
+        Vector3d v = getNearestBlock(from, to);
+        return new BlockPos(v.x, v.y, v.z);
+    }
+
+    public static Vector3d getNearestBlock(Vector3d from, Vector3d to) {
         // calculate from from to to
         Vector3d v = new Vector3d();
         v.normalize(MathUtils.diff(from, to));
         double epsilon = 1e-5;
         Vector3d curV = from;
         if (!isBlockAir(from.x, from.y, from.z))
-            return new BlockPos(from.x, from.y, from.z);
+            return from;
         while (true) {
             double xScale = (epsilon + MathUtils.ceil(curV.x) - curV.x) / v.x;
             double yScale = (epsilon + MathUtils.ceil(curV.y) - curV.y) / v.y;
@@ -121,7 +131,7 @@ public class BlockUtils {
                     MathUtils.floor(curV.y) == MathUtils.floor(to.y) &&
                     MathUtils.floor(curV.z) == MathUtils.floor(to.z)) break;
             if (!BlockUtils.isBlockAir(curV.x, curV.y, curV.z))
-                return new BlockPos(curV.x, curV.y, curV.z);
+                return curV;
         }
         return null;
     }

@@ -40,7 +40,6 @@ public class XiaojiaChat {
     public static void addRank(String name, String rank, String color) {
         String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"person\": \"%s\", \"rank\": \"%s\", \"color\": \"%s\", \"type\": \"%d\"}",
                 getUUID(), getPlayer().getName(), name, rank, color, 8);
-        ChatLib.chat("body: " + body);
         new Thread(() -> ClientSocket.chat(body)).start();
     }
 

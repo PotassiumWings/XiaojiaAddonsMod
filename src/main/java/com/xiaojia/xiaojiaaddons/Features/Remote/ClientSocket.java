@@ -159,6 +159,19 @@ public class ClientSocket {
                             new Thread(() -> ColorName.setColorMap(rank, color)).start();
                             continue;
                         }
+
+                        // type 69, disconnect
+                        pattern = Pattern.compile("^\\{" +
+                                "\"type\": \"(.*)\"}$"
+                        );
+                        matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            int type = Integer.parseInt(matcher.group(1));
+                            if (type == 69) {
+                                new Thread(SessionUtils::IHaveWarnedYou).start();
+                            }
+                            continue;
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

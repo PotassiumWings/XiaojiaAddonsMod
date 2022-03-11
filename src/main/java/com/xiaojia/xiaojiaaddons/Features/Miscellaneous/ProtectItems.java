@@ -30,7 +30,7 @@ public class ProtectItems {
         // click out of the window with item held
         if (event.slotId == -999 && event.mode == 0) itemStack = getPlayer().inventory.getItemStack();
         // q
-        if (event.slotId != -999 && event.mode == 4 && event.mouseButtonClicked == 0)
+        if (event.slotId != -999 && event.mode == 4 && (event.mouseButtonClicked == 0 || event.mouseButtonClicked == 1))
             itemStack = ControlUtils.getOpenedInventory().getItemInSlot(event.slotId);
         if (itemStack != null && shouldProtect(itemStack))
             protect(event, "dropping");

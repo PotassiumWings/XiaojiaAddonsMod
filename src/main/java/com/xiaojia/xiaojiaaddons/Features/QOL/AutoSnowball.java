@@ -38,7 +38,17 @@ public class AutoSnowball {
                         ControlUtils.rightClick();
                 }
                 ControlUtils.setHeldItemIndex(index);
-                CommandsUtils.addCommand("/pickupstash", 3);
+
+                boolean containsAir = false;
+                items = inventory.getItemStacks().subList(36, 45);
+                for (int x = 0; x < 9; x++) {
+                    if (items.get(x) == null) {
+                        containsAir = true;
+                        break;
+                    }
+                }
+                if (containsAir)
+                    CommandsUtils.addCommand("/pickupstash", 3);
             });
             snowballThread.start();
         }

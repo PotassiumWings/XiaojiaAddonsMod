@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
+import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +17,7 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.vecmath.Vector3d;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,9 +67,10 @@ public class ShowEtherwarp {
 
         int dist = 57 + NBTUtils.getIntFromExtraAttributes(held, "tuned_transmission");
         Vec3 eye = player.getPositionEyes(event.partialTicks);
-        BlockPos pos = BlockUtils.getLookingAtPos(dist);
-        if (valid(pos)) {
+        javax.vecmath.Vector3d vec = BlockUtils.getLookingAtVector(dist);
+        if (valid(vec)) {
             // render
+            BlockPos pos = new BlockPos(vec.x, vec.y, vec.z);
             GuiUtils.enableESP();
             Color color = ColorUtils.getColorFromString(Configs.EtherwarpPointColor, new Color(0, 0, 0, 255));
             Color outColor = ColorUtils.getColorFromString(Configs.EtherwarpPointBoundingColor, new Color(0, 0, 0, 255));
@@ -76,7 +79,8 @@ public class ShowEtherwarp {
                 GuiUtils.drawSelectionBoundingBoxAtBlock(pos, outColor);
             GuiUtils.disableESP();
         }
-        if (pos != null && Configs.ShowNearbyEtherwarp) {
+        if (vec != null && Configs.ShowNearbyEtherwarp) {
+            BlockPos pos = new BlockPos(vec.x, vec.y, vec.z);
             int r = Configs.NearbyEtherwarpRadius;
             for (int x = -r; x <= r; x++) {
                 for (int y = -r; y <= r; y++) {
@@ -84,7 +88,7 @@ public class ShowEtherwarp {
                         BlockPos blockPos = pos.add(x, y, z);
                         if (blockPos == null) continue;
                         ArrayList<BlockUtils.Face> faces = BlockUtils.getSurfaceMid(eye, blockPos);
-                        if (valid(blockPos)) {
+                        if (valid(new Vector3d(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5))) {
                             GuiUtils.enableESP();
                             faces.forEach(e -> {
                                 if (BlockUtils.getNearestBlock(eye, e.mid) == null) {
@@ -102,10 +106,24 @@ public class ShowEtherwarp {
     }
 
     // TODO no optimize currently
-    private boolean valid(BlockPos blockPos) {
-        if (blockPos == null) return false;
+    private boolean valid(Vector3d vec) {
+        if (vec == null) return false;
         try {
+            Vec3 playerEye = getPlayer().getPositionEyes(MathUtils.partialTicks);
+            double dis = MathUtils.distanceSquaredFromPoints(vec, new Vector3d(playerEye.xCoord, playerEye.yCoord, playerEye.zCoord));
+
+            BlockPos blockPos = new BlockPos(vec.x, vec.y, vec.z);
             Block block = BlockUtils.getBlockAt(blockPos);
+
+            // right click block
+            if (dis < 25 && (block == Blocks.chest || block == Blocks.ender_chest || block == Blocks.trapped_chest ||
+                    block == Blocks.hopper || block == Blocks.crafting_table ||
+                    block == Blocks.anvil || block == Blocks.enchanting_table ||
+                    block == Blocks.furnace || block == Blocks.lit_furnace ||
+                    block == Blocks.brewing_stand || block == Blocks.dispenser || block == Blocks.dropper
+                    ))
+                return false;
+
             // fire -> not collidable
             if (invalidBlocks.contains(block)) return false;
             for (int i = 1; i <= 2; i++) {
