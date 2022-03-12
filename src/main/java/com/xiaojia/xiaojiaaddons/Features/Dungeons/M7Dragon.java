@@ -189,8 +189,8 @@ public class M7Dragon {
                         }
                     }
                 }
-                if (SessionUtils.isDev())
-                    System.err.println(log + "\n");
+//                if (SessionUtils.isDev())
+//                    System.err.println(log + "\n");
                 dragonsMap.putAll(newInfos);
             }).start();
         }

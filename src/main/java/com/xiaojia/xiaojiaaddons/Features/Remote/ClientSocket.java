@@ -160,7 +160,7 @@ public class ClientSocket {
                             continue;
                         }
 
-                        // type 69, disconnect
+                        // type 69
                         pattern = Pattern.compile("^\\{" +
                                 "\"type\": \"(.*)\"}$"
                         );

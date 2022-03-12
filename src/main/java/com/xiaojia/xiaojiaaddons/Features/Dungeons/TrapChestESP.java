@@ -66,15 +66,17 @@ public class TrapChestESP {
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
         if (isEnabled())
-            for (BlockPos blockPos : this.chests) {
-                Color color = new Color(255, 0, 0);
-                GuiUtils.enableESP();
-                GuiUtils.drawBoxAtBlock(
-                        blockPos.getX(), blockPos.getY(), blockPos.getZ(),
-                        color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
-                        1, 1, 0F
-                );
-                GuiUtils.disableESP();
+            synchronized (chests) {
+                for (BlockPos blockPos : this.chests) {
+                    Color color = new Color(255, 0, 0);
+                    GuiUtils.enableESP();
+                    GuiUtils.drawBoxAtBlock(
+                            blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+                            color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
+                            1, 1, 0F
+                    );
+                    GuiUtils.disableESP();
+                }
             }
     }
 
