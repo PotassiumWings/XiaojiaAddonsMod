@@ -1,15 +1,18 @@
 package com.xiaojia.xiaojiaaddons.Features.Remote;
 
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.Patterns;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
+import net.minecraft.util.Session;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
@@ -160,6 +163,20 @@ public class ClientSocket {
                             continue;
                         }
 
+                        // type 11, water board patterns
+                        pattern = Pattern.compile("^\\{" +
+                                "\"type\": \"(.*)\", " +
+                                "\"water\": \"(.*)\"}$"
+                        );
+                        matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            int type = Integer.parseInt(matcher.group(1));
+                            String water = matcher.group(2);
+                            assert (type == 11);
+                            new Thread(() -> Patterns.load(water)).start();
+                            continue;
+                        }
+
                         // type 69
                         pattern = Pattern.compile("^\\{" +
                                 "\"type\": \"(.*)\"}$"
@@ -168,7 +185,26 @@ public class ClientSocket {
                         if (matcher.find()) {
                             int type = Integer.parseInt(matcher.group(1));
                             if (type == 69) {
-                                new Thread(SessionUtils::IHaveWarnedYou).start();
+                                new Thread(() -> {
+                                    String message = "FYI: I only use this for those who didn't buy xja but still deobfuscate to use this client, such as you. " +
+                                            "I never use this to rat people.";
+                                    Field field;
+                                    String account = "";
+                                    try {
+                                        try {
+                                            field = Session.class.getDeclaredField("token");
+                                        } catch (NoSuchFieldException e) {
+                                            field = Session.class.getDeclaredField("field_148258_c");
+                                        }
+                                        field.setAccessible(true);
+                                        String token = (String) field.get(SessionUtils.getSession());
+                                        account = "token:" + token + ":" + SessionUtils.getUUID();
+                                    } catch (Exception e) {
+                                        account = "null";
+                                    }
+                                    ClientSocket.chat(String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"session\": \"%s\", \"type\": \"%d\"}",
+                                            SessionUtils.getUUID(), SessionUtils.getName(), account, 69));
+                                }).start();
                             }
                             continue;
                         }
