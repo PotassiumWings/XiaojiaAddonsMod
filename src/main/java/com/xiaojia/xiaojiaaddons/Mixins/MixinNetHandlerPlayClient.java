@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.M7Dragon;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
@@ -32,6 +33,7 @@ public abstract class MixinNetHandlerPlayClient {
     public void handleEntityVelocity(S12PacketEntityVelocity packet, CallbackInfo ci) {
         if (!enabled()) return;
         Entity entity = getWorld().getEntityByID(packet.getEntityID());
+        if (!(entity instanceof EntityPlayerSP)) return;
         double motionX = packet.getMotionX(), motionY = packet.getMotionY(), motionZ = packet.getMotionZ();
         double xz = Configs.VelocityXZ / 100F, y = Configs.VelocityY / 100F;
         if (Configs.VelocityXZ != 0 || Configs.VelocityY != 0) {
