@@ -10,6 +10,7 @@ import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
+import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
@@ -97,31 +98,6 @@ public class M7Dragon {
         return null;
     }
 
-    private static String getLog(S2APacketParticles packetParticles) {
-        StringBuilder s = new StringBuilder();
-        for (int x : packetParticles.getParticleArgs())
-            s.append(" ").append(x);
-
-        return packetParticles.getParticleType() +
-                String.format(" at %.2f %.2f %.2f, %.2f %.2f %.2f, %.2f, %d %b", packetParticles.getXCoordinate(),
-                        packetParticles.getYCoordinate(), packetParticles.getZCoordinate(),
-                        packetParticles.getXOffset(), packetParticles.getYOffset(), packetParticles.getZOffset(),
-                        packetParticles.getParticleSpeed(), packetParticles.getParticleCount(),
-                        packetParticles.isLongDistance()) +
-                s;
-    }
-
-    public static void print() {
-        ChatLib.chat("printing particles:");
-        synchronized (particles) {
-            for (S2APacketParticles packetParticles : particles)
-                ChatLib.chat(getLog(packetParticles));
-        }
-        for (DragonInfo info : lastWarn.keySet()) {
-            ChatLib.chat(info.prefix + ", " + lastWarn.get(info));
-        }
-    }
-
     public static void onSpawnDragon(EntityDragon entity) {
         if (!SkyblockUtils.isInDungeon()) return;
         double distance = 1e9;
@@ -171,6 +147,7 @@ public class M7Dragon {
             lastCheck = TimeUtils.curTime();
             new Thread(() -> {
                 HashMap<String, ArrayList<EntityArmorStand>> relics = new HashMap<>();
+                ArrayList<EntityDragon> dragons = new ArrayList<>();
                 StringBuilder log = new StringBuilder();
                 for (Entity entity : getWorld().loadedEntityList) {
                     if (entity instanceof EntityArmorStand) {
@@ -182,14 +159,16 @@ public class M7Dragon {
                             relics.get(helmString).add((EntityArmorStand) entity);
                         }
                     }
+                    if (entity instanceof EntityDragon) {
+                        dragons.add((EntityDragon) entity);
+                    }
                 }
                 HashMap<EntityDragon, DragonInfo> newInfos = new HashMap<>();
                 boolean shouldPrintLog = false;
                 for (String name : relics.keySet()) {
                     log.append("relic: ").append(name).append("\n");
                     ArrayList<EntityArmorStand> armorStands = relics.get(name);
-                    for (EntityDragon entity : dragonsMap.keySet()) {
-                        if (entity.getHealth() <= 0 || entity.isDead) continue;
+                    for (EntityDragon entity : dragons) {
                         int cnt = 0;
                         log.append(String.format("checking entity dragon: %.2f %.2f %.2f", getX(entity), getY(entity), getZ(entity))).append("\n");
                         for (EntityArmorStand relic : armorStands) {
@@ -201,17 +180,17 @@ public class M7Dragon {
                         if (dragonInfo == null) shouldPrintLog = true;
                         else if (cnt >= 8) {
                             if (newInfos.containsKey(entity)) {
+                                newInfos.remove(entity);
                                 log.append(String.format("wtf this dragon is counted as %s and %s", newInfos.get(entity).headName, name)).append("\n");
                                 shouldPrintLog = true;
+                            } else {
+                                newInfos.put(entity, dragonInfo);
                             }
-                            newInfos.put(entity, dragonInfo);
                         }
                     }
                 }
-//                System.err.println(log + "\n");
-//                if (shouldPrintLog) {
-//                    ChatLib.chat("&cAn error occurred in M7 Dragon Color Check. Please &c&l/xj report.");
-//                }
+                if (SessionUtils.isDev())
+                    System.err.println(log + "\n");
                 dragonsMap.putAll(newInfos);
             }).start();
         }
@@ -235,7 +214,6 @@ public class M7Dragon {
             }
             if (res == null) return;
 
-            ChatLib.debug(getLog(packet));
             if (TimeUtils.curTime() - lastWarn.getOrDefault(res, 0L) > 6000) {
                 lastWarn.put(res, TimeUtils.curTime());
             }

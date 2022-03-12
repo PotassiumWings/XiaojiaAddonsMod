@@ -48,6 +48,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.TrapChestESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChatCopy;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestProfit;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.DevMode;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.NoRotate;
@@ -239,6 +240,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new RenderRank());
         MinecraftForge.EVENT_BUS.register(new KeepSprint());
         MinecraftForge.EVENT_BUS.register(new ShowLowestBin());
+        MinecraftForge.EVENT_BUS.register(new DevMode());
 
         // QOL
         MinecraftForge.EVENT_BUS.register(new AutoSnowball());

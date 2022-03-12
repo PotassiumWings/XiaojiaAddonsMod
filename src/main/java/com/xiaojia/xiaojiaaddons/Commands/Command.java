@@ -185,9 +185,6 @@ public class Command extends CommandBase {
                     WaterSolver.reset();
                     WaterSolver.calc(Integer.parseInt(strings[1]));
                 }).start();
-            case "par":
-                M7Dragon.print();
-                break;
             case "sp":
                 XiaojiaAddons.mc.getNetHandler().handleParticles(new S2APacketParticles(
                         EnumParticleTypes.SMOKE_LARGE, false,

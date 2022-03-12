@@ -18,6 +18,16 @@ public class Configs {
             description = "Any items with value greater than this will be protected.")
     public static int ProtectItemValue = 1000;
 
+    @Property(type = Property.Type.FOLDER, name = "Dev Mode", parent = "Misc",
+            description = "For my testings.")
+    public static boolean DevMode = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Particle Spawn Message", parent = "Dev Mode")
+    public static boolean ParticleSpawnMessage = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Entity Join Message", parent = "Dev Mode")
+    public static boolean EntityJoinEvent = false;
+
     @Property(type = Property.Type.FOLDER, name = "Dangerous Features", parent = "Misc",
             description = "DO NOT USE THESE FEATURES.")
     public static boolean DangerousFeatures = false;
