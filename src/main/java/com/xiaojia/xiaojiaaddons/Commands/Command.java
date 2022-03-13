@@ -9,6 +9,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Data;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.Patterns;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
@@ -115,6 +116,10 @@ public class Command extends CommandBase {
                 ShowItem.show();
                 break;
 
+            case "patterns":
+                Patterns.printPatterns();
+                break;
+
             // debug commands
             case "cache":
                 ColorName.showCache();
@@ -183,7 +188,7 @@ public class Command extends CommandBase {
             case "flag":
                 new Thread(() -> {
                     WaterSolver.reset();
-                    WaterSolver.calc(Integer.parseInt(strings[1]));
+                    WaterSolver.calc(Integer.parseInt(strings[1]), null);
                 }).start();
             case "sp":
                 XiaojiaAddons.mc.getNetHandler().handleParticles(new S2APacketParticles(

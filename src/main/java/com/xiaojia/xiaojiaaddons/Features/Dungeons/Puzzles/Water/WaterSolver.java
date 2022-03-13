@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoPuzzle;
+import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
@@ -36,6 +37,7 @@ public class WaterSolver {
     public static Room room = null;
     private static EnumFacing facing = null;
     private static EnumState[][] board = new EnumState[WaterUtils.height][WaterUtils.width];
+    private static EnumState[][] originBoard = new EnumState[WaterUtils.height][WaterUtils.width];
     private static int lastFlag;
     private static int process = 0;
     private static BufferedImage map = null;
@@ -54,35 +56,61 @@ public class WaterSolver {
         if (facing == null) return;
         System.err.println("facing: " + facing + ", x " + room.x + ", z " + room.z);
         board = WaterUtils.getBoard(room, facing);
-        WaterUtils.print(board);
+        originBoard = new EnumState[WaterUtils.height][WaterUtils.width];
+        for (int i = 0; i < WaterUtils.height; i++)
+            for (int j = 0; j < WaterUtils.width; j++)
+                originBoard[i][j] = board[i][j];
         WaterUtils.calculateVectors(room, facing);
         int flag = WaterUtils.getFlag(room, facing);
         while (flag == 0) {
             Thread.sleep(100);
             flag = WaterUtils.getFlag(room, facing);
         }
-        calc(flag);
+
+        Patterns.Operation operation = Patterns.getOperation(board, flag);
+        WaterUtils.processBoard(board);
+        WaterUtils.print(board);
+        calc(flag, operation);
     }
 
-    public static void calc(int flag) {
+    public static void calc(int flag, Patterns.Operation op) {
         // calc
         ChatLib.chat("Calculating possible solutions...");
         long startTime = TimeUtils.curTime();
-        if (lastFlag != flag) {
-            WaterUtils.operations.clear();
-            WaterUtils.bestTime = 120;
-            WaterUtils.dfs(board, -WaterUtils.gap, new HashMap<>(), flag, false);
-            if (WaterUtils.bestTime == 120)
-                WaterUtils.dfs(board, -WaterUtils.gap, new HashMap<>(), flag, true);
-            lastFlag = flag;
+        if (op != null && op.time < 150) {
+            WaterUtils.operations = op.operations;
+            ChatLib.chat(String.format("Estimate best solution: %.2fs (From Cache)", WaterUtils.bestTime * 0.25));
+        } else {
+            if (lastFlag != flag) {
+                WaterUtils.operations.clear();
+                WaterUtils.bestTime = 120;
+                WaterUtils.dfs(board, -WaterUtils.gap, new HashMap<>(), flag, false);
+                if (WaterUtils.bestTime == 120)
+                    WaterUtils.dfs(board, -WaterUtils.gap, new HashMap<>(), flag, true);
+                if (WaterUtils.bestTime != 120) {
+                    System.err.println(Patterns.getPatternString(
+                            originBoard, flag, WaterUtils.bestTime, WaterUtils.operations
+                    ));
+                }
+                lastFlag = flag;
+                upload(WaterUtils.boardString);
+            }
+            ChatLib.chat(String.format("Estimate best solution: %.2fs (%.2fs to calc)", WaterUtils.bestTime * 0.25,
+                    (TimeUtils.curTime() - startTime) / 1000F));
         }
-        ChatLib.chat(String.format("Estimate best solution: %.2fs (%.2fs to calc)", WaterUtils.bestTime * 0.25,
-                (TimeUtils.curTime() - startTime) / 1000F));
         for (Map.Entry<Integer, EnumOperation> operation : WaterUtils.operations.entrySet()) {
             if (operation.getValue().equals(EnumOperation.empty) || operation.getValue().equals(EnumOperation.trig))
                 continue;
             ChatLib.chat("  " + operation.getKey() * 0.25 + "s: " + getMessageFromOperation(operation.getValue()));
         }
+    }
+
+    private static void upload(String boardString) {
+        new Thread(() -> {
+            String body = String.format("{\"uuid\": \"%s\", \"name\": \"%s\", \"water\": \"%s\", \"type\": \"%d\"}",
+                    SessionUtils.getUUID(), SessionUtils.getName(), boardString, 11);
+            ClientSocket.chat(body);
+        }).start();
     }
 
     private static String getMessageFromOperation(EnumOperation o) {
@@ -129,7 +157,14 @@ public class WaterSolver {
 
     public static void reset() {
         board = WaterUtils.getBoard(room, facing);
+        WaterUtils.processBoard(board);
         process = 0;
+    }
+
+    public static void printLog() {
+        System.err.println("WaterSolver Log:");
+        System.err.println(WaterUtils.boardString);
+        System.err.println();
     }
 
     @SubscribeEvent
@@ -219,6 +254,7 @@ public class WaterSolver {
             process++;
             if (process >= 100) {
                 board = WaterUtils.getBoard(room, facing);
+                WaterUtils.processBoard(board);
                 process = 0;
             }
 
@@ -259,11 +295,5 @@ public class WaterSolver {
         board = new EnumState[WaterUtils.height][WaterUtils.width];
         lastFlag = -1;
         map = null;
-    }
-
-    public static void printLog() {
-        System.err.println("WaterSolver Log:");
-        System.err.println(WaterUtils.boardString);
-        System.err.println();
     }
 }

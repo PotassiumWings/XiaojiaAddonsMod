@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class WaterUtils {
-    public static String boardString = "";
     public static final int width = 21;
     public static final int height = 24;
     public static final int gap = 15;
@@ -43,6 +42,7 @@ public class WaterUtils {
                 put(EnumOperation.cl, cla);
                 put(EnumOperation.q, qa);
             }};
+    public static String boardString = "";
     public static int bestTime;
     public static TreeMap<Integer, EnumOperation> operations = new TreeMap<>();
 
@@ -149,6 +149,10 @@ public class WaterUtils {
 
         board[23][10] = EnumState.w;
         getBoardString(board);
+        return board;
+    }
+
+    public static void processBoard(EnumState[][] board) {
         // get board, piston
         ca.clear();
         ea.clear();
@@ -171,7 +175,6 @@ public class WaterUtils {
                     board[i][j] = EnumState.E;
             }
         }
-        return board;
     }
 
     private static void getBoardString(EnumState[][] board) {
@@ -179,7 +182,7 @@ public class WaterUtils {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 String cur = board[i][j].toString();
-                s.append(String.format("board[%d][%d]=awa.state.%s;", i, j, cur));
+                s.append(String.format("board[%d][%d]=EnumState.%s;", i, j, cur));
             }
         }
         boardString = s.toString();

@@ -29,6 +29,7 @@ public class ShowBookName {
     public void onItemDrawn(ItemDrawnEvent event) {
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (!Checker.enabled || inventory == null || !Configs.ShowBookName) return;
+        if (inventory.getName().contains("Superpairs (")) return;
         ItemStack itemStack = event.itemStack;
         if (itemStack == null || !itemStack.hasDisplayName()) return;
         String name = ChatLib.removeFormatting(itemStack.getDisplayName()).toLowerCase();
