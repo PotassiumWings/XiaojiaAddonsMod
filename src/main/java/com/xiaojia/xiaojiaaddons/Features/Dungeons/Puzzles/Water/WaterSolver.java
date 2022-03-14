@@ -64,10 +64,14 @@ public class WaterSolver {
         WaterUtils.calculateVectors(room, facing);
         Thread.sleep(200);
         int flag = WaterUtils.getFlag(room, facing);
-        while (flag == 0) {
+        while (flag == 0 && Dungeon.currentRoom.equals("Water Board")) {
             Thread.sleep(100);
             flag = WaterUtils.getFlag(room, facing);
         }
+        if (flag == 0) {
+            return;
+        }
+        System.err.println("flag: " + flag);
 
         Patterns.Operation operation = Patterns.getOperation(board, flag);
         WaterUtils.processBoard(board);
@@ -84,9 +88,10 @@ public class WaterSolver {
             ChatLib.chat(String.format("Estimate best solution: %.2fs (From Cache)", op.time * 0.25));
         } else {
             if (lastFlag != flag) {
-                if (WaterUtils.raw)
+                if (WaterUtils.raw){
+                    ChatLib.chat("This is a new pattern! Sent to server for calculation.");
                     upload(WaterUtils.boardString);
-                else
+                } else
                     ChatLib.chat("Levers are flipped, so calculating without cache.");
                 WaterUtils.operations = new TreeMap<>();
                 WaterUtils.bestTime = 120;
