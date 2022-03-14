@@ -56,13 +56,15 @@ public class Patterns {
             String s = "{";
             s += String.format("\"board\": [%s]", getBoardString(pattern.board));
             s += ", \"ops\": [";
+            ArrayList<String> flags = new ArrayList<>();
             for (int i = 0; i < 32; i++) {
                 if (pattern.operations[i] != null && pattern.operations[i].time < 150) {
-                    Operation operation =pattern.operations[i];
-                    s += String.format("{\"flag\": %d, \"time\": %d, \"operations\": %s}",
-                            i,operation.time,getOperationString(operation.operations));
+                    Operation operation = pattern.operations[i];
+                    flags.add(String.format("{\"flag\": %d, \"time\": %d, \"operations\": %s}",
+                            i, operation.time, getOperationString(operation.operations)));
                 }
             }
+            s += flags.stream().reduce("", (a, b) -> a.equals("") ? b : a + ", " + b);
             s += "]";
             s += "}";
             res += s + ",";
@@ -81,20 +83,20 @@ public class Patterns {
         return s;
     }
 
-    private static  String getOperationString(TreeMap<Integer, EnumOperation> operations) {
-        ArrayList<String > res = new ArrayList<>();
+    private static String getOperationString(TreeMap<Integer, EnumOperation> operations) {
+        ArrayList<String> res = new ArrayList<>();
         for (Map.Entry<Integer, EnumOperation> operation : operations.entrySet()) {
-            res.add(String.format("{\"time\": %d, \"type\": %s}", operation.getKey(), operation.getValue()));
+            res.add(String.format("{\"time\": %d, \"type\": \"%s\"}", operation.getKey(), operation.getValue()));
         }
-        return String.format("[%s]", res.stream().reduce("", (a, b) -> a + ", " + b));
+        return String.format("[%s]", res.stream().reduce("", (a, b) -> a.equals("") ? b : a + ", " + b));
     }
 
     private static String getBoardString(EnumState[][] board) {
         ArrayList<String> res = new ArrayList<>();
-        for (int i = 0; i <WaterUtils.height; i++)
-            for (int j =0 ;j<WaterUtils.width; j++)
+        for (int i = 0; i < WaterUtils.height; i++)
+            for (int j = 0; j < WaterUtils.width; j++)
                 res.add(String.format("\"%d %d %s\"", i, j, board[i][j]));
-        return res.stream().reduce("", (a, b) -> a + ", " + b);
+        return res.stream().reduce("", (a, b) -> a.equals("") ? b : a + ", " + b);
     }
 
     public static Operation getOperation(EnumState[][] board, int flag) {
