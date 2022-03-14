@@ -9,6 +9,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Data;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Quiz;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.Patterns;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
@@ -27,6 +28,7 @@ import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.MinecraftUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TabUtils;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -114,6 +116,11 @@ public class Command extends CommandBase {
                 break;
             case "showitem":
                 ShowItem.show();
+                break;
+
+            case "quiz":
+                ChatLib.chat("Year " + (TimeUtils.curTime() - 1560276000) / 446400 + 1);
+                ChatLib.chat(Quiz.answer);
                 break;
 
             case "patterns":

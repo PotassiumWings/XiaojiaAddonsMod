@@ -477,7 +477,6 @@ public class WaterUtils {
                         newState[i - 1][j] = EnumState.w;
                 } else {
                     if (beginJ != -1) {
-                        // beginJ: if left < right, then should go left
                         int l1 = 0, r1 = 0;
                         boolean d1 = true, d2 = true; // if can flow down
                         while (canExtendLeft(newState, i, beginJ - l1)) l1++;
@@ -486,7 +485,13 @@ public class WaterUtils {
                         if (WaterUtils.isBlock(state[i - 1][beginJ + r1])) d2 = false;
                         if (l1 == 0) l1 = 1000;
                         if (r1 == 0) r1 = 1000;
-                        if ((d1 && !d2 || d1 == d2 && l1 < r1) && canExtendLeft(newState, i, beginW))
+                        boolean canLeft = ((d1 && !d2 || d1 == d2 && l1 < r1) && canExtendLeft(newState, i, beginW));
+                        if (beginW == beginJ) {
+                            if (isWater(newState[i][beginW + 1])) canLeft = false;
+                        } else {
+                            canLeft &= beginJ - beginW <= 6;
+                        }
+                        if (canLeft)
                             newState[i][beginW - 1] = newState[i][beginW];
 
                         int l2 = 0, r2 = 0;
@@ -497,14 +502,20 @@ public class WaterUtils {
                         if (WaterUtils.isBlock(state[i - 1][endJ + r2])) d4 = false;
                         if (l2 == 0) l2 = 1000;
                         if (r2 == 0) r2 = 1000;
-                        if ((d4 && !d3 || d3 == d4 && l2 > r2) && canExtendRight(newState, i, endW))
+                        boolean canRight = ((d4 && !d3 || d3 == d4 && l2 > r2) && canExtendRight(newState, i, endW));
+                        if (endW == endJ) {
+                            if (isWater(newState[i][endW - 1])) canRight = false;
+                        } else {
+                            canRight &= endW - endJ <= 6;
+                        }
+                        if (canRight)
                             newState[i][endW + 1] = newState[i][endW];
 
                         // special case: extends |   |
                         //                      -------
                         // same range, and same diffusion
                         if (d1 == d4 && l1 == r2 && canExtendLeft(newState, i, beginW) && canExtendRight(newState, i, endW) &&
-                                beginJ - beginW == endW - endJ) {
+                                beginJ - beginW == endW - endJ && beginJ - beginW < 6) {
                             boolean noHoleBetween = true;
                             for (int k = beginW; k <= endW; k++)
                                 if (!isBlock(newState[i - 1][k])) {
@@ -528,6 +539,8 @@ public class WaterUtils {
                             if (!WaterUtils.isBlock(newState[i - 1][k]))
                                 left = right = 1000;
                         if (left != right || left != 1000) {  // no hole between, and can extend
+                            // TODO: If can't flow down cuz too far, this will end up calculating error.
+                            //  But i assume no such condition.
                             if (d1 && !d2 || d1 == d2 && left < right) {
                                 if (canExtendLeft(newState, i, beginW)) newState[i][beginW - 1] = newState[i][beginW];
                             } else if (!d1 && d2 || d1 == d2 && left > right) {

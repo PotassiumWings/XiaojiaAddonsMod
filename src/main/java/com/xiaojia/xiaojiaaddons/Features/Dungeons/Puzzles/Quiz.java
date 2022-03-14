@@ -34,7 +34,7 @@ public class Quiz {
     private static final String url = "https://cdn.jsdelivr.net/gh/Skytils/SkytilsMod-Data@main/solvers/oruotrivia.json";
     private static final HashMap<String, ArrayList<String>> solutions = new HashMap<>();
 
-    private static String answer = null;
+    public static String answer = null;
     private static ArrayList<String> answers = null;
 
     private static long lastFetch = 0;
