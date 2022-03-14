@@ -30,6 +30,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 // TODO: DELETE THIS FROM ROOM.JSON
@@ -61,6 +62,7 @@ public class WaterSolver {
             for (int j = 0; j < WaterUtils.width; j++)
                 originBoard[i][j] = board[i][j];
         WaterUtils.calculateVectors(room, facing);
+        Thread.sleep(200);
         int flag = WaterUtils.getFlag(room, facing);
         while (flag == 0) {
             Thread.sleep(100);
@@ -82,8 +84,11 @@ public class WaterSolver {
             ChatLib.chat(String.format("Estimate best solution: %.2fs (From Cache)", op.time * 0.25));
         } else {
             if (lastFlag != flag) {
-                upload(WaterUtils.boardString);
-                WaterUtils.operations.clear();
+                if (WaterUtils.raw)
+                    upload(WaterUtils.boardString);
+                else
+                    ChatLib.chat("Levers are flipped, so calculating without cache.");
+                WaterUtils.operations = new TreeMap<>();
                 WaterUtils.bestTime = 120;
                 WaterUtils.dfs(board, -WaterUtils.gap, new HashMap<>(), flag, false);
                 if (WaterUtils.bestTime == 120)

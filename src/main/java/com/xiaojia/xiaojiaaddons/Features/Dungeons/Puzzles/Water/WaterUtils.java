@@ -47,11 +47,13 @@ public class WaterUtils {
     public static TreeMap<Integer, EnumOperation> operations = new TreeMap<>();
 
     public static Vector3d trigV, qv, gv, cv, dv, ev, clv;
+    public static boolean raw = true;
     public static ArrayList<Vector3d> points;
 
     public static void calculateVectors(Room room, EnumFacing facing) {
         int x = room.x, z = room.z;
         points = new ArrayList<>();
+        raw= true;
         if (facing == EnumFacing.xn || facing == EnumFacing.xp) {
             if (facing == EnumFacing.xp) {
                 trigV = new Vector3d(x + 10 + 0.5, 60.2, z + 0.5);
@@ -105,6 +107,12 @@ public class WaterUtils {
                 points.add(new Vector3d(x - 3 + 0.5, 59, z + 3 + 0.5));
             }
         }
+        if (BlockUtils.getMetaAt(qv) > 5) raw = false;
+        if (BlockUtils.getMetaAt(dv) > 5) raw = false;
+        if (BlockUtils.getMetaAt(ev) > 5) raw = false;
+        if (BlockUtils.getMetaAt(cv) > 5) raw = false;
+        if (BlockUtils.getMetaAt(clv) > 5) raw = false;
+        if (BlockUtils.getMetaAt(gv) > 5) raw = false;
     }
 
     public static EnumState[][] getBoard(Room room, EnumFacing facing) {
@@ -211,7 +219,7 @@ public class WaterUtils {
             if (facing == EnumFacing.zn) flag = WaterUtils.getFlag(room.x + 2, room.z + 4, room.x + 2, room.z);
             else flag = WaterUtils.getFlag(room.x + 2, room.z - 4, room.x + 2, room.z);
         }
-        System.out.println("flag: " + flag);
+//        System.out.println("flag: " + flag);
         return flag;
     }
 

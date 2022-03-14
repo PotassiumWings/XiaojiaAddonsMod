@@ -75,6 +75,12 @@ public class BlockUtils {
         return getWorld().getBlockState(pos);
     }
 
+    public static int getMetaAt(Vector3d pos) {
+        IBlockState iBlockState = BlockUtils.getBlockStateAt(new BlockPos(pos.x, pos.y, pos.z));
+        if (iBlockState == null) return -1;
+        return iBlockState.getBlock().getMetaFromState(iBlockState);
+    }
+
     public static void showBlockAt(int x, int y, int z) {
         Block block = getBlockAt(x, y, z);
         if (block instanceof BlockSkull) {
