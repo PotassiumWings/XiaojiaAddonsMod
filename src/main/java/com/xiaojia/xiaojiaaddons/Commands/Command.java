@@ -118,11 +118,6 @@ public class Command extends CommandBase {
                 ShowItem.show();
                 break;
 
-            case "quiz":
-                ChatLib.chat("Year " + (TimeUtils.curTime() - 1560276000) / 446400 + 1);
-                ChatLib.chat(Quiz.answer);
-                break;
-
             case "patterns":
                 Patterns.printPatterns();
                 break;

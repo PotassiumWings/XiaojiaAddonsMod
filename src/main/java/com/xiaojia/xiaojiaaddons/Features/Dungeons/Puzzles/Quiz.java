@@ -11,6 +11,7 @@ import com.xiaojia.xiaojiaaddons.Features.Remote.RemoteUtils;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.block.Block;
@@ -84,7 +85,7 @@ public class Quiz {
             long started = Dungeon.runStarted;
             long cur = TimeUtils.curTime();
             long useTime = started < 5 ? cur : started;
-            long year = (useTime - 1560276000) / 446400 + 1;
+            int year = MathUtils.floor((useTime / 1000.0 - 1560276000) / 446400 + 1);
             answer = "Year " + year;
         } else {
             for (String question : solutions.keySet()) {

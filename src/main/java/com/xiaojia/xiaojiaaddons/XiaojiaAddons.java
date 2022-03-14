@@ -294,7 +294,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new ChestProfit());
 
         // Tests
-        MinecraftForge.EVENT_BUS.register(new TestM7());
+//        MinecraftForge.EVENT_BUS.register(new TestM7());
 
         for (KeyBind keyBind : KeyBindUtils.keyBinds) {
             ClientRegistry.registerKeyBinding(keyBind.mcKeyBinding());
