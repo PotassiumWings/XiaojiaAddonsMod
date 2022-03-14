@@ -79,9 +79,10 @@ public class WaterSolver {
         long startTime = TimeUtils.curTime();
         if (op != null && op.time < 150) {
             WaterUtils.operations = op.operations;
-            ChatLib.chat(String.format("Estimate best solution: %.2fs (From Cache)", WaterUtils.bestTime * 0.25));
+            ChatLib.chat(String.format("Estimate best solution: %.2fs (From Cache)", op.time * 0.25));
         } else {
             if (lastFlag != flag) {
+                upload(WaterUtils.boardString);
                 WaterUtils.operations.clear();
                 WaterUtils.bestTime = 120;
                 WaterUtils.dfs(board, -WaterUtils.gap, new HashMap<>(), flag, false);
@@ -93,7 +94,6 @@ public class WaterSolver {
                     ));
                 }
                 lastFlag = flag;
-                upload(WaterUtils.boardString);
             }
             ChatLib.chat(String.format("Estimate best solution: %.2fs (%.2fs to calc)", WaterUtils.bestTime * 0.25,
                     (TimeUtils.curTime() - startTime) / 1000F));
