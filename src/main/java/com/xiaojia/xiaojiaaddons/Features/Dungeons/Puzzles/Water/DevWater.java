@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
@@ -19,26 +20,30 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class DevWater {
-    public static TreeMap<Integer, EnumOperation> operations = new TreeMap<>();
     private static EnumState[][] board = new EnumState[WaterUtils.height][WaterUtils.width];
-    private static int process = 0;
+    public static int process = 0;
     private static long lastKey = 0;
     private static BufferedImage map = null;
     private final KeyBind devKeyBind = new KeyBind("Dev Water", Keyboard.KEY_NONE);
 
     public static void setBoard(int index, int flag) {
         Patterns.Pattern pattern = Patterns.patterns.get(index);
-        board = pattern.board;
-        operations = pattern.operations[flag].operations;
+        board = new EnumState[WaterUtils.height][WaterUtils.width];
+        for (int i = 0; i < WaterUtils.height; i++)
+            for (int j = 0; j < WaterUtils.width; j++)
+                board[i][j] = pattern.board[i][j];
+
+        WaterUtils.operations = pattern.operations[flag].operations;
 
         WaterUtils.getBoardString(board);
         System.err.println(WaterUtils.boardString);
         ChatLib.chat("flag: " + flag);
         for (Map.Entry<Integer, EnumOperation> operation : WaterUtils.operations.entrySet()) {
-            if (operation.getValue().equals(EnumOperation.empty) || operation.getValue().equals(EnumOperation.trig))
+            if (operation.getValue().equals(EnumOperation.empty))
                 continue;
             ChatLib.chat("  " + operation.getKey() * 0.25 + "s: " + WaterSolver.getMessageFromOperation(operation.getValue()));
         }
+        WaterUtils.processBoard(board);
         process = 0;
     }
 
@@ -49,8 +54,10 @@ public class DevWater {
         if (devKeyBind.isKeyDown()) {
             if (TimeUtils.curTime() - lastKey < 250) return;
             lastKey = TimeUtils.curTime();
-            if (operations.containsKey(process))
-                board = WaterUtils.getStatesFromOperation(board, operations.get(process));
+            if (WaterUtils.operations.containsKey(process)) {
+                ChatLib.chat("processing " + WaterUtils.operations.get(process));
+                board = WaterUtils.getStatesFromOperation(board, WaterUtils.operations.get(process));
+            }
             board = WaterUtils.simulate(board).getKey();
             process++;
 
@@ -75,11 +82,31 @@ public class DevWater {
     }
 
     @SubscribeEvent
-    public void onRenderOverlay(RenderGameOverlayEvent event) {
+    public void onRenderOverlay(RenderGameOverlayEvent.Pre event) {
         if (!Checker.enabled) return;
         if (!SessionUtils.isDev()) return;
         if (!Configs.DevWater) return;
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
+        if (map == null) return;
+        RenderUtils.start();
         RenderUtils.drawImage(new Image(map), Configs.MapX, Configs.MapY, 25 * Configs.MapScale, 25 * Configs.MapScale);
+
+        RenderUtils.retainTransforms(true);
+        RenderUtils.translate(Configs.MapX, Configs.MapY, 0);
+        RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
+        for (int i = 0; i < WaterUtils.height; i++) {
+            for (int j = 0; j < WaterUtils.width; j++) {
+                int x = WaterUtils.getWaterValueOf(board[i][j]);
+                if (x == 0) continue;
+                if (board[i][j] == EnumState.w) x = 9;
+                RenderUtils.drawStringWithShadow(
+                        x + "",
+                        j * 12F,
+                        (WaterUtils.height - 1 - i) * 10.5F
+                );
+            }
+        }
+        RenderUtils.retainTransforms(false);
+        RenderUtils.end();
     }
 }

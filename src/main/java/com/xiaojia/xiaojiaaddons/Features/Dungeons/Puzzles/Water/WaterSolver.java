@@ -119,6 +119,7 @@ public class WaterSolver {
         if (o == EnumOperation.d) return "&bDiamond";
         if (o == EnumOperation.q) return "&fQuartz";
         if (o == EnumOperation.g) return "&6Gold";
+        if (o == EnumOperation.trig) return "Trig";
         return "";
     }
 

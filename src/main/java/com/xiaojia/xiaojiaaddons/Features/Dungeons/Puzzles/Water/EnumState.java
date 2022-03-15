@@ -8,5 +8,5 @@ public enum EnumState {
     // converted ones, blocks
     cc, cg, cq, cd, ce, ccl,
     // water, and 6 forms of water
-    w, w1, w2, w3, w4, w5, w6
+    w, w1, w2, w3, w4, w5, w6, w7, w8
 }

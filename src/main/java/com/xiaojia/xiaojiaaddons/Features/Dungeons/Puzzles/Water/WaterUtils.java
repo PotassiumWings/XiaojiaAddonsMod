@@ -53,7 +53,7 @@ public class WaterUtils {
     public static void calculateVectors(Room room, EnumFacing facing) {
         int x = room.x, z = room.z;
         points = new ArrayList<>();
-        raw= true;
+        raw = true;
         if (facing == EnumFacing.xn || facing == EnumFacing.xp) {
             if (facing == EnumFacing.xp) {
                 trigV = new Vector3d(x + 10 + 0.5, 60.2, z + 0.5);
@@ -236,7 +236,12 @@ public class WaterUtils {
         return state == EnumState.w || state == EnumState.w1 ||
                 state == EnumState.w2 || state == EnumState.w3 ||
                 state == EnumState.w4 || state == EnumState.w5 ||
-                state == EnumState.w6;
+                state == EnumState.w6 || state == EnumState.w7 ||
+                state == EnumState.w8;
+    }
+
+    public static boolean isFlowWater(EnumState state) {
+        return isWater(state) && state != EnumState.w;
     }
 
     public static boolean isBlock(EnumState state) {
@@ -251,7 +256,9 @@ public class WaterUtils {
     }
 
     public static EnumState getLowerFormOfWater(EnumState s) {
-        if (s == EnumState.w || s == EnumState.w6) return EnumState.w5;
+        if (s == EnumState.w || s == EnumState.w8) return EnumState.w7;
+        if (s == EnumState.w7) return EnumState.w6;
+        if (s == EnumState.w6) return EnumState.w5;
         if (s == EnumState.w5) return EnumState.w4;
         if (s == EnumState.w4) return EnumState.w3;
         if (s == EnumState.w3) return EnumState.w2;
@@ -262,7 +269,9 @@ public class WaterUtils {
 
     public static int getWaterValueOf(EnumState s) {
         int res = 0;
-        if (s == EnumState.w || s == EnumState.w6) return 6;
+        if (s == EnumState.w || s == EnumState.w8) return 8;
+        if (s == EnumState.w7) return 7;
+        if (s == EnumState.w6) return 6;
         if (s == EnumState.w5) return 5;
         if (s == EnumState.w4) return 4;
         if (s == EnumState.w3) return 3;
@@ -454,10 +463,11 @@ public class WaterUtils {
     // simulate one time, return state and flag
     public static Pair<EnumState[][], Integer> simulate(EnumState[][] state) {
         EnumState[][] newState = new EnumState[height][width];
-        // only copies not water; water: above/aside with water
+        // only copies not water; water: above/aside with water; flow water
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (!WaterUtils.isWater(state[i][j])) newState[i][j] = state[i][j];
+                else if (WaterUtils.isFlowWater(state[i][j])) newState[i][j] = state[i][j];
                 else if (j > 1 && WaterUtils.isWater(state[i][j - 1]) || j < width - 1 && WaterUtils.isWater(state[i][j + 1]) ||
                         i + 1 < height && WaterUtils.isWater(state[i + 1][j]))
                     newState[i][j] = state[i][j];
@@ -467,16 +477,13 @@ public class WaterUtils {
         newState[23][10] = EnumState.w;
         // determines where to flow
         for (int i = 1; i < height - 1; i++) {
-            int beginJ = -1, endJ = -1;
+            boolean hasWaterAbove = false;
             int beginW = -1, endW = -1;
             for (int j = 0; j < width; j++) {
                 EnumState cur = state[i][j];
                 // next layer is water
                 if (WaterUtils.isWater(cur)) {
-                    if (WaterUtils.isWater(state[i + 1][j])) {
-                        if (beginJ == -1) beginJ = j;
-                        endJ = j;
-                    }
+                    hasWaterAbove |= WaterUtils.isWater(state[i + 1][j]);
                     if (beginW == -1) beginW = j;
                     endW = j;
 
@@ -484,113 +491,52 @@ public class WaterUtils {
                     if (!WaterUtils.isBlock(newState[i - 1][j]))
                         newState[i - 1][j] = EnumState.w;
                 } else {
-                    if (beginJ != -1) {
+                    // TODO: assumption: no single one block flow in the system
+                    if (beginW == -1) continue;
+                    boolean canLeft = false, canRight = false;
+                    if (hasWaterAbove && beginW == endW) {
                         int l1 = 0, r1 = 0;
                         boolean d1 = true, d2 = true; // if can flow down
-                        while (canExtendLeft(newState, i, beginJ - l1)) l1++;
-                        if (WaterUtils.isBlock(state[i - 1][beginJ - l1])) d1 = false;
-                        while (canExtendRight(newState, i, beginJ + r1)) r1++;
-                        if (WaterUtils.isBlock(state[i - 1][beginJ + r1])) d2 = false;
+                        while (canExtendLeft(newState, i, beginW - l1)) l1++;
+                        if (WaterUtils.isBlock(state[i - 1][beginW - l1])) d1 = false;
+                        while (canExtendRight(newState, i, beginW + r1)) r1++;
+                        if (WaterUtils.isBlock(state[i - 1][beginW + r1])) d2 = false;
                         if (l1 == 0) l1 = 1000;
                         if (r1 == 0) r1 = 1000;
-                        boolean canLeft = ((d1 && !d2 || d1 == d2 && l1 < r1) && canExtendLeft(newState, i, beginW));
-                        if (beginW == beginJ) {
-                            if (isWater(newState[i][beginW + 1])) canLeft = false;
-                        } else {
-                            canLeft &= beginJ - beginW <= 6;
-                        }
-                        if (canLeft)
-                            newState[i][beginW - 1] = newState[i][beginW];
-
-                        int l2 = 0, r2 = 0;
-                        boolean d3 = true, d4 = true;
-                        while (canExtendLeft(newState, i, endJ - l2)) l2++;
-                        if (WaterUtils.isBlock(state[i - 1][endJ - l2])) d3 = false;
-                        while (canExtendRight(newState, i, endJ + r2)) r2++;
-                        if (WaterUtils.isBlock(state[i - 1][endJ + r2])) d4 = false;
-                        if (l2 == 0) l2 = 1000;
-                        if (r2 == 0) r2 = 1000;
-                        boolean canRight = ((d4 && !d3 || d3 == d4 && l2 > r2) && canExtendRight(newState, i, endW));
-                        if (endW == endJ) {
-                            if (isWater(newState[i][endW - 1])) canRight = false;
-                        } else {
-                            canRight &= endW - endJ <= 6;
-                        }
-                        if (canRight)
-                            newState[i][endW + 1] = newState[i][endW];
-
-                        // special case: extends |   |
-                        //                      -------
-                        // same range, and same diffusion
-                        if (d1 == d4 && l1 == r2 && canExtendLeft(newState, i, beginW) && canExtendRight(newState, i, endW) &&
-                                beginJ - beginW == endW - endJ && beginJ - beginW < 6) {
-                            boolean noHoleBetween = true;
-                            for (int k = beginW; k <= endW; k++)
-                                if (!isBlock(newState[i - 1][k])) {
-                                    noHoleBetween = false;
-                                    break;
-                                }
-                            if (noHoleBetween)
-                                newState[i][beginW - 1] = newState[i][endW + 1] = newState[i][beginW];
-                        }
-                    } else if (beginW != -1) {
-                        // no upper, compare left / right
-                        int left = 0, right = 0;
-                        boolean d1 = true, d2 = true;
-                        while (canExtendLeft(newState, i, beginW - left)) left++;
-                        if (WaterUtils.isBlock(state[i - 1][beginW - left])) d1 = false;
-                        while (canExtendRight(newState, i, endW + right)) right++;
-                        if (WaterUtils.isBlock(state[i - 1][endW + right])) d2 = false;
-                        if (left == 0) left = 1000;
-                        if (right == 0) right = 1000;
-                        for (int k = beginW; k <= endW; k++)
-                            if (!WaterUtils.isBlock(newState[i - 1][k]))
-                                left = right = 1000;
-                        if (left != right || left != 1000) {  // no hole between, and can extend
-                            // TODO: If can't flow down cuz too far, this will end up calculating error.
-                            //  But i assume no such condition.
-                            if (d1 && !d2 || d1 == d2 && left < right) {
-                                if (canExtendLeft(newState, i, beginW)) newState[i][beginW - 1] = newState[i][beginW];
-                            } else if (!d1 && d2 || d1 == d2 && left > right) {
-                                if (canExtendRight(newState, i, endW)) newState[i][endW + 1] = newState[i][beginW];
-                            } else {
-                                if (canExtendLeft(newState, i, beginW)) newState[i][beginW - 1] = newState[i][beginW];
-                                if (canExtendRight(newState, i, endW)) newState[i][endW + 1] = newState[i][beginW];
-                            }
-                        }
-                    }
-                    beginJ = endJ = -1;
-                    beginW = endW = -1;
-                }
-            }
-        }
-        // calculate decrease
-        for (int i = 0; i < height - 1; i++) {
-            boolean waterAboveCurrentWaterFlow = false;
-            EnumState maxState = EnumState.E;
-            int cnt = 0; // consecutive water count
-            for (int j = 0; j < width; j++) {
-                EnumState cur = newState[i][j];
-                if (WaterUtils.isWater(cur)) {
-                    waterAboveCurrentWaterFlow |= WaterUtils.isWater(newState[i + 1][j]);
-                    if (WaterUtils.compare(maxState, cur) < 0) maxState = cur;
-                    cnt++;
-                } else {
-                    // do the calculation stuff
-                    if (waterAboveCurrentWaterFlow) {
-                        for (int k = j - 1; k >= 0 && WaterUtils.isWater(newState[i][k]); k--) {
-                            newState[i][k] = EnumState.w;
-                        }
+                        canLeft = ((d1 && !d2 || d1 == d2 && l1 <= r1) && canExtendLeft(newState, i, beginW));
+                        canRight = ((!d1 && d2 || d1 == d2 && l1 >= r1) && canExtendRight(newState, i, beginW));
+                        if (l1 == r1 && l1 == 1000)
+                            canLeft = canRight = false;
                     } else {
-                        if (cnt != 1)
-                            for (int k = j - 1; k >= 0 && WaterUtils.isWater(newState[i][k]); k--) {
-                                newState[i][k] = WaterUtils.getLowerFormOfWater(maxState);
-                            }
+                        canLeft = canExtendLeft(newState, i, beginW) && newState[i][beginW] != EnumState.w1 &&
+                                compare(newState[i][beginW], newState[i][beginW + 1]) <= 0;
+                        canRight = canExtendRight(newState, i, endW) && newState[i][endW] != EnumState.w1 &&
+                                compare(newState[i][endW], newState[i][endW - 1]) <= 0;
                     }
-                    // reset
-                    waterAboveCurrentWaterFlow = false;
-                    maxState = EnumState.E;
-                    cnt = 0;
+                    if (canLeft) {
+                        newState[i][beginW - 1] = getLowerFormOfWater(newState[i][beginW]);
+                        if (newState[i][beginW - 1] != EnumState.E) beginW--;
+                    }
+                    if (canRight) {
+                        newState[i][endW + 1] = getLowerFormOfWater(newState[i][endW]);
+                        if (newState[i][endW + 1] != EnumState.E) endW++;
+                    }
+                    // Assumption: 2 flows from above, 1 flow disappears, keep it won't affect
+                    //        |     |            ->                |
+                    //  123456w65456w654321             123456w5456w654321
+                    // should be    |         but TODO.
+                    //  123456665456w654321
+                    if (!hasWaterAbove) {
+                        EnumState max = EnumState.E;
+                        for (int x = beginW; x <= endW; x++)
+                            if (compare(max, newState[i][x]) < 0)
+                                max = newState[i][x];
+                        for (int x = beginW; x <= endW; x++)
+                            if (compare(max, newState[i][x]) == 0)
+                                newState[i][x] = getLowerFormOfWater(newState[i][x]);
+                    }
+                    hasWaterAbove = false;
+                    beginW = endW = -1;
                 }
             }
         }
