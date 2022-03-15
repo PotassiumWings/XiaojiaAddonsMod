@@ -10,6 +10,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Quiz;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.Patterns;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
@@ -120,6 +121,9 @@ public class Command extends CommandBase {
 
             case "patterns":
                 Patterns.printPatterns();
+                break;
+            case "dev":
+                DevWater.setBoard(Integer.parseInt(strings[1]), Integer.parseInt(strings[2]));
                 break;
 
             // debug commands

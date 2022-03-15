@@ -185,7 +185,7 @@ public class WaterUtils {
         }
     }
 
-    private static void getBoardString(EnumState[][] board) {
+    public static void getBoardString(EnumState[][] board) {
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {

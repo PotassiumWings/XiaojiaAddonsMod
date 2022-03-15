@@ -8,50 +8,39 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoPuzzle;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
-import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
-import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
-import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
 import javax.vecmath.Vector3d;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 
-// TODO: DELETE THIS FROM ROOM.JSON
 public class WaterSolver {
     public static Room room = null;
     private static EnumFacing facing = null;
     private static EnumState[][] board = new EnumState[WaterUtils.height][WaterUtils.width];
     private static EnumState[][] originBoard = new EnumState[WaterUtils.height][WaterUtils.width];
     private static int lastFlag;
-    private static int process = 0;
-    private static BufferedImage map = null;
     private static boolean should = false;
     private static boolean tpPacketReceived = false;
-    private static long lastKey = 0;
     private static Thread solveThread = null;
     // simulate
-    private final KeyBind devKeyBind = new KeyBind("Dev Water", Keyboard.KEY_NONE);
     private final KeyBind keyBind = AutoPuzzle.keyBind;
 
     public static void solve() throws InterruptedException {
-        process = 0;
         // facing
         facing = WaterUtils.getFacing(room);
         if (facing == null) return;
@@ -88,7 +77,7 @@ public class WaterSolver {
             ChatLib.chat(String.format("Estimate best solution: %.2fs (From Cache)", op.time * 0.25));
         } else {
             if (lastFlag != flag) {
-                if (WaterUtils.raw){
+                if (WaterUtils.raw) {
                     ChatLib.chat("This is a new pattern! Sent to server for calculation.");
                     upload(WaterUtils.boardString);
                 } else
@@ -123,7 +112,7 @@ public class WaterSolver {
         }).start();
     }
 
-    private static String getMessageFromOperation(EnumOperation o) {
+    public static String getMessageFromOperation(EnumOperation o) {
         if (o == EnumOperation.c) return "&0Coal";
         if (o == EnumOperation.cl) return "&4Clay";
         if (o == EnumOperation.e) return "&aEmerald";
@@ -168,7 +157,6 @@ public class WaterSolver {
     public static void reset() {
         board = WaterUtils.getBoard(room, facing);
         WaterUtils.processBoard(board);
-        process = 0;
     }
 
     public static void printLog() {
@@ -252,58 +240,10 @@ public class WaterSolver {
     }
 
     @SubscribeEvent
-    public void onTick(TickEndEvent event) {
-        if (!Checker.enabled) return;
-        if (!SessionUtils.isDev()) return;
-        if (devKeyBind.isKeyDown()) {
-            if (TimeUtils.curTime() - lastKey < 250) return;
-            lastKey = TimeUtils.curTime();
-            if (WaterUtils.operations.containsKey(process))
-                board = WaterUtils.getStatesFromOperation(board, WaterUtils.operations.get(process));
-            board = WaterUtils.simulate(board).getKey();
-            process++;
-            if (process >= 100) {
-                board = WaterUtils.getBoard(room, facing);
-                WaterUtils.processBoard(board);
-                process = 0;
-            }
-
-            BufferedImage newMap = new BufferedImage(WaterUtils.width, WaterUtils.height, BufferedImage.TYPE_4BYTE_ABGR);
-            for (int i = 0; i < WaterUtils.height; i++) {
-                for (int j = 0; j < WaterUtils.width; j++) {
-                    Color color = null;
-                    if (WaterUtils.isWater(board[i][j])) color = new Color(65, 65, 255);
-                    else if (board[i][j] == EnumState.cc) color = new Color(0, 0, 0);
-                    else if (board[i][j] == EnumState.ccl) color = new Color(180, 65, 65);
-                    else if (board[i][j] == EnumState.cd) color = new Color(90, 240, 240);
-                    else if (board[i][j] == EnumState.cg) color = new Color(255, 180, 0);
-                    else if (board[i][j] == EnumState.ce) color = new Color(0, 180, 0);
-                    else if (board[i][j] == EnumState.cq) color = new Color(255, 255, 255);
-                    else if (WaterUtils.isBlock(board[i][j])) color = new Color(120, 120, 120);
-                    else continue;
-                    newMap.setRGB(j, WaterUtils.height - i - 1, color.getRGB());
-                }
-            }
-            map = newMap;
-        }
-    }
-
-    @SubscribeEvent
-    public void onRenderOverlay(RenderGameOverlayEvent event) {
-        if (!Checker.enabled) return;
-        if (!SessionUtils.isDev()) return;
-        if (!SkyblockUtils.isInDungeon()) return;
-        if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
-        if (Dungeon.currentRoom.equals("Water Board") && map != null)
-            RenderUtils.drawImage(new Image(map), Configs.MapX, Configs.MapY, 25 * Configs.MapScale, 25 * Configs.MapScale);
-    }
-
-    @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         setRoom(null);
         facing = null;
         board = new EnumState[WaterUtils.height][WaterUtils.width];
         lastFlag = -1;
-        map = null;
     }
 }

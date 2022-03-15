@@ -22,6 +22,9 @@ public class Configs {
             description = "For my testings.")
     public static boolean DevMode = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Dev Water", parent = "Dev Mode")
+    public static boolean DevWater = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Particle Spawn Message", parent = "Dev Mode")
     public static boolean ParticleSpawnMessage = false;
 
