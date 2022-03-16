@@ -501,9 +501,9 @@ public class WaterUtils {
                     if (hasWaterAbove && beginW == endW || justBlocked) {
                         int l1 = 0, r1 = 0;
                         boolean d1 = true, d2 = true; // if can flow down
-                        while (canExtendLeft(newState, i, beginW - l1)) l1++;
+                        while (canExtendLeft(newState, i, beginW - l1) && l1 < 5) l1++;
                         if (WaterUtils.isBlock(state[i - 1][beginW - l1])) d1 = false;
-                        while (canExtendRight(newState, i, beginW + r1)) r1++;
+                        while (canExtendRight(newState, i, beginW + r1) && r1 < 5) r1++;
                         if (WaterUtils.isBlock(state[i - 1][beginW + r1])) d2 = false;
                         if (l1 == 0) l1 = 1000;
                         if (r1 == 0) r1 = 1000;
