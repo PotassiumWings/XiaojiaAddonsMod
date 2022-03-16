@@ -852,16 +852,12 @@ public class Configs {
                     "Fetch newest answer every 10 minutes.")
     public static boolean QuizSolver = false;
 
-    @Property(type = Property.Type.FOLDER, name = "Three Weirdos Solver", parent = "Solvers", description = "TODO")
+    @Property(type = Property.Type.FOLDER, name = "Three Weirdos Solver", parent = "Solvers")
     public static boolean ThreeWeirdosSolverEnable = false;
 
-    @Property(type = Property.Type.FOLDER, name = "Three Weirdos Solver Enable", parent = "Solvers",
+    @Property(type = Property.Type.BOOLEAN, name = "Three Weirdos Solver Enable", parent = "Solvers",
             description = "Hide wrong chests.")
     public static boolean ThreeWeirdosSolver = false;
-
-    @Property(type = Property.Type.FOLDER, name = "Auto Three Weirdos", parent = "Solvers",
-            description = "Auto etherwarp and click npcs.")
-    public static boolean AutoThreeWeirdos = false;
 
     @Property(type = Property.Type.FOLDER, name = "Water Solver", parent = "Solvers",
             description = "May behave bad at laggy servers.")

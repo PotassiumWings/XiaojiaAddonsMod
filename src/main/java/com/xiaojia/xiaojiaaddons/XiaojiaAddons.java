@@ -37,6 +37,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.MimicWarn;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Quiz;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.TeleportMaze;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.ThreeWeirdos;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShadowAssassinESP;
@@ -231,6 +232,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new TeleportMaze());
         MinecraftForge.EVENT_BUS.register(new Quiz());
         MinecraftForge.EVENT_BUS.register(new WaterSolver());
+        MinecraftForge.EVENT_BUS.register(new ThreeWeirdos());
 
         // Miscellaneous
         MinecraftForge.EVENT_BUS.register(new ChatCopy());

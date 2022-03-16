@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.BlockChangeEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
@@ -44,7 +45,7 @@ public class ThreeWeirdos {
             try {
                 String res = RemoteUtils.get(url, new ArrayList<>(), false);
                 JsonParser parser = new JsonParser();
-                JsonArray arr = parser.parse(res).getAsJsonObject().getAsJsonArray();
+                JsonArray arr = parser.parse(String.format("{\"res\": %s}", res)).getAsJsonObject().get("res").getAsJsonArray();
                 synchronized (solutions) {
                     for (JsonElement element : arr) {
                         solutions.add(element.getAsString());
@@ -88,12 +89,13 @@ public class ThreeWeirdos {
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
-        if (!Configs.ThreeWeirdosSolver) return;
-        if (!Dungeon.currentRoom.equals("Three Weirdos")) return;
+        if (!Checker.enabled) return;
         if (TimeUtils.curTime() - lastFetch > 1000 * 60 * 20) {
             lastFetch = TimeUtils.curTime();
             fetch();
         }
+        if (!Configs.ThreeWeirdosSolver) return;
+        if (!Dungeon.currentRoom.equals("Three Weirdos")) return;
         if (npc == null) return;
         BlockPos pos = null;
         for (Entity entity : getWorld().loadedEntityList) {
