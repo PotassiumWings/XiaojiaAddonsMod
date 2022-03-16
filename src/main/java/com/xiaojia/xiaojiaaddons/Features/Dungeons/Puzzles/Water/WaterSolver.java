@@ -19,10 +19,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Keyboard;
 
 import javax.vecmath.Vector3d;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -168,9 +166,10 @@ public class WaterSolver {
 
     @SubscribeEvent
     public void onTickAuto(TickEndEvent event) {
-        if (!Checker.enabled) return;
-        if (!Configs.WaterSolver) return;
-        if (!Dungeon.currentRoom.equals("Water Board")) return;
+        if (!Checker.enabled || !Configs.WaterSolver || !Dungeon.currentRoom.equals("Water Board")) {
+            deactivate();
+            return;
+        }
         if (keyBind.isPressed()) {
             should = !should;
             if (should) ChatLib.chat("Auto Water &aactivated");
