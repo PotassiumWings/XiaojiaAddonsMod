@@ -140,7 +140,7 @@ public class Patterns {
         }
 
         public void insert(int flag, Operation operation) {
-            if (operations[flag] == null || operations[flag].time > operation.time) {
+            if (operations[flag] == null || operations[flag].time >= operation.time) {
                 operations[flag] = operation;
             }
         }
