@@ -44,7 +44,7 @@ public class DevWater {
             ChatLib.chat("  " + operation.getKey() * 0.25 + "s: " + WaterSolver.getMessageFromOperation(operation.getValue()));
         }
         WaterUtils.processBoard(board);
-        process = 0;
+        process = -1;
     }
 
     @SubscribeEvent

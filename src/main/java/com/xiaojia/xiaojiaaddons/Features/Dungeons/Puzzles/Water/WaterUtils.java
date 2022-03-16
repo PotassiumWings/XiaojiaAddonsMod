@@ -488,13 +488,17 @@ public class WaterUtils {
                     endW = j;
 
                     // straight down
-                    if (!WaterUtils.isBlock(newState[i - 1][j]))
-                        newState[i - 1][j] = EnumState.w;
+                    if (!WaterUtils.isBlock(newState[i - 1][j])) {
+                        if (i > 1 && WaterUtils.isBlock(newState[i - 2][j])) newState[i - 1][j] = EnumState.w8;
+                        else newState[i - 1][j] = EnumState.w;
+                    }
                 } else {
                     // TODO: assumption: no single one block flow in the system
                     if (beginW == -1) continue;
                     boolean canLeft = false, canRight = false;
-                    if (hasWaterAbove && beginW == endW) {
+                    // instantly blocked, but still can extend
+                    boolean justBlocked = !hasWaterAbove && beginW == endW && newState[i][beginW] == EnumState.w8;
+                    if (hasWaterAbove && beginW == endW || justBlocked) {
                         int l1 = 0, r1 = 0;
                         boolean d1 = true, d2 = true; // if can flow down
                         while (canExtendLeft(newState, i, beginW - l1)) l1++;
@@ -508,10 +512,11 @@ public class WaterUtils {
                         if (l1 == r1 && l1 == 1000)
                             canLeft = canRight = false;
                     } else {
+                        // assumption: l1 = r1, can't left / right
                         canLeft = canExtendLeft(newState, i, beginW) && newState[i][beginW] != EnumState.w1 &&
-                                compare(newState[i][beginW], newState[i][beginW + 1]) <= 0;
+                                compare(newState[i][beginW], newState[i][beginW + 1]) < 0;
                         canRight = canExtendRight(newState, i, endW) && newState[i][endW] != EnumState.w1 &&
-                                compare(newState[i][endW], newState[i][endW - 1]) <= 0;
+                                compare(newState[i][endW], newState[i][endW - 1]) < 0;
                     }
                     if (canLeft) {
                         newState[i][beginW - 1] = getLowerFormOfWater(newState[i][beginW]);
@@ -526,7 +531,7 @@ public class WaterUtils {
                     //  123456w65456w654321             123456w5456w654321
                     // should be    |         but TODO.
                     //  123456665456w654321
-                    if (!hasWaterAbove) {
+                    if (!hasWaterAbove && !justBlocked) {
                         EnumState max = EnumState.E;
                         for (int x = beginW; x <= endW; x++)
                             if (compare(max, newState[i][x]) < 0)
