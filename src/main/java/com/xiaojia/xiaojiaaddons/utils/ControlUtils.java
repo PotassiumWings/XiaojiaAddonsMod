@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -17,6 +18,7 @@ import net.minecraft.util.Vector3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,22 @@ public class ControlUtils {
     private static final KeyBind jumpKeyBind = new KeyBind(mc.gameSettings.keyBindJump);
 
     private static Inventory openedInventory = null;
+
+    private static Method synHeldItem = null;
+    static {
+        try {
+            synHeldItem = PlayerControllerMP.class.getDeclaredMethod("syncCurrentPlayItem");
+        } catch (NoSuchMethodException e) {
+            try {
+                synHeldItem = PlayerControllerMP.class.getDeclaredMethod("func_78750_j");
+            } catch (NoSuchMethodException e1) {
+                e1.printStackTrace();
+            }
+        } finally {
+            if (synHeldItem != null)
+                synHeldItem.setAccessible(true);
+        }
+    }
 
     public static boolean reportedFacing(double yaw, double pitch) {
         try {
@@ -245,6 +263,13 @@ public class ControlUtils {
         InventoryPlayer inventoryPlayer = getPlayer().inventory;
         if (inventoryPlayer == null) return;
         inventoryPlayer.currentItem = index;
+        if (synHeldItem != null) {
+            try {
+                synHeldItem.invoke(mc.playerController);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static boolean checkHoldingItem(List<String> names) {
