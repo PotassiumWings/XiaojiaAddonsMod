@@ -98,6 +98,7 @@ import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
 import com.xiaojia.xiaojiaaddons.Features.Skills.GemstoneESP;
 import com.xiaojia.xiaojiaaddons.Features.Skills.JadeCrystalHelper;
 import com.xiaojia.xiaojiaaddons.Features.Skills.SuperPairs;
+import com.xiaojia.xiaojiaaddons.Features.Slayers.Blaze;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.ClickScreenMaddox;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Revenant;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
@@ -286,6 +287,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new SuperPairs());
 
         // Slayer
+        MinecraftForge.EVENT_BUS.register(new Blaze());
         MinecraftForge.EVENT_BUS.register(new Sven());
         MinecraftForge.EVENT_BUS.register(new Revenant());
         MinecraftForge.EVENT_BUS.register(new Tarantula());

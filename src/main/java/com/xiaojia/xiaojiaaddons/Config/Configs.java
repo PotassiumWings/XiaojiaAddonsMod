@@ -1269,6 +1269,15 @@ public class Configs {
             description = "Display HP of Tarantula mini/bosses.")
     public static boolean ShowTaraMiniHP = false;
 
+    // Blaze
+    @Property(type = Property.Type.FOLDER, name = "Blaze", parent = "Slayer")
+    public static boolean BlazeEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Blaze Slayer Helper", parent = "Blaze",
+            description = "Auto swap blades and right click when left-clicking.")
+    public static boolean BlazeSlayerHelper = false;
+
+
 
     // Skills
     @Property(type = Property.Type.FOLDER, name = "Skills")
