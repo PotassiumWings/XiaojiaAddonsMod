@@ -387,6 +387,7 @@ public class AutoBlaze {
                         cnt = 0;
                     }
                     Thread.sleep(20);
+                    ControlUtils.randomChangeDirection(0.00001);
                     cnt++;
                 }
                 lastBlazeHitTime = estimate + TimeUtils.curTime();

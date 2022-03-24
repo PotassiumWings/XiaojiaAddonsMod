@@ -449,6 +449,7 @@ public class Dungeon {
     public void onRenderMap(RenderGameOverlayEvent.Pre event) {
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
         if (!Configs.MapDisplay) return;
+        if (bossEntry > runStarted && Configs.DisableMapInBoss) return;
         if (!isInDungeon || !Configs.MapEnabled) return;
         RenderUtils.start();
         try {
@@ -506,6 +507,7 @@ public class Dungeon {
                 scoreString2 = "&cfully scanned.";
             } else {
                 try {
+                    getCompletedRooms();
                     calcScore();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -632,7 +634,7 @@ public class Dungeon {
             crypts = getInt(tab.get(32), Pattern.compile("Crypts: (\\d+)"));
             deaths = getInt(tab.get(25), Pattern.compile("Deaths: \\((\\d+)\\)"));
             openedRooms = getInt(tab.get(42), Pattern.compile("Opened Rooms: (\\d+)"));
-            completedRooms = getInt(tab.get(43), Pattern.compile("Completed Rooms: (\\d+)"));
+//            completedRooms = getInt(tab.get(43), Pattern.compile("Completed Rooms: (\\d+)"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -819,6 +821,25 @@ public class Dungeon {
             RenderUtils.scale(0.1F * Configs.MapScale, 0.1F * Configs.MapScale);
             RenderUtils.drawStringWithShadow(scoreString2, -RenderUtils.getStringWidth(ChatLib.removeFormatting(scoreString2)) / 2F, 0);
         }
+    }
+
+    private void getCompletedRooms() {
+        HashMap<String, Integer> roomCount = new HashMap<>();
+        for (Room room : rooms) {
+            if (room.checkmark.equals("white") || room.checkmark.equals("green")) {
+                roomCount.putIfAbsent(room.name, 0);
+                roomCount.put(room.name, roomCount.get(room.name) + 1);
+            }
+        }
+        int completed = 0;
+        for (String name : roomCount.keySet()) {
+            int cnt = roomCount.get(name);
+            if (cnt == 1) completed++;
+            else if (cnt == 3) completed += 2;
+            else if (cnt == 5) completed += 3;
+            else completed += 4;
+        }
+        completedRooms = completed;
     }
 
     private void calcScore() {

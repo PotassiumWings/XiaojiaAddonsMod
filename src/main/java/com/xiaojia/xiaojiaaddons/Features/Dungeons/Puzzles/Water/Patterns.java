@@ -111,9 +111,11 @@ public class Patterns {
     }
 
     private static Pattern getPattern(EnumState[][] state) {
-        for (Pattern pattern : patterns)
+        for (int i = 0; i < patterns.size(); i++) {
+            Pattern pattern = patterns.get(i);
             if (pattern.equals(state))
                 return pattern;
+        }
         Pattern res = new Pattern(state);
         patterns.add(res);
         return res;

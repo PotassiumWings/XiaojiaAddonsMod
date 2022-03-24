@@ -30,6 +30,7 @@ public class CoordsGB {
 //        if (!should) return;
         if (!SkyblockUtils.isInDungeon()) return;
         if (Dungeon.floorInt != 7) return;
+        if (getWorld() == null) return;
         for (BlockPos pos : blockCoords) {
             getWorld().setBlockToAir(pos);
         }

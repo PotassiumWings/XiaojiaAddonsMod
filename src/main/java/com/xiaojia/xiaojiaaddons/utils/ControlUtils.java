@@ -131,6 +131,12 @@ public class ControlUtils {
         getPlayer().rotationPitch += MathHelper.wrapAngleTo180_float(pitch - getPlayer().rotationPitch);
     }
 
+    public static void randomChangeDirection(double delta) {
+        float yaw = (float) MathUtils.validYaw(getPlayer().rotationYaw + delta - 2 * delta * Math.random());
+        float pitch = (float) MathUtils.validPitch(getPlayer().rotationPitch + delta - 2 * delta * Math.random());
+        changeDirection(yaw, pitch);
+    }
+
     public static void face(float tx, float ty, float tz) {
         getPlayer().closeScreen();
         Tuple<Float, Float> res = getFaceYawAndPitch(tx, ty, tz);

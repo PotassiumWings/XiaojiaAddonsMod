@@ -1414,6 +1414,10 @@ public class Configs {
             description = "Disable this if you don't want to see this shit.")
     public static boolean MapDisplay = true;
 
+
+    @Property(type = Property.Type.BOOLEAN, name = "Disable Map In Boss", parent = "Map")
+    public static boolean DisableMapInBoss = true;
+
     @Property(type = Property.Type.BOOLEAN, name = "Map Enabled", parent = "Map",
             description = "Need to be enabled to guarantee some dungeon features to work.")
     public static boolean MapEnabled = true;
