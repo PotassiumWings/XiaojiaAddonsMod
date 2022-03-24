@@ -37,7 +37,7 @@ public class Blaze {
         Entity entity = moving.entityHit;
         if (entity == null) return;
 
-        box = entity.getEntityBoundingBox().expand(0.4, 0.4, 0.4);
+        box = entity.getEntityBoundingBox().expand(0, 1, 0);
         List<Entity> entitiesInRange = getWorld().getEntitiesWithinAABBExcludingEntity(entity, box);
         for (Entity possible : entitiesInRange) {
             if (!possible.hasCustomName()) continue;

@@ -268,7 +268,7 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Nether Related", parent = "Bestiary")
     public static boolean NetherRelated = false;
 
-    @Property(type = Property.Type.FOLDER, name = "Corrupted Mob ESP", parent = "Bestiary")
+    @Property(type = Property.Type.BOOLEAN, name = "Corrupted Mob ESP", parent = "Bestiary")
     public static boolean CorruptedESP = false;
 
     // Spider
