@@ -1284,7 +1284,10 @@ public class Configs {
             description = "Auto swap blades and right click when left-clicking.")
     public static boolean BlazeSlayerHelper = false;
 
-
+    @Property(type = Property.Type.NUMBER, name = "Blaze Slayer Helper Cache Time", parent = "Blaze",
+            description = "Set this above your ping.",
+            min = 50, max = 500, step = 5, suffix = " ms")
+    public static int BlazeHelperCD = 250;
 
     // Skills
     @Property(type = Property.Type.FOLDER, name = "Skills")

@@ -7,9 +7,13 @@ import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
+import com.xiaojia.xiaojiaaddons.utils.NetUtils;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,6 +28,8 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Blaze {
     private AxisAlignedBB box = null;
+    private static long lastSwapSPICRY = 0;
+    private static long lastSwapASHAUR = 0;
     private static final ArrayList<String> states = new ArrayList<>(Arrays.asList(
             "SPIRIT", "CRYSTAL",
             "ASHEN", "AURIC"
@@ -37,11 +43,12 @@ public class Blaze {
         Entity entity = moving.entityHit;
         if (entity == null) return;
 
-        box = entity.getEntityBoundingBox().expand(0, 1, 0);
+        box = entity.getEntityBoundingBox().addCoord(0, 1, 0);
         List<Entity> entitiesInRange = getWorld().getEntitiesWithinAABBExcludingEntity(entity, box);
         for (Entity possible : entitiesInRange) {
             if (!possible.hasCustomName()) continue;
             String name = possible.getCustomNameTag();
+            ChatLib.debug(name);
             for (String state : states) {
                 if (name.contains(state)) {
                     doSwap(state);
@@ -51,59 +58,59 @@ public class Blaze {
         }
     }
 
-    private void doSwap(String state) {
+    public static void doSwap(String state) {
         ChatLib.debug("Current state: " + state);
-        if (state.equals("ASHEN") || state.equals("AURIC")) {
-            String id = "FIREDUST_DAGGER";
-            for (int i = 0; i < 8; i++) {
-                ItemStack itemStack = ControlUtils.getItemStackInSlot(i, true);
-                if (NBTUtils.getSkyBlockID(itemStack).equals(id)) {
-                    List<String> lore = NBTUtils.getLore(itemStack);
-                    AttunedState curState = null;
-                    for (String formatted : lore) {
-                        String unformatted = ChatLib.removeFormatting(formatted);
-                        if (unformatted.equals("Attuned: Ashen")) curState = AttunedState.ASHEN;
-                        if (unformatted.equals("Attuned: Auric")) curState = AttunedState.AURIC;
-                    }
-                    if (curState != null) {
-                        if (!curState.toString().equals(state)) {
-                            ControlUtils.setHeldItemIndex(i);
-                            ControlUtils.rightClick();
-                            return;
-                        }
-                    }
+        boolean shouldClick = false;
+        int swapIndex = -1;
+        String daggerId;
+        boolean isASHAUR = state.equals("ASHEN") || state.equals("AURIC");
+        if (isASHAUR) daggerId = "FIREDUST_DAGGER";
+        else daggerId = "MAWDUST_DAGGER";
+
+        for (int i = 0; i < 8; i++) {
+            ItemStack itemStack = ControlUtils.getItemStackInSlot(i + 36, true);
+            String sbId = NBTUtils.getSkyBlockID(itemStack);
+            if (sbId.equals(daggerId)) {
+                List<String> lore = NBTUtils.getLore(itemStack);
+                AttunedState curState = null;
+                for (String formatted : lore) {
+                    String unformatted = ChatLib.removeFormatting(formatted);
+                    if (unformatted.equals("Attuned: Ashen")) curState = AttunedState.ASHEN;
+                    if (unformatted.equals("Attuned: Auric")) curState = AttunedState.AURIC;
+                    if (unformatted.equals("Attuned: Spirit")) curState = AttunedState.SPIRIT;
+                    if (unformatted.equals("Attuned: Crystal")) curState = AttunedState.CRYSTAL;
                 }
-            }
-        } else {
-            String id = "MAWDUST_DAGGER";
-            for (int i = 0; i < 8; i++) {
-                ItemStack itemStack = ControlUtils.getItemStackInSlot(i, true);
-                if (NBTUtils.getSkyBlockID(itemStack).equals(id)) {
-                    List<String> lore = NBTUtils.getLore(itemStack);
-                    AttunedState curState = null;
-                    for (String formatted : lore) {
-                        String unformatted = ChatLib.removeFormatting(formatted);
-                        if (unformatted.equals("Attuned: Spirit")) curState = AttunedState.SPIRIT;
-                        if (unformatted.equals("Attuned: Crystal")) curState = AttunedState.CRYSTAL;
-                    }
-                    if (curState != null) {
-                        if (!curState.toString().equals(state)) {
-                            ControlUtils.setHeldItemIndex(i);
-                            ControlUtils.rightClick();
-                            return;
-                        }
-                    }
+                if (curState != null) {
+                    swapIndex = i;
+                    shouldClick = !curState.toString().equals(state);
+                    break;
                 }
             }
         }
+        ControlUtils.setHeldItemIndex(swapIndex);
+        if (shouldClick) {
+            long cur = TimeUtils.curTime();
+            long delta = cur - (isASHAUR? lastSwapASHAUR:lastSwapSPICRY);
+            if (delta < Configs.BlazeHelperCD) return;
+
+            if (isASHAUR) lastSwapASHAUR = cur;
+            else lastSwapSPICRY = cur;
+
+            NetUtils.sendPacket(new C08PacketPlayerBlockPlacement(
+                    new BlockPos(-1, -1, -1),
+                    255,
+                    ControlUtils.getHeldItemStack(),
+                    0, 0, 0)
+            );
+        }
     }
 
-    @SubscribeEvent
-    public void onRenderWorld(RenderWorldLastEvent event) {
-        if (!Checker.enabled) return;
-        if (box == null) return;
-        GuiUtils.drawBoundingBox(box, 3, new Color(114, 189, 105));
-    }
+//    @SubscribeEvent
+//    public void onRenderWorld(RenderWorldLastEvent event) {
+//        if (!Checker.enabled) return;
+//        if (box == null) return;
+//        GuiUtils.drawBoundingBox(box, 3, new Color(114, 189, 105));
+//    }
 
     enum AttunedState {
         ASHEN, AURIC, CRYSTAL, SPIRIT

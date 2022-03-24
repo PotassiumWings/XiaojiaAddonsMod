@@ -19,6 +19,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
+import com.xiaojia.xiaojiaaddons.Features.Slayers.Blaze;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Tests.CopyWorldInfo;
 import com.xiaojia.xiaojiaaddons.Tests.TestM7;
@@ -127,6 +128,16 @@ public class Command extends CommandBase {
                 break;
 
             // debug commands
+            case "swap":
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Blaze.doSwap(strings[1]);
+                }).start();
+                break;
             case "cache":
                 ColorName.showCache();
                 break;
