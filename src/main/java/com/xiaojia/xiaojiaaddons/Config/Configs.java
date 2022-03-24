@@ -264,6 +264,13 @@ public class Configs {
                     "&cSet a keybinding to toggle.")
     public static boolean AutoScatha = false;
 
+    // Corrupted
+    @Property(type = Property.Type.FOLDER, name = "Nether Related", parent = "Bestiary")
+    public static boolean NetherRelated = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Corrupted Mob ESP", parent = "Bestiary")
+    public static boolean CorruptedESP = false;
+
     // Spider
     @Property(type = Property.Type.FOLDER, name = "Spider", parent = "Bestiary")
     public static boolean SpiderEnabled = false;

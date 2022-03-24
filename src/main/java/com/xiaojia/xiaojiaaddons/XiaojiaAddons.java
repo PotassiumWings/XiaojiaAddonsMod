@@ -66,6 +66,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.AutoLobby;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoSnowball;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoUseItem;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
+import com.xiaojia.xiaojiaaddons.Features.QOL.CorruptedESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisableEntityRender;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisplayDayAndCoords;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
@@ -248,6 +249,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new DevMode());
 
         // QOL
+        MinecraftForge.EVENT_BUS.register(new CorruptedESP());
         MinecraftForge.EVENT_BUS.register(new AutoSnowball());
         MinecraftForge.EVENT_BUS.register(new AutoCombine());
         MinecraftForge.EVENT_BUS.register(new AutoHarp());
