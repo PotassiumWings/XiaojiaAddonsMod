@@ -26,6 +26,32 @@ public class SkyblockUtils {
             "The End", "The Mist", "Blazing Fortress", "The Catacombs", "Howling Cave",
             "Your Island", "None"
     ));
+
+    private static final ArrayList<String> dwarvenMaps = new ArrayList<>(Arrays.asList(
+            "The Forge",
+            "Forge Basin",
+            "Palace Bridge",
+            "Royal Palace",
+            "Aristocrat Passage",
+            "Hanging Court",
+            "Divan's Gateway",
+            "Far Reserve",
+            "Goblin Burrows",
+            "Miner's Guild",
+            "Great Ice Wall",
+            "The Mist",
+            "C&",
+            "Grand Library",
+            "Barracks of Heroes",
+            "Dwarven Village",
+            "The Lift",
+            "Royal Quarters",
+            "Lava Springs",
+            "Cliffside Veins",
+            "Rampart's Quarry",
+            "Upper Mines",
+            "Royal Mines", "Dwarven Mines", "Gates to the Mines"
+    ));
     private static final ArrayList<String> crystalHollowsMaps = new ArrayList<>(Arrays.asList(
             "Fairy Grotto",
             "Goblin Holdout", "Goblin Queen's Den",
@@ -42,6 +68,7 @@ public class SkyblockUtils {
     private static String currentServer = "";
     private static boolean set = false;
     private static boolean isInCrystalHollows = false;
+    private static boolean isInDwarven = false;
     private static String dungeon = "F6";
     private long lastPing;
     private Thread pingThread;
@@ -55,7 +82,7 @@ public class SkyblockUtils {
         for (int i = 0; i < line.length(); i++) {
             char c = line.charAt(i);
             if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '\'' || c == ' '
-                    || c == '(' || c == ')' || c == 'û')
+                    || c == '(' || c == ')' || c == 'û' || c == '&')
                 removeSkippingChar.append(c);
         }
         line = removeSkippingChar.toString();
@@ -80,6 +107,16 @@ public class SkyblockUtils {
                 if (line.contains(map)) {
                     result = map;
                     isInCrystalHollows = true;
+                }
+            }
+        }
+
+        isInDwarven = result.equals("The Mist");
+        if (result.equals("Others")) {
+            for (String map : dwarvenMaps) {
+                if (line.contains(map)) {
+                    result = map;
+                    isInDwarven = true;
                 }
             }
         }
@@ -161,6 +198,10 @@ public class SkyblockUtils {
 
     public static boolean isInCrystalHollows() {
         return isInCrystalHollows;
+    }
+
+    public static boolean isInDwarven() {
+        return isInDwarven;
     }
 
     public static String getCurrentServer() {

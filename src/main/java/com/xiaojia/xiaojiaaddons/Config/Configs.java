@@ -763,6 +763,10 @@ public class Configs {
             description = "Radius = 10 * 10 * 10")
     public static boolean ChestESPCrystalHollows = false;
 
+    // MonolithESP
+    @Property(type = Property.Type.BOOLEAN, name = "Monolith ESP", parent = "Other QOLs")
+    public static boolean MonolithESP = false;
+
     // SwordSwap
     @Property(type = Property.Type.BOOLEAN, name = "Ghost Sword Swap", parent = "Other QOLs", illegal = true,
             description = "Auto right click Soul Whip and\n" +

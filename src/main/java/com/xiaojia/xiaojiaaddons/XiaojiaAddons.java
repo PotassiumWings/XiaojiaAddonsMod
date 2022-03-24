@@ -75,6 +75,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.GhostQOL;
 import com.xiaojia.xiaojiaaddons.Features.QOL.HideCreepers;
 import com.xiaojia.xiaojiaaddons.Features.QOL.HoldRightClick;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
+import com.xiaojia.xiaojiaaddons.Features.QOL.MonolithESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NearbyChestESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.OneTick;
@@ -262,6 +263,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new GhostQOL());
         MinecraftForge.EVENT_BUS.register(new HideCreepers());
         MinecraftForge.EVENT_BUS.register(new NearbyChestESP());
+        MinecraftForge.EVENT_BUS.register(new MonolithESP());
         MinecraftForge.EVENT_BUS.register(new InCombatQOL());
         MinecraftForge.EVENT_BUS.register(new NoSlowdown());
         MinecraftForge.EVENT_BUS.register(new OneTick());
