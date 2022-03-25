@@ -68,15 +68,15 @@ public class Blaze {
         ChatLib.debug("Current state: " + state);
         boolean shouldClick = false;
         int swapIndex = -1;
-        String daggerId;
+        ArrayList<String> daggerIds;
         boolean isASHAUR = state.equals("ASHEN") || state.equals("AURIC");
-        if (isASHAUR) daggerId = "FIREDUST_DAGGER";
-        else daggerId = "MAWDUST_DAGGER";
+        if (isASHAUR) daggerIds = new ArrayList<>(Arrays.asList("FIREDUST_DAGGER", "BURSTFIRE_DAGGER", "HEARTFIRE_DAGGER"));
+        else daggerIds = new ArrayList<>(Arrays.asList("MAWDUST_DAGGER", "BURSTMAW_DAGGER", "HEARTMAW_DAGGER"));
 
         for (int i = 0; i < 8; i++) {
             ItemStack itemStack = ControlUtils.getItemStackInSlot(i + 36, true);
             String sbId = NBTUtils.getSkyBlockID(itemStack);
-            if (sbId.equals(daggerId)) {
+            if (daggerIds.stream().anyMatch(e -> e.equals(sbId))) {
                 List<String> lore = NBTUtils.getLore(itemStack);
                 AttunedState curState = null;
                 for (String formatted : lore) {
