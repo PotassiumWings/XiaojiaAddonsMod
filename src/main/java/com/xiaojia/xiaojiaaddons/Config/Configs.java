@@ -1289,6 +1289,26 @@ public class Configs {
             min = 50, max = 500, step = 5, suffix = " ms")
     public static int BlazeHelperCD = 250;
 
+    @Property(type = Property.Type.FOLDER, name = "Pillar Display", parent = "Blaze")
+    public static boolean PillarDisplayEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Pillar Info Display Test", parent = "Pillar Display",
+            description = "Display lines to show where the display is at.")
+    public static boolean PillarTest = true;
+
+    @Property(type = Property.Type.NUMBER, name = "Pillar Display X", parent = "Pillar Display")
+    public static int PillarX = 400;
+
+    @Property(type = Property.Type.NUMBER, name = "PillarDisplay Y", parent = "Pillar Display")
+    public static int PillarY = 160;
+
+    @Property(type = Property.Type.NUMBER, name = "Pillar Display Scale", parent = "Pillar Display",
+            min = 5, max = 100)
+    public static int PillarScale = 20;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Pillar Info Display Enable", parent = "Pillar Display")
+    public static boolean PillarDisplay = false;
+
     // Skills
     @Property(type = Property.Type.FOLDER, name = "Skills")
     public static boolean SkillsEnabled = false;

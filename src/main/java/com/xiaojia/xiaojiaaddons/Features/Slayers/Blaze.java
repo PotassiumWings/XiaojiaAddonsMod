@@ -2,12 +2,16 @@ package com.xiaojia.xiaojiaaddons.Features.Slayers;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.LeftClickEvent;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
+import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import com.xiaojia.xiaojiaaddons.utils.NetUtils;
+import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -22,6 +26,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
@@ -102,6 +108,41 @@ public class Blaze {
                     ControlUtils.getHeldItemStack(),
                     0, 0, 0)
             );
+        }
+    }
+
+    // pillar display
+    private static final Display display = new Display();
+
+    public Blaze() {
+        display.setShouldRender(false);
+        display.setBackground("full");
+        display.setBackgroundColor(0);
+        display.setAlign("center");
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.PillarDisplay) return;
+        if (getWorld() == null) return;
+        display.clearLines();
+        display.setRenderLoc(Configs.PillarX, Configs.PillarY);
+        display.setShouldRender(true);
+        if (Configs.PillarTest) {
+            DisplayLine line = new DisplayLine("&fPillar: " + "&6&l6s &c&l8 hits");
+            line.setScale(1.51F * Configs.PillarScale / 20);
+            display.addLine(line);
+        }
+        for (Entity entity : getWorld().loadedEntityList) {
+            String name = ChatLib.removeFormatting(entity.getName());
+            Pattern pattern = Pattern.compile("(\\d)s (\\d) hits");
+            Matcher matcher = pattern.matcher(name);
+            if (matcher.find()) {
+                DisplayLine line = new DisplayLine("&fPillar: " + entity.getName());
+                line.setScale(1.51F * Configs.PillarScale / 20);
+                display.addLine(line);
+            }
         }
     }
 
