@@ -1,4 +1,4 @@
-package com.xiaojia.xiaojiaaddons.Features.QOL;
+package com.xiaojia.xiaojiaaddons.Features.Nether;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;

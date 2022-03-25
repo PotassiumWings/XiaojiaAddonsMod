@@ -58,6 +58,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ProtectItems;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
+import com.xiaojia.xiaojiaaddons.Features.Nether.SpongeESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
@@ -66,10 +67,11 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.AutoLobby;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoSnowball;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoUseItem;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
-import com.xiaojia.xiaojiaaddons.Features.QOL.CorruptedESP;
+import com.xiaojia.xiaojiaaddons.Features.Nether.CorruptedESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisableEntityRender;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisplayDayAndCoords;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
+import com.xiaojia.xiaojiaaddons.Features.QOL.FairySoul;
 import com.xiaojia.xiaojiaaddons.Features.QOL.FindFairy;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostBlock;
 import com.xiaojia.xiaojiaaddons.Features.QOL.GhostQOL;
@@ -111,7 +113,6 @@ import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayHandler;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.Objects.TestCubeGUI;
-import com.xiaojia.xiaojiaaddons.Tests.TestM7;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CipherUtils;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
@@ -136,7 +137,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.4.2";
+    public static final String VERSION = "2.4.4.3";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -248,8 +249,12 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new ShowLowestBin());
         MinecraftForge.EVENT_BUS.register(new DevMode());
 
-        // QOL
+        // Nether
         MinecraftForge.EVENT_BUS.register(new CorruptedESP());
+        MinecraftForge.EVENT_BUS.register(new SpongeESP());
+
+        // QOL
+        MinecraftForge.EVENT_BUS.register(new FairySoul());
         MinecraftForge.EVENT_BUS.register(new AutoSnowball());
         MinecraftForge.EVENT_BUS.register(new AutoCombine());
         MinecraftForge.EVENT_BUS.register(new AutoHarp());

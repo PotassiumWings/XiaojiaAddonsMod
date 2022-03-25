@@ -264,13 +264,6 @@ public class Configs {
                     "&cSet a keybinding to toggle.")
     public static boolean AutoScatha = false;
 
-    // Corrupted
-    @Property(type = Property.Type.FOLDER, name = "Nether Related", parent = "Bestiary")
-    public static boolean NetherRelated = false;
-
-    @Property(type = Property.Type.BOOLEAN, name = "Corrupted Mob ESP", parent = "Bestiary")
-    public static boolean CorruptedESP = false;
-
     // Spider
     @Property(type = Property.Type.FOLDER, name = "Spider", parent = "Bestiary")
     public static boolean SpiderEnabled = false;
@@ -317,6 +310,27 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Show BroodMother Box", parent = "Brood Mother",
             description = "Display a bounding box at the Brood Mother.")
     public static boolean BroodMotherDisplayBox = false;
+
+
+    // Nether
+    @Property(type = Property.Type.FOLDER, name = "Nether")
+    public static boolean NetherEnabled = false;
+
+    // Corrupted
+    @Property(type = Property.Type.FOLDER, name = "Nether Mob ESP", parent = "Nether")
+    public static boolean NetherMobESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Corrupted Mob ESP", parent = "Nether Mob ESP")
+    public static boolean CorruptedESP = false;
+
+    // SpongeESP
+    @Property(type = Property.Type.FOLDER, name = "Nether Block ESP", parent = "Nether")
+    public static boolean NetherBlockESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Sponge ESP", parent = "Nether Block ESP",
+            description = "&cOnly turn this on when you're finding sponge.\n" +
+                    "&cThis feature will ruin your performance.")
+    public static boolean SpongeESP = false;
 
 
     // QOL
@@ -764,6 +778,10 @@ public class Configs {
 
     @Property(type = Property.Type.FOLDER, name = "Other QOLs", parent = "QOL")
     public static boolean OtherQOL = false;
+
+    // FairySoul
+    @Property(type = Property.Type.BOOLEAN, name = "Fairy Souls ESP", parent = "Other QOLs")
+    public static boolean FairySoulESP = false;
 
     // NearbyChestESP
     @Property(type = Property.Type.BOOLEAN, name = "Crystal Hollows Nearby Chest ESP", parent = "Other QOLs",
