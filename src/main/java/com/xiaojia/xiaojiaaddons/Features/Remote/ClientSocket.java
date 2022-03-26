@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Remote;
 
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.Patterns;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
@@ -33,10 +34,11 @@ public class ClientSocket {
 
     public static void connect() {
         try {
-            Socket socket = new Socket("47.94.243.9", 11052);
+            Socket socket = new Socket("47.94.243.9", 11053);
             connected = true;
             out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+            Checker.onConnect();
             new Thread(() -> {
                 try {
                     authenticate();
@@ -113,6 +115,7 @@ public class ClientSocket {
                             int type = Integer.parseInt(matcher.group(3));
                             String ver = matcher.group(4);
                             assert (type == 4);
+                            Checker.onAuth();
                             continue;
                         }
 
@@ -174,6 +177,20 @@ public class ClientSocket {
                             String water = matcher.group(2);
                             assert (type == 11);
                             new Thread(() -> Patterns.load(water)).start();
+                            continue;
+                        }
+
+                        // type 12, keepAlive
+                        pattern = Pattern.compile("^\\{" +
+                                "\"type\": \"(.*)\", " +
+                                "\"timestamp\": \"(.*)\"}$"
+                        );
+                        matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            int type = Integer.parseInt(matcher.group(1));
+                            long time = Long.parseLong(matcher.group(2));
+                            assert (type == 12);
+                            authenticate();
                             continue;
                         }
 
