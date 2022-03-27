@@ -56,6 +56,8 @@ public class ProtectItems {
     }
 
     private void protect(Event event, String reason) {
+        if (!Checker.enabled) return;
+        if (!Configs.ProtectItems) return;
         event.setCanceled(true);
         ChatLib.chat("Stopped from " + reason + " that item.");
         getPlayer().playSound("note.bass", 1000, 0.5F);

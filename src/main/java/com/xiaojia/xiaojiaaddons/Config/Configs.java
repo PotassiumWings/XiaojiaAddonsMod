@@ -881,6 +881,11 @@ public class Configs {
                     "Fetch newest answer every 10 minutes.")
     public static boolean QuizSolver = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Tic Tac Toe Solver", parent = "Solvers",
+            description = "Block clicks that let you fail. \n" +
+                    "&cWIP, currently useless.")
+    public static boolean TicTacToeSolver = false;
+
     @Property(type = Property.Type.FOLDER, name = "Three Weirdos Solver", parent = "Solvers")
     public static boolean ThreeWeirdosSolverEnable = false;
 
