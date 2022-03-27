@@ -31,6 +31,7 @@ public class AutoCombine extends StepEvent {
         put("No Pain No Gain", 5);
         put("Mana Steal", 3);
         put("Smarty Pants", 5);
+        put("Swarm", 5);
     }};
 
     private static boolean isFusingBooks = false;

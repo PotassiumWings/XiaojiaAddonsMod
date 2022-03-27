@@ -2,7 +2,12 @@ package com.xiaojia.xiaojiaaddons.Features.Miscellaneous;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
@@ -13,8 +18,12 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S2APacketParticles;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.ArrayList;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
@@ -57,7 +66,7 @@ public class DevMode {
             ItemStack item = ((EntityItemFrame) entity).getDisplayedItem();
             if (item != null) res = String.format("EIF(%s)", item.getDisplayName());
         } else {
-            res = entity.getClass().getSimpleName();
+            res = entity.getClass().getSimpleName() + "(" + entity.getName() + ")";
         }
         return res;
     }
@@ -78,5 +87,29 @@ public class DevMode {
         if (!SessionUtils.isDev()) return;
         if (!Configs.EntityJoinEvent) return;
         ChatLib.debug(getLog(event.entity));
+    }
+
+    public static final ArrayList<DisplayLine> lines = new ArrayList<>();
+
+    @SubscribeEvent
+    public void onTick(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (!SessionUtils.isDev()) return;
+        synchronized (lines) {
+            lines.clear();
+            MovingObjectPosition pos = XiaojiaAddons.mc.objectMouseOver;
+            Entity entity = pos.entityHit;
+            BlockPos block = pos.getBlockPos();
+            if (entity != null) {
+                DisplayLine line = new DisplayLine("Entity: " + getClassLog(entity));
+                line.setScale(Configs.DisplayScale / 20F);
+                lines.add(line);
+            }
+            if (block != null) {
+                DisplayLine line = new DisplayLine("Block: " + BlockUtils.getBlockInfo(block));
+                line.setScale(Configs.DisplayScale / 20F);
+                lines.add(line);
+            }
+        }
     }
 }

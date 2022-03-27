@@ -75,6 +75,15 @@ public class BlockUtils {
         return getWorld().getBlockState(pos);
     }
 
+    public static String getBlockInfo(BlockPos pos) {
+        IBlockState iBlockState = getBlockStateAt(pos);
+        if (iBlockState != null) {
+            int meta = iBlockState.getBlock().getMetaFromState(iBlockState);
+            return iBlockState.getBlock() + ", meta: " + meta;
+        }
+        return "";
+    }
+
     public static int getMetaAt(Vector3d pos) {
         IBlockState iBlockState = BlockUtils.getBlockStateAt(new BlockPos(pos.x, pos.y, pos.z));
         if (iBlockState == null) return -1;

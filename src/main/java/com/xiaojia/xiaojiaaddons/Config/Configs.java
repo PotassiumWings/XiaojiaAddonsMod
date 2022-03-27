@@ -651,6 +651,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Combine Soul Eater", parent = "Auto Combine")
     public static boolean CombineSoulEater = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Swarm", parent = "Auto Combine")
+    public static boolean CombineSwarm = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Combine Ultimate Jerry", parent = "Auto Combine")
     public static boolean CombineUltimateJerry = false;
 
@@ -806,6 +809,12 @@ public class Configs {
 
     @Property(type = Property.Type.FOLDER, name = "Other QOLs", parent = "QOL")
     public static boolean OtherQOL = false;
+
+    // PetShow
+    @Property(type = Property.Type.BOOLEAN, name = "Pet Show", parent = "Other QOLs",
+            description = "Display pet box.\n" +
+                    "Only useful for current alpha fishing.")
+    public static boolean PetShow = false;
 
     // FairySoul
     @Property(type = Property.Type.BOOLEAN, name = "Fairy Souls ESP", parent = "Other QOLs")

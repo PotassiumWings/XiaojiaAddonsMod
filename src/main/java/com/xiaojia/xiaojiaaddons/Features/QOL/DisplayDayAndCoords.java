@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.DevMode;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
@@ -84,6 +85,10 @@ public class DisplayDayAndCoords {
             DisplayLine line3 = new DisplayLine("pro: " + DevWater.process);
             line2.setScale(Configs.DisplayScale / 20F);
             display.addLine(line3);
+            synchronized (DevMode.lines) {
+                for (DisplayLine devLine: DevMode.lines)
+                    display.addLine(devLine);
+            }
         }
     }
 }
