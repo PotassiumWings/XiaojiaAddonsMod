@@ -49,6 +49,8 @@ public class ControlUtils {
     private static Inventory openedInventory = null;
 
     private static Method synHeldItem = null;
+    private static Field pressTime = null;
+
     static {
         try {
             synHeldItem = PlayerControllerMP.class.getDeclaredMethod("syncCurrentPlayItem");
@@ -61,6 +63,20 @@ public class ControlUtils {
         } finally {
             if (synHeldItem != null)
                 synHeldItem.setAccessible(true);
+        }
+
+
+        try {
+            pressTime = KeyBinding.class.getDeclaredField("pressTime");
+        } catch (NoSuchFieldException e) {
+            try {
+                pressTime = KeyBinding.class.getDeclaredField("field_151474_i");
+            } catch (NoSuchFieldException e1) {
+                e1.printStackTrace();
+            }
+        } finally {
+            if (pressTime != null)
+                pressTime.setAccessible(true);
         }
     }
 
@@ -388,6 +404,12 @@ public class ControlUtils {
 
     public static void releaseRightClick() {
         KeyBinding.setKeyBindState(useKeyBind.mcKeyBinding().getKeyCode(), false);
+        if (getPlayer().isUsingItem())
+            mc.playerController.onStoppedUsingItem(getPlayer());
+    }
+
+    public static int getRightClickPressTime() throws IllegalAccessException {
+        return (int) pressTime.get(useKeyBind.mcKeyBinding());
     }
 
     public static void holdRightClick() {

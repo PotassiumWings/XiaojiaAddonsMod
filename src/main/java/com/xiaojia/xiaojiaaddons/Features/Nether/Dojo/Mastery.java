@@ -68,18 +68,17 @@ public class Mastery {
         }
         if (facing == null) return;
         ControlUtils.face(facing.getX() + 0.5, facing.getY() + 1.1, facing.getZ() + 0.5);
-        ControlUtils.randomChangeDirection(0.00001);
         if (!Configs.MasteryAutoRelease) return;
         long cur = TimeUtils.curTime();
         if ((int) (7000 - (cur - min)) < Configs.MasteryAutoReleaseCD && cur - lastRelease > 900) {
-            ControlUtils.releaseRightClick();
+            lastRelease = cur;
             new Thread(() -> {
                 try {
+                    ControlUtils.releaseRightClick();
                     Thread.sleep(40);
-                } catch (InterruptedException e) {
+                    ControlUtils.holdRightClick();
+                } catch (Exception e) {
                 }
-
-                ControlUtils.holdRightClick();
             }).start();
         }
     }
@@ -88,10 +87,9 @@ public class Mastery {
     public void onBlockChange(BlockChangeEvent event) {
         if (!Checker.enabled) return;
         if (DojoUtils.getTask() != EnumDojoTask.MASTERY) return;
-        if (event.position.getX() < getX(getPlayer()) - 16 || event.position.getX() > getX(getPlayer()) + 16) return;
-        if (event.position.getZ() < getZ(getPlayer()) - 16 || event.position.getZ() > getZ(getPlayer()) + 16) return;
+        if (event.position.getX() < getX(getPlayer()) - 20 || event.position.getX() > getX(getPlayer()) + 20) return;
+        if (event.position.getZ() < getZ(getPlayer()) - 20 || event.position.getZ() > getZ(getPlayer()) + 20) return;
         if (event.position.getY() < getY(getPlayer()) - 4 || event.position.getY() > getY(getPlayer()) + 10) return;
-        if (MathUtils.distanceSquareFromPlayer(event.position) > 16 * 16) return;
         if (event.oldBlock.getBlock() != Blocks.wool && event.newBlock.getBlock() == Blocks.wool) {
             countDown.put(event.position, TimeUtils.curTime());
         } else if (event.oldBlock.getBlock() == Blocks.wool && event.newBlock.getBlock() != Blocks.wool) {
