@@ -16,6 +16,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
+import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.DojoUtils;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
@@ -128,6 +129,9 @@ public class Command extends CommandBase {
                 break;
 
             // debug commands
+            case "dojo":
+                ChatLib.chat(DojoUtils.getTask() + "!");
+                break;
             case "swap":
                 new Thread(() -> {
                     try {

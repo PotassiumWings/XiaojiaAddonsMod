@@ -59,7 +59,9 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Discipline;
+import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.DojoUtils;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Force;
+import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Mastery;
 import com.xiaojia.xiaojiaaddons.Features.Nether.SpongeESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
@@ -256,7 +258,9 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new SpongeESP());
         // Dojo
         MinecraftForge.EVENT_BUS.register(new Force());
+        MinecraftForge.EVENT_BUS.register(new Mastery());
         MinecraftForge.EVENT_BUS.register(new Discipline());
+        MinecraftForge.EVENT_BUS.register(new DojoUtils());
 
         // QOL
         MinecraftForge.EVENT_BUS.register(new FairySoul());

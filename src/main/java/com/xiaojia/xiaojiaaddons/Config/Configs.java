@@ -317,12 +317,16 @@ public class Configs {
     public static boolean NetherEnabled = false;
 
     // Dojo
-    @Property(type=Property.Type.FOLDER, name = "Dojo")
+    @Property(type=Property.Type.FOLDER, name = "Dojo", parent = "Nether")
     public static boolean DojoEnabled = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Force Helper",
+    @Property(type = Property.Type.BOOLEAN, name = "Force Helper", parent = "Dojo",
             description = "Block wrong click in force task.")
     public static boolean ForceHelper = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Mastery Helper", parent = "Dojo",
+            description = "Shows the countdown for blocks to disappear.")
+    public static boolean MasteryHelper = false;
 
     // Corrupted
     @Property(type = Property.Type.FOLDER, name = "Nether Mob ESP", parent = "Nether")

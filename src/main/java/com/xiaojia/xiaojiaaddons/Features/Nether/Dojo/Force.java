@@ -29,7 +29,7 @@ public class Force {
         double x = getX(entity);
         double y = getY(entity);
         double z = getZ(entity);
-        AxisAlignedBB box = new AxisAlignedBB(x, y, z, x, y, z).expand(0.2, 0, 0.2).addCoord(0, 1, 0);
+        AxisAlignedBB box = new AxisAlignedBB(x, y, z, x, y, z).expand(0.2, 0, 0.2).addCoord(0, 2.5, 0);
         List<Entity> entitiesInRange = getWorld().getEntitiesWithinAABBExcludingEntity(entity, box);
         for (Entity possible : entitiesInRange) {
             if (!possible.hasCustomName()) continue;

@@ -1,14 +1,27 @@
 package com.xiaojia.xiaojiaaddons.Features.Nether.Dojo;
 
 
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 
 public class DojoUtils {
+    private static EnumDojoTask currentTask;
+
+    @SubscribeEvent
+    public void onTick(TickEndEvent event) {
+        currentTask = getCurrentTask();
+    }
+
     public static EnumDojoTask getTask() {
+        return currentTask;
+    }
+
+    private static EnumDojoTask getCurrentTask() {
         if (!SkyblockUtils.isInDojo()) return null;
 
         ArrayList<String> lines = ScoreBoard.getLines();
