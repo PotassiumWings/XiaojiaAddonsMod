@@ -386,6 +386,15 @@ public class ControlUtils {
         KeyBinding.setKeyBindState(moveForwardKeyBind.mcKeyBinding().getKeyCode(), false);
     }
 
+    public static void releaseRightClick() {
+        KeyBinding.setKeyBindState(useKeyBind.mcKeyBinding().getKeyCode(), false);
+    }
+
+    public static void holdRightClick() {
+        KeyBinding.setKeyBindState(useKeyBind.mcKeyBinding().getKeyCode(), true);
+    }
+
+
     public static void releaseBackward() {
         KeyBinding.setKeyBindState(moveBackwardKeyBind.mcKeyBinding().getKeyCode(), false);
     }

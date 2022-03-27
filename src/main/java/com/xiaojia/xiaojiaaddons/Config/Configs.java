@@ -324,9 +324,25 @@ public class Configs {
             description = "Block wrong click in force task.")
     public static boolean ForceHelper = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Discipline Helper", parent = "Dojo",
+            description = "Auto swap click in discipline task.")
+    public static boolean DisciplineHelper = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Mastery Helper", parent = "Dojo",
             description = "Shows the countdown for blocks to disappear.")
     public static boolean MasteryHelper = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Mastery Helper - Auto Turn", parent = "Dojo",
+            description = "Auto turn to the exploding wool.")
+    public static boolean MasteryAutoTurn = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Mastery Helper - Auto Release Right Click", parent = "Dojo",
+            description = "Auto release when cd is 900ms.")
+    public static boolean MasteryAutoRelease = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Mastery Helper - Auto Release Right Click When", parent = "Dojo",
+            min = 500, max = 1500, step = 10, description = "Set when to release right click.")
+    public static int MasteryAutoReleaseCD = 900;
 
     // Corrupted
     @Property(type = Property.Type.FOLDER, name = "Nether Mob ESP", parent = "Nether")
