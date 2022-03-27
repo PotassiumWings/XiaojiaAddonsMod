@@ -54,7 +54,6 @@ public class Blaze {
         for (Entity possible : entitiesInRange) {
             if (!possible.hasCustomName()) continue;
             String name = possible.getCustomNameTag();
-            ChatLib.debug(name);
             for (String state : states) {
                 if (name.contains(state)) {
                     doSwap(state);

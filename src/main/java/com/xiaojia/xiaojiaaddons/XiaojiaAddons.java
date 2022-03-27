@@ -58,6 +58,8 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ProtectItems;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
+import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Discipline;
+import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Force;
 import com.xiaojia.xiaojiaaddons.Features.Nether.SpongeESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
@@ -137,7 +139,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.5";
+    public static final String VERSION = "2.4.5.1";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -252,6 +254,9 @@ public class XiaojiaAddons {
         // Nether
         MinecraftForge.EVENT_BUS.register(new CorruptedESP());
         MinecraftForge.EVENT_BUS.register(new SpongeESP());
+        // Dojo
+        MinecraftForge.EVENT_BUS.register(new Force());
+        MinecraftForge.EVENT_BUS.register(new Discipline());
 
         // QOL
         MinecraftForge.EVENT_BUS.register(new FairySoul());

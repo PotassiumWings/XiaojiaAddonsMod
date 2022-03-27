@@ -24,33 +24,16 @@ public class SkyblockUtils {
             "Dungeon Hub",
             "Hub", "Spider's Den", "Gunpowder Mines", "Void Sepulture", "Dragon's Nest",
             "The End", "The Mist", "Blazing Fortress", "The Catacombs", "Howling Cave",
-            "Your Island", "None"
+            "Your Island", "Dojo Arena",  "None"
     ));
 
     private static final ArrayList<String> dwarvenMaps = new ArrayList<>(Arrays.asList(
-            "The Forge",
-            "Forge Basin",
-            "Palace Bridge",
-            "Royal Palace",
-            "Aristocrat Passage",
-            "Hanging Court",
-            "Divan's Gateway",
-            "Far Reserve",
-            "Goblin Burrows",
-            "Miner's Guild",
-            "Great Ice Wall",
-            "The Mist",
-            "C&",
-            "Grand Library",
-            "Barracks of Heroes",
-            "Dwarven Village",
-            "The Lift",
-            "Royal Quarters",
-            "Lava Springs",
-            "Cliffside Veins",
-            "Rampart's Quarry",
-            "Upper Mines",
-            "Royal Mines", "Dwarven Mines", "Gates to the Mines"
+            "The Forge", "Forge Basin", "Palace Bridge", "Royal Palace", "Aristocrat Passage",
+            "Hanging Court", "Divan's Gateway", "Far Reserve", "Goblin Burrows",
+            "Miner's Guild", "Great Ice Wall", "The Mist", "C&",
+            "Grand Library", "Barracks of Heroes", "Dwarven Village", "The Lift",
+            "Royal Quarters", "Lava Springs", "Cliffside Veins", "Rampart's Quarry",
+            "Upper Mines", "Royal Mines", "Dwarven Mines", "Gates to the Mines"
     ));
     private static final ArrayList<String> crystalHollowsMaps = new ArrayList<>(Arrays.asList(
             "Fairy Grotto",
@@ -199,6 +182,8 @@ public class SkyblockUtils {
     public static boolean isInCrystalHollows() {
         return isInCrystalHollows;
     }
+
+    public static boolean isInDojo() {return currentMap.equals("Dojo Arena");}
 
     public static boolean isInDwarven() {
         return isInDwarven;

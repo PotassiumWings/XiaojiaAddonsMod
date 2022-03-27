@@ -316,6 +316,14 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Nether")
     public static boolean NetherEnabled = false;
 
+    // Dojo
+    @Property(type=Property.Type.FOLDER, name = "Dojo")
+    public static boolean DojoEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Force Helper",
+            description = "Block wrong click in force task.")
+    public static boolean ForceHelper = false;
+
     // Corrupted
     @Property(type = Property.Type.FOLDER, name = "Nether Mob ESP", parent = "Nether")
     public static boolean NetherMobESP = false;
