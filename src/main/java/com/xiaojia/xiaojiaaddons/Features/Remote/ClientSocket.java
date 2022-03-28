@@ -44,6 +44,7 @@ public class ClientSocket {
                     authenticate();
 
                     boolean first = true;
+                    OUT:
                     while (true) {
                         StringBuilder sb = new StringBuilder();
                         int recv = in.read();
@@ -57,6 +58,7 @@ public class ClientSocket {
                         while ((char) recv != '\n') {
                             sb.append((char) recv);
                             recv = in.read();
+                            if (recv == -1) break OUT;
                         }
 
                         String s = sb.toString();
