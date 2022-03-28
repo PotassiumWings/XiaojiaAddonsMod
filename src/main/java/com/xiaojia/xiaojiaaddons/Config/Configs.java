@@ -321,7 +321,7 @@ public class Configs {
     public static boolean DojoEnabled = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Force Helper", parent = "Dojo",
-            description = "Block wrong click in force task.")
+            description = "Block wrong clicks in force task.")
     public static boolean ForceHelper = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Discipline Helper", parent = "Dojo",
@@ -336,19 +336,19 @@ public class Configs {
             description = "Auto turn to the exploding wool.")
     public static boolean MasteryAutoTurn = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Mastery Helper - Auto Release Right Click", parent = "Dojo",
-            description = "Auto release when cd is 900ms.")
+    @Property(type = Property.Type.BOOLEAN, name = "Mastery Helper - Auto Release Right Click", parent = "Dojo")
     public static boolean MasteryAutoRelease = false;
 
     @Property(type = Property.Type.NUMBER, name = "Mastery Helper - Auto Release Right Click When", parent = "Dojo",
             min = 500, max = 1500, step = 10, description = "Set when to release right click.")
-    public static int MasteryAutoReleaseCD = 900;
+    public static int MasteryAutoReleaseCD = 1000;
 
     // Corrupted
     @Property(type = Property.Type.FOLDER, name = "Nether Mob ESP", parent = "Nether")
     public static boolean NetherMobESP = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Corrupted Mob ESP", parent = "Nether Mob ESP")
+    @Property(type = Property.Type.BOOLEAN, name = "Corrupted Mob ESP", parent = "Nether Mob ESP",
+            description = "Bad bad bad.")
     public static boolean CorruptedESP = false;
 
     // SpongeESP
