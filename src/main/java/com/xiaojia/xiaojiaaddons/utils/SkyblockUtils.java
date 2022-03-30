@@ -21,7 +21,7 @@ public class SkyblockUtils {
 
     private static final ArrayList<String> maps = new ArrayList<>(Arrays.asList(
             "Ruins", "Forest", "Mountain", "High Level", "Wilderness",
-            "Dungeon Hub",
+            "Dungeon Hub", "Kuudra's End",
             "Hub", "Spider's Den", "Gunpowder Mines", "Void Sepulture", "Dragon's Nest",
             "The End", "The Mist", "Blazing Fortress", "The Catacombs", "Howling Cave",
             "Your Island", "Dojo Arena",  "None"
@@ -129,6 +129,10 @@ public class SkyblockUtils {
     public static void setCurrentMap(String map) {
         currentMap = map;
         set = true;
+    }
+
+    public static boolean isInKuudra() {
+        return currentMap.equals("Kuudra's End");
     }
 
     public static boolean isInSpiderDen() {

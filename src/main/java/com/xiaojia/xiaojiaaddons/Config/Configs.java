@@ -316,6 +316,27 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Nether")
     public static boolean NetherEnabled = false;
 
+    // Kuudra
+    @Property(type = Property.Type.FOLDER, name = "Kuudra Display", parent = "Blaze")
+    public static boolean KuudraDisplayEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Kuudra Info Display Test", parent = "Kuudra Display",
+            description = "Display lines to show where the display is at.")
+    public static boolean KuudraTest = true;
+
+    @Property(type = Property.Type.NUMBER, name = "Kuudra Display X", parent = "Kuudra Display")
+    public static int KuudraX = 400;
+
+    @Property(type = Property.Type.NUMBER, name = "Kuudra Display Y", parent = "Kuudra Display")
+    public static int KuudraY = 160;
+
+    @Property(type = Property.Type.NUMBER, name = "Kuudra Display Scale", parent = "Kuudra Display",
+            min = 5, max = 100)
+    public static int KuudraScale = 20;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Kuudra Info Display Enable", parent = "Kuudra Display")
+    public static boolean KuudraDisplay = false;
+
     // Dojo
     @Property(type=Property.Type.FOLDER, name = "Dojo", parent = "Nether")
     public static boolean DojoEnabled = false;
@@ -353,6 +374,10 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Ghast ESP", parent = "Nether Mob ESP")
     public static boolean GhastESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Convergence Center ESP", parent = "Nether Mob ESP")
+    public static boolean ConvergenceESP = false;
+
 
     // SpongeESP
     @Property(type = Property.Type.FOLDER, name = "Nether Block ESP", parent = "Nether",

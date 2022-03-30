@@ -58,11 +58,13 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ProtectItems;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
+import com.xiaojia.xiaojiaaddons.Features.Nether.ConvergenceESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Discipline;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.DojoUtils;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Force;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Mastery;
 import com.xiaojia.xiaojiaaddons.Features.Nether.GhastESP;
+import com.xiaojia.xiaojiaaddons.Features.Nether.Kuudra;
 import com.xiaojia.xiaojiaaddons.Features.Nether.PrismarineESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.SpongeESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
@@ -259,6 +261,8 @@ public class XiaojiaAddons {
         // Nether
         MinecraftForge.EVENT_BUS.register(new CorruptedESP());
         MinecraftForge.EVENT_BUS.register(new GhastESP());
+        MinecraftForge.EVENT_BUS.register(new Kuudra());
+        MinecraftForge.EVENT_BUS.register(new ConvergenceESP());
         MinecraftForge.EVENT_BUS.register(new SpongeESP());
         MinecraftForge.EVENT_BUS.register(new PrismarineESP());
         // Dojo
