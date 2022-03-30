@@ -98,6 +98,7 @@ public class DevMode {
         synchronized (lines) {
             lines.clear();
             MovingObjectPosition pos = XiaojiaAddons.mc.objectMouseOver;
+            if (pos == null) return;
             Entity entity = pos.entityHit;
             BlockPos block = pos.getBlockPos();
             if (entity != null) {

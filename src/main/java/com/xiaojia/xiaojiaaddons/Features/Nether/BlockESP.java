@@ -74,7 +74,7 @@ public abstract class BlockESP {
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
         if (!Checker.enabled) return;
-        if (isEnabled()) return;
+        if (!isEnabled()) return;
         synchronized (blocks) {
             for (BlockPos pos : blocks) {
                 GuiUtils.enableESP();
