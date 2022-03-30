@@ -21,75 +21,19 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
-public class SpongeESP {
-    private final HashSet<BlockPos> sponges = new HashSet<>();
-    private Thread scanThread = null;
-    private Block block = Blocks.sponge;
-
-    @SubscribeEvent
-    public void onTick(TickEndEvent event) {
-        if (!Checker.enabled) return;
-        if (!Configs.SpongeESP) return;
-        if (scanThread == null || !scanThread.isAlive()) {
-            scanThread = new Thread(() -> {
-                try {
-                    int x = MathUtils.floor(getX(getPlayer())), z = MathUtils.floor(getZ(getPlayer()));
-                    for (int r = 0; r < 400; r++) {
-                        for (int i = 0; i < 4; i++) {
-                            for (int sy = 40; sy <= 240; sy ++) {
-                                int cx = MathUtils.floor(getX(getPlayer())), cz = MathUtils.floor(getZ(getPlayer()));
-                                if (Math.abs(cx - x) > 10 || Math.abs(cz - z) > 10) return;
-                                for (int sx = x - r; sx <= x + r; sx++) {
-                                    check(sx, sy, z - r);
-                                    check(sx, sy, z + r);
-                                }
-                                for (int sz = z - r; sz <= z + r; sz++) {
-                                    check(x - r, sy, sz);
-                                    check(x + r, sy, sz);
-                                }
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-            scanThread.start();
-        }
+public class SpongeESP extends BlockESP {
+    @Override
+    public Block getBlock() {
+        return Blocks.sponge;
     }
 
-    private void check(int x, int y, int z) {
-        if (BlockUtils.getBlockAt(x, y, z) == block) {
-            synchronized (sponges) {
-                sponges.add(new BlockPos(x, y, z));
-            }
-        }
+    @Override
+    public Color getColor() {
+        return new Color(255, 242, 82, 120);
     }
 
-    @SubscribeEvent
-    public void onRenderWorld(RenderWorldLastEvent event) {
-        if (!Checker.enabled) return;
-        if (!Configs.SpongeESP) return;
-        synchronized (sponges) {
-            for (BlockPos pos : sponges) {
-                GuiUtils.enableESP();
-                GuiUtils.drawBoxAtBlock(pos, new Color(255, 242, 82, 120), 1, 1, 0.0020000000949949026F);
-                GuiUtils.disableESP();
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onBlockChange(BlockChangeEvent event) {
-        if (event.oldBlock.getBlock() == block && event.newBlock.getBlock() != block) {
-            sponges.remove(event.position);
-        }
-    }
-
-    @SubscribeEvent
-    public void onReset(WorldEvent.Load event) {
-        synchronized (sponges) {
-            sponges.clear();
-        }
+    @Override
+    public boolean isEnabled() {
+        return Configs.SpongeESP;
     }
 }

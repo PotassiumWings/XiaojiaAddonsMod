@@ -62,6 +62,8 @@ import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Discipline;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.DojoUtils;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Force;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Mastery;
+import com.xiaojia.xiaojiaaddons.Features.Nether.GhastESP;
+import com.xiaojia.xiaojiaaddons.Features.Nether.PrismarineESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.SpongeESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
@@ -142,7 +144,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.5.2";
+    public static final String VERSION = "2.4.5.3";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -256,7 +258,9 @@ public class XiaojiaAddons {
 
         // Nether
         MinecraftForge.EVENT_BUS.register(new CorruptedESP());
+        MinecraftForge.EVENT_BUS.register(new GhastESP());
         MinecraftForge.EVENT_BUS.register(new SpongeESP());
+        MinecraftForge.EVENT_BUS.register(new PrismarineESP());
         // Dojo
         MinecraftForge.EVENT_BUS.register(new Force());
         MinecraftForge.EVENT_BUS.register(new Mastery());

@@ -351,14 +351,20 @@ public class Configs {
             description = "Bad bad bad.")
     public static boolean CorruptedESP = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Ghast ESP", parent = "Nether Mob ESP")
+    public static boolean GhastESP = false;
+
     // SpongeESP
-    @Property(type = Property.Type.FOLDER, name = "Nether Block ESP", parent = "Nether")
+    @Property(type = Property.Type.FOLDER, name = "Nether Block ESP", parent = "Nether",
+            description = "&cOnly turn this on when you're finding blocks.\n" +
+                    "&cThis feature will ruin your performance.")
     public static boolean NetherBlockESP = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Sponge ESP", parent = "Nether Block ESP",
-            description = "&cOnly turn this on when you're finding sponge.\n" +
-                    "&cThis feature will ruin your performance.")
+    @Property(type = Property.Type.BOOLEAN, name = "Sponge ESP", parent = "Nether Block ESP")
     public static boolean SpongeESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Prismarine ESP", parent = "Nether Block ESP")
+    public static boolean PrismarineESP = false;
 
 
     // QOL
