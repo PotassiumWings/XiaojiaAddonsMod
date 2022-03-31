@@ -78,8 +78,8 @@ public class Kuudra {
         display2.clearLines();
         display3.clearLines();
         display1.setRenderLoc(Configs.KuudraX, Configs.KuudraY);
-        display2.setRenderLoc(Configs.KuudraX + 120, Configs.KuudraY);
-        display3.setRenderLoc(Configs.KuudraX + 240, Configs.KuudraY);
+        display2.setRenderLoc(Configs.KuudraX + 120 / 8 * Configs.KuudraScale, Configs.KuudraY);
+        display3.setRenderLoc(Configs.KuudraX + 240 / 8 * Configs.KuudraScale, Configs.KuudraY);
         display1.setShouldRender(true);
         display2.setShouldRender(true);
         display3.setShouldRender(true);
@@ -145,10 +145,10 @@ public class Kuudra {
         String name = info.name;
         int tier = tiers.getOrDefault(name, 1);
         int cost = info.cost.getOrDefault(tier, -1);
-        String colorString = getColorStringFromTier(tier, info.cost.size());
+        String colorString = getColorStringFromTier(tier, info.cost.size() + 1);
         String tierString = "T" + tier;
         String costString = cost == -1? "MAXED": cost + "";
-        return "&e&l" + name + ": " + colorString + tierString + costString;
+        return "&e&l" + name + ": " + colorString + tierString + " " + costString;
     }
 
     private static String getColorStringFromTier(int tier, int max) {
