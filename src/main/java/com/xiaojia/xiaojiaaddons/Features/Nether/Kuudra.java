@@ -78,8 +78,8 @@ public class Kuudra {
         display2.clearLines();
         display3.clearLines();
         display1.setRenderLoc(Configs.KuudraX, Configs.KuudraY);
-        display2.setRenderLoc(Configs.KuudraX + 120 / 8 * Configs.KuudraScale, Configs.KuudraY);
-        display3.setRenderLoc(Configs.KuudraX + 240 / 8 * Configs.KuudraScale, Configs.KuudraY);
+        display2.setRenderLoc(Configs.KuudraX + 9 * Configs.KuudraScale, Configs.KuudraY);
+        display3.setRenderLoc(Configs.KuudraX + 18 * Configs.KuudraScale, Configs.KuudraY);
         display1.setShouldRender(true);
         display2.setShouldRender(true);
         display3.setShouldRender(true);
@@ -94,13 +94,13 @@ public class Kuudra {
             tiers.put("Hinder", 6);
             tiers.put("Shell", 4);
         }
-        DisplayLine title = new DisplayLine("&c&lPrimary Upgrades");
+        DisplayLine title = new DisplayLine("&c&lPrimary");
         title.setScale(1.51F * Configs.KuudraScale / 15);
         display1.addLine(title);
-        title = new DisplayLine("&d&lSecondary Upgrades");
+        title = new DisplayLine("&d&lSecondary");
         title.setScale(1.51F * Configs.KuudraScale / 15);
         display2.addLine(title);
-        title = new DisplayLine("&4&lPersonal Upgrades");
+        title = new DisplayLine("&4&lPersonal");
         title.setScale(1.51F * Configs.KuudraScale / 15);
         display3.addLine(title);
         for (KuudraInfo info : primaryInfos) {
@@ -126,11 +126,11 @@ public class Kuudra {
         if (event.type != 0) return;
         if (!Configs.KuudraDisplay) return;
         String text = ChatLib.removeFormatting(event.message.getUnformattedText());
-        Pattern pattern = Pattern.compile("^([a-zA-Z ]+) was upgraded to tier: (\\d+)$");
+        Pattern pattern = Pattern.compile("^([a-zA-Z ]+)( was upgraded to tier: | has been upgraded to tier: )(\\d+)$");
         Matcher matcher = pattern.matcher(text);
         if (matcher.find()) {
             String name = matcher.group(1);
-            int tier = Integer.parseInt(matcher.group(2));
+            int tier = Integer.parseInt(matcher.group(3));
             tiers.put(name, tier);
         }
     }
@@ -148,7 +148,7 @@ public class Kuudra {
         String colorString = getColorStringFromTier(tier, info.cost.size() + 1);
         String tierString = "T" + tier;
         String costString = cost == -1? "MAXED": cost + "";
-        return "&e&l" + name + ": " + colorString + tierString + " " + costString;
+        return "&e" + name + ": " + colorString + tierString + " " + costString;
     }
 
     private static String getColorStringFromTier(int tier, int max) {
