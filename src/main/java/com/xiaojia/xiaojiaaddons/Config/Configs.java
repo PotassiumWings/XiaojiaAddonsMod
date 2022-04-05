@@ -316,6 +316,26 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Nether")
     public static boolean NetherEnabled = false;
 
+    // AshFang
+    @Property(type = Property.Type.FOLDER, name = "Ashfang", parent = "Nether")
+    public static boolean AshfangEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Ashfang Gravity Center ESP", parent = "Ashfang")
+    public static boolean AshfangGravityCenterESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Ashfang Follower ESP", parent = "Ashfang")
+    public static boolean AshfangFollowerESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Ashfang Acolyte ESP", parent = "Ashfang")
+    public static boolean AshfangAcolyteESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Ashfang Underling ESP", parent = "Ashfang")
+    public static boolean AshfangUnderlingESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Ashfang Blazing Soul ESP", parent = "Ashfang")
+    public static boolean BlazingSoulESP = false;
+
+
     // Kuudra
     @Property(type = Property.Type.FOLDER, name = "Kuudra", parent = "Nether")
     public static boolean KuudraEnable = false;

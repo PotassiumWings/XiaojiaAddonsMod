@@ -58,6 +58,8 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ProtectItems;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
+import com.xiaojia.xiaojiaaddons.Features.Nether.AshFangESP;
+import com.xiaojia.xiaojiaaddons.Features.Nether.AshFangGravityESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.ConvergenceESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Discipline;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.DojoUtils;
@@ -146,7 +148,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.5.3";
+    public static final String VERSION = "2.4.5.4";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -263,6 +265,8 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new GhastESP());
         MinecraftForge.EVENT_BUS.register(new Kuudra());
         MinecraftForge.EVENT_BUS.register(new ConvergenceESP());
+        MinecraftForge.EVENT_BUS.register(new AshFangESP());
+        MinecraftForge.EVENT_BUS.register(new AshFangGravityESP());
         MinecraftForge.EVENT_BUS.register(new SpongeESP());
         MinecraftForge.EVENT_BUS.register(new PrismarineESP());
         // Dojo

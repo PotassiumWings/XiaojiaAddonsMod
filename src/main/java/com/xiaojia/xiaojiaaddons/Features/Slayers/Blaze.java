@@ -46,6 +46,7 @@ public class Blaze {
         if (!Checker.enabled) return;
         if (!Configs.BlazeSlayerHelper) return;
         MovingObjectPosition moving = mc.objectMouseOver;
+        if (moving == null) return;
         Entity entity = moving.entityHit;
         if (entity == null) return;
 

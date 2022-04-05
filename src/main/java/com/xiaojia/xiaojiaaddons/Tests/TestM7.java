@@ -19,7 +19,13 @@ public class TestM7 {
                 ItemStack helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);
                 if (helm == null) continue;
                 String name = ChatLib.removeFormatting(helm.getDisplayName()).trim();
-                ChatLib.chat(name + String.format(", %.2f %.2f %.2f", entity.posX, entity.posY, entity.posZ));
+                String owner = "";
+                try {
+                    owner = helm.getTagCompound()
+                            .getCompoundTag("SkullOwner")
+                            .getString("Id");
+                } catch (Exception ignored) {}
+                ChatLib.chat(name + ", owner " + owner + String.format(", %.2f %.2f %.2f", entity.posX, entity.posY, entity.posZ));
             }
             if (entity instanceof EntityDragon) {
                 ChatLib.chat(String.format("dragon at %.2f %.2f %.2f, health %.2f", entity.posX, entity.posY, entity.posZ, ((EntityDragon) entity).getHealth()));

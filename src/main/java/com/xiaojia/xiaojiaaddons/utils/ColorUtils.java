@@ -26,6 +26,15 @@ public class ColorUtils {
             new Color(0x5555FF)
     };
 
+    public static Color getColorFromCode(String code) {
+        for (int i = 0; i < colors.length; i++) {
+            if (colors[i].equals(code)) {
+                return realColors[i];
+            }
+        }
+        return null;
+    }
+
     public static Color getColorFromLong(long color) {
         return new Color(
                 ((int) ((color >> 16) & 0xFF)) / 255.0F, ((int) ((color >> 8) & 0xFF)) / 255.0F,
