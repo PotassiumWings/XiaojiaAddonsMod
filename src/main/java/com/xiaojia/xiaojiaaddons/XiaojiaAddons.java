@@ -93,6 +93,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.NearbyChestESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.OneTick;
 import com.xiaojia.xiaojiaaddons.Features.QOL.PetShow;
+import com.xiaojia.xiaojiaaddons.Features.QOL.RelicESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.RemoveBlindness;
 import com.xiaojia.xiaojiaaddons.Features.QOL.ShowBookName;
 import com.xiaojia.xiaojiaaddons.Features.QOL.ShowEtherwarp;
@@ -148,7 +149,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.5.4";
+    public static final String VERSION = "2.4.5.5";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -180,6 +181,7 @@ public class XiaojiaAddons {
         ItemRename.load();
         ClientSocket.connect();
         DupedItems.load();
+        RelicESP.load();
 
         ClientCommandHandler.instance.registerCommand(new Command());
         ClientCommandHandler.instance.registerCommand(new PP());
@@ -277,6 +279,7 @@ public class XiaojiaAddons {
 
         // QOL
         MinecraftForge.EVENT_BUS.register(new FairySoul());
+        MinecraftForge.EVENT_BUS.register(new RelicESP());
         MinecraftForge.EVENT_BUS.register(new AutoSnowball());
         MinecraftForge.EVENT_BUS.register(new AutoCombine());
         MinecraftForge.EVENT_BUS.register(new AutoHarp());

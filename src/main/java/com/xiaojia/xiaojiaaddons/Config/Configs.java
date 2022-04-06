@@ -874,6 +874,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Fairy Souls ESP", parent = "Other QOLs")
     public static boolean FairySoulESP = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Relic ESP", parent = "Other QOLs")
+    public static boolean RelicESP = false;
+
     // NearbyChestESP
     @Property(type = Property.Type.BOOLEAN, name = "Crystal Hollows Nearby Chest ESP", parent = "Other QOLs",
             description = "Radius = 10 * 10 * 10")
