@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LowestBin {
-    private static final String url = "https://sbe-stole-skytils.design/api/auctions/lowestbins";
+    private static final String url = "https://skytils.gg/api/auctions/lowestbins";
     private static final HashMap<String, Double> prices = new HashMap<>();
     private static long lastCheckedTime = 0;
     private static long lastSuccessTime = 0;
