@@ -20,7 +20,13 @@ public class Velocity {
     private final KeyBind keyBind = new KeyBind("Velocity", Keyboard.KEY_NONE);
 
     public static boolean canDisableKnockBack() {
-        return TimeUtils.curTime() - lastShot > 1000 && !getPlayer().isInLava() && enabled;
+        return TimeUtils.curTime() - lastShot > 1000 && !getPlayer().isInLava() && enabled && !wearingSpringBoots();
+    }
+
+    private static boolean wearingSpringBoots() {
+        ItemStack boot = ControlUtils.getBoots();
+        String id = NBTUtils.getSkyBlockID(boot);
+        return id.equals("SPRING_BOOTS") || id.equals("TARANTULA_BOOTS") || id.equals("THORNS_BOOTS");
     }
 
     @SubscribeEvent
@@ -37,7 +43,8 @@ public class Velocity {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             ItemStack item = ControlUtils.getHeldItemStack();
             String sbId = NBTUtils.getSkyBlockID(item);
-            if (sbId.equals("BONZO_STAFF") || sbId.equals("JERRY_STAFF") || sbId.equals("STARRED_BONZO_STAFF")) {
+            if (sbId.equals("BONZO_STAFF") || sbId.equals("JERRY_STAFF") || sbId.equals("STARRED_BONZO_STAFF") ||
+                sbId.equals("GRAPPLING_HOOK")) {
                 lastShot = TimeUtils.curTime();
             }
         }

@@ -300,6 +300,11 @@ public class ControlUtils {
         return checkHotbarItem(getHeldItemIndex(), names);
     }
 
+    public static ItemStack getBoots() {
+        EntityPlayerSP player = getPlayer();
+        return player.getEquipmentInSlot(1);
+    }
+
     public static boolean checkHoldingItem(String name) {
         ArrayList<String> names = new ArrayList<>();
         names.add(name);
