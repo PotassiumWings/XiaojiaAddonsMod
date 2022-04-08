@@ -1,5 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Features;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
@@ -45,6 +46,7 @@ public abstract class RenderEntityESP {
     @SubscribeEvent
     public final void onRenderWorld(RenderWorldLastEvent event) {
         if (!Checker.enabled) return;
+        if (!Configs.GeneralESP) return;
         try {
             for (EntityInfo entityInfo : renderEntities) {
                 EntityInfo.EnumDraw draw = entityInfo.getDrawString();

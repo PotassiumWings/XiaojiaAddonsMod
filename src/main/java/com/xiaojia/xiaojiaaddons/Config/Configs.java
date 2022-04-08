@@ -48,6 +48,10 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "No Rotate Enabled", parent = "No Rotate")
     public static boolean NoRotate = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "No Rotate Optimize", parent = "No Rotate",
+            description = "IDK if this is bannable.")
+    public static boolean NoRotateOptimize = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "No Rotate Disable When Holding Leaps", parent = "No Rotate")
     public static boolean NoRotateDisableHoldingLeaps = false;
 
@@ -132,6 +136,9 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Close Gui When Changing Direction", parent = "General XJA Setting")
     public static boolean CloseInvWhenChangingDirection = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "General ESP toggle", parent = "General XJA Setting")
+    public static boolean GeneralESP = true;
 
     @Property(type = Property.Type.BOOLEAN, name = "Show XJA Message", parent = "General XJA Setting",
             description = "Show the messages starting with \"XJA >\".")

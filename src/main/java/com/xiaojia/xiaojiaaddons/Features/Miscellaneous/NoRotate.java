@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,6 +66,23 @@ public class NoRotate {
             player.prevPosZ = player.posZ;
             player.closeScreen();
         }
+
+        float finalYaw = player.rotationYaw;
+        float finalPitch = player.rotationPitch;
+        if (!Configs.NoRotateOptimize) return;
+        new Thread(() -> {
+            float startYaw = finalYaw, startPitch = finalPitch;
+            try {
+                Thread.sleep(40);
+                float curYaw = getPlayer().rotationYaw;
+                float curPitch = getPlayer().rotationPitch;
+                if (curYaw == startYaw && curPitch == startPitch) {
+                    ChatLib.chat("Changing direction");
+                    ControlUtils.randomChangeDirection(0.001);
+                }
+            } catch (Exception ignored){
+            }
+        }).start();
     }
 
 
