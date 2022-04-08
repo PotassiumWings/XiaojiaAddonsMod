@@ -113,6 +113,7 @@ import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
 import com.xiaojia.xiaojiaaddons.Features.Skills.GemstoneESP;
 import com.xiaojia.xiaojiaaddons.Features.Skills.JadeCrystalHelper;
 import com.xiaojia.xiaojiaaddons.Features.Skills.SuperPairs;
+import com.xiaojia.xiaojiaaddons.Features.Skills.TitaniumESP;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Blaze;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.ClickScreenMaddox;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Revenant;
@@ -149,7 +150,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.5.5";
+    public static final String VERSION = "2.4.5.6";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -271,6 +272,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AshFangGravityESP());
         MinecraftForge.EVENT_BUS.register(new SpongeESP());
         MinecraftForge.EVENT_BUS.register(new PrismarineESP());
+        MinecraftForge.EVENT_BUS.register(new TitaniumESP());
         // Dojo
         MinecraftForge.EVENT_BUS.register(new Force());
         MinecraftForge.EVENT_BUS.register(new Mastery());

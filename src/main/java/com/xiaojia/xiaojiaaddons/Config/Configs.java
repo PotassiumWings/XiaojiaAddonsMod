@@ -414,6 +414,11 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Prismarine ESP", parent = "Nether Block ESP")
     public static boolean PrismarineESP = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Titanium ESP", parent = "Nether Block ESP",
+            description = "This is not supposed to be in nether block esp " +
+                    "but i have 5 hours left with 2k hotm exp so")
+    public static boolean TitaniumESP = false;
+
 
     // QOL
     @Property(type = Property.Type.FOLDER, name = "QOL")

@@ -90,6 +90,10 @@ public class BlockUtils {
         return iBlockState.getBlock().getMetaFromState(iBlockState);
     }
 
+    public static int getMetaFromIBS(IBlockState state) {
+        return state.getBlock().getMetaFromState(state);
+    }
+
     public static void showBlockAt(int x, int y, int z) {
         Block block = getBlockAt(x, y, z);
         if (block instanceof BlockSkull) {

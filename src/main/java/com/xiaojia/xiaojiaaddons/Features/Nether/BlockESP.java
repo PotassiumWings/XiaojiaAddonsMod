@@ -21,7 +21,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public abstract class BlockESP {
     private final HashSet<BlockPos> blocks = new HashSet<>();
-    private final Block block = getBlock();
+    public final Block block = getBlock();
     private final Color color = getColor();
     private Thread scanThread = null;
 
@@ -45,12 +45,12 @@ public abstract class BlockESP {
                                 int cx = MathUtils.floor(getX(getPlayer())), cz = MathUtils.floor(getZ(getPlayer()));
                                 if (Math.abs(cx - x) > 10 || Math.abs(cz - z) > 10) return;
                                 for (int sx = x - r; sx <= x + r; sx++) {
-                                    check(sx, sy, z - r);
-                                    check(sx, sy, z + r);
+                                    deal(sx, sy, z - r);
+                                    deal(sx, sy, z + r);
                                 }
                                 for (int sz = z - r; sz <= z + r; sz++) {
-                                    check(x - r, sy, sz);
-                                    check(x + r, sy, sz);
+                                    deal(x - r, sy, sz);
+                                    deal(x + r, sy, sz);
                                 }
                             }
                         }
@@ -63,12 +63,16 @@ public abstract class BlockESP {
         }
     }
 
-    private void check(int x, int y, int z) {
-        if (BlockUtils.getBlockAt(x, y, z) == block) {
+    public void deal(int x, int y, int z) {
+        if (check(x, y, z)) {
             synchronized (blocks) {
                 blocks.add(new BlockPos(x, y, z));
             }
         }
+    }
+
+    public boolean check(int x, int y, int z) {
+        return BlockUtils.getBlockAt(x, y, z) == block;
     }
 
     @SubscribeEvent
