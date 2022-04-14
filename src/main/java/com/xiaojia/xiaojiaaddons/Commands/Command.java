@@ -19,6 +19,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.DojoUtils;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
+import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Blaze;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
@@ -119,6 +120,9 @@ public class Command extends CommandBase {
                 break;
             case "showitem":
                 ShowItem.show();
+                break;
+            case "reconnect":
+                ClientSocket.reconnect();
                 break;
 
             case "patterns":

@@ -23,23 +23,24 @@ public class ClientSocket {
     private static PrintWriter out;
     private static BufferedReader in;
     private static boolean connected = false;
+    private static Socket socket = null;
+    private static Thread socketThread = null;
+    private static int socketId = 0;
 
     public static void reconnect() {
-        if (connected) {
-            ChatLib.chat("Already connected!");
-        } else {
-            connect();
-        }
+        disconnect();
+        connect();
     }
 
     public static void connect() {
         try {
-            Socket socket = new Socket("47.94.243.9", 11053);
+            socket = new Socket("47.94.243.9", 11053);
             connected = true;
             out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             Checker.onConnect();
-            new Thread(() -> {
+            socketThread = new Thread(() -> {
+                int currentId = socketId;
                 try {
                     authenticate();
 
@@ -231,18 +232,25 @@ public class ClientSocket {
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    disconnect();
+                    if (socketId == currentId)
+                        reconnect();
                 }
-            }).start();
+            });
+            socketThread.start();
         } catch (IOException e) {
-            disconnect();
+            reconnect();
             e.printStackTrace();
         }
     }
 
     public static void disconnect() {
+        socketId++;
+        try {
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         connected = false;
-        connect();
     }
 
     public synchronized static void chat(String message) {
