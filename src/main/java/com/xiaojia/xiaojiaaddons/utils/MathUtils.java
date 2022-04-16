@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -72,8 +73,12 @@ public class MathUtils {
         return distanceSquaredFromPoints(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
     }
 
+    public static double distanceSquareFromPlayer(Vector3d v) {
+        return distanceSquareFromPlayer(v.x, v.y, v.z);
+    }
+
     public static double distanceSquareFromPlayer(double x, double y, double z) {
-        double tx = getX(getPlayer()), ty = getY(getPlayer()), tz = getZ(getPlayer());
+        double tx = getX(getPlayer()), ty = getY(getPlayer()) + getEyeHeight(getPlayer()), tz = getZ(getPlayer());
         return distanceSquaredFromPoints(x, y, z, tx, ty, tz);
     }
 
@@ -100,6 +105,11 @@ public class MathUtils {
     public static float getZ(Entity entity) {
         if (entity == null) return -10000;
         return (float) (entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks);
+    }
+
+    public static float getEyeHeight(Entity entity) {
+        if (entity == null) return 0;
+        return entity.getEyeHeight();
     }
 
     public static String getPosString(Entity entity) {

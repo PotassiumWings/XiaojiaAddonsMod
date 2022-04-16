@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.utils;
 
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.properties.Property;
+import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
 import net.minecraft.block.state.IBlockState;
@@ -31,7 +32,7 @@ public class BlockUtils {
         return new BlockPos(res.x, res.y, res.z);
     }
 
-    public static Vector3d getLookingAtVector(int dist) {
+    public static Vector3d getLookingAtVector(double dist) {
         EntityPlayer player = getPlayer();
         Vec3 eye = player.getPositionEyes(MathUtils.partialTicks);
         Vec3 look = player.getLook(MathUtils.partialTicks);
@@ -134,6 +135,7 @@ public class BlockUtils {
         Vector3d curV = from;
         if (!isBlockAir(from.x, from.y, from.z))
             return from;
+        GuiTest.clear();
         while (true) {
             double xScale = (epsilon + MathUtils.ceil(curV.x) - curV.x) / v.x;
             double yScale = (epsilon + MathUtils.ceil(curV.y) - curV.y) / v.y;
@@ -143,9 +145,10 @@ public class BlockUtils {
             if (v.z < 0) zScale = (MathUtils.floor(curV.z) - epsilon - curV.z) / v.z;
 
             double scale = xScale;
-            if (yScale < scale) scale = yScale;
-            if (zScale < scale) scale = zScale;
+            if (Math.abs(yScale) < Math.abs(scale)) scale = yScale;
+            if (Math.abs(zScale) < Math.abs(scale)) scale = zScale;
             curV = MathUtils.add(curV, MathUtils.mul(scale, v));
+            GuiTest.append(curV);
             if (MathUtils.floor(curV.x) == MathUtils.floor(to.x) &&
                     MathUtils.floor(curV.y) == MathUtils.floor(to.y) &&
                     MathUtils.floor(curV.z) == MathUtils.floor(to.z)) break;
@@ -165,9 +168,12 @@ public class BlockUtils {
         return block.getUnlocalizedName().toLowerCase().contains("water");
     }
 
+    public static boolean isBlockAir(BlockPos pos) {
+        return isBlockAir(pos.getX(), pos.getY(), pos.getZ());
+    }
+
     public static boolean isBlockAir(float x, float y, float z) {
-        Block block = getBlockAt(x, y, z);
-        return block.getUnlocalizedName().toLowerCase().contains("air");
+        return isBlockAir((double) x, (double) y, (double) z);
     }
 
     public static boolean isBlockAir(double x, double y, double z) {

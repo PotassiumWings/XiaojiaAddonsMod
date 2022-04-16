@@ -163,6 +163,10 @@ public class GuiUtils {
         drawFilledBoundingBoxAbsolute(x - delta, y - delta, z - delta, x + width + delta, y + height + delta, z + width + delta, r, g, b, a);
     }
 
+    public static void drawBoxAtPos(float x, float y, float z, int r, int g, int b, int a, float width, float height, float delta) {
+        drawFilledBoundingBoxAbsolute(x - delta, y - delta, z - delta, x + width + delta, y + height + delta, z + width + delta, r, g, b, a);
+    }
+
     public static void drawBoxAtBlock(BlockPos blockPos, Color color, int width, int height, float delta) {
         drawBoxAtBlock(
                 blockPos.getX(), blockPos.getY(), blockPos.getZ(),

@@ -30,6 +30,7 @@ public class HotbarUtils {
 
     public static int aotvSlot = -1;
     public static int shortBowSlot = -1;
+    public static int dirtWandSlot = -1;
 
     public static boolean checkSoulwhip() {
         return checkHotbarItem(soulwhipSlot, "Soul Whip");
@@ -47,7 +48,7 @@ public class HotbarUtils {
         boolean terminator = false, emerald = false, aots = false, soulWhip = false, plasma = false,
                 healingWand = false, gyro = false, zombieSword = false, gloomlock = false,
                 ebm = false, bm = false, treecap = false, sapling = false, rod = false,
-                aotv = false, shortBow = false;
+                aotv = false, shortBow = false, dirt = false;
         for (int i = 0; i < 9; i++) {
             ItemStack item = items.get(i);
             if (item == null) continue;
@@ -104,6 +105,9 @@ public class HotbarUtils {
             } else if (name.contains("Shortbow")) {
                 shortBowSlot = i;
                 shortBow = true;
+            } else if (name.contains("InfiniDirt")) {
+                dirtWandSlot = i;
+                dirt = true;
             }
         }
         if (!terminator) terminatorSlot = -1;
@@ -122,5 +126,6 @@ public class HotbarUtils {
         if (!rod) rodSlot = -1;
         if (!aotv) aotvSlot = -1;
         if (!shortBow) shortBowSlot = -1;
+        if (!dirt) dirtWandSlot = -1;
     }
 }
