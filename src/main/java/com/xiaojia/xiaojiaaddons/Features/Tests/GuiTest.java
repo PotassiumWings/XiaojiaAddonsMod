@@ -32,7 +32,7 @@ public class GuiTest {
                 GuiUtils.drawBoxAtPos(
                         (float) pos.x, (float)pos.y, (float)pos.z,
                         100, 160, 240, 255,
-                        0.2F, 0.2F, 0
+                        0.1F, 0.1F, 0
                 );
             }
         }

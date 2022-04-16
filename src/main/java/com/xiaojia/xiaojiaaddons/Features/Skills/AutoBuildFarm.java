@@ -142,7 +142,8 @@ public class AutoBuildFarm {
                         }
                         Vector3d nearestVec = BlockUtils.getNearestBlock(
                                 getPlayer().getPositionEyes(MathUtils.partialTicks),
-                                currentFacing.mid
+                                currentFacing.mid,
+                                false
                         );
                         if (nearestVec == null) {
                             ChatLib.chat("? currentFacing " + currentFacing + ", nearest null");
@@ -206,9 +207,9 @@ public class AutoBuildFarm {
         }
         GuiUtils.enableESP();
         if (currentBlockPos != null)
-            GuiUtils.drawBoxAtBlock(currentBlockPos, new Color(255, 0, 0, 120), 1, 1, 0.0020000000949949026F);
+            GuiUtils.drawBoxAtBlock(currentBlockPos, new Color(255, 0, 0, 80), 1, 1, 0.0020000000949949026F);
         if (currentFacing != null)
-            GuiUtils.drawFilledFace(currentFacing, new Color(224, 104, 51, 240));
+            GuiUtils.drawFilledFace(currentFacing, new Color(224, 104, 51, 200));
         GuiUtils.disableESP();
     }
 

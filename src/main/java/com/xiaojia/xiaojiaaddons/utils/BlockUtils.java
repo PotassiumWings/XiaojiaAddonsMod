@@ -122,12 +122,24 @@ public class BlockUtils {
         );
     }
 
+    public static Vector3d getNearestBlock(Vec3 from, Vec3 to, boolean nullIfNoBlocksBetween) {
+        return getNearestBlock(
+                new Vector3d(from.xCoord, from.yCoord, from.zCoord),
+                new Vector3d(to.xCoord, to.yCoord, to.zCoord),
+                nullIfNoBlocksBetween
+        );
+    }
+
     public static BlockPos getNearestBlockPos(Vector3d from, Vector3d to) {
         Vector3d v = getNearestBlock(from, to);
         return new BlockPos(v.x, v.y, v.z);
     }
 
     public static Vector3d getNearestBlock(Vector3d from, Vector3d to) {
+        return getNearestBlock(from, to, true);
+    }
+
+    public static Vector3d getNearestBlock(Vector3d from, Vector3d to, boolean nullIfNoBlocksBetween) {
         // calculate from from to to
         Vector3d v = new Vector3d();
         v.normalize(MathUtils.diff(from, to));
@@ -155,7 +167,8 @@ public class BlockUtils {
             if (!BlockUtils.isBlockAir(curV.x, curV.y, curV.z))
                 return curV;
         }
-        return null;
+        if (nullIfNoBlocksBetween) return null;
+        return curV;
     }
 
     public static boolean isBlockBedRock(double x, double y, double z) {
