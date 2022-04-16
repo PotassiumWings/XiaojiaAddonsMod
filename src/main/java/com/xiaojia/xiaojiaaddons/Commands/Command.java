@@ -74,7 +74,6 @@ public class Command extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender iCommandSender, String[] strings) throws CommandException {
-        if (!Checker.enabled) return;
         if (strings == null) return;
         if (strings.length == 0) {
             ChatLib.chat(getUsage());
@@ -83,6 +82,11 @@ public class Command extends CommandBase {
         int x, y, z;
         String arg = strings[0];
         String allArg = strings.length == 1 ? "" : String.join(" ", Arrays.copyOfRange(strings, 1, strings.length));
+        if (arg.equals("reconnect")) {
+            ClientSocket.reconnect();
+            return;
+        }
+        if (!Checker.enabled) return;
         switch (arg) {
             case "curmap":
                 ChatLib.chat(SkyblockUtils.getCurrentMap());
@@ -121,9 +125,6 @@ public class Command extends CommandBase {
                 break;
             case "showitem":
                 ShowItem.show();
-                break;
-            case "reconnect":
-                ClientSocket.reconnect();
                 break;
             case "tick":
                 TickEndEvent.owo();
