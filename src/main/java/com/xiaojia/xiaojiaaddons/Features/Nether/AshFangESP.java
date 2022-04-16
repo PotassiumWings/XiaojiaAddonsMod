@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -78,5 +79,9 @@ public class AshFangESP extends RenderEntityESP {
         float y = getY(entity);
         float z = getZ(entity);
         GuiUtils.drawLine(x, y, z, -484.5F, 137.5F, -1015.5F, new Color(255, 0, 0), 2);
+    }
+
+    public boolean enabled() {
+        return SkyblockUtils.isInNether();
     }
 }

@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Items;
@@ -45,6 +46,11 @@ public class AshFangGravityESP  extends RenderEntityESP {
             return new EntityInfo(hashMap);
         }
         return null;
+    }
+
+    @Override
+    public boolean enabled() {
+        return SkyblockUtils.isInNether();
     }
 
     private boolean isGravityCenter(Entity entity) {

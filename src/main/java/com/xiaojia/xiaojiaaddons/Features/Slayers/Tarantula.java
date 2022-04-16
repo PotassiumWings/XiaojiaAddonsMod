@@ -52,4 +52,9 @@ public class Tarantula extends RenderEntityESP {
         }
         return null;
     }
+
+    @Override
+    public boolean enabled() {
+        return true;
+    }
 }

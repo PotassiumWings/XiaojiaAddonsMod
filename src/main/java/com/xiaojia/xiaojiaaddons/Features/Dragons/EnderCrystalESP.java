@@ -25,7 +25,6 @@ public class EnderCrystalESP extends RenderEntityESP {
 
     @Override
     public EntityInfo getEntityInfo(Entity entity) {
-        if (!Checker.enabled || !SkyblockUtils.isInDragon()) return null;
         if (!(entity instanceof EntityEnderCrystal) || !Configs.CrystalESP) return null;
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("entity", entity);
@@ -38,5 +37,10 @@ public class EnderCrystalESP extends RenderEntityESP {
         hashMap.put("isFilled", true);
         hashMap.put("isESP", true);
         return new EntityInfo(hashMap);
+    }
+
+    @Override
+    public boolean enabled() {
+        return SkyblockUtils.isInDragon();
     }
 }

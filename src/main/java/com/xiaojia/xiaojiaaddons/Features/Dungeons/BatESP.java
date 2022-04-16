@@ -50,4 +50,9 @@ public class BatESP extends RenderEntityESP {
         hashMap.put("isFilled", true);
         return new EntityInfo(hashMap);
     }
+
+    @Override
+    public boolean enabled() {
+        return true;
+    }
 }

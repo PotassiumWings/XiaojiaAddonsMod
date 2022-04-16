@@ -74,4 +74,9 @@ public class LividESP extends RenderEntityESP {
         hashMap.put("kind", "Livid");
         return new EntityInfo(hashMap);
     }
+
+    @Override
+    public boolean enabled() {
+        return (Dungeon.bossEntry > Dungeon.runStarted && Dungeon.floorInt == 5);
+    }
 }

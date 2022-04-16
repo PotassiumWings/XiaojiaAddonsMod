@@ -2,18 +2,14 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
-import com.xiaojia.xiaojiaaddons.Events.BlockChangeEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
-import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Features.Remote.RemoteUtils;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
@@ -26,18 +22,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class ThreeWeirdos {
     private static final String url = "https://cdn.jsdelivr.net/gh/Skytils/SkytilsMod-Data@main/solvers/threeweirdos.json";
-    private static String npc = null;
     private static final HashSet<String> solutions = new HashSet<>();
-
+    private static String npc = null;
     private static long lastFetch = 0;
 
     public static void fetch() {
@@ -66,7 +60,7 @@ public class ThreeWeirdos {
         if (!Dungeon.currentRoom.equals("Three Weirdos")) return;
         String message = ChatLib.removeFormatting(event.message.getUnformattedText()).trim();
         if (message.matches("PUZZLE SOLVED! [a-zA-Z0-9_]+ wasn't fooled by.*") ||
-            message.matches("PUZZLE FAIL! [a-zA-Z0-9_]+ was fooled by \\w+! Yikes!")) {
+                message.matches("PUZZLE FAIL! [a-zA-Z0-9_]+ was fooled by \\w+! Yikes!")) {
             npc = null;
         }
         // question

@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -47,5 +48,9 @@ public class KeyESP extends RenderEntityESP {
             return new EntityInfo(hashMap);
         }
         return null;
+    }
+
+    public boolean enabled() {
+        return SkyblockUtils.isInDungeon() && Dungeon.bloodOpen <= Dungeon.runStarted;
     }
 }

@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Vector2i;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -62,6 +63,7 @@ public class BloodAssist {
         if (!Checker.enabled) return;
         if (!Configs.BloodAssist) return;
         if (!SkyblockUtils.isInDungeon()) return;
+        if (Dungeon.bossEntry > Dungeon.runStarted) return;
         for (EntityArmorStand skull : skulls) {
             String uuid = skull.getUniqueID().toString();
             BloodMobInfo info = infos.get(uuid);

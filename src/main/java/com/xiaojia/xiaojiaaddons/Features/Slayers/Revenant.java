@@ -54,4 +54,9 @@ public class Revenant extends RenderEntityESP {
         }
         return null;
     }
+
+    @Override
+    public boolean enabled() {
+        return true;
+    }
 }

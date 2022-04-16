@@ -44,6 +44,12 @@ public class SkyblockUtils {
             "Magma Fields", "Crystal Nucleus",
             "Khazad", "Dragon's Lair"
     ));
+    private static final ArrayList<String> netherMaps = new ArrayList<>(Arrays.asList(
+            "Barbarian Outpost", "The Bastion", "Blazing Volcano", "Burning Desert",
+            "Cathedral", "Crimson Fields", "Dojo", "Dragontail", "Forgotten Skull",
+            "Kuudra's End", "Mage Outpost", "Magma Chamber", "Mystic Marsh",
+            "Odger's Hut", "Ruins of Ashfang", "Stronghold", "The Wasteland"
+    ));
     public static int calculatedPing = -1;
     public static long[] pings = new long[]{-1, -1, -1, -1, -1};
     public static int pingsIndex = 0;
@@ -52,6 +58,7 @@ public class SkyblockUtils {
     private static boolean set = false;
     private static boolean isInCrystalHollows = false;
     private static boolean isInDwarven = false;
+    private static boolean isInNether = false;
     private static String dungeon = "F6";
     private long lastPing;
     private Thread pingThread;
@@ -100,6 +107,15 @@ public class SkyblockUtils {
                 if (line.contains(map)) {
                     result = map;
                     isInDwarven = true;
+                }
+            }
+        }
+
+        if (result.equals("Others")) {
+            for (String map : netherMaps) {
+                if (line.contains(map)) {
+                    result = map;
+                    isInNether = true;
                 }
             }
         }
@@ -199,6 +215,10 @@ public class SkyblockUtils {
 
     public static boolean isInSkyblock() {
         return ChatLib.removeFormatting(ScoreBoard.title).contains("SKYBLOCK");
+    }
+
+    public static boolean isInNether() {
+        return isInNether;
     }
 
     public static int calcPing() {

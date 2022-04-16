@@ -92,7 +92,6 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.MonolithESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NearbyChestESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.OneTick;
-import com.xiaojia.xiaojiaaddons.Features.QOL.PetShow;
 import com.xiaojia.xiaojiaaddons.Features.QOL.RelicESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.RemoveBlindness;
 import com.xiaojia.xiaojiaaddons.Features.QOL.ShowBookName;
@@ -308,7 +307,6 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new RemoveBlindness());
         MinecraftForge.EVENT_BUS.register(new HoldRightClick());
         MinecraftForge.EVENT_BUS.register(new TransferBack());
-        MinecraftForge.EVENT_BUS.register(new PetShow());
 
         // Skills
         MinecraftForge.EVENT_BUS.register(new AutoCloseCrystalHollowsChest());

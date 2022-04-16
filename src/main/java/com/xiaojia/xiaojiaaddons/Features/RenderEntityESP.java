@@ -25,7 +25,9 @@ public abstract class RenderEntityESP {
     @SubscribeEvent
     public final void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
+        if (!Configs.GeneralESP) return;
         if (getWorld() == null) return;
+        if (!enabled()) return;
         try {
             List<EntityInfo> newEntities = new ArrayList<>();
             for (Entity entity : getEntities()) {
@@ -99,4 +101,6 @@ public abstract class RenderEntityESP {
 
     // in TICK phase, return the entityInfo to be dealt with.
     public abstract EntityInfo getEntityInfo(Entity entity);
+
+    public abstract boolean enabled();
 }

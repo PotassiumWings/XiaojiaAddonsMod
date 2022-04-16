@@ -51,4 +51,9 @@ public class Voidgloom extends RenderEntityESP {
         }
         return null;
     }
+
+    @Override
+    public boolean enabled() {
+        return true;
+    }
 }

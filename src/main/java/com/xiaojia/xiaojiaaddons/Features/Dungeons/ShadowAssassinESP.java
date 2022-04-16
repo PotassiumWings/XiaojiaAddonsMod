@@ -45,4 +45,9 @@ public class ShadowAssassinESP extends RenderEntityESP {
         }
         return null;
     }
+
+    @Override
+    public boolean enabled() {
+        return true;
+    }
 }

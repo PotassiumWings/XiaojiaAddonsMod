@@ -42,6 +42,11 @@ public class FairySoul extends RenderEntityESP {
         return null;
     }
 
+    @Override
+    public boolean enabled() {
+        return true;
+    }
+
     private boolean isFairySoul(EntityArmorStand entity) {
         try {
             ItemStack helm = entity.getEquipmentInSlot(4);

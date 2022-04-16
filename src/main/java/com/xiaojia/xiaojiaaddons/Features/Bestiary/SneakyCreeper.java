@@ -25,7 +25,6 @@ public class SneakyCreeper extends RenderEntityESP {
 
     @Override
     public EntityInfo getEntityInfo(Entity entity) {
-        if (!Checker.enabled || !SkyblockUtils.isInGunpowderMines()) return null;
         if (!(entity instanceof EntityCreeper)) return null;
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("entity", entity);
@@ -35,5 +34,10 @@ public class SneakyCreeper extends RenderEntityESP {
         hashMap.put("kind", SNEAKYCREEPER_STRING);
         hashMap.put("fontColor", 0x33ff33);
         return new EntityInfo(hashMap);
+    }
+
+    @Override
+    public boolean enabled() {
+        return SkyblockUtils.isInGunpowderMines();
     }
 }

@@ -74,7 +74,6 @@ public class GhostQOL extends RenderEntityESP {
 
     @Override
     public EntityInfo getEntityInfo(Entity entity) {
-        if (!Checker.enabled || !SkyblockUtils.isInMist()) return null;
         if (!(entity instanceof EntityCreeper) || !runicGhostUUIDs.containsKey(entity.getUniqueID().toString()))
             return null;
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -86,6 +85,11 @@ public class GhostQOL extends RenderEntityESP {
         hashMap.put("isFilled", true);
         hashMap.put("kind", GHOST_STRING);
         return new EntityInfo(hashMap);
+    }
+
+    @Override
+    public boolean enabled() {
+        return SkyblockUtils.isInMist();
     }
 
     @SubscribeEvent

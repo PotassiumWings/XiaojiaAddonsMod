@@ -876,12 +876,6 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Other QOLs", parent = "QOL")
     public static boolean OtherQOL = false;
 
-    // PetShow
-    @Property(type = Property.Type.BOOLEAN, name = "Pet Show", parent = "Other QOLs",
-            description = "Display pet box.\n" +
-                    "Only useful for current alpha fishing.")
-    public static boolean PetShow = false;
-
     // FairySoul
     @Property(type = Property.Type.BOOLEAN, name = "Fairy Souls ESP", parent = "Other QOLs")
     public static boolean FairySoulESP = false;

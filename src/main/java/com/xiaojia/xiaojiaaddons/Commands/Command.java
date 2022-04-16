@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
@@ -123,6 +124,9 @@ public class Command extends CommandBase {
                 break;
             case "reconnect":
                 ClientSocket.reconnect();
+                break;
+            case "tick":
+                TickEndEvent.owo();
                 break;
 
             case "patterns":

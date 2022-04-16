@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.RenderEntityModelEvent;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
@@ -115,6 +116,10 @@ public class StarredMobESP extends RenderEntityESP {
         hashMap.put("height", height);
         hashMap.put("isESP", true);
         return new EntityInfo(hashMap);
+    }
+
+    public boolean enabled() {
+        return SkyblockUtils.isInDungeon() && Dungeon.bossEntry < Dungeon.runStarted;
     }
 
     @Override

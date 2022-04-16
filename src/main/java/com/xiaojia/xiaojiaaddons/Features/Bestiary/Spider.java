@@ -173,4 +173,8 @@ public class Spider extends RenderEntityESP {
         if (!Checker.enabled) return;
         shadowFuryWarnedInThisLobby = false;
     }
+
+    public boolean enabled() {
+        return SkyblockUtils.isInSpiderDen();
+    }
 }
