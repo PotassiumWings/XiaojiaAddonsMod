@@ -1494,6 +1494,18 @@ public class Configs {
                     "&c&lDONT FULLY AFK!")
     public static boolean AutoForaging = false;
 
+    // Farming
+    @Property(type = Property.Type.FOLDER, name = "Farming", parent = "Skills")
+    public static boolean FarmingFeatures = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Build Farm - Step 1", parent = "Farming",
+            description = "Stand on a block to start.\n" +
+                    "/farmingpoint to set farming point for corp to grow.\n" +
+                    "Keep adjusting till the expected blocks are correct.\n" +
+                    "Press the keybind and move along the highlighted block direction.\n" +
+                    "&6Requires Infinite Dirt Wand.")
+    public static boolean AutoBuildFarm1 = false;
+
     // GemstoneESP
     @Property(type = Property.Type.FOLDER, name = "Gemstone ESP", parent = "Skills",
             description = "Display ESP boxes of gemstones, \n" +

@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons;
 
 import com.xiaojia.xiaojiaaddons.Commands.AutoForagingCommand;
 import com.xiaojia.xiaojiaaddons.Commands.Command;
+import com.xiaojia.xiaojiaaddons.Commands.FarmingPoint;
 import com.xiaojia.xiaojiaaddons.Commands.PP;
 import com.xiaojia.xiaojiaaddons.Commands.TransferBackCommand;
 import com.xiaojia.xiaojiaaddons.Commands.XiaojiaChatTest;
@@ -103,6 +104,7 @@ import com.xiaojia.xiaojiaaddons.Features.Remote.DungeonLoot;
 import com.xiaojia.xiaojiaaddons.Features.Remote.DupedItems;
 import com.xiaojia.xiaojiaaddons.Features.Remote.LowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
+import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarm;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoCloseCrystalHollowsChest;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowder;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowderChest;
@@ -149,7 +151,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.5.6";
+    public static final String VERSION = "2.4.5.7";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -184,6 +186,7 @@ public class XiaojiaAddons {
         RelicESP.load();
 
         ClientCommandHandler.instance.registerCommand(new Command());
+        ClientCommandHandler.instance.registerCommand(new FarmingPoint());
         ClientCommandHandler.instance.registerCommand(new PP());
         ClientCommandHandler.instance.registerCommand(new AutoForagingCommand());
         ClientCommandHandler.instance.registerCommand(new TransferBackCommand());
@@ -314,6 +317,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoPowderChest());
         MinecraftForge.EVENT_BUS.register(new Foraging());
         MinecraftForge.EVENT_BUS.register(new Fishing());
+        MinecraftForge.EVENT_BUS.register(new AutoBuildFarm());
         MinecraftForge.EVENT_BUS.register(new GemstoneESP());
         MinecraftForge.EVENT_BUS.register(new JadeCrystalHelper());
         MinecraftForge.EVENT_BUS.register(new Experimentation());
