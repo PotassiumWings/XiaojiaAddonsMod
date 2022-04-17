@@ -40,12 +40,14 @@ public class AutoBuildFarm {
 
     private static BlockPos currentBlockPos = null;
     private static BlockUtils.Face currentFacing = null;
+    private static int step = 1;
 
     // TODO: mode
     public static void setFarmingPoint(int mode) {
         float x = getX(getPlayer());
         float y = getY(getPlayer()) - 0.01F;
         float z = getZ(getPlayer());
+        step = 1;
         blocksOne.clear();
         blocksTwo.clear();
         toRemoveBlocks.clear();
@@ -96,8 +98,11 @@ public class AutoBuildFarm {
         if (!Checker.enabled) return;
         if (keyBind.isPressed()) {
             isBuilding = !isBuilding;
-            ChatLib.chat(isBuilding ? "Auto Build Farm - 1 &aactivated" : "Auto Build Farm - 1 &cdeactivated");
+            ChatLib.chat("Auto Build Farm - " + step + (isBuilding ? " &aactivated" : " &cdeactivated"));
         }
+        if (step != 1) return;
+
+        // step 1
         if (!Configs.AutoBuildFarm1) return;
         if (!isBuilding) return;
         if (autoBuildThreadLock) return;
@@ -177,6 +182,93 @@ public class AutoBuildFarm {
                             break;
                     }
                 }
+                ChatLib.chat("Farm model built. Expand them with builder's wand, " +
+                        "set side borders before pressing keybind again.");
+                stop(false);
+                step = 2;
+            } catch (Exception e) {
+                e.printStackTrace();
+                stop();
+            } finally {
+                autoBuildThreadLock = false;
+            }
+        }).start();
+    }
+
+    @SubscribeEvent
+    public void onTickStep2(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (step != 2) return;
+        if (!Configs.AutoBuildFarm2) return;
+        if (!isBuilding) return;
+        if (autoBuildThreadLock) return;
+        if (getPlayer() == null) return;
+        autoBuildThreadLock = true;
+        new Thread(() -> {
+            try {
+                ControlUtils.changeDirection(getYaw() > 0 ? 120 : -120,  -10);
+                ControlUtils.stopMoving();
+                ControlUtils.holdLeftClick();
+                ControlUtils.holdForward();
+                float y = getY(getPlayer());
+                while (enabled()) {
+                    y = getY(getPlayer());
+                    while (getY(getPlayer()) >= y && enabled()) {
+                        ControlUtils.holdLeftClick();
+                        ControlUtils.holdForward();
+                        Thread.sleep(20);
+                    }
+                    if (!enabled()) break;
+                    ControlUtils.releaseLeftClick();
+                    ControlUtils.releaseForward();
+                    ControlUtils.faceSlowly(-getYaw(), -10);
+                    while (getY(getPlayer()) != y - 3 && getY(getPlayer()) < y + 200 && enabled())
+                        Thread.sleep(20);
+                    // tped up
+                    if (getY(getPlayer()) > y + 200) break;
+                }
+                if (enabled()) {
+                    stop(false);
+                    step = 3;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                stop();
+            } finally {
+                autoBuildThreadLock = false;
+            }
+        }).start();
+    }
+
+    @SubscribeEvent
+    public void onTickStep3(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (step != 3) return;
+        if (!Configs.AutoBuildFarm3) return;
+        if (!isBuilding) return;
+        if (autoBuildThreadLock) return;
+        if (getPlayer() == null) return;
+        autoBuildThreadLock = true;
+        new Thread(() -> {
+            try {
+                ControlUtils.changeDirection(getYaw() > 0 ? 90 : -90,  80);
+                ControlUtils.stopMoving();
+                ControlUtils.holdRightClick();
+                ControlUtils.holdForward();
+
+                float y = getY(getPlayer());
+                while (getY(getPlayer()) == y && enabled()) {
+                    ControlUtils.stopMoving();
+                    ControlUtils.holdRightClick();
+                    ControlUtils.holdForward();
+                    Thread.sleep(20);
+                }
+                ControlUtils.stopMoving();
+                ControlUtils.releaseRightClick();
+                if (enabled()) {
+                    ControlUtils.jump();
+                    ControlUtils.jump();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 stop();
@@ -187,7 +279,7 @@ public class AutoBuildFarm {
     }
 
     private boolean enabled() {
-        return isBuilding && Checker.enabled && Configs.AutoBuildFarm1;
+        return isBuilding && Checker.enabled;
     }
 
     private void stop() {
@@ -199,7 +291,7 @@ public class AutoBuildFarm {
         if (getPlayer() != null && b)
             getPlayer().playSound("random.successful_hit", 1000, 1);
         isBuilding = false;
-        ChatLib.chat("Auto Build Farm - 1 &cdeactivated");
+        ChatLib.chat("Auto Build Farm - " + step + " &cdeactivated");
     }
 
     @SubscribeEvent

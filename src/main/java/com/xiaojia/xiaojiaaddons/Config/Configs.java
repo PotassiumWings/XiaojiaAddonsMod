@@ -1509,6 +1509,21 @@ public class Configs {
                     "&6Requires Infinite Dirt Wand.")
     public static boolean AutoBuildFarm1 = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Build Farm - Step 2", parent = "Farming",
+            description = "Stand on left top of your farm.\n" +
+                    "Make sure you can fall between layers.\n" +
+                    "Use rancher's boots to set speed to 220\n" +
+                    "This step automatically helps you to remove the dirt.")
+    public static boolean AutoBuildFarm2 = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Build Farm - Step 3", parent = "Farming",
+            description = "This makes you move along and till the dirt.")
+    public static boolean AutoBuildFarm3 = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Build Farm - Step 2 CD", parent = "Farming",
+            description = "CD between layers.", min = 100, max = 2000, step = 20)
+    public static int AutoBuildFarm2CD = 1000;
+
     @Property(type = Property.Type.NUMBER, name = "Auto Build Farm - Step 1 CD", parent = "Farming",
             description = "CD between placing dirt. Must be higher than your ping.", min = 100, max = 2000, step = 20)
     public static int AutoBuildFarm1CD = 500;

@@ -442,6 +442,13 @@ public class ControlUtils {
         KeyBinding.setKeyBindState(jumpKeyBind.mcKeyBinding().getKeyCode(), false);
     }
 
+    public static void jump() throws InterruptedException {
+        KeyBinding.setKeyBindState(jumpKeyBind.mcKeyBinding().getKeyCode(), true);
+        Thread.sleep(30);
+        KeyBinding.setKeyBindState(jumpKeyBind.mcKeyBinding().getKeyCode(), false);
+        Thread.sleep(30);
+    }
+
     public static void moveForward(long delta) throws InterruptedException {
         KeyBinding.setKeyBindState(moveForwardKeyBind.mcKeyBinding().getKeyCode(), true);
         Thread.sleep(delta);
