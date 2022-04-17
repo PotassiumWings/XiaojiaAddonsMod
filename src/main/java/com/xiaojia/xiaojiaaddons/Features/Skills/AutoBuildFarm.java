@@ -22,8 +22,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getPitch;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getYaw;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
@@ -161,9 +163,14 @@ public class AutoBuildFarm {
                         }
 
                         ControlUtils.face(faceCenter.x, faceCenter.y, faceCenter.z);
-                        ControlUtils.setHeldItemIndex(index);
+                        float yaw = getYaw();
+                        float pitch = getPitch();
+                        float x = getX(getPlayer()), y = getY(getPlayer()), z = getZ(getPlayer());
                         ControlUtils.stopMoving();
-                        Thread.sleep(Configs.AutoBuildFarm1CD);
+                        Thread.sleep(250);
+                        if (ControlUtils.differentDirection(yaw, pitch) || MathUtils.differentPosition(x, y, z))
+                            continue;
+                        ControlUtils.setHeldItemIndex(index);
                         ControlUtils.rightClick();
                         Thread.sleep(Configs.AutoBuildFarm1CD);
                         if (!BlockUtils.isBlockAir(pos))

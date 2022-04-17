@@ -211,11 +211,15 @@ public class ControlUtils {
     }
 
     public static void checkDirection(float yaw, float pitch, boolean shouldThrow) throws InterruptedException {
-        if ((Math.abs(getYaw() - yaw) > 1e-2 && Math.abs(getYaw() - yaw) < 360 - 1e-2) ||
-                Math.abs(getPitch() - pitch) > 1e-2 && shouldThrow) {
+        if (differentDirection(yaw, pitch) && shouldThrow) {
             ChatLib.chat("Detected yaw/pitch move, interrupted.");
             throw new InterruptedException();
         }
+    }
+
+    public static boolean differentDirection(float yaw, float pitch) {
+        return (Math.abs(getYaw() - yaw) > 1e-2 && Math.abs(getYaw() - yaw) < 360 - 1e-2) ||
+                Math.abs(getPitch() - pitch) > 1e-2;
     }
 
     public synchronized static void faceSlowly(float tx, float ty, float tz, boolean shouldThrow) throws InterruptedException {
