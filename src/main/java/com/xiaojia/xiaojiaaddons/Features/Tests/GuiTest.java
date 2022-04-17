@@ -1,5 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Tests;
 
+import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -25,6 +27,8 @@ public class GuiTest {
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.DevTracing) return;
 //        Entity player = getPlayer();
         GuiUtils.enableESP();
         synchronized (blocks) {

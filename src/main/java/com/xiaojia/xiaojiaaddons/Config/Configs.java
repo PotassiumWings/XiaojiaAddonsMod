@@ -25,6 +25,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Dev Water", parent = "Dev Mode")
     public static boolean DevWater = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Dev Tracing", parent = "Dev Mode")
+    public static boolean DevTracing = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Particle Spawn Message", parent = "Dev Mode")
     public static boolean ParticleSpawnMessage = false;
 
@@ -1505,6 +1508,10 @@ public class Configs {
                     "Press the keybind and move along the highlighted block direction.\n" +
                     "&6Requires Infinite Dirt Wand.")
     public static boolean AutoBuildFarm1 = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Build Farm - Step 1 CD", parent = "Farming",
+            description = "CD between placing dirt. Must be higher than your ping.", min = 100, max = 2000, step = 20)
+    public static int AutoBuildFarm1CD = 500;
 
     // GemstoneESP
     @Property(type = Property.Type.FOLDER, name = "Gemstone ESP", parent = "Skills",

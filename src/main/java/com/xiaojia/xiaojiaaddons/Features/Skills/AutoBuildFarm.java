@@ -108,7 +108,7 @@ public class AutoBuildFarm {
                 OUT:
                 for (BlockPos pos : blocks) {
                     currentBlockPos = pos;
-                    while (BlockUtils.isBlockAir(pos)) {
+                    while (BlockUtils.isBlockAir(pos) && enabled()) {
                         ArrayList<BlockPos> nearest = new ArrayList<>(Arrays.asList(
                                 pos.up(), pos.down(),
                                 pos.east(), pos.west(),
@@ -163,9 +163,11 @@ public class AutoBuildFarm {
                         ControlUtils.face(faceCenter.x, faceCenter.y, faceCenter.z);
                         ControlUtils.setHeldItemIndex(index);
                         ControlUtils.stopMoving();
-                        Thread.sleep(250);
+                        Thread.sleep(Configs.AutoBuildFarm1CD);
                         ControlUtils.rightClick();
-                        break;
+                        Thread.sleep(Configs.AutoBuildFarm1CD);
+                        if (!BlockUtils.isBlockAir(pos))
+                            break;
                     }
                 }
             } catch (Exception e) {
