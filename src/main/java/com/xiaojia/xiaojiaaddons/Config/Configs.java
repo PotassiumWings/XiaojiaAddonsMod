@@ -1520,6 +1520,17 @@ public class Configs {
             description = "This makes you move along and till the dirt.")
     public static boolean AutoBuildFarm3 = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Build Farm - Step 4", parent = "Farming",
+            description = "Stand at the top edge of your farm." +
+                    "Make sure your stash is full of materials.\n" +
+                    "Put 1 material in your basket of seeds.\n" +
+                    "Automatically /pickupstash and use basket of seeds.\n" +
+                    "&cDon't move or click, only press keybind if u want to quit.")
+    public static boolean AutoBuildFarm4 = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Island Size", parent = "Farming")
+    public static int IslandSize = 170;
+
     @Property(type = Property.Type.NUMBER, name = "Auto Build Farm - Step 2 CD", parent = "Farming",
             description = "CD between layers.", min = 100, max = 2000, step = 20)
     public static int AutoBuildFarm2CD = 1000;

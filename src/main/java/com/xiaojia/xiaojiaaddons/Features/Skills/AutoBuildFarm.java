@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.BlockChangeEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -11,8 +12,11 @@ import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -36,18 +40,17 @@ public class AutoBuildFarm {
     private static final ArrayList<BlockPos> blocksTwo = new ArrayList<>();
     private static final ArrayList<BlockPos> toRemoveBlocks = new ArrayList<>();
     private static final KeyBind keyBind = new KeyBind("Auto Build Farm", Keyboard.KEY_NONE);
+    private static final ArrayList<BlockPos> notTilled = new ArrayList<>();
     private static boolean isBuilding = false;
     private static boolean autoBuildThreadLock = false;
     private static BlockPos startPos = null;
-
     private static BlockPos currentBlockPos = null;
     private static BlockUtils.Face currentFacing = null;
     private static int step = 1;
 
-    private static ArrayList<BlockPos> notTilled = new ArrayList<>();
-
     public static void setStep(int s) {
         step = s;
+        ChatLib.chat("Successfully set step to " + s + ".");
     }
 
     // TODO: mode
@@ -99,6 +102,26 @@ public class AutoBuildFarm {
             return new BlockUtils.Face(v.x - 0.5, v.y - 0.5, v.z, v.x + 0.5, v.y + 0.5, v.z);
         }
         return null;
+    }
+
+    // check after step 3
+    public static void check(int sx, int sy, int sz, int tx, int ty, int tz) {
+        ArrayList<BlockPos> blocks = new ArrayList<>();
+        ChatLib.chat(String.format("Checking from (%d, %d, %d) to (%d, %d, %d).", sx, sy, sz, tx, ty, tz));
+        for (int x = sx; x <= tx; x++) {
+            for (int y = sy; y <= ty; y++) {
+                for (int z = sz; z <= tz; z++) {
+                    if (BlockUtils.isBlockAir(x, y + 1, z) && BlockUtils.getBlockAt(x, y, z) == Blocks.dirt) {
+                        blocks.add(new BlockPos(x, y, z));
+                        ChatLib.chat(String.format("Detected dirt: (%d %d %d)", x, y, z));
+                    }
+                }
+            }
+        }
+        synchronized (notTilled) {
+            notTilled.addAll(blocks);
+        }
+        ChatLib.chat("Finished checking.");
     }
 
     @SubscribeEvent
@@ -214,7 +237,7 @@ public class AutoBuildFarm {
         autoBuildThreadLock = true;
         new Thread(() -> {
             try {
-                ControlUtils.changeDirection(getYaw() > 0 ? 120 : -120,  -10);
+                ControlUtils.changeDirection(getYaw() > 0 ? 120 : -120, -10);
                 ControlUtils.stopMoving();
                 ControlUtils.holdLeftClick();
                 ControlUtils.holdForward();
@@ -259,7 +282,7 @@ public class AutoBuildFarm {
         autoBuildThreadLock = true;
         new Thread(() -> {
             try {
-                ControlUtils.changeDirection(getYaw() > 0 ? 90 : -90,  45);
+                ControlUtils.changeDirection(getYaw() > 0 ? 90 : -90, 45);
                 ControlUtils.stopMoving();
                 ControlUtils.holdRightClick();
                 ControlUtils.holdForward();
@@ -276,7 +299,7 @@ public class AutoBuildFarm {
                 if (enabled()) {
                     new Thread(() -> {
                         try {
-                            ControlUtils.faceSlowly(getYaw() > 0 ? -90 : 90,  45);
+                            ControlUtils.faceSlowly(getYaw() > 0 ? -90 : 90, 45);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -296,26 +319,157 @@ public class AutoBuildFarm {
         }).start();
     }
 
-    // check after step 3
-    public static void check(int sx, int sy, int sz, int dx, int dy, int dz) {
-        int tx = sx + dx, ty = sy + dy, tz = sz + dz;
-        ArrayList<BlockPos> blocks = new ArrayList<>();
-        ChatLib.chat(String.format("Checking from (%d, %d, %d) to (%d, %d, %d).", sx, sy, sz, tx, ty, tz));
-        for (int x = sx; x <= tx; x++) {
-            for (int y = sy; y <= ty; y++) {
-                for (int z = sz; z <= tz; z++) {
-                    if (BlockUtils.isBlockAir(x, y + 1, z) && BlockUtils.getBlockAt(x, y, z) == Blocks.dirt) {
-                        blocks.add(new BlockPos(x, y, z));
+    @SubscribeEvent
+    public void onTickStep4(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (step != 4) return;
+        if (!Configs.AutoBuildFarm4) return;
+        if (!isBuilding) return;
+        if (autoBuildThreadLock) return;
+        if (getPlayer() == null) return;
+        autoBuildThreadLock = true;
+        new Thread(() -> {
+            try {
+                // check farming material
+                ItemStack held = ControlUtils.getHeldItemStack();
+                if (!NBTUtils.getSkyBlockID(held).equals("BASKET_OF_SEEDS")) {
+                    ChatLib.chat("Hold basket of seeds to continue.");
+                    stop();
+                    return;
+                }
+                ControlUtils.leftClick();
+                Inventory inventory = ControlUtils.getOpenedInventory();
+                while (enabled() && !inventory.getName().contains("Basket of Seeds")) {
+                    Thread.sleep(20);
+                    inventory = ControlUtils.getOpenedInventory();
+                }
+                if (!enabled()) return;
+                ItemStack mat = null;
+                for (ItemStack itemStack : inventory.getItemStacks()) {
+                    if (itemStack != null) {
+                        mat = itemStack;
+                        break;
                     }
                 }
+                if (mat == null) {
+                    ChatLib.chat("Put material in basket.");
+                    stop();
+                    return;
+                }
+                ChatLib.chat("Got material: " + mat.getUnlocalizedName());
+                getPlayer().closeScreen();
+                Thread.sleep(1000);
+
+                // step 1: validate edge
+                float x = getX(getPlayer());
+                float y = getY(getPlayer());
+                float z = getZ(getPlayer());
+                BlockPos pos1 = new BlockPos(x, y - 1e-4, z);
+                BlockPos pos2 = new BlockPos(x, y - 1e-4, z - 1);
+                BlockPos pos3 = new BlockPos(x, y - 1e-4, z - 2);
+                BlockPos pos4 = new BlockPos(x, y - 1e-4, z - 3);
+                ControlUtils.jump();
+                ControlUtils.jump();
+
+                ControlUtils.faceSlowly(getYaw() > 0 ? 90 : -90, 0);
+                ControlUtils.moveBackward(250);
+
+                ControlUtils.sneak();
+                while (getY(getPlayer()) + 1.5 > y - 0.5)
+                    Thread.sleep(20);
+                ControlUtils.unSneak();
+
+                // found position
+                ChatLib.chat("Found starting position.");
+                ChatLib.chat("Set material per row to: " + Configs.IslandSize);
+
+                int materialLeft = 0;
+                // start clicking
+                while (pos1.getY() > 3 && enabled()) {
+                    while (materialLeft < 4 * Configs.IslandSize && enabled()) {
+                        materialLeft = refillMaterial(mat);
+                    }
+                    materialLeft -= 4 * Configs.IslandSize;
+                    if (!enabled()) break;
+
+                    ControlUtils.faceSlowly(pos1.getX() + 0.5, pos1.getY() + 0.5, pos1.getZ() + 0.5);
+                    if (!enabled()) break;
+                    ControlUtils.rightClick();
+                    ControlUtils.faceSlowly(pos2.getX() + 0.5, pos2.getY() + 0.5, pos2.getZ() + 0.5);
+                    if (!enabled()) break;
+                    ControlUtils.rightClick();
+                    ControlUtils.faceSlowly(pos3.getX() + 0.5, pos3.getY() + 0.5, pos3.getZ() + 0.5);
+                    if (!enabled()) break;
+                    ControlUtils.rightClick();
+                    ControlUtils.faceSlowly(pos4.getX() + 0.5, pos4.getY() + 0.5, pos4.getZ() + 0.5);
+                    if (!enabled()) break;
+                    ControlUtils.rightClick();
+                    y -= 3;
+
+                    ControlUtils.sneak();
+                    while (getY(getPlayer()) + 1.5 > y - 0.5 && enabled())
+                        Thread.sleep(20);
+                    ControlUtils.unSneak();
+                    pos1 = pos1.down(3);
+                    pos2 = pos2.down(3);
+                    pos3 = pos3.down(3);
+                    pos4 = pos4.down(3);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                stop();
+            } finally {
+                autoBuildThreadLock = false;
             }
+        }).start();
+    }
+
+    private static boolean picked = false;
+
+    private static int refillMaterial(ItemStack mat) throws InterruptedException {
+        // left left in basket
+        ChatLib.say("/pickupstash");
+        picked = false;
+        while (!picked && enabled()) {
+            Thread.sleep(20);
         }
-        synchronized (notTilled) {
-            notTilled.addAll(blocks);
+        if (picked) {
+            picked = false;
+            ControlUtils.leftClick();
+            Inventory inventory = ControlUtils.getOpenedInventory();
+            while (enabled() && !inventory.getName().contains("Basket of Seeds")) {
+                Thread.sleep(20);
+                inventory = ControlUtils.getOpenedInventory();
+            }
+            for (int i = 45; i < 90; i++) {
+                ItemStack slotItem = inventory.getItemInSlot(i);
+                if (slotItem == null) continue;
+                if (slotItem.getItem() == mat.getItem()) {
+                    inventory.click(i, true, "LEFT");
+                }
+            }
+            int current = 0;
+            for (int i = 0; i < 45; i++) {
+                ItemStack slotItem = inventory.getItemInSlot(i);
+                if (slotItem == null || slotItem.getItem() != mat.getItem()) continue;
+                current += slotItem.stackSize;
+            }
+            return current;
+        }
+        return -1;
+    }
+
+    @SubscribeEvent
+    public void onReceive(ClientChatReceivedEvent event) {
+        if (!Checker.enabled) return;
+        if (event.type != 0)return;
+        if (ChatLib.removeFormatting(event.message.getUnformattedText())
+                .matches("You picked up \\d+ items from your item stash!")) {
+            picked = true;
         }
     }
 
-    private boolean enabled() {
+    private static boolean enabled() {
         return isBuilding && Checker.enabled;
     }
 
