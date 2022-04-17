@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.NetUtils;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.BlockPos;
@@ -16,6 +17,7 @@ public class NoSlowdown {
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!Checker.enabled) return;
+        if (!SkyblockUtils.isInSkyblock()) return;
         try {
             ItemStack itemStack = ControlUtils.getHeldItemStack();
             if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR &&
