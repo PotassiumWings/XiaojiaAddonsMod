@@ -1528,12 +1528,17 @@ public class Configs {
                     "&cDon't move or click, only press keybind if u want to quit.")
     public static boolean AutoBuildFarm4 = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Build Farm - Step 5", parent = "Farming",
+            description = "Places lighting blocks for you.\n" +
+                    "Make sure your inventory is filled with Sea Lantern or Glowstone.\n")
+    public static boolean AutoBuildFarm5 = false;
+
     @Property(type = Property.Type.NUMBER, name = "Island Size", parent = "Farming")
     public static int IslandSize = 170;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Build Farm - Step 2 CD", parent = "Farming",
-            description = "CD between layers.", min = 100, max = 2000, step = 20)
-    public static int AutoBuildFarm2CD = 1000;
+    @Property(type = Property.Type.NUMBER, name = "Auto Build Farm - Step 5 CD", parent = "Farming",
+            description = "CD between placing blocks.", min = 20, max = 2000, step = 20)
+    public static int AutoBuildFarm5CD = 320;
 
     @Property(type = Property.Type.NUMBER, name = "Auto Build Farm - Step 1 CD", parent = "Farming",
             description = "CD between placing dirt. Must be higher than your ping.", min = 100, max = 2000, step = 20)
