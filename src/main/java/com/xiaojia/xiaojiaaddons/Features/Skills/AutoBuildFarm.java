@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Skills;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.BlockChangeEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
@@ -10,6 +11,7 @@ import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -41,6 +43,12 @@ public class AutoBuildFarm {
     private static BlockPos currentBlockPos = null;
     private static BlockUtils.Face currentFacing = null;
     private static int step = 1;
+
+    private static ArrayList<BlockPos> notTilled = new ArrayList<>();
+
+    public static void setStep(int s) {
+        step = s;
+    }
 
     // TODO: mode
     public static void setFarmingPoint(int mode) {
@@ -251,7 +259,7 @@ public class AutoBuildFarm {
         autoBuildThreadLock = true;
         new Thread(() -> {
             try {
-                ControlUtils.changeDirection(getYaw() > 0 ? 90 : -90,  80);
+                ControlUtils.changeDirection(getYaw() > 0 ? 90 : -90,  45);
                 ControlUtils.stopMoving();
                 ControlUtils.holdRightClick();
                 ControlUtils.holdForward();
@@ -266,8 +274,18 @@ public class AutoBuildFarm {
                 ControlUtils.stopMoving();
                 ControlUtils.releaseRightClick();
                 if (enabled()) {
+                    new Thread(() -> {
+                        try {
+                            ControlUtils.faceSlowly(getYaw() > 0 ? -90 : 90,  45);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
                     ControlUtils.jump();
+                    ChatLib.chat("Jump!");
                     ControlUtils.jump();
+                    ChatLib.chat("Jump!");
+                    stop(false);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -276,6 +294,25 @@ public class AutoBuildFarm {
                 autoBuildThreadLock = false;
             }
         }).start();
+    }
+
+    // check after step 3
+    public static void check(int sx, int sy, int sz, int dx, int dy, int dz) {
+        int tx = sx + dx, ty = sy + dy, tz = sz + dz;
+        ArrayList<BlockPos> blocks = new ArrayList<>();
+        ChatLib.chat(String.format("Checking from (%d, %d, %d) to (%d, %d, %d).", sx, sy, sz, tx, ty, tz));
+        for (int x = sx; x <= tx; x++) {
+            for (int y = sy; y <= ty; y++) {
+                for (int z = sz; z <= tz; z++) {
+                    if (BlockUtils.isBlockAir(x, y + 1, z) && BlockUtils.getBlockAt(x, y, z) == Blocks.dirt) {
+                        blocks.add(new BlockPos(x, y, z));
+                    }
+                }
+            }
+        }
+        synchronized (notTilled) {
+            notTilled.addAll(blocks);
+        }
     }
 
     private boolean enabled() {
@@ -311,7 +348,26 @@ public class AutoBuildFarm {
             GuiUtils.drawBoxAtBlock(currentBlockPos, new Color(255, 0, 0, 80), 1, 1, 0.0020000000949949026F);
         if (currentFacing != null)
             GuiUtils.drawFilledFace(currentFacing, new Color(224, 104, 51, 200));
+        synchronized (notTilled) {
+            for (BlockPos pos : notTilled) {
+                GuiUtils.drawBoxAtBlock(pos, new Color(238, 85, 140, 200), 1, 1, 0);
+            }
+        }
         GuiUtils.disableESP();
+    }
+
+    @SubscribeEvent
+    public void onBlockChange(BlockChangeEvent event) {
+        if (event.oldBlock.getBlock() == Blocks.dirt && event.newBlock.getBlock() == Blocks.farmland) {
+            synchronized (notTilled) {
+                notTilled.remove(event.position);
+            }
+        }
+        if (event.newBlock.getBlock() == Blocks.dirt && event.oldBlock.getBlock() == Blocks.farmland) {
+            synchronized (notTilled) {
+                notTilled.add(event.position);
+            }
+        }
     }
 
     @SubscribeEvent
@@ -319,6 +375,9 @@ public class AutoBuildFarm {
         blocksOne.clear();
         blocksTwo.clear();
         toRemoveBlocks.clear();
+        synchronized (notTilled) {
+            notTilled.clear();
+        }
         currentFacing = null;
         currentBlockPos = null;
         startPos = null;

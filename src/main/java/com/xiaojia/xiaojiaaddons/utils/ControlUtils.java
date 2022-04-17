@@ -444,9 +444,9 @@ public class ControlUtils {
 
     public static void jump() throws InterruptedException {
         KeyBinding.setKeyBindState(jumpKeyBind.mcKeyBinding().getKeyCode(), true);
-        Thread.sleep(30);
+        Thread.sleep(100);
         KeyBinding.setKeyBindState(jumpKeyBind.mcKeyBinding().getKeyCode(), false);
-        Thread.sleep(30);
+        Thread.sleep(100);
     }
 
     public static void moveForward(long delta) throws InterruptedException {

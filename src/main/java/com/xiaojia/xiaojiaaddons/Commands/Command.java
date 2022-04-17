@@ -22,6 +22,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
+import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarm;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Blaze;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Tests.CopyWorldInfo;
@@ -135,6 +136,18 @@ public class Command extends CommandBase {
                 break;
             case "dev":
                 DevWater.setBoard(Integer.parseInt(strings[1]), Integer.parseInt(strings[2]));
+                break;
+            case "step":
+                AutoBuildFarm.setStep(Integer.parseInt(strings[1]));
+                break;
+            case "check":
+                x = Integer.parseInt(strings[1]);
+                y = Integer.parseInt(strings[2]);
+                z = Integer.parseInt(strings[3]);
+                int dx = Integer.parseInt(strings[4]);
+                int dy = Integer.parseInt(strings[5]);
+                int dz = Integer.parseInt(strings[6]);
+                new Thread(() -> AutoBuildFarm.check(x, y, z, x + dx, y + dy, z + dz)).start();
                 break;
 
             // debug commands
