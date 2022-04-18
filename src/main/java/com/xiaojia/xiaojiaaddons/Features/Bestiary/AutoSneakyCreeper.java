@@ -28,6 +28,7 @@ public class AutoSneakyCreeper {
     private static final ArrayList<BlockPos> positions = new ArrayList<>(Arrays.asList(
             new BlockPos(3, 152, 30),
             new BlockPos(-12, 153, 28),
+            new BlockPos(-20, 154, 25),
             new BlockPos(-25, 154, 20),
             new BlockPos(-26, 153, 11),
             new BlockPos(-29, 153, 2),
@@ -39,9 +40,10 @@ public class AutoSneakyCreeper {
             new BlockPos(8, 155, -36),
             new BlockPos(16, 156, -33),
             new BlockPos(24, 157, -35),
-            new BlockPos(30, 158, -32),
+            new BlockPos(32, 158, -31),
             new BlockPos(37, 157, -26),
             new BlockPos(35, 152, -12),
+            new BlockPos(38, 152, -7),
             new BlockPos(40, 151, 3),
             new BlockPos(41, 150, 16),
             new BlockPos(31, 150, 26),
@@ -61,15 +63,19 @@ public class AutoSneakyCreeper {
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
+        if ((!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) && should) {
+            stop();
+        }
         if (keyBind.isPressed()) {
             should = !should;
-            ChatLib.chat(should ? "Auto Sneaky Creeper &aactivated" : "Auto Sneaky Creeper &cdeactivated");
             if (should) {
                 if (!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) {
                     stop();
                 }
+                ChatLib.chat("Auto Sneaky Creeper &aactivated");
             } else {
                 goingTo = null;
+                stop();
             }
         }
         if (!should) return;
@@ -97,7 +103,8 @@ public class AutoSneakyCreeper {
                         if (facingThread == null || !facingThread.isAlive()) {
                             facingThread = new Thread(() -> {
                                 try {
-                                    ControlUtils.faceSlowly(goingTo);
+                                    ControlUtils.faceSlowly(goingTo.getX(),
+                                            getY(getPlayer()) + getPlayer().getEyeHeight(), goingTo.getZ());
                                 } catch (Exception e) {
                                     stop();
                                 }
@@ -108,7 +115,7 @@ public class AutoSneakyCreeper {
                         // stop if there's creeper nearby
                         while (existCreeperBeside() && should) {
                             ControlUtils.stopMoving();
-                            Thread.sleep(100);
+                            Thread.sleep(20);
                         }
                         if (!should) return;
                         ControlUtils.holdForward();
@@ -117,7 +124,7 @@ public class AutoSneakyCreeper {
                             ControlUtils.jump();
                         else ControlUtils.releaseJump();
                         // just move
-                        Thread.sleep(100);
+                        Thread.sleep(20);
                     }
                 }
 
@@ -143,7 +150,16 @@ public class AutoSneakyCreeper {
         if (goingTo != null) {
             GuiUtils.enableESP();
             GuiUtils.drawBoxAtBlock(goingTo, new Color(0x3C, 0x3C, 0xDE, 200), 1, 1, 0.0020000000949949026F);
+            GuiUtils.disableESP();
+        }else{
             GuiUtils.enableESP();
+            for (BlockPos pos : positions) {
+                GuiUtils.drawBoxAtBlock(pos,
+                        new Color(0x3C, 0x3C, 0xDE, 200),
+                        1, 1, 0.0020000000949949026F
+                );
+            }
+            GuiUtils.disableESP();
         }
     }
 }
