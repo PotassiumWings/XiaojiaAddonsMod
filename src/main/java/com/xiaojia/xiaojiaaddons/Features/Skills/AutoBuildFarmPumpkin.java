@@ -41,7 +41,6 @@ public class AutoBuildFarmPumpkin {
             } else if (r == 1 || r == 2) {
                 dirt.add(new BlockPos(sx, sy, i));
             } else if (r == 3) {
-                dirt.add(new BlockPos(sx, sy + 1, i));
                 dirt.add(new BlockPos(sx, sy, i));
                 dirt.add(new BlockPos(sx, sy - 1, i));
             } else {

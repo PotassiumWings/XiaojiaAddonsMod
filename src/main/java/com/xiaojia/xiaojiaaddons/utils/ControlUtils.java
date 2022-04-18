@@ -179,7 +179,7 @@ public class ControlUtils {
         if (yaw - curyaw > 180) yaw -= 360;  // yaw = 359, curyaw = 1 -> yaw = -1, curyaw = 1
         if (curyaw - yaw > 180) curyaw -= 360;  // yaw = 1, curyaw = 359 -> yaw = 1, curyaw = -1
 
-        int[] factors = new int[]{50, 20, 7};
+        int[] factors = new int[]{50, 20, 7, 3};
         int factor = factors[Configs.ChangeDirectionMode];
         int rotate_times = MathUtils.floor(
                 Math.sqrt(Math.pow(curyaw - yaw, 2) + Math.pow(curpitch - pitch, 2)) / factor

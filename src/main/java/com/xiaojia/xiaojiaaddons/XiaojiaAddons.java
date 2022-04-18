@@ -12,6 +12,7 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.AutoScatha;
+import com.xiaojia.xiaojiaaddons.Features.Bestiary.AutoSneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.SneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.Spider;
@@ -218,6 +219,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoScatha());
         MinecraftForge.EVENT_BUS.register(new Spider());
         MinecraftForge.EVENT_BUS.register(new SneakyCreeper());
+        MinecraftForge.EVENT_BUS.register(new AutoSneakyCreeper());
         MinecraftForge.EVENT_BUS.register(new GolemAlert());
 
         // Dragons

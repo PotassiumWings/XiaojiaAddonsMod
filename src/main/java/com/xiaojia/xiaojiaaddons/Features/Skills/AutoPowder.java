@@ -18,6 +18,7 @@ import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -201,14 +202,26 @@ public class AutoPowder {
         solved.clear();
     }
 
+//    @SubscribeEvent
+//    public void onGuiDraw(GuiScreenEvent.BackgroundDrawnEvent event) {
+//        if (!Configs.AutoPowder || !enabled) return;
+//        if (!SkyblockUtils.isInCrystalHollows()) return;
+//        Inventory inventory = ControlUtils.getOpenedInventory();
+//        if (inventory == null || !inventory.getName().contains("Treasure")) return;
+//        ControlUtils.releaseLeftClick();
+//        getPlayer().closeScreen();
+//        if (closestChest != null) solved.add(closestChest);
+//        isOpeningChest = false;
+//        System.err.println("Closing chest, stop opening chest");
+//    }
+
     @SubscribeEvent
-    public void onGuiDraw(GuiScreenEvent.BackgroundDrawnEvent event) {
+    public void onReceive(ClientChatReceivedEvent event) {
         if (!Configs.AutoPowder || !enabled) return;
         if (!SkyblockUtils.isInCrystalHollows()) return;
-        Inventory inventory = ControlUtils.getOpenedInventory();
-        if (inventory == null || !inventory.getName().contains("Treasure")) return;
+        if (event.type != 0) return;
+        if (!ChatLib.removeFormatting(event.message.getUnformattedText()).startsWith("You received")) return;
         ControlUtils.releaseLeftClick();
-        getPlayer().closeScreen();
         if (closestChest != null) solved.add(closestChest);
         isOpeningChest = false;
         System.err.println("Closing chest, stop opening chest");

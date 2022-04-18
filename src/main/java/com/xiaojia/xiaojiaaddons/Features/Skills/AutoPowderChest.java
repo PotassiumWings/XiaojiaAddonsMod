@@ -16,6 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -144,15 +145,27 @@ public class AutoPowderChest {
     }
 
     @SubscribeEvent
-    public void onGuiDraw(GuiScreenEvent.BackgroundDrawnEvent event) {
+    public void onReceive(ClientChatReceivedEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.AutoPowderChest || !enabled) return;
         if (!SkyblockUtils.isInCrystalHollows()) return;
         if (Configs.AutoPowder) return;
-        Inventory inventory = ControlUtils.getOpenedInventory();
-        if (inventory == null || !inventory.getName().contains("Treasure")) return;
-        if (Configs.AutoPowderChestClose)
-            getPlayer().closeScreen();
-        if (closestChest != null) solved.add(closestChest);
+        if (event.type != 0) return;
+        if (ChatLib.removeFormatting(event.message.getUnformattedText()).startsWith("You received"))
+            if (closestChest != null)
+                solved.add(closestChest);
     }
+
+//    @SubscribeEvent
+//    public void onGuiDraw(GuiScreenEvent.BackgroundDrawnEvent event) {
+//        if (!Checker.enabled) return;
+//        if (!Configs.AutoPowderChest || !enabled) return;
+//        if (!SkyblockUtils.isInCrystalHollows()) return;
+//        if (Configs.AutoPowder) return;
+//        Inventory inventory = ControlUtils.getOpenedInventory();
+//        if (inventory == null || !inventory.getName().contains("Treasure")) return;
+//        if (Configs.AutoPowderChestClose)
+//            getPlayer().closeScreen();
+//        if (closestChest != null) solved.add(closestChest);
+//    }
 }

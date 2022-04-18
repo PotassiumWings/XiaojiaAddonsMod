@@ -158,7 +158,7 @@ public class Configs {
     public static int BoxLineThickness = 5;
 
     @Property(type = Property.Type.SELECT, name = "Change Direction Mode", parent = "General XJA Setting",
-            options = {"Fast Mode", "Mid Mode", "Slow Mode"}
+            options = {"Fast Mode", "Mid Mode", "Slow Mode", "Super Slow Mode"}
     )
     public static int ChangeDirectionMode = 0;
 
@@ -247,6 +247,12 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Show Sneaky Creeper Box", parent = "Gunpowder Mines",
             description = "Display green esp box at sneaky creepers.")
     public static boolean SneakyCreeperDisplayBox = false;
+
+    // AutoSneakyCreeper
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Sneaky Creeper", parent = "Gunpowder Mines",
+            description = "Wear a full set of frozen blaze set and get as much mf as you can.\n" +
+                    "Auto walking in a route in gunpowder mines and afk kill creepers.")
+    public static boolean AutoSneakyCreeper= false;
 
     // GolemAlert
     @Property(type = Property.Type.FOLDER, name = "Golem", parent = "Bestiary", description = "Endstone Protector features.")
