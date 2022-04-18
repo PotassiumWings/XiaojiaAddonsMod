@@ -1544,6 +1544,12 @@ public class Configs {
             description = "CD between placing dirt. Must be higher than your ping.", min = 100, max = 2000, step = 20)
     public static int AutoBuildFarm1CD = 500;
 
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Farming", parent = "Farming",
+            description = "Auto Farm for this kind of vertical farm.\n")
+    public static boolean AutoFarm = false;
+
+
     // GemstoneESP
     @Property(type = Property.Type.FOLDER, name = "Gemstone ESP", parent = "Skills",
             description = "Display ESP boxes of gemstones, \n" +

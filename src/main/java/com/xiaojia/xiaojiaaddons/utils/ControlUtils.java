@@ -462,15 +462,23 @@ public class ControlUtils {
     }
 
     public static void moveLeft(long delta) throws InterruptedException {
-        KeyBinding.setKeyBindState(moveLeftKeyBind.mcKeyBinding().getKeyCode(), true);
+        holdLeft();
         Thread.sleep(delta);
-        KeyBinding.setKeyBindState(moveLeftKeyBind.mcKeyBinding().getKeyCode(), false);
+        releaseLeft();
     }
 
     public static void moveRight(long delta) throws InterruptedException {
-        KeyBinding.setKeyBindState(moveRightKeyBind.mcKeyBinding().getKeyCode(), true);
+        holdRight();
         Thread.sleep(delta);
-        KeyBinding.setKeyBindState(moveRightKeyBind.mcKeyBinding().getKeyCode(), false);
+        releaseRight();
+    }
+
+    public static void holdRight() {
+        KeyBinding.setKeyBindState(moveRightKeyBind.mcKeyBinding().getKeyCode(), true);
+    }
+
+    public static void holdLeft() {
+        KeyBinding.setKeyBindState(moveLeftKeyBind.mcKeyBinding().getKeyCode(), true);
     }
 
     public static void stopMoving() {

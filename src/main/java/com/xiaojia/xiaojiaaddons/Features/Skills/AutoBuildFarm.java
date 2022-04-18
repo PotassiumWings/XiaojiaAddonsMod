@@ -550,6 +550,7 @@ public class AutoBuildFarm {
                 e.printStackTrace();
                 stop();
             } finally {
+                ControlUtils.releaseForward();
                 autoBuildThreadLock = false;
             }
         }).start();

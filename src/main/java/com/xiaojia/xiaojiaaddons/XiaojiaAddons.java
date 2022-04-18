@@ -109,6 +109,7 @@ import com.xiaojia.xiaojiaaddons.Features.Skills.AutoCloseCrystalHollowsChest;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowder;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowderChest;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Experimentation;
+import com.xiaojia.xiaojiaaddons.Features.Skills.Farming;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
 import com.xiaojia.xiaojiaaddons.Features.Skills.GemstoneESP;
@@ -318,6 +319,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new Foraging());
         MinecraftForge.EVENT_BUS.register(new Fishing());
         MinecraftForge.EVENT_BUS.register(new AutoBuildFarm());
+        MinecraftForge.EVENT_BUS.register(new Farming());
         MinecraftForge.EVENT_BUS.register(new GemstoneESP());
         MinecraftForge.EVENT_BUS.register(new JadeCrystalHelper());
         MinecraftForge.EVENT_BUS.register(new Experimentation());
