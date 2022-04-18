@@ -20,6 +20,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class AutoSneakyCreeper {
@@ -51,6 +53,7 @@ public class AutoSneakyCreeper {
     private Thread runningThread = null;
 
     private static void stop() {
+        ControlUtils.stopMoving();
         should = false;
         ChatLib.chat("Auto Sneaky Creeper &cdeactivated");
     }
@@ -75,9 +78,9 @@ public class AutoSneakyCreeper {
             try {
                 int index = 0;
                 goingTo = positions.get(index);
-                if (MathUtils.distanceSquareFromPlayer(goingTo) > 2 * 2) {
+                if (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4) {
                     ChatLib.chat("Go near the blue block.");
-                    while (MathUtils.distanceSquareFromPlayer(goingTo) > 2 * 2)
+                    while (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4)
                         Thread.sleep(100);
                 }
                 ChatLib.chat("Start moving automatically.");
@@ -90,7 +93,7 @@ public class AutoSneakyCreeper {
                     goingTo = positions.get(index);
                     ControlUtils.holdForward();
                     Thread facingThread = null;
-                    while (MathUtils.distanceSquareFromPlayer(goingTo) > 2 * 2 && should) {
+                    while (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4 && should) {
                         if (facingThread == null || !facingThread.isAlive()) {
                             facingThread = new Thread(() -> {
                                 try {
@@ -110,7 +113,7 @@ public class AutoSneakyCreeper {
                         if (!should) return;
                         ControlUtils.holdForward();
                         // jump if need
-                        if (goingTo.getY() > positions.get((index + positions.size() - 1) % positions.size()).getY())
+                        if (goingTo.getY() > getY(getPlayer()))
                             ControlUtils.jump();
                         else ControlUtils.releaseJump();
                         // just move
