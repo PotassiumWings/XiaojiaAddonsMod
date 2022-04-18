@@ -115,8 +115,11 @@ public class AutoSneakyCreeper {
 
                     while (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4 && should) {
                         BlockPos pos = getPlayer().getPosition();
-                        if (!pos.equals(lastPos)) lastTime = TimeUtils.curTime();
-                        if (TimeUtils.curTime() - lastTime > 5000) {
+                        if (!pos.equals(lastPos)) {
+                            lastPos = pos;
+                            lastTime = TimeUtils.curTime();
+                        }
+                        if (TimeUtils.curTime() - lastTime > 4000) {
                             ControlUtils.jump();
                         }
                         if (TimeUtils.curTime() - lastTime > 10000) {
@@ -132,6 +135,7 @@ public class AutoSneakyCreeper {
                                             getY(getPlayer()) + getPlayer().getEyeHeight(), goingTo.getZ());
                                 } catch (Exception e) {
                                     stop();
+                                    getPlayer().playSound("random.successful_hit", 1000, 1);
                                 }
                             });
                             facingThread.start();
