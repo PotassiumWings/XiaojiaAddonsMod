@@ -5,12 +5,10 @@ import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
-import com.xiaojia.xiaojiaaddons.Features.Dungeons.M7Dragon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Data;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Room;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
-import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Quiz;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.Patterns;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
@@ -22,7 +20,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
-import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarm;
+import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmVertical;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Blaze;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Tests.CopyWorldInfo;
@@ -34,7 +32,6 @@ import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.MinecraftUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TabUtils;
-import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -138,7 +135,7 @@ public class Command extends CommandBase {
                 DevWater.setBoard(Integer.parseInt(strings[1]), Integer.parseInt(strings[2]));
                 break;
             case "step":
-                AutoBuildFarm.setStep(Integer.parseInt(strings[1]));
+                AutoBuildFarmVertical.setStep(Integer.parseInt(strings[1]));
                 break;
             case "check":
                 x = Integer.parseInt(strings[1]);
@@ -147,7 +144,7 @@ public class Command extends CommandBase {
                 int dx = Integer.parseInt(strings[4]);
                 int dy = Integer.parseInt(strings[5]);
                 int dz = Integer.parseInt(strings[6]);
-                new Thread(() -> AutoBuildFarm.check(x, y, z, x + dx, y + dy, z + dz)).start();
+                new Thread(() -> AutoBuildFarmVertical.check(x, y, z, x + dx, y + dy, z + dz)).start();
                 break;
 
             // debug commands

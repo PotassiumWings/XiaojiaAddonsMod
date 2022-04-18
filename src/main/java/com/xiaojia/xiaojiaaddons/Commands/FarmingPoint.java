@@ -1,12 +1,18 @@
 package com.xiaojia.xiaojiaaddons.Commands;
 
-import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarm;
-import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
+import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmPumpkin;
+import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmVertical;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
 public class FarmingPoint extends CommandBase {
+    private static EnumFarmingType type = EnumFarmingType.VERTICAL;
+
+    public static void setType(EnumFarmingType farmingType) {
+        type = farmingType;
+    }
 
     @Override
     public String getCommandName() {
@@ -15,7 +21,9 @@ public class FarmingPoint extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "";
+        return "&c/farmingpoint start end&b to set farming range.\n" +
+                "For vertical farm, &c/farmingpoint startY endY&b;\n" +
+                "For pumpkin farm, &c/farmingpoint startZ endZ&b.";
     }
 
     @Override
@@ -28,7 +36,9 @@ public class FarmingPoint extends CommandBase {
 //        }
         int sy = Integer.parseInt(args[0]);
         int ty = Integer.parseInt(args[1]);
-        AutoBuildFarm.setFarmingPoint(sy, ty);
+        ChatLib.chat("Current farming type: " + type);
+        if (type == EnumFarmingType.VERTICAL) AutoBuildFarmVertical.setFarmingPoint(sy, ty);
+        else if (type == EnumFarmingType.PUMPKIN) AutoBuildFarmPumpkin.setFarmingPoint(sy, ty);
     }
 
     @Override
@@ -37,3 +47,7 @@ public class FarmingPoint extends CommandBase {
     }
 }
 
+
+enum EnumFarmingType {
+    VERTICAL, PUMPKIN
+}

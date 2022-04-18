@@ -13,6 +13,7 @@ import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
+import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -38,7 +39,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getYaw;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
-public class AutoBuildFarm {
+public class AutoBuildFarmVertical {
     private static final ArrayList<BlockPos> blocksOne = new ArrayList<>();
     private static final ArrayList<BlockPos> blocksTwo = new ArrayList<>();
     private static final ArrayList<BlockPos> toRemoveBlocks = new ArrayList<>();
@@ -617,6 +618,8 @@ public class AutoBuildFarm {
 
     @SubscribeEvent
     public void onBlockChange(BlockChangeEvent event) {
+        if (!SkyblockUtils.getCurrentMap().equals("Your Island")) return;
+        if (step != 3) return;
         if (event.oldBlock.getBlock() == Blocks.dirt && event.newBlock.getBlock() == Blocks.farmland) {
             synchronized (notTilled) {
                 notTilled.remove(event.position);
