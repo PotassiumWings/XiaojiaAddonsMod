@@ -26,7 +26,9 @@ public class FarmingPoint extends CommandBase {
 //            else if (args[0].toLowerCase().equals("west")) mode = 2;
 //            else if (args[0].toLowerCase().equals("east")) mode = 3;
 //        }
-        AutoBuildFarm.setFarmingPoint(mode);
+        int sy = Integer.parseInt(args[0]);
+        int ty = Integer.parseInt(args[1]);
+        AutoBuildFarm.setFarmingPoint(sy, ty);
     }
 
     @Override

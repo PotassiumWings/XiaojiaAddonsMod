@@ -52,13 +52,16 @@ public class AutoBuildFarm {
     private static int step = 1;
     private static boolean picked = false;
 
+    private static int from, to;
+
     public static void setStep(int s) {
         step = s;
+        notTilled.clear();
         ChatLib.chat("Successfully set step to " + s + ".");
     }
 
     // TODO: mode
-    public static void setFarmingPoint(int mode) {
+    public static void setFarmingPoint(int fromY, int toY) {
         float x = getX(getPlayer());
         float y = getY(getPlayer()) - 0.01F;
         float z = getZ(getPlayer());
@@ -66,12 +69,14 @@ public class AutoBuildFarm {
         blocksOne.clear();
         blocksTwo.clear();
         toRemoveBlocks.clear();
+        from = fromY;
+        to = toY;
 
         startPos = new BlockPos(x, y, z);
         int sx = startPos.getX();
         int sy = startPos.getY();
         int sz = startPos.getZ();
-        for (int i = 2; i < 253; ) {
+        for (int i = from; i < to; ) {
             int r = (sy + 333333 - i) % 3;
             if (r == 1) {
                 blocksOne.add(new BlockPos(sx, i, sz + 1));
@@ -321,10 +326,10 @@ public class AutoBuildFarm {
                     ControlUtils.releaseLeftClick();
                     ControlUtils.releaseForward();
                     ControlUtils.faceSlowly(-getYaw(), -10);
-                    while (getY(getPlayer()) != y - 3 && getY(getPlayer()) < y + 200 && enabled())
+                    while (getY(getPlayer()) != y - 3 && getY(getPlayer()) < y + 3 && enabled())
                         Thread.sleep(20);
                     // tped up
-                    if (getY(getPlayer()) > y + 200) break;
+                    if (getY(getPlayer()) > y + 3) break;
                 }
                 if (enabled()) {
                     stop(false);
@@ -462,7 +467,7 @@ public class AutoBuildFarm {
                 ChatLib.chat("Set material per row to: " + Configs.IslandSize);
 
                 // start clicking
-                while (pos1.getY() > 3 && enabled()) {
+                while (pos1.getY() > from && enabled()) {
                     while (materialLeft < 4 * Configs.IslandSize && enabled()) {
                         ChatLib.chat("Trying to fill up materials.");
                         materialLeft = refillMaterial(mat);
@@ -537,10 +542,10 @@ public class AutoBuildFarm {
                     if (!enabled()) break;
                     ControlUtils.releaseForward();
                     ControlUtils.faceSlowly(-getYaw(), -25);
-                    while (getY(getPlayer()) != y - 3 && getY(getPlayer()) < y + 200 && enabled())
+                    while (getY(getPlayer()) != y - 3 && getY(getPlayer()) < y + 3 && enabled())
                         Thread.sleep(20);
                     // tped up
-                    if (getY(getPlayer()) > y + 200) break;
+                    if (getY(getPlayer()) > y + 3) break;
                 }
                 if (enabled()) {
                     stop(false);

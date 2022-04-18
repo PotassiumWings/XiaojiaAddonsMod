@@ -55,10 +55,10 @@ public class Farming {
         autoFarmingThreadLock = true;
         new Thread(() -> {
             try {
+                boolean right = getYaw() < 0;
                 ControlUtils.changeDirection(180, 10);
                 ControlUtils.stopMoving();
                 ControlUtils.holdLeftClick();
-                boolean right = getYaw() < 0;
                 moveAccordingToRight(right);
 
                 float y;
