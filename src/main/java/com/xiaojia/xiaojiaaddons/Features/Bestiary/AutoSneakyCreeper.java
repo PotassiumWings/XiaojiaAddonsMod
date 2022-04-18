@@ -97,7 +97,8 @@ public class AutoSneakyCreeper {
                 ControlUtils.face(positions.get(1));
                 while (should) {
                     index = (index + 1) % positions.size();
-                    goingTo = positions.get(index);
+//                    goingTo = positions.get(index);
+                    goingTo = null;
                     ControlUtils.holdForward();
                     Thread facingThread = null;
 
@@ -107,11 +108,11 @@ public class AutoSneakyCreeper {
 
                     while (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4 && should) {
                         BlockPos pos = getPlayer().getPosition();
-                        if (pos != lastPos) lastTime = TimeUtils.curTime();
-                        if (TimeUtils.curTime() - lastTime > 2000) {
+                        if (!pos.equals(lastPos)) lastTime = TimeUtils.curTime();
+                        if (TimeUtils.curTime() - lastTime > 5000) {
                             ControlUtils.jump();
                         }
-                        if (TimeUtils.curTime() - lastTime > 5000) {
+                        if (TimeUtils.curTime() - lastTime > 10000) {
                             stop();
                             getPlayer().playSound("random.successful_hit", 1000, 1);
                             return;
@@ -166,9 +167,12 @@ public class AutoSneakyCreeper {
     public void onRender(RenderWorldLastEvent event) {
         if (goingTo != null) {
             GuiUtils.enableESP();
-            GuiUtils.drawBoxAtBlock(goingTo, new Color(0x3C, 0x3C, 0xDE, 200), 1, 1, 0.0020000000949949026F);
+            GuiUtils.drawBoxAtBlock(goingTo,
+                    new Color(0x3C, 0x3C, 0xDE, 200),
+                    1, 1, 0.0020000000949949026F);
             GuiUtils.disableESP();
-        }else{
+        } else {
+            if (!Configs.DevTracing) return;
             GuiUtils.enableESP();
             for (BlockPos pos : positions) {
                 GuiUtils.drawBoxAtBlock(pos,
