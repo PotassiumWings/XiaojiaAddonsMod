@@ -251,7 +251,8 @@ public class Configs {
     // AutoSneakyCreeper
     @Property(type = Property.Type.BOOLEAN, name = "Auto Sneaky Creeper", parent = "Gunpowder Mines",
             description = "Wear a full set of frozen blaze set and get as much mf as you can.\n" +
-                    "Auto walking in a route in gunpowder mines and afk kill creepers.")
+                    "Auto walking in a route in gunpowder mines and afk kill creepers.\n" +
+                    "Disable jump boost, rabbit, speed potions.")
     public static boolean AutoSneakyCreeper= false;
 
     // GolemAlert

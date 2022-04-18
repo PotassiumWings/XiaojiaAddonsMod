@@ -20,6 +20,7 @@ import org.lwjgl.input.Keyboard;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
@@ -54,6 +55,9 @@ public class AutoSneakyCreeper {
     private static boolean should = false;
     private static BlockPos goingTo = null;
     private Thread runningThread = null;
+    private static int index = 0;
+
+    private static boolean shouldShow = false;
 
     private static void stop() {
         ControlUtils.stopMoving();
@@ -83,22 +87,25 @@ public class AutoSneakyCreeper {
         if (runningThread != null && runningThread.isAlive()) return;
         runningThread = new Thread(() -> {
             try {
-                int index = 0;
-                goingTo = positions.get(index);
-                if (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4) {
-                    ChatLib.chat("Go near the blue block.");
-                    while (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4)
-                        Thread.sleep(100);
-                }
-                ChatLib.chat("Start moving automatically.");
-                ControlUtils.stopMoving();
-                Thread.sleep(1000); // waiting for fall down
+                ChatLib.chat("Starting a new Thread...");
+                if (goingTo == null) {
+                    shouldShow = true;
+                    goingTo = positions.get(index);
+                    if (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4) {
+                        ChatLib.chat("Go near the blue block.");
+                        while (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4)
+                            Thread.sleep(100);
+                    }
+                    ChatLib.chat("Start moving automatically.");
+                    ControlUtils.stopMoving();
+                    shouldShow = false;
+                    Thread.sleep(1000); // waiting for fall down
 
-                ControlUtils.face(positions.get(1));
+                    ControlUtils.face(positions.get((index + 1) % positions.size()));
+                }
                 while (should) {
                     index = (index + 1) % positions.size();
-//                    goingTo = positions.get(index);
-                    goingTo = null;
+                    goingTo = positions.get(index);
                     ControlUtils.holdForward();
                     Thread facingThread = null;
 
@@ -154,7 +161,8 @@ public class AutoSneakyCreeper {
     }
 
     private boolean existCreeperBeside() {
-        for (Entity entity : getWorld().loadedEntityList) {
+        List<Entity> list = new ArrayList<>(getWorld().loadedEntityList);
+        for (Entity entity : list) {
             if (entity instanceof EntityCreeper && !entity.isDead &&
                     MathUtils.distanceSquareFromPlayer(entity) < 5 * 5) {
                 return true;
@@ -166,6 +174,8 @@ public class AutoSneakyCreeper {
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         if (goingTo != null) {
+            if (!shouldShow && !Configs.DevTracing)
+                return;
             GuiUtils.enableESP();
             GuiUtils.drawBoxAtBlock(goingTo,
                     new Color(0x3C, 0x3C, 0xDE, 200),
