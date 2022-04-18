@@ -314,7 +314,7 @@ public class AutoBuildFarm {
                 ControlUtils.stopMoving();
                 ControlUtils.holdLeftClick();
                 ControlUtils.holdForward();
-                float y = getY(getPlayer());
+                float y;
                 while (enabled()) {
                     y = getY(getPlayer());
                     while (getY(getPlayer()) >= y && enabled()) {
@@ -503,6 +503,10 @@ public class AutoBuildFarm {
                     pos3 = pos3.down(3);
                     pos4 = pos4.down(3);
                 }
+                if (enabled()) {
+                    stop(false);
+                    step = 5;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 stop();
@@ -597,10 +601,12 @@ public class AutoBuildFarm {
                 GuiUtils.drawBoxAtBlock(pos, new Color(72, 50, 34, 80), 1, 1, 0);
         }
         GuiUtils.enableESP();
-        if (currentBlockPos != null)
-            GuiUtils.drawBoxAtBlock(currentBlockPos, new Color(255, 0, 0, 80), 1, 1, 0.0020000000949949026F);
-        if (currentFacing != null)
-            GuiUtils.drawFilledFace(currentFacing, new Color(224, 104, 51, 200));
+        if (step == 1) {
+            if (currentBlockPos != null)
+                GuiUtils.drawBoxAtBlock(currentBlockPos, new Color(255, 0, 0, 80), 1, 1, 0.0020000000949949026F);
+            if (currentFacing != null)
+                GuiUtils.drawFilledFace(currentFacing, new Color(224, 104, 51, 200));
+        }
         synchronized (notTilled) {
             for (BlockPos pos : notTilled) {
                 GuiUtils.drawBoxAtBlock(pos, new Color(238, 85, 140, 200), 1, 1, 0);
