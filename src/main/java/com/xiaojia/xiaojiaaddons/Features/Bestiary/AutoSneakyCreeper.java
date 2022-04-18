@@ -9,6 +9,7 @@ import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.util.BlockPos;
@@ -99,7 +100,23 @@ public class AutoSneakyCreeper {
                     goingTo = positions.get(index);
                     ControlUtils.holdForward();
                     Thread facingThread = null;
+
+                    // stuck detection
+                    BlockPos lastPos = getPlayer().getPosition();
+                    long lastTime = TimeUtils.curTime();
+
                     while (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4 && should) {
+                        BlockPos pos = getPlayer().getPosition();
+                        if (pos != lastPos) lastTime = TimeUtils.curTime();
+                        if (TimeUtils.curTime() - lastTime > 2000) {
+                            ControlUtils.jump();
+                        }
+                        if (TimeUtils.curTime() - lastTime > 5000) {
+                            stop();
+                            getPlayer().playSound("random.successful_hit", 1000, 1);
+                            return;
+                        }
+
                         if (facingThread == null || !facingThread.isAlive()) {
                             facingThread = new Thread(() -> {
                                 try {
