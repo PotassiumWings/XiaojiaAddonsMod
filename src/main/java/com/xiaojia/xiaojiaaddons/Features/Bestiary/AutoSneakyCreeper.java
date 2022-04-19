@@ -335,7 +335,8 @@ public class AutoSneakyCreeper {
             HashSet<Integer> search = dfs(next, MAX_LEN - distanceBetween(index, next), along, list);
             if (along.size() + search.size() > res) {
                 res = along.size() + search.size();
-                nextIndexes = new ArrayList<>(next);
+                nextIndexes = new ArrayList<>();
+                nextIndexes.add(next);
             } else if (along.size() + search.size() == res) {
                 nextIndexes.add(next);
             }
