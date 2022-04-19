@@ -91,6 +91,8 @@ public class AutoSneakyCreeper {
     private static boolean shouldShow = false;
     private Thread runningThread = null;
     private static int lastIndex = 0;
+
+    private static boolean tryingEnable = false;
     private static long lastForceClose = 0;
 
     private static void stop() {
@@ -98,16 +100,19 @@ public class AutoSneakyCreeper {
         if (should) {
             should = false;
             ChatLib.chat("Auto Sneaky Creeper &cdeactivated");
-            if (!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) {
-                return;
-            }
+            if (!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) return;
             new Thread(() -> {
                 try {
+                    tryingEnable = true;
+                    ChatLib.chat("Waiting 2s for re-enable...");
                     Thread.sleep(2000);
                     if (TimeUtils.curTime() - lastForceClose > 2022) {
                         ChatLib.chat("Re-enabling...");
                         should = true;
+                    } else {
+                        should = false;
                     }
+                    tryingEnable = false;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -118,18 +123,19 @@ public class AutoSneakyCreeper {
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
-        if ((!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) && should) {
-            stop();
-        }
+        if ((!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) && should) stop();
         if (keyBind.isPressed()) {
+            // re-enable
+            if (!should && tryingEnable) {
+                lastForceClose = TimeUtils.curTime();
+                return;
+            }
+
             should = !should;
             if (should) {
-                if (!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) {
-                    stop();
-                }
+                if (!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) stop();
                 ChatLib.chat("Auto Sneaky Creeper &aactivated");
             } else {
-                lastForceClose = TimeUtils.curTime();
                 goingTo = null;
                 stop();
             }
@@ -166,7 +172,7 @@ public class AutoSneakyCreeper {
 
                     while (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4 && should) {
                         BlockPos pos = getPlayer().getPosition();
-                        if (!pos.equals(lastDetectPos)) {
+                        if (pos.getX() != lastDetectPos.getX() || lastDetectPos.getZ() != pos.getZ()) {
                             lastDetectPos = pos;
                             lastTime = TimeUtils.curTime();
                         }
