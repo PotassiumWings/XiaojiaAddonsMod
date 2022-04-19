@@ -253,11 +253,15 @@ public class Configs {
             description = "Wear a full set of frozen blaze set and get as much mf as you can.\n" +
                     "Auto walking in a route in gunpowder mines and afk kill creepers.\n" +
                     "Disable jump boost, rabbit, speed potions.")
-    public static boolean AutoSneakyCreeper= false;
+    public static boolean AutoSneakyCreeper = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Sneaky Creeper Map Enable", parent = "Gunpowder Mines",
             description = "This is just for your better visualize.")
     public static boolean SneakyCreeperMap = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Sneaky Creeper Optimize Param", parent = "Gunpowder Mines",
+            description = "OwO", min = 1, max = 60)
+    public static int SNMaxLen = 48;
 
     @Property(type = Property.Type.NUMBER, name = "(Sneaky) Map Scale", parent = "Gunpowder Mines", min = 1, max = 10)
     public static int SNMapScale = 7;
@@ -404,7 +408,7 @@ public class Configs {
     public static boolean KuudraDisplay = false;
 
     // Dojo
-    @Property(type=Property.Type.FOLDER, name = "Dojo", parent = "Nether")
+    @Property(type = Property.Type.FOLDER, name = "Dojo", parent = "Nether")
     public static boolean DojoEnabled = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Force Helper", parent = "Dojo",

@@ -325,7 +325,7 @@ public class AutoSneakyCreeper {
         int res = -1;
         List<EntityCreeper> list = getCreepers();
         ArrayList<Integer> nextIndexes = new ArrayList<>();
-        double MAX_LEN = 48;
+        double MAX_LEN = Configs.SNMaxLen;
         for (int next : graph.get(index)) {
             HashSet<Integer> along = getCreepersAlong(index, next, new HashSet<>(), new HashSet<>(), list);
             HashSet<Integer> search = dfs(next, MAX_LEN - distanceBetween(index, next), along, list);
