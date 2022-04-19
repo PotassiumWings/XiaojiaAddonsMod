@@ -35,7 +35,7 @@ public class AutoSneakyCreeper {
             new BlockPos(-25, 154, 20),
             new BlockPos(-26, 153, 11),
 
-            new BlockPos(-19, 154, 6),
+            new BlockPos(-22, 154, 5),
             new BlockPos(-11, 153, -2),
             new BlockPos(5, 151, -12),
             new BlockPos(17, 151, -9),
@@ -51,7 +51,7 @@ public class AutoSneakyCreeper {
             new BlockPos(16, 156, -33),
 
             new BlockPos(24, 157, -35),
-            new BlockPos(32, 158, -31),
+            new BlockPos(33, 158, -30),
             new BlockPos(37, 157, -26),
             new BlockPos(35, 152, -12),
 
@@ -63,7 +63,8 @@ public class AutoSneakyCreeper {
             // 27
             new BlockPos(-16, 154, 3),
             new BlockPos(-13, 154, 8),
-            new BlockPos(-5, 158, 18),
+            new BlockPos(-5, 157, 17),
+            new BlockPos(1, 158, 16),
             new BlockPos(5, 155, 15),
             new BlockPos(8, 152, 25)
     ));
@@ -79,7 +80,8 @@ public class AutoSneakyCreeper {
             new Pair<>(22, 23), new Pair<>(23, 24), new Pair<>(24, 25), new Pair<>(25, 26),
             new Pair<>(26, 0),
             new Pair<>(7, 17),
-            new Pair<>(27, 28), new Pair<>(28, 29), new Pair<>(29, 30), new Pair<>(30, 31), new Pair<>(31, 0)
+            new Pair<>(27, 28), new Pair<>(28, 29), new Pair<>(29, 30),
+            new Pair<>(30, 31), new Pair<>(31, 32), new Pair<>(32, 0)
     ));
     private static final KeyBind keyBind = new KeyBind("Auto Sneaky Creeper", Keyboard.KEY_NONE);
     private static boolean should = false;
@@ -197,7 +199,7 @@ public class AutoSneakyCreeper {
                         // just move
                         Thread.sleep(20);
                     }
-                    index = getNext(index);
+                    if (should) index = getNext(index);
                 }
 
             } catch (Exception e) {
@@ -236,20 +238,19 @@ public class AutoSneakyCreeper {
             GuiUtils.drawBoxAtBlock(goingTo,
                     new Color(0x3C, 0x3C, 0xDE, 200),
                     1, 1, 0.0020000000949949026F);
+            GuiUtils.drawString(
+                    index + "",
+                    goingTo.getX() + 0.5F, goingTo.getY() + 1.2F, goingTo.getZ() + 0.5F,
+                    new Color(0, 255, 0).getRGB(), 0.8F, true
+            );
             GuiUtils.disableESP();
         } else {
             if (!Configs.DevTracing) return;
             GuiUtils.enableESP();
-            for (int index = 0; index < positions.size(); index++) {
-                BlockPos pos = positions.get(index);
+            for (BlockPos pos : positions) {
                 GuiUtils.drawBoxAtBlock(pos,
                         new Color(0x3C, 0x3C, 0xDE, 200),
                         1, 1, 0.0020000000949949026F
-                );
-                GuiUtils.drawString(
-                        index + "",
-                        pos.getX(), pos.getY() + 1.2F, pos.getZ(),
-                        new Color(0, 255, 0).getRGB(), 0.8F, true
                 );
             }
             for (Pair<Integer, Integer> edge : edges) {
@@ -259,6 +260,14 @@ public class AutoSneakyCreeper {
                         p1.getX() + 0.5F, p1.getY() + 0.5F, p1.getZ() + 0.5F,
                         p2.getX() + 0.5F, p2.getY() + 0.5F, p2.getZ() + 0.5F,
                         new Color(255, 0, 0), 2
+                );
+            }
+            for (int index = 0; index < positions.size(); index++) {
+                BlockPos pos = positions.get(index);
+                GuiUtils.drawString(
+                        index + "",
+                        pos.getX() + 0.5F, pos.getY() + 1.2F, pos.getZ() + 0.5F,
+                        new Color(0, 255, 0).getRGB(), 0.8F, true
                 );
             }
             GuiUtils.disableESP();
