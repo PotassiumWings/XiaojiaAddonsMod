@@ -118,6 +118,8 @@ public class AutoSneakyCreeper {
     private static StringBuilder log = new StringBuilder();
     private static HashSet<Integer> toBeKilled = new HashSet<>();
 
+    private static BlockPos ghostBlockPos = new BlockPos(0, 0, 0);
+
     static {
         for (int i = 0; i < positions.size(); i++)
             graph.put(i, new ArrayList<>());
@@ -296,6 +298,15 @@ public class AutoSneakyCreeper {
                                 } catch (Exception e) {
                                     stop();
                                     getPlayer().playSound("random.successful_hit", 1000, 1);
+                                    BlockPos playerPos = getPlayer().getPosition();
+                                    if (playerPos.distanceSq(ghostBlockPos) < 2 * 2) {
+                                        try {
+                                            ControlUtils.moveBackward(200);
+                                        } catch (InterruptedException e1) {
+                                            e1.printStackTrace();
+                                        }
+                                    }
+                                    ghostBlockPos = playerPos;
                                 }
                             });
                             facingThread.start();
