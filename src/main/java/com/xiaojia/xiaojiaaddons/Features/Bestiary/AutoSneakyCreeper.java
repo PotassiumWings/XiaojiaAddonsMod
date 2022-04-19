@@ -63,6 +63,7 @@ public class AutoSneakyCreeper {
             // 27
             new BlockPos(-16, 154, 3),
             new BlockPos(-13, 154, 8),
+            new BlockPos(-13, 156, 12),
             new BlockPos(-5, 157, 17),
             new BlockPos(1, 158, 16),
             new BlockPos(5, 155, 15),
@@ -81,7 +82,7 @@ public class AutoSneakyCreeper {
             new Pair<>(26, 0),
             new Pair<>(7, 17),
             new Pair<>(27, 28), new Pair<>(28, 29), new Pair<>(29, 30),
-            new Pair<>(30, 31), new Pair<>(31, 32), new Pair<>(32, 0)
+            new Pair<>(30, 31), new Pair<>(31, 32), new Pair<>(32, 33), new Pair<>(33, 0)
     ));
     private static final KeyBind keyBind = new KeyBind("Auto Sneaky Creeper", Keyboard.KEY_NONE);
     private static boolean should = false;
@@ -89,6 +90,8 @@ public class AutoSneakyCreeper {
     private static int index = 0;
     private static boolean shouldShow = false;
     private Thread runningThread = null;
+    private static int lastIndex = 0;
+    private static long lastForceClose = 0;
 
     private static void stop() {
         ControlUtils.stopMoving();
@@ -101,8 +104,10 @@ public class AutoSneakyCreeper {
             new Thread(() -> {
                 try {
                     Thread.sleep(2000);
-                    ChatLib.chat("Re-enabling...");
-                    should = true;
+                    if (TimeUtils.curTime() - lastForceClose > 2022) {
+                        ChatLib.chat("Re-enabling...");
+                        should = true;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -124,6 +129,7 @@ public class AutoSneakyCreeper {
                 }
                 ChatLib.chat("Auto Sneaky Creeper &aactivated");
             } else {
+                lastForceClose = TimeUtils.curTime();
                 goingTo = null;
                 stop();
             }
@@ -135,6 +141,7 @@ public class AutoSneakyCreeper {
                 ChatLib.chat("Starting a new Thread...");
                 if (goingTo == null) {
                     shouldShow = true;
+                    lastIndex = 0;
                     goingTo = positions.get(index);
 //                    if (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4) {
 //                        ChatLib.chat("Go near the blue block.");
@@ -154,22 +161,25 @@ public class AutoSneakyCreeper {
                     Thread facingThread = null;
 
                     // stuck detection
-                    BlockPos lastPos = getPlayer().getPosition();
+                    BlockPos lastDetectPos = getPlayer().getPosition();
                     long lastTime = TimeUtils.curTime();
 
                     while (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4 && should) {
                         BlockPos pos = getPlayer().getPosition();
-                        if (!pos.equals(lastPos)) {
-                            lastPos = pos;
+                        if (!pos.equals(lastDetectPos)) {
+                            lastDetectPos = pos;
                             lastTime = TimeUtils.curTime();
                         }
-                        if (TimeUtils.curTime() - lastTime > 4000) {
-                            ControlUtils.jump();
+                        if (TimeUtils.curTime() - lastTime > 4000) ControlUtils.jump();
+                        if (TimeUtils.curTime() - lastTime > 6000) {
+                            index = lastIndex;
+                            goingTo = positions.get(index);
+                            ChatLib.chat("Backwards 1 step!");
+                            continue;
                         }
-                        if (TimeUtils.curTime() - lastTime > 10000) {
+                        if (TimeUtils.curTime() - lastTime > 8000) {
                             stop();
                             getPlayer().playSound("random.successful_hit", 1000, 1);
-                            return;
                         }
 
                         if (facingThread == null || !facingThread.isAlive()) {
@@ -199,9 +209,11 @@ public class AutoSneakyCreeper {
                         // just move
                         Thread.sleep(20);
                     }
-                    if (should) index = getNext(index);
+                    if (should) {
+                        lastIndex = index;
+                        index = getNext(index);
+                    }
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
