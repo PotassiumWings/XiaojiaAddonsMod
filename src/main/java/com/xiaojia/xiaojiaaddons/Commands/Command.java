@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Bestiary.AutoSneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
@@ -104,6 +105,7 @@ public class Command extends CommandBase {
                     break;
                 }
             case "report":
+                AutoSneakyCreeper.printLog();
                 TabUtils.printTab();
                 Dungeon.showDungeonInfo();
                 AutoItemFrame.printLog();

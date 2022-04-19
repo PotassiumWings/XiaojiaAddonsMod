@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterUtils;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
@@ -18,6 +19,7 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
@@ -114,6 +116,7 @@ public class AutoSneakyCreeper {
     private static boolean tryingEnable = false;
     private static long lastForceClose = 0;
     public static Image defaultIcon = new Image("defaultPlayerIcon.png");
+    private static StringBuilder log = new StringBuilder();
 
     static {
         for (int i = 0; i < positions.size(); i++)
@@ -326,6 +329,7 @@ public class AutoSneakyCreeper {
         List<EntityCreeper> list = getCreepers();
         ArrayList<Integer> nextIndexes = new ArrayList<>();
         double MAX_LEN = Configs.SNMaxLen;
+        log.append("Getting next: " + index + "\n");
         for (int next : graph.get(index)) {
             HashSet<Integer> along = getCreepersAlong(index, next, new HashSet<>(), new HashSet<>(), list);
             HashSet<Integer> search = dfs(next, MAX_LEN - distanceBetween(index, next), along, list);
@@ -335,6 +339,7 @@ public class AutoSneakyCreeper {
             } else if (along.size() + search.size() == res) {
                 nextIndexes.add(next);
             }
+            log.append("   next: " + next + ", along: " + along.size() + ", search: " + search.size() + ", size " + nextIndexes.size() + "\n");
         }
         return nextIndexes.get((int) (nextIndexes.size() * Math.random()));
     }
@@ -440,6 +445,20 @@ public class AutoSneakyCreeper {
                 );
             }
             GuiUtils.disableESP();
+        }
+    }
+
+    public static void printLog() {
+        System.err.println("AutoSneakyCreeper Log:");
+        System.err.println(log);
+        System.err.println();
+    }
+
+    @SubscribeEvent
+    public void onLoad(WorldEvent.Load event) {
+        log = new StringBuilder();
+        for (int i = 0; i < positions.size(); i++) {
+            log.append("Graph log - " + i + " " + graph.get(i).size() + "\n");
         }
     }
 }
