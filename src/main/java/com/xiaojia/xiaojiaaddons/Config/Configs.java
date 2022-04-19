@@ -255,6 +255,29 @@ public class Configs {
                     "Disable jump boost, rabbit, speed potions.")
     public static boolean AutoSneakyCreeper= false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Sneaky Creeper Map Enable", parent = "Gunpowder Mines",
+            description = "This is just for your better visualize.")
+    public static boolean SneakyCreeperMap = false;
+
+    @Property(type = Property.Type.NUMBER, name = "(Sneaky) Map Scale", parent = "Gunpowder Mines", min = 1, max = 10)
+    public static int SNMapScale = 7;
+
+    @Property(type = Property.Type.NUMBER, name = "(Sneaky) Player Head Scale", parent = "Gunpowder Mines", suffix = " %",
+            min = 1, max = 100)
+    public static int SNHeadScale = 50;
+
+    @Property(type = Property.Type.NUMBER, name = "(Sneaky) Map X", parent = "Gunpowder Mines",
+            min = 0, max = 1000, step = 5)
+    public static int SNMapX = 55;
+
+    @Property(type = Property.Type.NUMBER, name = "(Sneaky) Map Y", parent = "Gunpowder Mines",
+            min = 0, max = 1000, step = 5)
+    public static int SNMapY = 20;
+
+    @Property(type = Property.Type.NUMBER, name = "(Sneaky) Background Alpha", parent = "Gunpowder Mines",
+            min = 0, max = 255, step = 5)
+    public static int SNBackgroundAlpha = 140;
+
     // GolemAlert
     @Property(type = Property.Type.FOLDER, name = "Golem", parent = "Bestiary", description = "Endstone Protector features.")
     public static boolean GolemAlertEnable = false;

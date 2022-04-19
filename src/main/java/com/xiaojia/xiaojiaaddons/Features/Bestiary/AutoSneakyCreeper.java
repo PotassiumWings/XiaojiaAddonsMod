@@ -3,28 +3,38 @@ package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.Pair;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.util.BlockPos;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
+import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3d;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getYaw;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
@@ -52,7 +62,7 @@ public class AutoSneakyCreeper {
             new BlockPos(16, 156, -33),
 
             new BlockPos(24, 157, -35),
-            new BlockPos(33, 158, -30),
+            new BlockPos(32, 158, -32),
             new BlockPos(37, 157, -26),
             new BlockPos(35, 152, -12),
 
@@ -72,7 +82,7 @@ public class AutoSneakyCreeper {
 
             // 34
             new BlockPos(25, 161, -24),
-            new BlockPos(17, 164, -13),
+            new BlockPos(18, 164, -12),
             new BlockPos(13, 164, -5),
             new BlockPos(12, 160, 2)
     ));
@@ -94,6 +104,7 @@ public class AutoSneakyCreeper {
             new Pair<>(34, 35), new Pair<>(35, 36), new Pair<>(36, 37), new Pair<>(37, 32),
             new Pair<>(19, 34)
     ));
+    private static final HashMap<Integer, ArrayList<Integer>> graph = new HashMap<>();
     private static final KeyBind keyBind = new KeyBind("Auto Sneaky Creeper", Keyboard.KEY_NONE);
     private static final ConcurrentLinkedDeque<Integer> indexes = new ConcurrentLinkedDeque<>();
     private static boolean should = false;
@@ -102,6 +113,16 @@ public class AutoSneakyCreeper {
     private static boolean shouldShow = false;
     private static boolean tryingEnable = false;
     private static long lastForceClose = 0;
+    public static Image defaultIcon = new Image("defaultPlayerIcon.png");
+
+    static {
+        for (int i = 0; i < positions.size(); i++)
+            graph.put(i, new ArrayList<>());
+        for (Pair<Integer, Integer> edge : edges) {
+            graph.get(edge.getKey()).add(edge.getValue());
+        }
+    }
+
     private Thread runningThread = null;
 
     private static void stop() {
@@ -131,6 +152,57 @@ public class AutoSneakyCreeper {
 
     public static int getSize() {
         return indexes.size();
+    }
+
+    // return added set for killed
+    private static HashSet<Integer> dfs(int index, double cap, HashSet<Integer> killed, List<EntityCreeper> creepers) {
+        if (cap < 0) return new HashSet<>();
+
+        HashSet<Integer> result = new HashSet<>(killed);
+        for (int next : graph.get(index)) {
+            double dis = distanceBetween(index, next);
+            HashSet<Integer> added = dfs(next, cap - dis, killed, creepers);
+            HashSet<Integer> along = getCreepersAlong(index, next, killed, added, creepers);
+            if (result.size() < added.size() + along.size()) {
+                added.addAll(along);
+                result = added;
+            }
+        }
+        return result;
+    }
+
+    private static double distanceBetween(int from, int to) {
+        return Math.sqrt(positions.get(from).distanceSq(positions.get(to)));
+    }
+
+    private static HashSet<Integer> getCreepersAlong(int s, int t, HashSet<Integer> s1, HashSet<Integer> s2, List<EntityCreeper> creepers) {
+        BlockPos from = positions.get(s);
+        BlockPos to = positions.get(t);
+        HashSet<Integer> res = new HashSet<>();
+        int MAX_DELTA = 20;
+        for (int delta = 0; delta <= MAX_DELTA; delta++) {
+            Vector3d v = new Vector3d(from.getX() + 0.5, from.getY() + 0.5, from.getZ() + 0.5);
+            Vector3d diff = new Vector3d(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ());
+            diff.scale(delta * 1.0 / MAX_DELTA);
+            v.add(diff);
+            // calculate from v
+            for (EntityCreeper creeper : creepers)
+                if (creeper.getDistance(v.x, v.y, v.z) < 7)
+                    res.add(creeper.getEntityId());
+        }
+        return res;
+    }
+
+    private static List<EntityCreeper> getCreepers() {
+        List<Entity> list = new ArrayList<>(getWorld().loadedEntityList);
+        List<EntityCreeper> res = new ArrayList<>();
+        for (Entity entity : list) {
+            if (!(entity instanceof EntityCreeper)) continue;
+            EntityCreeper e = ((EntityCreeper) entity);
+            if (e.getHealth() < 1) continue;
+            res.add(e);
+        }
+        return res;
     }
 
     @SubscribeEvent
@@ -183,7 +255,8 @@ public class AutoSneakyCreeper {
                     BlockPos lastDetectPos = getPlayer().getPosition();
                     long lastTime = TimeUtils.curTime();
 
-                    while (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4 && should) {
+                    while (MathUtils.distanceSquareFromPlayer(
+                            goingTo.getX(), getY(getPlayer()) + 1.5F, goingTo.getZ()) > 4 * 4 && should) {
                         BlockPos pos = getPlayer().getPosition();
                         if (pos.getX() != lastDetectPos.getX() || lastDetectPos.getZ() != pos.getZ()) {
                             lastDetectPos = pos;
@@ -249,27 +322,84 @@ public class AutoSneakyCreeper {
     }
 
     private int getNext(int index) {
-        ArrayList<Integer> going = new ArrayList<>();
-        for (Pair<Integer, Integer> edge : edges) {
-            if (edge.getKey() != index) continue;
-            going.add(edge.getValue());
+        int res = -1;
+        List<EntityCreeper> list = getCreepers();
+        ArrayList<Integer> nextIndexes = new ArrayList<>();
+        double MAX_LEN = 48;
+        for (int next : graph.get(index)) {
+            HashSet<Integer> along = getCreepersAlong(index, next, new HashSet<>(), new HashSet<>(), list);
+            HashSet<Integer> search = dfs(next, MAX_LEN - distanceBetween(index, next), along, list);
+            if (along.size() + search.size() > res) {
+                res = along.size() + search.size();
+                nextIndexes = new ArrayList<>(next);
+            } else if (along.size() + search.size() == res) {
+                nextIndexes.add(next);
+            }
         }
-        return going.get((int) (Math.random() * going.size()));
+        return nextIndexes.get((int) (nextIndexes.size() * Math.random()));
+    }
+
+    @SubscribeEvent
+    public void onRenderOverlay(RenderGameOverlayEvent.Pre event) {
+        if (!Checker.enabled) return;
+        if (!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) return;
+        if (!Configs.SneakyCreeperMap) return;
+        if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
+        RenderUtils.start();
+        RenderUtils.drawRect(new Color(0F, 0F, 0F, Configs.SNBackgroundAlpha / 255F).getRGB(),
+                Configs.SNMapX, Configs.SNMapY,
+                25 * Configs.SNMapScale, 25 * Configs.SNMapScale);
+        int x = MathUtils.floor(getX(getPlayer())), z = MathUtils.floor(getZ(getPlayer()));
+
+        Vector2f size = new Vector2f(Configs.SNMapScale * Configs.SNHeadScale * 0.02f, Configs.SNMapScale * Configs.SNHeadScale * 0.02f);
+        // player head
+        RenderUtils.retainTransforms(false);
+        translateTo(x, z);
+        RenderUtils.translate(size.x / 2F, size.y / 2F);
+        RenderUtils.rotate(getYaw() + 180);
+        RenderUtils.translate(-size.x / 2F, -size.y / 2F);
+        RenderUtils.drawImage(defaultIcon, 0, 0, size.x, size.y);
+        // positions
+        for (BlockPos pos : positions) {
+            RenderUtils.retainTransforms(false);
+            translateTo(pos.getX(), pos.getZ());
+            RenderUtils.drawRect(new Color(0, 0, 255).getRGB(),
+                    -Configs.SNMapScale / 2, -Configs.SNMapScale / 2,
+                    Configs.SNMapScale, Configs.SNMapScale);
+        }
+        // creepers
+        for (EntityCreeper creeper : getCreepers()) {
+            RenderUtils.retainTransforms(false);
+            translateTo(getX(creeper), getZ(creeper));
+            RenderUtils.drawRect(new Color(0, 255, 0).getRGB(),
+                    -Configs.SNMapScale / 2, -Configs.SNMapScale / 2,
+                    Configs.SNMapScale, Configs.SNMapScale);
+        }
+        if (goingTo != null) {
+            RenderUtils.retainTransforms(false);
+            translateTo(goingTo.getX(), goingTo.getZ());
+            RenderUtils.drawRect(new Color(255, 0, 0).getRGB(),
+                    -Configs.SNMapScale / 2, -Configs.SNMapScale / 2,
+                    Configs.SNMapScale, Configs.SNMapScale);
+        }
+        RenderUtils.end();
+    }
+
+    private static void translateTo(double x, double z) {
+        RenderUtils.translate(
+                Configs.SNMapX + (x - -40) * (Configs.SNMapScale * 25 / 90F),
+                Configs.SNMapY + (z - -45) * (Configs.SNMapScale * 25 / 90F)
+        );
     }
 
     private boolean existCreeperBeside() {
-        List<Entity> list = new ArrayList<>(getWorld().loadedEntityList);
-        for (Entity entity : list) {
-            if (entity instanceof EntityCreeper && ((EntityCreeper) entity).getHealth() > 1 &&
-                    MathUtils.distanceSquareFromPlayer(entity) < 5 * 5) {
-                return true;
-            }
-        }
-        return false;
+        return getCreepers().stream().anyMatch(e -> MathUtils.distanceSquareFromPlayer(e) < 5 * 5);
     }
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) return;
         if (goingTo != null) {
             if (!shouldShow && !Configs.DevTracing)
                 return;
