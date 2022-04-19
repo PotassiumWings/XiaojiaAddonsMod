@@ -19,9 +19,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.Color;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
@@ -90,7 +93,7 @@ public class AutoSneakyCreeper {
     private static int index = 0;
     private static boolean shouldShow = false;
     private Thread runningThread = null;
-    private static int lastIndex = 0;
+    private static ConcurrentLinkedDeque<Integer> indexes = new ConcurrentLinkedDeque<>();
 
     private static boolean tryingEnable = false;
     private static long lastForceClose = 0;
@@ -120,6 +123,10 @@ public class AutoSneakyCreeper {
         }
     }
 
+    public static int getSize() {
+        return indexes.size();
+    }
+
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
@@ -147,7 +154,6 @@ public class AutoSneakyCreeper {
                 ChatLib.chat("Starting a new Thread...");
                 if (goingTo == null) {
                     shouldShow = true;
-                    lastIndex = 0;
                     goingTo = positions.get(index);
 //                    if (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4) {
 //                        ChatLib.chat("Go near the blue block.");
@@ -178,14 +184,20 @@ public class AutoSneakyCreeper {
                         }
                         if (TimeUtils.curTime() - lastTime > 4000) ControlUtils.jump();
                         if (TimeUtils.curTime() - lastTime > 6000) {
-                            index = lastIndex;
+                            Integer integer = indexes.pollLast();
+                            if (integer == null) {
+                                stop();
+                                getPlayer().playSound("random.successful_hit", 1000, 1);
+                                return;
+                            }
+                            index = integer;
                             goingTo = positions.get(index);
                             ChatLib.chat("Backwards 1 step!");
-                            continue;
                         }
                         if (TimeUtils.curTime() - lastTime > 8000) {
                             stop();
                             getPlayer().playSound("random.successful_hit", 1000, 1);
+                            return;
                         }
 
                         if (facingThread == null || !facingThread.isAlive()) {
@@ -216,7 +228,8 @@ public class AutoSneakyCreeper {
                         Thread.sleep(20);
                     }
                     if (should) {
-                        lastIndex = index;
+                        indexes.offerLast(index);
+                        if (indexes.size() > 100) indexes.pollFirst();
                         index = getNext(index);
                     }
                 }

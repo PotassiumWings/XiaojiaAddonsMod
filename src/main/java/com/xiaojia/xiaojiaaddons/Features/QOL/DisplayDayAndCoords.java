@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Features.Bestiary.AutoSneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
@@ -85,6 +86,9 @@ public class DisplayDayAndCoords {
             DisplayLine line3 = new DisplayLine("pro: " + DevWater.process);
             line2.setScale(Configs.DisplayScale / 20F);
             display.addLine(line3);
+            DisplayLine line4 = new DisplayLine("sneaky queue: " + AutoSneakyCreeper.getSize());
+            line4.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line4);
             synchronized (DevMode.lines) {
                 for (DisplayLine devLine: DevMode.lines)
                     display.addLine(devLine);
