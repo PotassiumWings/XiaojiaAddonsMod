@@ -2,7 +2,6 @@ package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
-import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterUtils;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
@@ -109,14 +108,15 @@ public class AutoSneakyCreeper {
     private static final HashMap<Integer, ArrayList<Integer>> graph = new HashMap<>();
     private static final KeyBind keyBind = new KeyBind("Auto Sneaky Creeper", Keyboard.KEY_NONE);
     private static final ConcurrentLinkedDeque<Integer> indexes = new ConcurrentLinkedDeque<>();
+    public static Image defaultIcon = new Image("defaultPlayerIcon.png");
     private static boolean should = false;
     private static BlockPos goingTo = null;
     private static int index = 0;
     private static boolean shouldShow = false;
     private static boolean tryingEnable = false;
     private static long lastForceClose = 0;
-    public static Image defaultIcon = new Image("defaultPlayerIcon.png");
     private static StringBuilder log = new StringBuilder();
+    private static HashSet<Integer> toBeKilled = new HashSet<>();
 
     static {
         for (int i = 0; i < positions.size(); i++)
@@ -182,7 +182,7 @@ public class AutoSneakyCreeper {
         BlockPos from = positions.get(s);
         BlockPos to = positions.get(t);
         HashSet<Integer> res = new HashSet<>();
-        int MAX_DELTA = 20;
+        int MAX_DELTA = Configs.SneakySplit;
         for (int delta = 0; delta <= MAX_DELTA; delta++) {
             Vector3d v = new Vector3d(from.getX() + 0.5, from.getY() + 0.5, from.getZ() + 0.5);
             Vector3d diff = new Vector3d(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ());
@@ -190,7 +190,7 @@ public class AutoSneakyCreeper {
             v.add(diff);
             // calculate from v
             for (EntityCreeper creeper : creepers)
-                if (creeper.getDistance(v.x, v.y, v.z) < 7)
+                if (creeper.getDistance(v.x, v.y, v.z) < Configs.SneakySearchRadius / 10F)
                     res.add(creeper.getEntityId());
         }
         return res;
@@ -206,6 +206,19 @@ public class AutoSneakyCreeper {
             res.add(e);
         }
         return res;
+    }
+
+    private static void translateTo(double x, double z) {
+        RenderUtils.translate(
+                Configs.SNMapX + (x - -40) * (Configs.SNMapScale * 25 / 90F),
+                Configs.SNMapY + (z - -45) * (Configs.SNMapScale * 25 / 90F)
+        );
+    }
+
+    public static void printLog() {
+        System.err.println("AutoSneakyCreeper Log:");
+        System.err.println(log);
+        System.err.println();
     }
 
     @SubscribeEvent
@@ -328,21 +341,29 @@ public class AutoSneakyCreeper {
         int res = -1;
         List<EntityCreeper> list = getCreepers();
         ArrayList<Integer> nextIndexes = new ArrayList<>();
+        ArrayList<HashSet<Integer>> toKilledCreepers = new ArrayList<>();
         double MAX_LEN = Configs.SNMaxLen;
         log.append("Getting next: " + index + "\n");
         for (int next : graph.get(index)) {
             HashSet<Integer> along = getCreepersAlong(index, next, new HashSet<>(), new HashSet<>(), list);
             HashSet<Integer> search = dfs(next, MAX_LEN - distanceBetween(index, next), along, list);
-            if (along.size() + search.size() > res) {
-                res = along.size() + search.size();
+            along.addAll(search);
+            if (along.size() > res) {
+                res = along.size();
                 nextIndexes = new ArrayList<>();
+                toKilledCreepers = new ArrayList<>();
                 nextIndexes.add(next);
-            } else if (along.size() + search.size() == res) {
+                toKilledCreepers.add(along);
+            } else if (along.size() == res) {
                 nextIndexes.add(next);
+                toKilledCreepers.add(along);
             }
-            log.append("   next: " + next + ", along: " + along.size() + ", search: " + search.size() + ", size " + nextIndexes.size() + "\n");
+            log.append("   next: " + next + ", along: " + (along.size() - search.size())
+                    + ", search: " + search.size() + ", size " + nextIndexes.size() + "\n");
         }
-        return nextIndexes.get((int) (nextIndexes.size() * Math.random()));
+        int ind = (int) (nextIndexes.size() * Math.random());
+        toBeKilled = toKilledCreepers.get(ind);
+        return nextIndexes.get(ind);
     }
 
     @SubscribeEvent
@@ -375,9 +396,11 @@ public class AutoSneakyCreeper {
         }
         // creepers
         for (EntityCreeper creeper : getCreepers()) {
+            Color color = new Color(0, 255, 0);
+            if (toBeKilled.contains(creeper.getEntityId())) color = new Color(255, 255, 0);
             RenderUtils.retainTransforms(false);
             translateTo(getX(creeper), getZ(creeper));
-            RenderUtils.drawRect(new Color(0, 255, 0).getRGB(),
+            RenderUtils.drawRect(color.getRGB(),
                     -Configs.SNMapScale / 2, -Configs.SNMapScale / 2,
                     Configs.SNMapScale, Configs.SNMapScale);
         }
@@ -389,13 +412,6 @@ public class AutoSneakyCreeper {
                     Configs.SNMapScale, Configs.SNMapScale);
         }
         RenderUtils.end();
-    }
-
-    private static void translateTo(double x, double z) {
-        RenderUtils.translate(
-                Configs.SNMapX + (x - -40) * (Configs.SNMapScale * 25 / 90F),
-                Configs.SNMapY + (z - -45) * (Configs.SNMapScale * 25 / 90F)
-        );
     }
 
     private boolean existCreeperBeside() {
@@ -449,15 +465,10 @@ public class AutoSneakyCreeper {
         }
     }
 
-    public static void printLog() {
-        System.err.println("AutoSneakyCreeper Log:");
-        System.err.println(log);
-        System.err.println();
-    }
-
     @SubscribeEvent
     public void onLoad(WorldEvent.Load event) {
         log = new StringBuilder();
+        toBeKilled.clear();
         for (int i = 0; i < positions.size(); i++) {
             log.append("Graph log - " + i + " " + graph.get(i).size() + "\n");
         }

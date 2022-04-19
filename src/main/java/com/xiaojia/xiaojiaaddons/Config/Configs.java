@@ -263,6 +263,14 @@ public class Configs {
             description = "OwO", min = 1, max = 60)
     public static int SNMaxLen = 48;
 
+    @Property(type = Property.Type.NUMBER, name = "Sneaky Creeper Search Radius", parent = "Gunpowder Mines",
+            description = "OwO", min = 50, max = 90)
+    public static int SneakySearchRadius = 65;
+
+    @Property(type = Property.Type.NUMBER, name = "Sneaky Creeper Split Count", parent = "Gunpowder Mines",
+            description = "OwO", min = 1, max = 200)
+    public static int SneakySplit = 20;
+
     @Property(type = Property.Type.NUMBER, name = "(Sneaky) Map Scale", parent = "Gunpowder Mines", min = 1, max = 10)
     public static int SNMapScale = 7;
 
