@@ -19,10 +19,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.Color;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
@@ -70,7 +68,13 @@ public class AutoSneakyCreeper {
             new BlockPos(-5, 157, 17),
             new BlockPos(1, 158, 16),
             new BlockPos(5, 155, 15),
-            new BlockPos(8, 152, 25)
+            new BlockPos(8, 152, 25),
+
+            // 34
+            new BlockPos(25, 161, -24),
+            new BlockPos(17, 164, -13),
+            new BlockPos(13, 164, -5),
+            new BlockPos(12, 160, 2)
     ));
 
     private static final ArrayList<Pair<Integer, Integer>> edges = new ArrayList<>(Arrays.asList(
@@ -85,18 +89,20 @@ public class AutoSneakyCreeper {
             new Pair<>(26, 0),
             new Pair<>(7, 17),
             new Pair<>(27, 28), new Pair<>(28, 29), new Pair<>(29, 30),
-            new Pair<>(30, 31), new Pair<>(31, 32), new Pair<>(32, 33), new Pair<>(33, 0)
+            new Pair<>(30, 31), new Pair<>(31, 32), new Pair<>(32, 33), new Pair<>(33, 0),
+
+            new Pair<>(34, 35), new Pair<>(35, 36), new Pair<>(36, 37), new Pair<>(37, 32),
+            new Pair<>(19, 34)
     ));
     private static final KeyBind keyBind = new KeyBind("Auto Sneaky Creeper", Keyboard.KEY_NONE);
+    private static final ConcurrentLinkedDeque<Integer> indexes = new ConcurrentLinkedDeque<>();
     private static boolean should = false;
     private static BlockPos goingTo = null;
     private static int index = 0;
     private static boolean shouldShow = false;
-    private Thread runningThread = null;
-    private static ConcurrentLinkedDeque<Integer> indexes = new ConcurrentLinkedDeque<>();
-
     private static boolean tryingEnable = false;
     private static long lastForceClose = 0;
+    private Thread runningThread = null;
 
     private static void stop() {
         ControlUtils.stopMoving();
@@ -135,6 +141,7 @@ public class AutoSneakyCreeper {
             // re-enable
             if (!should && tryingEnable) {
                 lastForceClose = TimeUtils.curTime();
+                ChatLib.chat("Stopped from re-enabling.");
                 return;
             }
 
@@ -193,6 +200,7 @@ public class AutoSneakyCreeper {
                             index = integer;
                             goingTo = positions.get(index);
                             ChatLib.chat("Backwards 1 step!");
+                            lastTime = TimeUtils.curTime();
                         }
                         if (TimeUtils.curTime() - lastTime > 8000) {
                             stop();
