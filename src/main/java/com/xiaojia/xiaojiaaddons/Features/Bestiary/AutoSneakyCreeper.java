@@ -250,11 +250,6 @@ public class AutoSneakyCreeper {
                 if (goingTo == null) {
                     shouldShow = true;
                     goingTo = positions.get(index);
-//                    if (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4) {
-//                        ChatLib.chat("Go near the blue block.");
-//                        while (MathUtils.distanceSquareFromPlayer(goingTo) > 4 * 4)
-//                            Thread.sleep(100);
-//                    }
                     ChatLib.chat("Start moving automatically.");
                     ControlUtils.stopMoving();
                     shouldShow = false;
@@ -272,7 +267,8 @@ public class AutoSneakyCreeper {
                     long lastTime = TimeUtils.curTime();
 
                     while (MathUtils.distanceSquareFromPlayer(
-                            goingTo.getX(), getY(getPlayer()) + 1.5F, goingTo.getZ()) > 4 * 4 && should) {
+                            goingTo.getX(), getY(getPlayer()) + 1.5F, goingTo.getZ())
+                            > 3.5 * 3.5 && should) {
                         BlockPos pos = getPlayer().getPosition();
                         if (pos.getX() != lastDetectPos.getX() || lastDetectPos.getZ() != pos.getZ()) {
                             lastDetectPos = pos;
@@ -290,11 +286,6 @@ public class AutoSneakyCreeper {
                             goingTo = positions.get(index);
                             ChatLib.chat("Backwards 1 step!");
                             lastTime = TimeUtils.curTime();
-                        }
-                        if (TimeUtils.curTime() - lastTime > 8000) {
-                            stop();
-                            getPlayer().playSound("random.successful_hit", 1000, 1);
-                            return;
                         }
 
                         if (facingThread == null || !facingThread.isAlive()) {

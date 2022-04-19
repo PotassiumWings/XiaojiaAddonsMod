@@ -21,7 +21,7 @@ public class SkyblockUtils {
 
     private static final ArrayList<String> maps = new ArrayList<>(Arrays.asList(
             "Ruins", "Forest", "Mountain", "High Level", "Wilderness",
-            "Dungeon Hub", "Kuudra's End",
+            "Dungeon Hub", "Kuudra's End", "Deep Caverns",
             "Hub", "Spider's Den", "Gunpowder Mines", "Void Sepulture", "Dragon's Nest",
             "The End", "The Mist", "Blazing Fortress", "The Catacombs", "Howling Cave",
             "Your Island", "Dojo Arena",  "None"
@@ -180,7 +180,7 @@ public class SkyblockUtils {
     }
 
     public static boolean isInGunpowderMines() {
-        return currentMap.equals("Gunpowder Mines");
+        return currentMap.equals("Gunpowder Mines") || currentMap.equals("Deep Caverns");
     }
 
     public static boolean isInHowlingCave() {
