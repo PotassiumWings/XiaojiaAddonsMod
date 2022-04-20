@@ -73,7 +73,7 @@ public class SimonSays {
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Configs.SimonSaysAutoChangeDirection) return;
-        if (MathUtils.distanceSquareFromPlayer(109, 120, 93) > 3 * 3) return;
+        if (MathUtils.distanceSquareFromPlayer(109, 121, 93) > 3 * 3) return;
         if (canStartClick && (thread == null || !thread.isAlive()) && clickIndex < clicks.size()) {
             canStartClick = false;
             thread = new Thread(() -> {

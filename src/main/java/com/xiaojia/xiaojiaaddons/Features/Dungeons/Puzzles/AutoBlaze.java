@@ -493,7 +493,7 @@ public class AutoBlaze {
         }
 
         Thread.sleep(Configs.EtherWarpDelayAfter);
-        if (MathUtils.distanceSquareFromPlayer(toWarp.x, toWarp.y + 0.25, toWarp.z) > 1) {
+        if (MathUtils.distanceSquareFromPlayer(toWarp.x, toWarp.y + 0.25 + MathUtils.getEyeHeight(getPlayer()), toWarp.z) > 1) {
             ChatLib.chat("Failed to etherwarp!");
             log.append(String.format("Player is at %.2f %.2f %.2f", getX(getPlayer()), getY(getPlayer()), getZ(getPlayer()))).append("\n");
             throw new Exception();
