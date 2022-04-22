@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.block.Block;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -13,11 +14,13 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public abstract class BlockESP {
     private final HashSet<BlockPos> blocks = new HashSet<>();
@@ -62,6 +65,22 @@ public abstract class BlockESP {
             scanThread.start();
         }
     }
+
+    private static long lastCheck = 0;
+
+    @SubscribeEvent
+    public void onTickCheck(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (getWorld() == null) return;
+        if (getPlayer() == null) return;
+        if (TimeUtils.curTime() - lastCheck > 1000) {
+            lastCheck = TimeUtils.curTime();
+            synchronized (blocks) {
+                blocks.removeIf(pos -> getPlayer().getDistanceSq(pos) < 100 * 100 && !check(pos.getX(), pos.getY(), pos.getZ()));
+            }
+        }
+    }
+
 
     public void deal(int x, int y, int z) {
         if (check(x, y, z)) {

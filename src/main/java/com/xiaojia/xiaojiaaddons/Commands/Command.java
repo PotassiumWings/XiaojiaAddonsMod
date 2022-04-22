@@ -16,6 +16,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.MusicRune;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.DojoUtils;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BatchCommands;
 import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
@@ -147,6 +148,9 @@ public class Command extends CommandBase {
                 int dy = Integer.parseInt(strings[5]);
                 int dz = Integer.parseInt(strings[6]);
                 new Thread(() -> AutoBuildFarmVertical.check(x, y, z, x + dx, y + dy, z + dz)).start();
+                break;
+            case "musicrune":
+                MusicRune.play();
                 break;
 
             // debug commands

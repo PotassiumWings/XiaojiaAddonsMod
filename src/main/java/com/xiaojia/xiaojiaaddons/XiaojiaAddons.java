@@ -56,6 +56,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.DevMode;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.MusicRune;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.NoRotate;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ProtectItems;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
@@ -155,7 +156,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.5.9";
+    public static final String VERSION = "2.4.6";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -270,6 +271,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new KeepSprint());
         MinecraftForge.EVENT_BUS.register(new ShowLowestBin());
         MinecraftForge.EVENT_BUS.register(new DevMode());
+        MinecraftForge.EVENT_BUS.register(new MusicRune());
 
         // Nether
         MinecraftForge.EVENT_BUS.register(new CorruptedESP());

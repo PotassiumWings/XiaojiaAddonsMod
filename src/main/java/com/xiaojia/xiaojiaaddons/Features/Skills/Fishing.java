@@ -112,7 +112,8 @@ public class Fishing {
         if (getPlayer().fishEntity == null) return;
         EntityFishHook hook = getPlayer().fishEntity;
         if (MathUtils.distanceSquaredFromPoints(hook.posX, hook.posY, hook.posZ,
-                packet.getXCoordinate(), packet.getYCoordinate(), packet.getZCoordinate()) < 0.1) {
+                packet.getXCoordinate(), hook.posY, packet.getZCoordinate()) < 0.1 &&
+                Math.abs(hook.posY - packet.getYCoordinate()) < 1) {
             boolean flag = false;
             if (hook.isInWater()) flag = packet.getParticleSpeed() > 0.1 && packet.getParticleSpeed() < 0.3;
             if (hook.isInLava()) flag = true;
