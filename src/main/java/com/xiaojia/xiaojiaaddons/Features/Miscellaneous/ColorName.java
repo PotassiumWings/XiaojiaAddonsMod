@@ -341,6 +341,7 @@ public class ColorName {
                 // PotassiumWings (DEAD)
                 int index = 0;
                 if (splits[0].matches("^\\[.*]$")) index = 1;
+                if (splits.length <= index) return;
                 name = splits[index];
 
                 if (colorMap.containsKey(name)) {

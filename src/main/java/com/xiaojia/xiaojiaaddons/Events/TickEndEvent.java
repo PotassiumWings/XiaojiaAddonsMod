@@ -20,32 +20,32 @@ public class TickEndEvent extends Event {
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             try {
-                MinecraftForge.EVENT_BUS.post(new TickEndEvent());
-//                Event tickEndEvent = new TickEndEvent();
-//                Field busIdField = EventBus.class.getDeclaredField("busID");
-//                busIdField.setAccessible(true);
-//                int busID = busIdField.getInt(MinecraftForge.EVENT_BUS);
-//                IEventListener[] listeners = tickEndEvent.getListenerList().getListeners(busID);
-//                int index = 0;
-//                long start = TimeUtils.curTime();
-//                for (; index < listeners.length; index++) {
-//                    int max = 1;
-//                    if (owo && !listeners[index].toString().matches(".*(HIGHEST|HIGH|NORMAL|LOW|LOWEST).*")) max = 10000;
-//                    for (int i = 0; i < max; i++)
-//                        listeners[index].invoke(tickEndEvent);
-//                    long cur = TimeUtils.curTime();
-//                    timeConsumed[index] = (int) (cur - start);
-//                    start = cur;
-//                }
-//                if (owo) {
-//                    for (int i = 0; i < listeners.length; i++) {
-//                        ChatLib.chat(listeners[i].toString() + " " + timeConsumed[i]);
-//                    }
-//                    owo = false;
-//                }
+//                MinecraftForge.EVENT_BUS.post(new TickEndEvent());
+                Event tickEndEvent = new TickEndEvent();
+                Field busIdField = EventBus.class.getDeclaredField("busID");
+                busIdField.setAccessible(true);
+                int busID = busIdField.getInt(MinecraftForge.EVENT_BUS);
+                IEventListener[] listeners = tickEndEvent.getListenerList().getListeners(busID);
+                int index = 0;
+                long start = TimeUtils.curTime();
+                for (; index < listeners.length; index++) {
+                    int max = 1;
+                    if (owo && !listeners[index].toString().matches(".*(HIGHEST|HIGH|NORMAL|LOW|LOWEST).*")) max = 100;
+                    for (int i = 0; i < max; i++)
+                        listeners[index].invoke(tickEndEvent);
+                    long cur = TimeUtils.curTime();
+                    timeConsumed[index] = (int) (cur - start);
+                    start = cur;
+                }
+                if (owo) {
+                    for (int i = 0; i < listeners.length; i++) {
+                        ChatLib.chat(listeners[i].toString() + " " + timeConsumed[i]);
+                    }
+                    owo = false;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
-//                owo = false;
+                owo = false;
             }
         }
     }
