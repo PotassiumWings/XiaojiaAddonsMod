@@ -24,10 +24,10 @@ public abstract class RenderEntityESP {
 
     @SubscribeEvent
     public final void onTick(TickEndEvent event) {
-        if (!Checker.enabled) return;
-        if (!Configs.GeneralESP) return;
-        if (getWorld() == null) return;
-        if (!enabled()) return;
+        if (!Checker.enabled || !Configs.GeneralESP || getWorld() == null || !enabled())  {
+            renderEntities = new ArrayList<>();
+            return;
+        }
         try {
             List<EntityInfo> newEntities = new ArrayList<>();
             for (Entity entity : getEntities()) {
