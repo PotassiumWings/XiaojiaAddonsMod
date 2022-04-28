@@ -32,6 +32,12 @@ public class AutoCombine extends StepEvent {
         put("Mana Steal", 3);
         put("Smarty Pants", 5);
         put("Swarm", 5);
+        put("Strong Mana", 10);
+        put("Hardened Mana", 10);
+        put("Ferocious Mana", 10);
+        put("Mana Vampire", 10);
+        put("Charm", 5);
+        put("Corruption", 5);
     }};
 
     private static boolean isFusingBooks = false;

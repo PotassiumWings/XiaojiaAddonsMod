@@ -98,6 +98,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.NoSlowdown;
 import com.xiaojia.xiaojiaaddons.Features.QOL.OneTick;
 import com.xiaojia.xiaojiaaddons.Features.QOL.RelicESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.RemoveBlindness;
+import com.xiaojia.xiaojiaaddons.Features.QOL.ShowAttribute;
 import com.xiaojia.xiaojiaaddons.Features.QOL.ShowBookName;
 import com.xiaojia.xiaojiaaddons.Features.QOL.ShowEtherwarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
@@ -156,7 +157,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.6";
+    public static final String VERSION = "2.4.6.1";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -318,6 +319,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new RemoveBlindness());
         MinecraftForge.EVENT_BUS.register(new HoldRightClick());
         MinecraftForge.EVENT_BUS.register(new TransferBack());
+        MinecraftForge.EVENT_BUS.register(new ShowAttribute());
 
         // Skills
         MinecraftForge.EVENT_BUS.register(new AutoCloseCrystalHollowsChest());

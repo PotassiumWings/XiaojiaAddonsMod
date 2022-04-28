@@ -780,6 +780,24 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Combine Smarty Pants", parent = "Auto Combine")
     public static boolean CombineSmartyPants = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Ferocious Mana", parent = "Auto Combine")
+    public static boolean CombineFerociousMana = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Strong Mana", parent = "Auto Combine")
+    public static boolean CombineStrongMana = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Hardened Mana", parent = "Auto Combine")
+    public static boolean CombineHardenedMana = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Mana Vampire", parent = "Auto Combine")
+    public static boolean CombineManaVampire = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Charm", parent = "Auto Combine")
+    public static boolean CombineCharm = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Combine Corruption", parent = "Auto Combine")
+    public static boolean CombineCorruption = false;
+
     // BlockAbility
     @Property(type = Property.Type.FOLDER, name = "Block Abilities", parent = "QOL")
     public static boolean BlockAbility = false;
@@ -859,6 +877,17 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Ghost Block with KeyBind", parent = "Ghost Block",
             description = "Create a keybinding to use!")
     public static boolean GhostBlockWithKeyBind = false;
+
+    // Show Attribute
+    @Property(type = Property.Type.FOLDER, name = "Show Attribute", parent = "QOL",
+            description = "Shows all attribute shards which contains the string you set.")
+    public static boolean ShowAttributeEnable = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Attribute Enable", parent = "Show Attribute")
+    public static boolean ShowAttribute = false;
+
+    @Property(type = Property.Type.TEXT, name = "Show Attribute Contains", parent = "Show Attribute")
+    public static String ShowAttributeName = "Mana Pool";
 
     // NoSlowdown
     @Property(type = Property.Type.FOLDER, name = "No Slowdown", parent = "QOL",
