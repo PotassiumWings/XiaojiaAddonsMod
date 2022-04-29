@@ -394,6 +394,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "XYZ Helper", parent = "XYZ")
     public static boolean XYZHelper = false;
 
+    @Property(type = Property.Type.SELECT, name = "XYZ Mode", parent = "XYZ", options = {"Z", "Y", "X"})
+    public static int XYZMode = 0;
+
     // Kuudra
     @Property(type = Property.Type.FOLDER, name = "Kuudra", parent = "Nether")
     public static boolean KuudraEnable = false;

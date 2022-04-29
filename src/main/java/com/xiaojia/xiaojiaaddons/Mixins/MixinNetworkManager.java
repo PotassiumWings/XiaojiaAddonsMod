@@ -1,7 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Mixins;
 
 import com.xiaojia.xiaojiaaddons.Events.PacketSendEvent;
-import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraftforge.common.MinecraftForge;
@@ -13,10 +12,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(NetworkManager.class)
 public class MixinNetworkManager {
 
-    @Inject(method = "sendPacket", at = @At("HEAD"))
+    @Inject(method = "sendPacket", at = @At("HEAD"), cancellable = true)
     public void onPacketSend(Packet packet, CallbackInfo ci) {
         try {
-            MinecraftForge.EVENT_BUS.post(new PacketSendEvent(packet));
+            if (MinecraftForge.EVENT_BUS.post(new PacketSendEvent(packet)))
+                ci.cancel();
         } catch (Exception e) {
             e.printStackTrace();
         }

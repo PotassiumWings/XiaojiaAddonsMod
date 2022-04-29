@@ -39,6 +39,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
@@ -211,7 +212,8 @@ public class Command extends CommandBase {
             case "entities":
                 List<Entity> list = getWorld().loadedEntityList;
                 for (Entity entity : list) {
-                    ChatLib.chat(entity.hasCustomName() + ", " + entity.getName() + ", " + MathUtils.getPosString(entity));
+                    ChatLib.chat(entity.hasCustomName() + ", " + entity.getName() + ", " + MathUtils.getPosString(entity) +
+                            (entity instanceof EntityLivingBase ? ((EntityLivingBase) entity).getHealth() : ""));
                 }
                 break;
             case "m7":
