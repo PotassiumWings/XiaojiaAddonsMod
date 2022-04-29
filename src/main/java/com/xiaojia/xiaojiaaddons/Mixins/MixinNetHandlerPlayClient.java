@@ -1,7 +1,6 @@
 package com.xiaojia.xiaojiaaddons.Mixins;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
-import com.xiaojia.xiaojiaaddons.Events.PacketSendEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.M7Dragon;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
@@ -12,11 +11,9 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S0FPacketSpawnMob;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.network.play.server.S27PacketExplosion;
-import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -68,15 +65,6 @@ public abstract class MixinNetHandlerPlayClient {
         Entity entity = clientWorldController.getEntityByID(packet.getEntityID());
         if (entity instanceof EntityDragon) {
             M7Dragon.onSpawnDragon((EntityDragon) entity);
-        }
-    }
-
-    @Inject(method = "addToSendQueue", at = @At("HEAD"))
-    public void onPacketSend(Packet packet, CallbackInfo ci) {
-        try {
-            MinecraftForge.EVENT_BUS.post(new PacketSendEvent(packet));
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

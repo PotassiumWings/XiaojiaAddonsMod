@@ -18,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -220,6 +221,10 @@ public class GuiUtils {
 
     public static void drawLine(float sx, float sy, float sz, float tx, float ty, float tz, Color color, int lineWidth) {
         drawLineWithDepthAbsolute(sx, sy, sz, tx, ty, tz, color, lineWidth);
+    }
+
+    public static void drawLine(Vec3 from, Vec3 to, Color color, int lineWidth) {
+        drawLine((float) from.xCoord, (float) from.yCoord, (float) from.zCoord, (float) to.xCoord, (float) to.yCoord, (float) to.zCoord, color, lineWidth);
     }
 
     private static void drawLineWithDepthAbsolute(float sx, float sy, float sz, float tx, float ty, float tz, Color color, int lineWidth) {

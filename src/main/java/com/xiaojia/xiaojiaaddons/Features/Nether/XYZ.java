@@ -6,9 +6,9 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
-import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
@@ -18,10 +18,12 @@ import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -33,8 +35,12 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class XYZ {
-    private HashSet<Integer> charmed = new HashSet<>();
+    private final HashSet<Integer> charmed = new HashSet<>();
     private long lastClick = 0;
+    private AxisAlignedBB entityBox = null;
+    private Vec3 eyePos = null;
+    private Vec3 lookVec = null;
+    private Vec3 hitVec = null;
 
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent event) {
@@ -59,9 +65,9 @@ public class XYZ {
             else if (name.contains("Wai")) ys.add(entity);
             else if (name.contains("Zee")) zs.add(entity);
         }
-        xs.sort((a, b) -> (int)(MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
-        ys.sort((a, b) -> (int)(MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
-        zs.sort((a, b) -> (int)(MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
+        xs.sort((a, b) -> (int) (MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
+        ys.sort((a, b) -> (int) (MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
+        zs.sort((a, b) -> (int) (MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
         try {
             Entity entity = null;
             boolean charm = false;
@@ -131,9 +137,9 @@ public class XYZ {
     @SubscribeEvent
     public void onPacketSend(PacketSendEvent event) {
         if (!SessionUtils.isDev()) return;
-        if (TimeUtils.curTime() - lastClick < 400) {
+        if (TimeUtils.curTime() - lastClick < 1000) {
             ChatLib.chat(event.packet.getClass().getSimpleName() +
-                    (event.packet instanceof C02PacketUseEntity ? ", " + (((C02PacketUseEntity) event.packet)).getAction() : ""));
+                    (event.packet instanceof C02PacketUseEntity ? ", " + MathUtils.getPosString((((C02PacketUseEntity) event.packet)).getHitVec()) : ""));
         }
     }
 
@@ -157,15 +163,15 @@ public class XYZ {
 
     private void tryClickEntity(Entity entity) {
         ControlUtils.face(getX(entity), getY(entity) + entity.height / 2, getZ(entity));
-        ControlUtils.forceFace();
+//        ControlUtils.forceFace();
 //        ControlUtils.rightClick();
 
-        Vec3 vec3 = entity.getPositionEyes(MathUtils.partialTicks);
-        double d0 = (double)XiaojiaAddons.mc.playerController.getBlockReachDistance();
-        Vec3 vec31 = entity.getLook(MathUtils.partialTicks);
+        Vec3 vec3 = getPlayer().getPositionEyes(1.0F);
+        double d0 = XiaojiaAddons.mc.playerController.getBlockReachDistance();
+        Vec3 vec31 = getPlayer().getLook(1.0F);
         Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
         float f1 = entity.getCollisionBorderSize();
-        AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expand((double)f1, (double)f1, (double)f1);
+        AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expand(f1, f1, f1);
         MovingObjectPosition moving = axisalignedbb.calculateIntercept(vec3, vec32);
 
         Vec3 vec = new Vec3(
@@ -174,6 +180,34 @@ public class XYZ {
                 moving.hitVec.zCoord - entity.posZ
         );
 
+        hitVec = vec;
+        lookVec = vec31;
+        entityBox = axisalignedbb;
+        eyePos = vec3;
+
         XiaojiaAddons.mc.getNetHandler().getNetworkManager().sendPacket(new C02PacketUseEntity(entity, vec));
+    }
+
+    @SubscribeEvent
+    public void onRender(RenderWorldLastEvent event) {
+        if (entityBox == null || lookVec == null || eyePos == null || hitVec == null) return;
+        GuiUtils.drawBoundingBox(entityBox, 2, new Color(240, 220, 230, 80));
+        draw(eyePos, new Color(255, 0, 0, 170));
+        GuiUtils.drawLine(
+                eyePos,
+                eyePos.addVector(lookVec.xCoord * 4.5, lookVec.yCoord * 4.5, lookVec.zCoord * 4.5),
+                new Color(0, 0, 255), 3
+        );
+        draw(hitVec, new Color(0, 255, 0, 170));
+    }
+
+    private void draw(Vec3 vec, Color color) {
+        if (vec != null) {
+            GuiUtils.drawBoxAtPos(
+                    (float) vec.xCoord, (float) vec.yCoord, (float) vec.zCoord,
+                    color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
+                    0.01F, 0.01F, 0
+            );
+        }
     }
 }

@@ -17,6 +17,7 @@
         "MixinEntity",
         "MixinEntityPlayerSP",
         "MixinEntityRenderer",
+        "MixinNetworkManager",
         "MixinNetHandlerPlayClient",
         "MixinRenderItem",
         "MixinRenderManager",

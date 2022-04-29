@@ -126,6 +126,10 @@ public class MathUtils {
         return String.format("(%.2f %.2f %.2f)", getX(entity), getY(entity), getZ(entity));
     }
 
+    public static String getPosString(Vec3 vec) {
+        return String.format("(%.2f %.2f %.2f)", vec.xCoord, vec.yCoord, vec.zCoord);
+    }
+
     public static boolean differentPosition(float x, float y, float z) {
         return Math.abs(getX(getPlayer()) - x) > 1e-2 ||
                 Math.abs(getY(getPlayer()) - y) > 1e-2 ||
