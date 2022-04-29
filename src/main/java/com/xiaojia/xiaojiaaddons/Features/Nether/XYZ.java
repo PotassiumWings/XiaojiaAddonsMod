@@ -1,12 +1,14 @@
 package com.xiaojia.xiaojiaaddons.Features.Nether;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.PacketSendEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
+import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
@@ -34,7 +36,7 @@ public class XYZ {
     public void onRightClick(PlayerInteractEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.XYZHelper) return;
-        if (!SkyblockUtils.isInNether()) return;
+        if (!SkyblockUtils.isInMysticMarsh()) return;
         if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_AIR) return;
 
         if (TimeUtils.curTime() - lastClick < 30) return;
@@ -66,7 +68,7 @@ public class XYZ {
             } else {
                 if (ys.size() != 0) {
                     for (Entity wai : ys) {
-                        if (!wai.getName().contains("50/100")) {
+                        if (!ChatLib.removeFormatting(wai.getName()).contains("50/100")) {
                             entity = wai;
                             harvest = true;
                             break;
@@ -84,7 +86,7 @@ public class XYZ {
                 }
                 if (entity == null && xs.size() != 0) {
                     for (Entity exe : xs) {
-                        if (!exe.getName().contains("50/100")) {
+                        if (!ChatLib.removeFormatting(exe.getName()).contains("50/100")) {
                             entity = exe;
                             harvest = true;
                             break;
@@ -107,7 +109,7 @@ public class XYZ {
                 lastClick = TimeUtils.curTime();
                 if (charm) {
                     swapCharm();
-                    charmed.add(entity.getEntityId());
+//                    charmed.add(entity.getEntityId());
                 }
                 if (harvest) swapHarvest();
                 tryClickEntity(entity);
@@ -120,6 +122,14 @@ public class XYZ {
     @SubscribeEvent
     public void onLoad(WorldEvent.Load event) {
         charmed.clear();
+    }
+
+    @SubscribeEvent
+    public void onPacketSend(PacketSendEvent event) {
+        if (!SessionUtils.isDev()) return;
+        if (TimeUtils.curTime() - lastClick < 2000) {
+            ChatLib.chat(event.packet.toString());
+        }
     }
 
     private void swapCharm() throws Exception {

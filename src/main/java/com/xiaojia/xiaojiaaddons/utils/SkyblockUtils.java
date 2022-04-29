@@ -221,6 +221,10 @@ public class SkyblockUtils {
         return isInNether;
     }
 
+    public static boolean isInMysticMarsh() {
+        return currentMap.equals("Mystic Marsh");
+    }
+
     public static int calcPing() {
         int cnt = 0;
         int sum = 0;
