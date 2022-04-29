@@ -6,7 +6,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -19,6 +21,14 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class MathUtils {
     public static float partialTicks = 0;
+
+    public static Vec3 getCurrentLook(float pitch, float yaw) {
+        float f = MathHelper.cos(-yaw * 0.017453292F - (float)Math.PI);
+        float f1 = MathHelper.sin(-yaw * 0.017453292F - (float)Math.PI);
+        float f2 = -MathHelper.cos(-pitch * 0.017453292F);
+        float f3 = MathHelper.sin(-pitch * 0.017453292F);
+        return new Vec3((double)(f1 * f2), (double)f3, (double)(f * f2));
+    }
 
     public static boolean equal(Vector3d a, Vector3d b) {
         double delta = distanceSquaredFromPoints(a.x, a.y, a.z, b.x, b.y, b.z);

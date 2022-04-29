@@ -161,6 +161,11 @@ public class ControlUtils {
         changeDirection(yaw, pitch);
     }
 
+    public static void forceFace() {
+        getPlayer().prevRotationPitch = getPlayer().rotationPitch;
+        getPlayer().prevRotationYaw = getPlayer().rotationYaw;
+    }
+
     public static void face(double tx, double ty, double tz) {
         face((float) tx, (float) ty, (float) tz);
     }

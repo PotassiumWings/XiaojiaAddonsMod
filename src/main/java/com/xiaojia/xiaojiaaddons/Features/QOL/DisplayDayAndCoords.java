@@ -10,11 +10,13 @@ import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -68,27 +70,32 @@ public class DisplayDayAndCoords {
             display.addLine(line);
         }
         if (SessionUtils.isDev()) {
-            DisplayLine line = new DisplayLine("Name Cache size: " + ColorName.getCacheSize());
-            line.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line);
-            DisplayLine bookCacheLine = new DisplayLine("Book Cache size: " + ShowBookName.getCacheSize());
-            bookCacheLine.setScale(Configs.DisplayScale / 20F);
-            display.addLine(bookCacheLine);
-            DisplayLine fixCacheLine = new DisplayLine("Fix Entity size: " + StarredMobESP.getSetSize());
-            fixCacheLine.setScale(Configs.DisplayScale / 20F);
-            display.addLine(fixCacheLine);
+//            DisplayLine line = new DisplayLine("Name Cache size: " + ColorName.getCacheSize());
+//            line.setScale(Configs.DisplayScale / 20F);
+//            display.addLine(line);
+//            DisplayLine bookCacheLine = new DisplayLine("Book Cache size: " + ShowBookName.getCacheSize());
+//            bookCacheLine.setScale(Configs.DisplayScale / 20F);
+//            display.addLine(bookCacheLine);
+//            DisplayLine fixCacheLine = new DisplayLine("Fix Entity size: " + StarredMobESP.getSetSize());
+//            fixCacheLine.setScale(Configs.DisplayScale / 20F);
+//            display.addLine(fixCacheLine);
             DisplayLine line1 = new DisplayLine("yaw: " + MathUtils.getYaw());
             line1.setScale(Configs.DisplayScale / 20F);
             display.addLine(line1);
             DisplayLine line2 = new DisplayLine("pitch: " + MathUtils.getPitch());
             line2.setScale(Configs.DisplayScale / 20F);
             display.addLine(line2);
-            DisplayLine line3 = new DisplayLine("pro: " + DevWater.process);
-            line2.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line3);
-            DisplayLine line4 = new DisplayLine("sneaky queue: " + AutoSneakyCreeper.getSize());
-            line4.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line4);
+//            DisplayLine line3 = new DisplayLine("pro: " + DevWater.process);
+//            line2.setScale(Configs.DisplayScale / 20F);
+//            display.addLine(line3);
+//            DisplayLine line4 = new DisplayLine("sneaky queue: " + AutoSneakyCreeper.getSize());
+//            line4.setScale(Configs.DisplayScale / 20F);
+//            display.addLine(line4);
+
+            Vec3 vec = XiaojiaAddons.mc.objectMouseOver.hitVec;
+            DisplayLine line5 = new DisplayLine(String.format("Moving Object: %.2f %.2f %.2f", vec.xCoord, vec.yCoord, vec.zCoord));
+            line5.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line5);
             synchronized (DevMode.lines) {
                 for (DisplayLine devLine: DevMode.lines)
                     display.addLine(devLine);

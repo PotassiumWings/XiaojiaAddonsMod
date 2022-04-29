@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.Nether;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.PacketSendEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
@@ -13,7 +14,10 @@ import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -109,7 +113,7 @@ public class XYZ {
                 lastClick = TimeUtils.curTime();
                 if (charm) {
                     swapCharm();
-//                    charmed.add(entity.getEntityId());
+                    charmed.add(entity.getEntityId());
                 }
                 if (harvest) swapHarvest();
                 tryClickEntity(entity);
@@ -127,8 +131,9 @@ public class XYZ {
     @SubscribeEvent
     public void onPacketSend(PacketSendEvent event) {
         if (!SessionUtils.isDev()) return;
-        if (TimeUtils.curTime() - lastClick < 2000) {
-            ChatLib.chat(event.packet.toString());
+        if (TimeUtils.curTime() - lastClick < 400) {
+            ChatLib.chat(event.packet.getClass().getSimpleName() +
+                    (event.packet instanceof C02PacketUseEntity ? ", " + (((C02PacketUseEntity) event.packet)).getAction() : ""));
         }
     }
 
@@ -152,6 +157,23 @@ public class XYZ {
 
     private void tryClickEntity(Entity entity) {
         ControlUtils.face(getX(entity), getY(entity) + entity.height / 2, getZ(entity));
-        ControlUtils.rightClick();
+        ControlUtils.forceFace();
+//        ControlUtils.rightClick();
+
+        Vec3 vec3 = entity.getPositionEyes(MathUtils.partialTicks);
+        double d0 = (double)XiaojiaAddons.mc.playerController.getBlockReachDistance();
+        Vec3 vec31 = entity.getLook(MathUtils.partialTicks);
+        Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
+        float f1 = entity.getCollisionBorderSize();
+        AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expand((double)f1, (double)f1, (double)f1);
+        MovingObjectPosition moving = axisalignedbb.calculateIntercept(vec3, vec32);
+
+        Vec3 vec = new Vec3(
+                moving.hitVec.xCoord - entity.posX,
+                moving.hitVec.yCoord - entity.posY,
+                moving.hitVec.zCoord - entity.posZ
+        );
+
+        XiaojiaAddons.mc.getNetHandler().getNetworkManager().sendPacket(new C02PacketUseEntity(entity, vec));
     }
 }
