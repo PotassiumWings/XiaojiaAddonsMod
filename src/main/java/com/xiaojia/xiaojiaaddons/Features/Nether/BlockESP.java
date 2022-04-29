@@ -45,6 +45,7 @@ public abstract class BlockESP {
                     for (int r = 0; r < 400; r++) {
                         for (int i = 0; i < 4; i++) {
                             for (int sy = 40; sy <= 240; sy++) {
+                                if (!isEnabled()) return;
                                 int cx = MathUtils.floor(getX(getPlayer())), cz = MathUtils.floor(getZ(getPlayer()));
                                 if (Math.abs(cx - x) > 10 || Math.abs(cz - z) > 10) return;
                                 for (int sx = x - r; sx <= x + r; sx++) {

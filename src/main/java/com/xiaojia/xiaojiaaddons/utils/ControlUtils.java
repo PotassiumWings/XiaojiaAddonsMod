@@ -145,6 +145,7 @@ public class ControlUtils {
             getPlayer().closeScreen();
         getPlayer().rotationYaw += MathHelper.wrapAngleTo180_float(yaw - getPlayer().rotationYaw);
         getPlayer().rotationPitch += MathHelper.wrapAngleTo180_float(pitch - getPlayer().rotationPitch);
+        mc.entityRenderer.getMouseOver(MathUtils.partialTicks);
     }
 
     public static void randomChangeDirection(double delta) {

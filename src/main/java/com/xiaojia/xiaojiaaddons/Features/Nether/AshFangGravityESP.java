@@ -62,7 +62,7 @@ public class AshFangGravityESP  extends RenderEntityESP {
             return helm.getTagCompound()
                     .getCompoundTag("SkullOwner")
                     .getString("Id")
-                    .equals("c91c8e98-81b0-4656-8da1-f1742a663032");
+                    .equals("645e1499-e947-4dc7-bc49-62a04cd96a66");
         } catch (Exception e) {
             return false;
         }

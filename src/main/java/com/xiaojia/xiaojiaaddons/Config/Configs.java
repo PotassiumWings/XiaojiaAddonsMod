@@ -387,6 +387,12 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Ashfang Blazing Soul ESP", parent = "Ashfang")
     public static boolean BlazingSoulESP = false;
 
+    // XYZ
+    @Property(type = Property.Type.FOLDER, name = "XYZ", parent = "Nether")
+    public static boolean XYZ = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "XYZ Helper", parent = "XYZ")
+    public static boolean XYZHelper = false;
 
     // Kuudra
     @Property(type = Property.Type.FOLDER, name = "Kuudra", parent = "Nether")

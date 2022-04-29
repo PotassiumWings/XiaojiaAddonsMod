@@ -73,6 +73,7 @@ import com.xiaojia.xiaojiaaddons.Features.Nether.GhastESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Kuudra;
 import com.xiaojia.xiaojiaaddons.Features.Nether.PrismarineESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.SpongeESP;
+import com.xiaojia.xiaojiaaddons.Features.Nether.XYZ;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
@@ -157,7 +158,7 @@ import java.util.ArrayList;
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
     public static final String MODID = "xiaojiaaddons";
-    public static final String VERSION = "2.4.6.1";
+    public static final String VERSION = "2.4.6.2";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
@@ -284,6 +285,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new SpongeESP());
         MinecraftForge.EVENT_BUS.register(new PrismarineESP());
         MinecraftForge.EVENT_BUS.register(new TitaniumESP());
+        MinecraftForge.EVENT_BUS.register(new XYZ());
         // Dojo
         MinecraftForge.EVENT_BUS.register(new Force());
         MinecraftForge.EVENT_BUS.register(new Mastery());
