@@ -397,6 +397,9 @@ public class Configs {
     @Property(type = Property.Type.SELECT, name = "XYZ Mode", parent = "XYZ", options = {"Z", "Y", "X"})
     public static int XYZMode = 0;
 
+    @Property(type = Property.Type.NUMBER, name = "XYZ Reach", parent = "XYZ", min = 4, max = 100)
+    public static int XYZReach = 4;
+
     // Kuudra
     @Property(type = Property.Type.FOLDER, name = "Kuudra", parent = "Nether")
     public static boolean KuudraEnable = false;

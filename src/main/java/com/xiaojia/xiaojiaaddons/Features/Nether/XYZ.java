@@ -96,7 +96,9 @@ public class XYZ {
 
         if (TimeUtils.curTime() - lastClick < 30) return;
 
-        AxisAlignedBB box = getPlayer().getEntityBoundingBox().expand(4.5, 4.5, 4.5);
+        double radius = 4.5;
+        if (Configs.XYZReach > radius) radius = Configs.XYZReach;
+        AxisAlignedBB box = getPlayer().getEntityBoundingBox().expand(radius, radius, radius);
         List<Entity> entitiesInRange = getWorld().getEntitiesWithinAABBExcludingEntity(getPlayer(), box);
         // priority: click z, click y, charm y, click x, charm x
         ArrayList<EntityArmorStand> xs = new ArrayList<>();
@@ -123,7 +125,7 @@ public class XYZ {
             } else {
                 if (ys.size() != 0) {
                     for (EntityArmorStand wai : ys) {
-                        if (wai.getHealth() > wai.getMaxHealth() / 2) {
+                        if (wai.getHealth() > wai.getMaxHealth() / 2 && !hits.containsKey(wai.getEntityId())) {
                             entity = wai;
                             harvest = true;
                             break;
@@ -141,7 +143,7 @@ public class XYZ {
                 }
                 if (entity == null && xs.size() != 0) {
                     for (EntityArmorStand exe : xs) {
-                        if (exe.getHealth() > exe.getMaxHealth() / 2) {
+                        if (exe.getHealth() > exe.getMaxHealth() / 2 && !hits.containsKey(exe.getEntityId())) {
                             entity = exe;
                             harvest = true;
                             break;
@@ -197,7 +199,7 @@ public class XYZ {
                 // any health is ok
                 if (z || y && Configs.XYZMode >= 1 || x && Configs.XYZMode >= 2) return;
                 // should not kill em
-                if (2 * health - (hits.getOrDefault(entityId, 0)  + 1) * maxHealth > 0) {
+                if (2 * health - (hits.getOrDefault(entityId, 0) + 1) * maxHealth > 0) {
                     hits.put(entityId, hits.getOrDefault(entityId, 0) + 1);
                     return;
                 }
@@ -234,6 +236,7 @@ public class XYZ {
 
         Vec3 vec3 = getPlayer().getPositionEyes(1.0F);
         double d0 = XiaojiaAddons.mc.playerController.getBlockReachDistance();
+        if (Configs.XYZReach > d0) d0 = Configs.XYZReach;
         Vec3 vec31 = getPlayer().getLook(1.0F);
         Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
         float f1 = entity.getCollisionBorderSize();
