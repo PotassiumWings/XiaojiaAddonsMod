@@ -242,6 +242,10 @@ public class XYZ {
         float f1 = entity.getCollisionBorderSize();
         AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expand(f1, f1, f1);
         MovingObjectPosition moving = axisalignedbb.calculateIntercept(vec3, vec32);
+        if (moving == null) {
+            ChatLib.chat("Failed to click!");
+            return;
+        }
 
         Vec3 vec = new Vec3(
                 moving.hitVec.xCoord - entity.posX,

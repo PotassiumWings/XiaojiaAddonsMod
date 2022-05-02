@@ -92,10 +92,12 @@ public class DisplayDayAndCoords {
 //            line4.setScale(Configs.DisplayScale / 20F);
 //            display.addLine(line4);
 
-            Vec3 vec = XiaojiaAddons.mc.objectMouseOver.hitVec;
-            DisplayLine line5 = new DisplayLine(String.format("Moving Object: %.2f %.2f %.2f", vec.xCoord, vec.yCoord, vec.zCoord));
-            line5.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line5);
+            try {
+                Vec3 vec = XiaojiaAddons.mc.objectMouseOver.hitVec;
+                DisplayLine line5 = new DisplayLine(String.format("Moving Object: %.2f %.2f %.2f", vec.xCoord, vec.yCoord, vec.zCoord));
+                line5.setScale(Configs.DisplayScale / 20F);
+                display.addLine(line5);
+            } catch (Exception ignored) {}
             synchronized (DevMode.lines) {
                 for (DisplayLine devLine: DevMode.lines)
                     display.addLine(devLine);

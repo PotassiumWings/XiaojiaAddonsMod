@@ -1557,7 +1557,7 @@ public class Configs {
 
     @Property(type = Property.Type.NUMBER, name = "Auto Pulling Rod CD", parent = "Fishing",
             description = "Cooldown between particles approaching and pulling.",
-            min = 50, max = 500, step = 5, suffix = " ms")
+            min = 50, max = 6000, step = 10, suffix = " ms")
     public static int AutoPullRodCD = 150;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Move Randomly", parent = "Fishing", illegal = true,
