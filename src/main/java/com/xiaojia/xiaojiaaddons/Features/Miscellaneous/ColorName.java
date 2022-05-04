@@ -336,6 +336,7 @@ public class ColorName {
                 }
                 String name = player.getDisplayName().getUnformattedText();
                 String[] splits = name.split(" ");
+                if (splits.length == 0) return;
 
                 // [YOUTUBE] Mxmimi (Mage I)
                 // PotassiumWings (DEAD)
