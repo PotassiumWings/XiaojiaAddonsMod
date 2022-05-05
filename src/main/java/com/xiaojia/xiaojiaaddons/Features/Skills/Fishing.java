@@ -117,7 +117,7 @@ public class Fishing {
             boolean flag = false;
             if (hook.isInWater()) flag = packet.getParticleSpeed() > 0.1 && packet.getParticleSpeed() < 0.3;
             if (hook.isInLava()) flag = true;
-            if (flag && TimeUtils.curTime() - lastReeledIn > 3000) {
+            if (flag && TimeUtils.curTime() - lastReeledIn > 600) {
                 lastReeledIn = TimeUtils.curTime();
                 new Thread(this::reelIn).start();
             }
