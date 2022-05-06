@@ -1555,6 +1555,13 @@ public class Configs {
                     "Water / lava fishing are supported.")
     public static boolean AutoPullRod = false;
 
+    @Property(type = Property.Type.NUMBER, name = "Auto Pulling Rod Blob Time", parent = "Fishing",
+            description = "Minimum time between 2 pulls.\n" +
+                    "If you're grinding blobfish, set this to 30000.\n" +
+                    "Else, set this to 600.",
+            min = 100, max = 30000, step = 100, suffix = " ms")
+    public static int ReelCD = 600;
+
     @Property(type = Property.Type.NUMBER, name = "Auto Pulling Rod CD", parent = "Fishing",
             description = "Cooldown between particles approaching and pulling.",
             min = 50, max = 6000, step = 10, suffix = " ms")
