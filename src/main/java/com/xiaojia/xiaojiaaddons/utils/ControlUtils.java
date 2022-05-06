@@ -287,6 +287,10 @@ public class ControlUtils {
     }
 
     public static void setHeldItemIndex(int index) {
+        setHeldItemIndex(index, true);
+    }
+
+    public static void setHeldItemIndex(int index, boolean sync) {
         if (index < 0 || index > 8) {
             System.err.println("WTF? NO");
             return;
@@ -295,7 +299,7 @@ public class ControlUtils {
         InventoryPlayer inventoryPlayer = getPlayer().inventory;
         if (inventoryPlayer == null) return;
         inventoryPlayer.currentItem = index;
-        if (synHeldItem != null) {
+        if (synHeldItem != null && sync) {
             try {
                 synHeldItem.invoke(mc.playerController);
             } catch (IllegalAccessException | InvocationTargetException e) {

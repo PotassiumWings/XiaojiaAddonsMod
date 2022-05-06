@@ -140,4 +140,17 @@ public class HotbarUtils {
         if (!charm) charmSlot = -1;
         if (!harvest) harvestSlot = -1;
     }
+
+    public static int getIndex(String sbId) {
+        Inventory inventory = ControlUtils.getOpenedInventory();
+        if (inventory == null || inventory.getSize() != 45) return -1;
+        List<ItemStack> items = inventory.getItemStacks().subList(36, 45);
+        for (int i = 0; i < 9; i++) {
+            ItemStack item = items.get(i);
+            if (item == null) continue;
+            String id = NBTUtils.getSkyBlockID(item);
+            if (id.equals(sbId)) return i;
+        }
+        return -1;
+    }
 }

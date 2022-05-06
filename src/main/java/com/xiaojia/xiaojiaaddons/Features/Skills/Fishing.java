@@ -7,6 +7,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.projectile.EntityFishHook;
@@ -89,8 +90,28 @@ public class Fishing {
         try {
             Thread.sleep(Configs.AutoPullRodCD);
             ControlUtils.rightClick();
-            Thread.sleep(200);
-            ControlUtils.rightClick();
+            if (Configs.FishingMode == 1) {
+                // regular
+                Thread.sleep(Configs.PullCastCD);
+                ControlUtils.rightClick();
+            } else {
+                // swap
+                int wand = HotbarUtils.getIndex("ICE_SPRAY_WAND");
+                int witherBlade = HotbarUtils.getIndex("HYPERION");
+                if (witherBlade == -1) witherBlade = HotbarUtils.getIndex("SCYLLA");
+                if (witherBlade == -1) witherBlade = HotbarUtils.getIndex("VALKYRIE");
+                if (witherBlade == -1) witherBlade = HotbarUtils.getIndex("ASTRAEA");
+
+                if (wand == -1 || witherBlade == -1) {
+                    ChatLib.chat("Requires ice spray wand and wither blade in hotbar.");
+                    return;
+                }
+
+                ControlUtils.setHeldItemIndex(wand, false);
+                Thread.sleep(Configs.PullCastCD);
+                ControlUtils.rightClick();
+                ControlUtils.setHeldItemIndex(witherBlade);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

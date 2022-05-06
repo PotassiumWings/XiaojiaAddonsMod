@@ -1555,6 +1555,11 @@ public class Configs {
                     "Water / lava fishing are supported.")
     public static boolean AutoPullRod = false;
 
+    @Property(type = Property.Type.SELECT, name = "Fishing Mode", parent = "Fishing",
+            description = "Lava Fishing - Pull rod, swap to ice spray, right click, swap to wither blade.\n" +
+                    "Regular Fishing - Pull rod, wait 200ms, cast rod.", options = {"Lava", "Regular"})
+    public static int FishingMode = 1;
+
     @Property(type = Property.Type.NUMBER, name = "Auto Pulling Rod Blob Time", parent = "Fishing",
             description = "Minimum time between 2 pulls.\n" +
                     "If you're grinding blobfish, set this to 30000.\n" +
@@ -1562,10 +1567,15 @@ public class Configs {
             min = 100, max = 30000, step = 100, suffix = " ms")
     public static int ReelCD = 600;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Pulling Rod CD", parent = "Fishing",
+    @Property(type = Property.Type.NUMBER, name = "Particle-pull CD", parent = "Fishing",
             description = "Cooldown between particles approaching and pulling.",
-            min = 50, max = 6000, step = 10, suffix = " ms")
+            min = 50, max = 600, step = 10, suffix = " ms")
     public static int AutoPullRodCD = 150;
+
+    @Property(type = Property.Type.NUMBER, name = "Pull-cast CD", parent = "Fishing",
+            description = "Cooldown between pulling and casting.",
+            min = 50, max = 6000, step = 10, suffix = " ms")
+    public static int PullCastCD = 200;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Move Randomly", parent = "Fishing", illegal = true,
             description = "Move around and rotate to bypass afk test \n" +
