@@ -31,6 +31,7 @@ public class Fishing {
     private long lastMove = 0;
 
     public static String timer() {
+        if (!Configs.AutoMoveTimer) return "";
         if (startTime == 0) return "";
         int ms = (int) (TimeUtils.curTime() - startTime);
         int sec = ms / 1000;
@@ -165,6 +166,10 @@ public class Fishing {
         }
         if (!shouldMove) return;
         long cur = TimeUtils.curTime();
+        if (Configs.AutoMoveRecast && cur - lastReeledIn >= 1000 * Configs.AutoMoveRecastTime) {
+            lastReeledIn = TimeUtils.curTime();
+            new Thread(this::reelIn).start();
+        }
         if (cur - lastMove > 2000) {
             lastMove = cur;
             new Thread(() -> {
@@ -230,7 +235,7 @@ public class Fishing {
                 }
             }).start();
         }
-        if (cur - startTime >= 280 * 1000) {
+        if (cur - startTime >= 280 * 1000 && Configs.AutoMoveTimer) {
             getPlayer().playSound("random.successful_hit", 1000, 1);
         }
     }

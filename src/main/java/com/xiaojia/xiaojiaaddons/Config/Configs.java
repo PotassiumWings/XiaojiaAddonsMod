@@ -1584,6 +1584,20 @@ public class Configs {
                     "&c&lDONT FULLY AFK!\n")
     public static boolean AutoMove = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Move Timer", parent = "Fishing",
+            description = "Alarm when you auto-moved for 4min40s.\n" +
+                    "Display timer in 'display day and coords'.")
+    public static boolean AutoMoveTimer = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Move Recast", parent = "Fishing",
+            description = "Recast fishing rod when rod is active for too long and auto-move is on.")
+    public static boolean AutoMoveRecast = true;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Move Recast", parent = "Fishing",
+            min = 15, max = 200, step = 5,
+            suffix = " s")
+    public static int AutoMoveRecastTime = 60;
+
     // Foraging
     @Property(type = Property.Type.FOLDER, name = "Foraging", parent = "Skills")
     public static boolean ForagingFeatures = false;
