@@ -966,6 +966,10 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Fairy Souls ESP", parent = "Other QOLs")
     public static boolean FairySoulESP = false;
 
+    // RunicESP
+    @Property(type = Property.Type.BOOLEAN, name = "Runic Mob ESP", parent = "Other QOLs")
+    public static boolean RunicESP = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Relic ESP", parent = "Other QOLs")
     public static boolean RelicESP = false;
 
