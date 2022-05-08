@@ -143,8 +143,9 @@ public class HotbarUtils {
 
     public static int getIndex(String sbId) {
         Inventory inventory = ControlUtils.getOpenedInventory();
-        if (inventory == null || inventory.getSize() != 45) return -1;
-        List<ItemStack> items = inventory.getItemStacks().subList(36, 45);
+        if (inventory == null || inventory.getSize() < 9) return -1;
+        int size = inventory.getSize();
+        List<ItemStack> items = inventory.getItemStacks().subList(size - 9, size);
         for (int i = 0; i < 9; i++) {
             ItemStack item = items.get(i);
             if (item == null) continue;
