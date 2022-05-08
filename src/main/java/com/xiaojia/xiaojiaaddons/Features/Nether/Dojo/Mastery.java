@@ -85,19 +85,39 @@ public class Mastery {
                     break;
             }
             int delta = (int) (time * 1000);
-            double dis = Math.sqrt(MathUtils.distanceSquareFromPlayer(entity));
-            double dx = (entity.posX - getX(getPlayer())) / dis;
-            double dz = (entity.posZ - getZ(getPlayer())) / dis;
-
-            BlockPos pos = countDown.keySet().stream().min(Comparator.comparing(x -> entity.getDistanceSq(
-                    x.getX() + 0.5F - dx, x.getY() + 2.7, x.getZ() + 0.5F - dz
-            ))).orElse(null);
+            BlockPos pos = countDown.keySet().stream().min(Comparator.comparing(x -> getDis(entity, x))).orElse(null);
             if (pos == null) continue;
             officialCountDown.put(pos, delta);
             tempLink.put(entity.getEntityId(), pos);
         }
         link.clear();
         link.putAll(tempLink);
+    }
+
+    public static void printLog() {
+        System.err.println("Player at: " + MathUtils.getPosString(getPlayer()));
+        System.err.println("Mastery count down set:");
+        for (BlockPos pos : countDown.keySet()) {
+            System.err.println(pos);
+        }
+        System.err.println("Mastery entities:");
+        List<Entity> entities = new ArrayList<>(getWorld().loadedEntityList);
+        for (Entity entity : entities) {
+            String name = entity.getName();
+            Pattern pattern = Pattern.compile("^\u00a7(\\w)\u00a7l([\\d:]+)$");
+            Matcher matcher = pattern.matcher(name);
+            if (!matcher.find()) continue;
+            String color = matcher.group(1);
+            double time = Double.parseDouble(matcher.group(2).replaceAll(":", "."));
+            System.err.println("Entity " + color + " " + time + " at " + MathUtils.getPosString(entity));
+        }
+    }
+
+    public static double getDis(Entity entity, BlockPos pos) {
+        double dis = Math.sqrt(MathUtils.distanceSquareFromPlayer(entity));
+        double dx = (entity.posX - getX(getPlayer())) / dis;
+        double dz = (entity.posZ - getZ(getPlayer())) / dis;
+        return entity.getDistanceSq(pos.getX() + 0.5F - dx, pos.getY() + 3, pos.getZ() + 0.5F - dz);
     }
 
     @SubscribeEvent
@@ -131,8 +151,12 @@ public class Mastery {
             int id = entity.getEntityId();
             if (!link.containsKey(id)) continue;
             BlockPos pos = link.get(id);
+
+            float dis = (float) Math.sqrt(MathUtils.distanceSquareFromPlayer(entity));
+            float dx = (float) ((entity.posX - getX(getPlayer())) / dis);
+            float dz = (float) ((entity.posZ - getZ(getPlayer())) / dis);
             GuiUtils.drawLine(
-                    (float) entity.posX, (float) entity.posY + 2.7F, (float) entity.posZ,
+                    (float) entity.posX + dx, (float) entity.posY + 3F, (float) entity.posZ + dz,
                     pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
                     new Color(255, 0, 0), 2
             );
@@ -170,7 +194,7 @@ public class Mastery {
         }
 
         if (facing == null) return;
-        ControlUtils.face(facing.getX() + 0.5, facing.getY() + 1.25, facing.getZ() + 0.5);
+        ControlUtils.face(facing.getX() + 0.5, facing.getY() + 1.4, facing.getZ() + 0.5);
         if (!Configs.MasteryAutoRelease) return;
         if (min < Configs.MasteryAutoReleaseCD && cur - lastRelease > 900) {
             lastRelease = cur;
