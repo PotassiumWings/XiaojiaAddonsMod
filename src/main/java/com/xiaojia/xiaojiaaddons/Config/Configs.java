@@ -473,6 +473,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Ghast ESP", parent = "Nether Mob ESP")
     public static boolean GhastESP = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Golem ESP", parent = "Nether Mob ESP")
+    public static boolean GolemESP = false;
+
 
     // SpongeESP
     @Property(type = Property.Type.FOLDER, name = "Nether Block ESP", parent = "Nether",

@@ -70,6 +70,7 @@ import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.DojoUtils;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Force;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Mastery;
 import com.xiaojia.xiaojiaaddons.Features.Nether.GhastESP;
+import com.xiaojia.xiaojiaaddons.Features.Nether.GolemESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Kuudra;
 import com.xiaojia.xiaojiaaddons.Features.Nether.PrismarineESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.SpongeESP;
@@ -287,6 +288,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new PrismarineESP());
         MinecraftForge.EVENT_BUS.register(new TitaniumESP());
         MinecraftForge.EVENT_BUS.register(new XYZ());
+        MinecraftForge.EVENT_BUS.register(new GolemESP());
         // Dojo
         MinecraftForge.EVENT_BUS.register(new Force());
         MinecraftForge.EVENT_BUS.register(new Mastery());

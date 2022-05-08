@@ -103,7 +103,8 @@ public class Mastery {
                     1.5F, true
             );
 
-            delta = officialCountDown.get(pos);
+            delta = officialCountDown.getOrDefault(pos, -1);
+            if (delta == -1) continue;
             color = getColorFromDelta(delta);
             GuiUtils.drawString(
                     String.format("%.2f s", delta / 1000F),
