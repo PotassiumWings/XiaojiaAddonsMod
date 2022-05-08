@@ -85,8 +85,12 @@ public class Mastery {
                     break;
             }
             int delta = (int) (time * 1000);
+            double dis = Math.sqrt(MathUtils.distanceSquareFromPlayer(entity));
+            double dx = (entity.posX - getX(getPlayer())) / dis;
+            double dz = (entity.posZ - getZ(getPlayer())) / dis;
+
             BlockPos pos = countDown.keySet().stream().min(Comparator.comparing(x -> entity.getDistanceSq(
-                    x.getX(), x.getY() + 3, x.getZ()
+                    x.getX() + 0.5F - dx, x.getY() + 2.7, x.getZ() + 0.5F - dz
             ))).orElse(null);
             if (pos == null) continue;
             officialCountDown.put(pos, delta);
@@ -128,7 +132,7 @@ public class Mastery {
             if (!link.containsKey(id)) continue;
             BlockPos pos = link.get(id);
             GuiUtils.drawLine(
-                    (float) entity.posX, (float) entity.posY, (float) entity.posZ,
+                    (float) entity.posX, (float) entity.posY + 2.7F, (float) entity.posZ,
                     pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
                     new Color(255, 0, 0), 2
             );
