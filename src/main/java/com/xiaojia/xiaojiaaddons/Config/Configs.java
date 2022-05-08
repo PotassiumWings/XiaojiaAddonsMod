@@ -459,6 +459,9 @@ public class Configs {
             min = 500, max = 1500, step = 10, description = "Set when to release right click.")
     public static int MasteryAutoReleaseCD = 1000;
 
+    @Property(type = Property.Type.SELECT, name = "Mastery Helper Mode", parent = "Dojo", options = {"Estimate", "Official"})
+    public static int MasteryMode = 0;
+
     // Corrupted
     @Property(type = Property.Type.FOLDER, name = "Nether Mob ESP", parent = "Nether")
     public static boolean NetherMobESP = false;

@@ -163,6 +163,9 @@ public class Fishing {
                 startTime = 0;
             }
             ChatLib.chat(shouldMove ? "Auto Move &aactivated" : "Auto Move &cdeactivated");
+            if (!shouldMove) {
+                ControlUtils.unSneak();
+            }
         }
         if (!shouldMove) return;
         long cur = TimeUtils.curTime();

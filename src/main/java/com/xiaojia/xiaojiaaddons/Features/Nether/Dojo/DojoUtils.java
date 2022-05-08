@@ -14,8 +14,10 @@ public class DojoUtils {
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
+        EnumDojoTask preTask = currentTask;
         currentTask = getCurrentTask();
         if (currentTask != EnumDojoTask.MASTERY) Mastery.clear();
+        if (currentTask != preTask && currentTask == EnumDojoTask.MASTERY) Mastery.onEnter();
     }
 
     public static EnumDojoTask getTask() {
