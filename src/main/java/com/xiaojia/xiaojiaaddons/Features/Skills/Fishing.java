@@ -55,7 +55,6 @@ public class Fishing {
     }
 
     private void reelIn() {
-        lastReeledIn = TimeUtils.curTime();
         try {
             Thread.sleep(Configs.AutoPullRodCD);
             ControlUtils.rightClick();
@@ -104,6 +103,7 @@ public class Fishing {
             if (hook.isInWater()) flag = packet.getParticleSpeed() > 0.1 && packet.getParticleSpeed() < 0.3;
             if (hook.isInLava()) flag = true;
             if (flag && TimeUtils.curTime() - lastReeledIn > Configs.ReelCD) {
+                lastReeledIn = TimeUtils.curTime();
                 new Thread(this::reelIn).start();
             }
         }
@@ -118,11 +118,14 @@ public class Fishing {
     public void onReceive(ClientChatReceivedEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.AutoMove) return;
+        if (!shouldMove) return;
         String message = ChatLib.removeFormatting(event.message.getUnformattedText());
         if (message.equals("The Golden Fish escapes your hook but looks weakened.")) {
+            lastReeledIn = TimeUtils.curTime();
             new Thread(this::cast).start();
         }
         if (message.equals("The Golden Fish is weak!")) {
+            lastReeledIn = TimeUtils.curTime();
             new Thread(this::reelIn).start();
         }
     }
@@ -146,6 +149,7 @@ public class Fishing {
         if (!shouldMove) return;
         long cur = TimeUtils.curTime();
         if (Configs.AutoMoveRecast && cur - lastReeledIn >= 1000 * Configs.AutoMoveRecastTime) {
+            lastReeledIn = TimeUtils.curTime();
             new Thread(this::reelIn).start();
         }
         if (cur - lastMove > 2000) {
