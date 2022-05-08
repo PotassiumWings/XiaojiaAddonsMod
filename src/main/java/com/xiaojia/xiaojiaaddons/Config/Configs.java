@@ -64,8 +64,10 @@ public class Configs {
 
     @Property(type = Property.Type.FOLDER, name = "Velocity", parent = "Dangerous Features",
             description = "Only works in SkyBlock.\n" +
-                    "If you are in lava or used bonzo's staff / jerrychine gun\n" +
-                    "within 1s, this feature will be automatically disabled.")
+                    "If you are in lava and in dungeon, or used bonzo's staff / jerrychine gun\n" +
+                    "within Velocity CD, this feature will be automatically disabled.\n" +
+                    "If you are wearing tarantula / spider / spring / spirit boots, \n" +
+                    "this feature is also automatically disabled.")
     public static boolean Velocity = false;
 
     @Property(type = Property.Type.NUMBER, name = "Velocity XZ Scale", parent = "Velocity", min = 0, max = 100, suffix = " %")
@@ -73,6 +75,9 @@ public class Configs {
 
     @Property(type = Property.Type.NUMBER, name = "Velocity Y Scale", parent = "Velocity", min = 0, max = 100, suffix = " %")
     public static int VelocityY = 100;
+
+    @Property(type = Property.Type.NUMBER, name = "Velocity CD", parent = "Velocity", min = 0, max = 2000, step = 10, suffix = " ms")
+    public static int VelocityCD = 1000;
 
     @Property(type = Property.Type.FOLDER, name = "Dupe Display", parent = "Misc")
     public static boolean DupeDisplay = false;
