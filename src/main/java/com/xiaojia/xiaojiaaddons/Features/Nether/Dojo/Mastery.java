@@ -46,7 +46,7 @@ public class Mastery {
         ControlUtils.setHeldItemIndex(0);
         new Thread(() -> {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(4000);
                 ControlUtils.setHeldItemIndex(0);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -108,7 +108,7 @@ public class Mastery {
             color = getColorFromDelta(delta);
             GuiUtils.drawString(
                     String.format("%.2f s", delta / 1000F),
-                    pos.getX() + 0.5F, pos.getY() + 1.1F, pos.getZ() + 0.5F,
+                    pos.getX() + 0.5F, pos.getY() + 1.7F, pos.getZ() + 0.5F,
                     color.getRGB(),
                     1.5F, true
             );
@@ -171,6 +171,7 @@ public class Mastery {
             countDown.put(event.position, TimeUtils.curTime());
         } else if (event.oldBlock.getBlock() == Blocks.wool && event.newBlock.getBlock() != Blocks.wool) {
             countDown.remove(event.position);
+            officialCountDown.remove(event.position);
         }
     }
 
