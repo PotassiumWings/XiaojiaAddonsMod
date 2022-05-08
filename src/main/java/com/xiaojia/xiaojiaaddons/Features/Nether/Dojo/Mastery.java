@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,16 +33,14 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Mastery {
-    private final static HashMap<BlockPos, Long> countDown = new HashMap<>();
-    private final static HashMap<BlockPos, Integer> officialCountDown = new HashMap<>();
-    private final static HashMap<Integer, BlockPos> link = new HashMap<>();
+    private final static ConcurrentHashMap<BlockPos, Long> countDown = new ConcurrentHashMap<>();
+    private final static ConcurrentHashMap<BlockPos, Integer> officialCountDown = new ConcurrentHashMap<>();
+    private final static ConcurrentHashMap<Integer, BlockPos> link = new ConcurrentHashMap<>();
 
     public static void clear() {
         officialCountDown.clear();
         countDown.clear();
-        synchronized (link) {
-            link.clear();
-        }
+        link.clear();
     }
 
     public static void onEnter() {
@@ -64,7 +63,6 @@ public class Mastery {
         if (!Configs.MasteryHelper) return;
         if (DojoUtils.getTask() != EnumDojoTask.MASTERY) return;
         List<Entity> entities = new ArrayList<>(getWorld().loadedEntityList);
-        HashMap<BlockPos, Double> timeMap = new HashMap<>();
         HashMap<Integer, BlockPos> tempLink = new HashMap<>();
         for (Entity entity : entities) {
             String name = entity.getName();
@@ -88,15 +86,14 @@ public class Mastery {
             }
             int delta = (int) (time * 1000);
             BlockPos pos = countDown.keySet().stream().min(Comparator.comparing(x -> entity.getDistanceSq(
-                    x.getX(), entity.posY, x.getZ()
+                    x.getX(), x.getY() + 3, x.getZ()
             ))).orElse(null);
+            if (pos == null) continue;
             officialCountDown.put(pos, delta);
             tempLink.put(entity.getEntityId(), pos);
         }
-        synchronized (link) {
-            link.clear();
-            link.putAll(tempLink);
-        }
+        link.clear();
+        link.putAll(tempLink);
     }
 
     @SubscribeEvent
@@ -126,17 +123,15 @@ public class Mastery {
             );
         }
         GuiUtils.enableESP();
-        synchronized (link) {
-            for (Entity entity : getWorld().loadedEntityList) {
-                int id = entity.getEntityId();
-                if (!link.containsKey(id)) continue;
-                BlockPos pos = link.get(id);
-                GuiUtils.drawLine(
-                        (float) entity.posX, (float) entity.posY, (float) entity.posZ,
-                        pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
-                        new Color(255, 0, 0), 2
-                );
-            }
+        for (Entity entity : getWorld().loadedEntityList) {
+            int id = entity.getEntityId();
+            if (!link.containsKey(id)) continue;
+            BlockPos pos = link.get(id);
+            GuiUtils.drawLine(
+                    (float) entity.posX, (float) entity.posY, (float) entity.posZ,
+                    pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
+                    new Color(255, 0, 0), 2
+            );
         }
         GuiUtils.disableESP();
     }
@@ -171,7 +166,7 @@ public class Mastery {
         }
 
         if (facing == null) return;
-        ControlUtils.face(facing.getX() + 0.5, facing.getY() + 1.1, facing.getZ() + 0.5);
+        ControlUtils.face(facing.getX() + 0.5, facing.getY() + 1.25, facing.getZ() + 0.5);
         if (!Configs.MasteryAutoRelease) return;
         if (min < Configs.MasteryAutoReleaseCD && cur - lastRelease > 900) {
             lastRelease = cur;
