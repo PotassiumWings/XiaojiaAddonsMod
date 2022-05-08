@@ -14,6 +14,8 @@ import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
@@ -24,9 +26,6 @@ public class Fishing {
     private static long startTime = 0;
     private final KeyBind autoMoveKeyBind = new KeyBind("Auto Move", Keyboard.KEY_NONE);
     private long lastReeledIn = 0;
-    private long lastBobberEnterLiquid = 0;
-    private boolean oldBobberIsInLiquid = false;
-    private double oldBobberY = 0;
     private boolean shouldMove = false;
     private long lastMove = 0;
 
@@ -41,60 +40,29 @@ public class Fishing {
     }
 
     @SubscribeEvent
-    public void onTick(TickEndEvent event) {
+    public void onLoad(WorldEvent.Load event) {
         if (!Checker.enabled) return;
-        if (Checker.enabled) return;
-        if (!Configs.AutoPullRod) return;
-        long time = TimeUtils.curTime();
-        ItemStack item = ControlUtils.getHeldItemStack();
-        if (item == null) return;
-
-        try {
-            if (!item.getItem().getRegistryName().equals("minecraft:fishing_rod")) return;
-            EntityFishHook bobber = getPlayer().fishEntity;
-            if (bobber != null) {
-                if ((bobber.isInWater()) && !oldBobberIsInLiquid) lastBobberEnterLiquid = time;
-                oldBobberIsInLiquid = bobber.isInWater();
-
-                if (Math.abs(bobber.motionX) < 0.01 && Math.abs(bobber.motionZ) < 0.01 &&
-                        time - lastBobberEnterLiquid > 1500 && time - lastReeledIn > 3000 &&
-                        bobber.isInWater()) {
-                    double movement = bobber.posY - oldBobberY;
-                    oldBobberY = bobber.posY;
-                    double delta = -0.04;
-                    if (movement < delta) {
-                        lastReeledIn = time;
-                        new Thread(this::reelIn).start();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (!Configs.AutoMove) return;
+        if (!shouldMove) return;
+        shouldMove = false;
+        ControlUtils.stopMoving();
+        ChatLib.chat("Auto Move &cdeactivated");
     }
 
-//    private static final ArrayList<Vector3d> bubbles = new ArrayList<>();
-//
-//    @SubscribeEvent
-//    public void onRenderWorld(RenderWorldLastEvent event) {
-//        synchronized (bubbles) {
-//            for (Vector3d bubble: bubbles) {
-//                GuiUtils.drawBoundingBoxAtPos(
-//                        (float) bubble.x, (float) bubble.y, (float) bubble.z, new Color(0, 255, 0),
-//                        0.02F, 0.05F
-//                );
-//            }
-//        }
-//    }
+    private void cast() {
+        lastReeledIn = TimeUtils.curTime();
+        ControlUtils.rightClick();
+    }
 
     private void reelIn() {
+        lastReeledIn = TimeUtils.curTime();
         try {
             Thread.sleep(Configs.AutoPullRodCD);
             ControlUtils.rightClick();
             if (Configs.FishingMode == 1) {
                 // regular
                 Thread.sleep(Configs.PullCastCD);
-                ControlUtils.rightClick();
+                cast();
             } else {
                 // swap
                 int wand = HotbarUtils.getIndex("ICE_SPRAY_WAND");
@@ -118,10 +86,6 @@ public class Fishing {
         }
     }
 
-//    public static void clearBubbles() {
-//        bubbles.clear();
-//    }
-
     @SubscribeEvent
     public void onParticle(PacketReceivedEvent event) {
         if (!Checker.enabled) return;
@@ -140,7 +104,6 @@ public class Fishing {
             if (hook.isInWater()) flag = packet.getParticleSpeed() > 0.1 && packet.getParticleSpeed() < 0.3;
             if (hook.isInLava()) flag = true;
             if (flag && TimeUtils.curTime() - lastReeledIn > Configs.ReelCD) {
-                lastReeledIn = TimeUtils.curTime();
                 new Thread(this::reelIn).start();
             }
         }
@@ -152,13 +115,26 @@ public class Fishing {
     }
 
     @SubscribeEvent
+    public void onReceive(ClientChatReceivedEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.AutoMove) return;
+        String message = ChatLib.removeFormatting(event.message.getUnformattedText());
+        if (message.equals("The Golden Fish escapes your hook but looks weakened.")) {
+            new Thread(this::cast).start();
+        }
+        if (message.equals("The Golden Fish is weak!")) {
+            new Thread(this::reelIn).start();
+        }
+    }
+
+    @SubscribeEvent
     public void onTickMove(TickEndEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.AutoMove) return;
         if (autoMoveKeyBind.isPressed()) {
             shouldMove = !shouldMove;
             if (shouldMove) {
-                startTime = TimeUtils.curTime();
+                startTime = lastReeledIn = TimeUtils.curTime();
             } else {
                 startTime = 0;
             }
@@ -170,7 +146,6 @@ public class Fishing {
         if (!shouldMove) return;
         long cur = TimeUtils.curTime();
         if (Configs.AutoMoveRecast && cur - lastReeledIn >= 1000 * Configs.AutoMoveRecastTime) {
-            lastReeledIn = TimeUtils.curTime();
             new Thread(this::reelIn).start();
         }
         if (cur - lastMove > 2000) {
