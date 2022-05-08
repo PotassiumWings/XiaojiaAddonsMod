@@ -10,6 +10,8 @@ import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.List;
+
 public class AutoSalvage {
     private long lastSalvage = 0;
 
@@ -20,11 +22,14 @@ public class AutoSalvage {
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null) return;
         String name = inventory.getName();
-        if (!name.equals("Salvage Dungeon Item")) return;
-        ItemStack toSalvage = inventory.getItemInSlot(13);
+        if (!name.equals("Salvage Item")) return;
+        ItemStack toSalvage = inventory.getItemInSlot(22);
         if (NBTUtils.isItemStarred(toSalvage)) return;
         ItemStack essence = inventory.getItemInSlot(31);
-        if (essence != null && !essence.getItem().getRegistryName().contains("barrier") && TimeUtils.curTime() > lastSalvage + 200) {
+        if (essence == null) return;
+        String salvageName = essence.getDisplayName();
+        if (!salvageName.equals("§aSalvage Item")) return;
+        if (essence.getItem().getRegistryName().contains("beacon") && TimeUtils.curTime() > lastSalvage + 200) {
             // salvage!
             lastSalvage = TimeUtils.curTime();
             inventory.click(31);
