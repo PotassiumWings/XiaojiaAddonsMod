@@ -34,10 +34,14 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 public class Mastery {
     private final static HashMap<BlockPos, Long> countDown = new HashMap<>();
     private final static HashMap<BlockPos, Integer> officialCountDown = new HashMap<>();
+    private final static HashMap<Integer, BlockPos> link = new HashMap<>();
 
     public static void clear() {
         officialCountDown.clear();
         countDown.clear();
+        synchronized (link) {
+            link.clear();
+        }
     }
 
     public static void onEnter() {
@@ -47,7 +51,7 @@ public class Mastery {
         new Thread(() -> {
             try {
                 Thread.sleep(4000);
-                ControlUtils.setHeldItemIndex(0);
+                ControlUtils.holdRightClick();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -61,6 +65,7 @@ public class Mastery {
         if (DojoUtils.getTask() != EnumDojoTask.MASTERY) return;
         List<Entity> entities = new ArrayList<>(getWorld().loadedEntityList);
         HashMap<BlockPos, Double> timeMap = new HashMap<>();
+        HashMap<Integer, BlockPos> tempLink = new HashMap<>();
         for (Entity entity : entities) {
             String name = entity.getName();
             Pattern pattern = Pattern.compile("^\u00a7(\\w)\u00a7l([\\d:]+)$");
@@ -82,8 +87,15 @@ public class Mastery {
                     break;
             }
             int delta = (int) (time * 1000);
-            BlockPos pos = countDown.keySet().stream().min(Comparator.comparing(entity::getDistanceSq)).orElse(null);
+            BlockPos pos = countDown.keySet().stream().min(Comparator.comparing(x -> entity.getDistanceSq(
+                    x.getX(), entity.posY, x.getZ()
+            ))).orElse(null);
             officialCountDown.put(pos, delta);
+            tempLink.put(entity.getEntityId(), pos);
+        }
+        synchronized (link) {
+            link.clear();
+            link.putAll(tempLink);
         }
     }
 
@@ -113,6 +125,20 @@ public class Mastery {
                     1.5F, true
             );
         }
+        GuiUtils.enableESP();
+        synchronized (link) {
+            for (Entity entity : getWorld().loadedEntityList) {
+                int id = entity.getEntityId();
+                if (!link.containsKey(id)) continue;
+                BlockPos pos = link.get(id);
+                GuiUtils.drawLine(
+                        (float) entity.posX, (float) entity.posY, (float) entity.posZ,
+                        pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
+                        new Color(255, 0, 0), 2
+                );
+            }
+        }
+        GuiUtils.disableESP();
     }
 
     private static Color getColorFromDelta(int delta) {
@@ -132,6 +158,7 @@ public class Mastery {
         if (!Configs.MasteryAutoTurn) return;
         BlockPos facing = null;
         long min = 0;
+        long cur = TimeUtils.curTime();
 
         if (Configs.MasteryMode == 1) {
             facing = officialCountDown.keySet().stream().min(Comparator.comparing(officialCountDown::get)).orElse(null);
@@ -140,14 +167,13 @@ public class Mastery {
 
         if (facing == null) {
             facing = countDown.keySet().stream().min(Comparator.comparing(countDown::get)).orElse(null);
-            if (facing != null) min = countDown.get(facing);
+            if (facing != null) min = (7000 - (cur - countDown.get(facing)));
         }
 
         if (facing == null) return;
         ControlUtils.face(facing.getX() + 0.5, facing.getY() + 1.1, facing.getZ() + 0.5);
         if (!Configs.MasteryAutoRelease) return;
-        long cur = TimeUtils.curTime();
-        if ((int) (7000 - (cur - min)) < Configs.MasteryAutoReleaseCD && cur - lastRelease > 900) {
+        if (min < Configs.MasteryAutoReleaseCD && cur - lastRelease > 900) {
             lastRelease = cur;
             new Thread(() -> {
                 try {
