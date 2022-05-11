@@ -24,6 +24,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmVertical;
+import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Blaze;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Tests.CopyWorldInfo;
@@ -197,6 +198,21 @@ public class Command extends CommandBase {
                 break;
             case "golem":
                 GolemAlert.golemWarn();
+                break;
+            case "cpblock":
+                x = Integer.parseInt(strings[1]);
+                y = Integer.parseInt(strings[2]);
+                z = Integer.parseInt(strings[3]);
+                int tx = Integer.parseInt(strings[4]);
+                int ty = Integer.parseInt(strings[5]);
+                int tz = Integer.parseInt(strings[6]);
+                XiaojiaAddons.mc.theWorld.setBlockState(new BlockPos(x, y, z),
+                        BlockUtils.getBlockStateAt(new BlockPos(tx, ty, tz)));
+                break;
+            case "jawbus":
+                if (strings.length == 1) x = 20;
+                else x = Integer.parseInt(strings[1]);
+                Fishing.warn(x);
                 break;
             case "block":
                 if (strings.length == 1) {

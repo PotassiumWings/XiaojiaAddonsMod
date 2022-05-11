@@ -3,12 +3,14 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -55,6 +57,16 @@ public class EntityQOL {
         return (uuid.version() == 3 || uuid.version() == 4) && !entity.getName().contains(" ");
     }
 
+    private static boolean isLaser(Entity entity) {
+        String owner = EntityUtils.getHeadOwner(entity);
+        return (owner != null && owner.equals("7a237e5c-ca9a-3dc1-b1d9-b385fc200aa7"));
+    }
+
+    private static boolean isGoldenFish(Entity entity) {
+        String owner = EntityUtils.getHeadOwner(entity);
+        return (owner != null && owner.equals("51760500-acd8-4ea4-8b5e-a4ee20fcd894"));
+    }
+
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
@@ -68,6 +80,14 @@ public class EntityQOL {
                 }
             } else if (isSummon(entity)) {
                 if (Configs.HideSummons) {
+                    entity.posY = entity.lastTickPosY = 9999;
+                }
+            } else if (isGoldenFish(entity)) {
+                if (Configs.HideGoldenFish) {
+                    entity.posY = entity.lastTickPosY = 9999;
+                }
+            } else if (isLaser(entity)) {
+                if (Configs.HideGuardianLaser) {
                     entity.posY = entity.lastTickPosY = 9999;
                 }
             }

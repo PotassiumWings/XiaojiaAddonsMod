@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Tests;
 
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
@@ -16,16 +17,8 @@ public class TestM7 {
     public static void m7() {
         for (Entity entity : getWorld().loadedEntityList) {
             if (entity instanceof EntityArmorStand) {
-                ItemStack helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);
-                if (helm == null) continue;
-                String name = ChatLib.removeFormatting(helm.getDisplayName()).trim();
-                String owner = "";
-                try {
-                    owner = helm.getTagCompound()
-                            .getCompoundTag("SkullOwner")
-                            .getString("Id");
-                } catch (Exception ignored) {}
-                ChatLib.chat(name + ", owner " + owner + String.format(", %.2f %.2f %.2f", entity.posX, entity.posY, entity.posZ));
+                String owner = EntityUtils.getHeadOwner(entity);
+                ChatLib.chat("owner " + owner + String.format(", %.2f %.2f %.2f", entity.posX, entity.posY, entity.posZ));
             }
             if (entity instanceof EntityDragon) {
                 ChatLib.chat(String.format("dragon at %.2f %.2f %.2f, health %.2f", entity.posX, entity.posY, entity.posZ, ((EntityDragon) entity).getHealth()));

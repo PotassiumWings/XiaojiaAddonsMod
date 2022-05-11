@@ -11,10 +11,10 @@ import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.projectile.EntityFishHook;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
@@ -28,6 +28,7 @@ public class Fishing {
     private long lastReeledIn = 0;
     private boolean shouldMove = false;
     private long lastMove = 0;
+    private Thread pushingThread = null;
 
     public static String timer() {
         if (!Configs.AutoMoveTimer) return "";
@@ -44,9 +45,8 @@ public class Fishing {
         if (!Checker.enabled) return;
         if (!Configs.AutoMove) return;
         if (!shouldMove) return;
-        shouldMove = false;
         ControlUtils.stopMoving();
-        ChatLib.chat("Auto Move &cdeactivated");
+        stopMove();
     }
 
     private void cast() {
@@ -91,18 +91,21 @@ public class Fishing {
         if (!Configs.AutoPullRod) return;
         if (!(event.packet instanceof S2APacketParticles)) return;
         S2APacketParticles packet = (S2APacketParticles) event.packet;
-        if (packet.getParticleType() != EnumParticleTypes.WATER_WAKE &&
-                packet.getParticleType() != EnumParticleTypes.SMOKE_NORMAL) return;
+        if (packet.getParticleType() != EnumParticleTypes.WATER_BUBBLE &&
+                packet.getParticleType() != EnumParticleTypes.FLAME) return;
         if (getPlayer() == null) return;
         if (getPlayer().fishEntity == null) return;
         EntityFishHook hook = getPlayer().fishEntity;
+        if (!MathUtils.equal(packet.getXOffset(), 0.25) ||
+                !MathUtils.equal(packet.getYOffset(), 0) ||
+                !MathUtils.equal(packet.getZOffset(), 0.25) ||
+                !MathUtils.equal(packet.getParticleSpeed(), 0.2)) return;
+        if (packet.getParticleCount() != 6) return;
+
         if (MathUtils.distanceSquaredFromPoints(hook.posX, hook.posY, hook.posZ,
-                packet.getXCoordinate(), hook.posY, packet.getZCoordinate()) < 0.1 &&
-                Math.abs(hook.posY - packet.getYCoordinate()) < 1) {
-            boolean flag = false;
-            if (hook.isInWater()) flag = packet.getParticleSpeed() > 0.1 && packet.getParticleSpeed() < 0.3;
-            if (hook.isInLava()) flag = true;
-            if (flag && TimeUtils.curTime() - lastReeledIn > Configs.ReelCD) {
+                packet.getXCoordinate(), hook.posY, packet.getZCoordinate()) < 1 &&
+                Math.abs(hook.posY - packet.getYCoordinate()) < 2) {
+            if (TimeUtils.curTime() - lastReeledIn > Configs.ReelCD) {
                 lastReeledIn = TimeUtils.curTime();
                 new Thread(this::reelIn).start();
             }
@@ -128,6 +131,51 @@ public class Fishing {
             lastReeledIn = TimeUtils.curTime();
             new Thread(this::reelIn).start();
         }
+        if (message.matches(" ☠ [a-zA-Z0-9_]+ was killed by Lord Jawbus.")) {
+            if (Configs.JawbusWarn) {
+                new Thread(() -> warn(20)).start();
+            }
+        }
+    }
+
+    public static void warn(int num) {
+        try {
+            for (int i = 40; i <= 250; i++) {
+                getPlayer().playSound("random.orb", 1, i / 100F);
+                Thread.sleep(num);
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    @SubscribeEvent
+    public void onTickPushingThread(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (!shouldMove) return;
+        if (pushingThread == null || !pushingThread.isAlive()) {
+            pushingThread = new Thread(() -> {
+                long start = TimeUtils.curTime();
+                try {
+                    Thread.sleep(Configs.FishCheckCD);
+                    cast();
+                    Thread.sleep(Configs.FishCheckCD);
+                    cast();
+                    Thread.sleep(Configs.FishCheckCD);
+                    ChatLib.chat("Too long since last catch!");
+                    stopMove();
+                } catch (InterruptedException ignored) {
+
+                }
+            });
+            pushingThread.start();
+        }
+    }
+
+    private void stopMove() {
+        shouldMove = false;
+        startTime = 0;
+        ChatLib.chat("Auto Move &cdeactivated");
+        ControlUtils.unSneak();
     }
 
     @SubscribeEvent
@@ -138,15 +186,17 @@ public class Fishing {
             shouldMove = !shouldMove;
             if (shouldMove) {
                 startTime = lastReeledIn = TimeUtils.curTime();
+                ChatLib.chat("Auto Move &aactivated");
             } else {
-                startTime = 0;
-            }
-            ChatLib.chat(shouldMove ? "Auto Move &aactivated" : "Auto Move &cdeactivated");
-            if (!shouldMove) {
-                ControlUtils.unSneak();
+                stopMove();
             }
         }
         if (!shouldMove) return;
+
+        EntityFishHook hook = getPlayer().fishEntity;
+        if (hook != null && (hook.isInLava() || hook.isInWater()))
+            pushingThread.interrupt();
+
         long cur = TimeUtils.curTime();
         if (Configs.AutoMoveRecast && cur - lastReeledIn >= 1000 * Configs.AutoMoveRecastTime) {
             lastReeledIn = TimeUtils.curTime();
@@ -158,7 +208,8 @@ public class Fishing {
                 try {
                     int choose = floor(Math.random() * 4);
                     ControlUtils.sneak();
-                    int moveTime = 100 + floor(Math.random() * 100);
+                    int time = Configs.AutoMoveTime;
+                    int moveTime = time + floor(Math.random() * time);
                     switch (choose) {
                         case 0: {
                             ControlUtils.moveLeft(moveTime);
@@ -209,9 +260,6 @@ public class Fishing {
                             rawYaw + DELTAYAW - 2 * DELTAYAW * (float) Math.random(),
                             rawPitch + DELTAPITCH - 2 * DELTAPITCH * (float) Math.random()
                     );
-
-                    if (!shouldMove)
-                        ControlUtils.unSneak();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

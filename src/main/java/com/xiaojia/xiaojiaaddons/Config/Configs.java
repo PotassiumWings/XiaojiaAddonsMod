@@ -839,6 +839,12 @@ public class Configs {
             description = "Act like the summons dont exist, can click through")
     public static boolean HideSummons = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Golden Fish", parent = "Hide Entity Features")
+    public static boolean HideGoldenFish = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Guardian Laser", parent = "Hide Entity Features")
+    public static boolean HideGuardianLaser = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Hide Nearby Players", parent = "Hide Entity Features", illegal = true,
             description = "Act like the players dont exist, can click through")
     public static boolean HidePlayers = false;
@@ -1575,9 +1581,19 @@ public class Configs {
                     "Regular Fishing - Pull rod, wait 200ms, cast rod.", options = {"Lava", "Regular"})
     public static int FishingMode = 1;
 
+    @Property(type = Property.Type.NUMBER, name = "Fishing Check CD", parent = "Fishing",
+            description = "Check if fishing rod is there and in lava, recast if not.",
+            min = 1, max = 60, step = 1, suffix = " s")
+    public static int FishCheckCD = 3;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Move Time", parent = "Fishing",
+            description = "Set time t, and you'll be randomly move for [t, 2t) every time.",
+            min = 0, max = 1000, step = 10, suffix = " ms")
+    public static int AutoMoveTime = 100;
+
     @Property(type = Property.Type.NUMBER, name = "Auto Pulling Rod Blob Time", parent = "Fishing",
             description = "Minimum time between 2 pulls.\n" +
-                    "If you're grinding blobfish, set this to 30000.\n" +
+                    "If you're grinding slugfish, set this to 30000.\n" +
                     "Else, set this to 600.",
             min = 100, max = 30000, step = 100, suffix = " ms")
     public static int ReelCD = 600;
@@ -1604,11 +1620,16 @@ public class Configs {
                     "Display timer in 'display day and coords'.")
     public static boolean AutoMoveTimer = true;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Jawbus Warn", parent = "Fishing",
+            description = "Alarm when someone in your lobby dies to a jawbus.\n" +
+                    "&c/xj jawbus&r to test this alarm.")
+    public static boolean JawbusWarn = true;
+
     @Property(type = Property.Type.BOOLEAN, name = "Auto Move Recast", parent = "Fishing",
             description = "Recast fishing rod when rod is active for too long and auto-move is on.")
     public static boolean AutoMoveRecast = true;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Move Recast", parent = "Fishing",
+    @Property(type = Property.Type.NUMBER, name = "Auto Move Recast Time", parent = "Fishing",
             min = 15, max = 200, step = 5,
             suffix = " s")
     public static int AutoMoveRecastTime = 60;

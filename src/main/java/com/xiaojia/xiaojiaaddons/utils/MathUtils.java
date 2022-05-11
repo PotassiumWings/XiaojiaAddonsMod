@@ -1,7 +1,6 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -23,16 +22,20 @@ public class MathUtils {
     public static float partialTicks = 0;
 
     public static Vec3 getCurrentLook(float pitch, float yaw) {
-        float f = MathHelper.cos(-yaw * 0.017453292F - (float)Math.PI);
-        float f1 = MathHelper.sin(-yaw * 0.017453292F - (float)Math.PI);
+        float f = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
+        float f1 = MathHelper.sin(-yaw * 0.017453292F - (float) Math.PI);
         float f2 = -MathHelper.cos(-pitch * 0.017453292F);
         float f3 = MathHelper.sin(-pitch * 0.017453292F);
-        return new Vec3((double)(f1 * f2), (double)f3, (double)(f * f2));
+        return new Vec3(f1 * f2, f3, f * f2);
     }
 
     public static boolean equal(Vector3d a, Vector3d b) {
         double delta = distanceSquaredFromPoints(a.x, a.y, a.z, b.x, b.y, b.z);
         return (delta < 1e-5);
+    }
+
+    public static boolean equal(double a, double b) {
+        return Math.abs(a - b) < 1e-5;
     }
 
     public static double yawPitchSquareFromPlayer(float x, float y, float z) {
