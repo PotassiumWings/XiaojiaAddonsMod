@@ -126,7 +126,7 @@ public class Fishing {
         String message = ChatLib.removeFormatting(event.message.getUnformattedText());
         if (message.matches(" ☠ [a-zA-Z0-9_]+ was killed by Lord Jawbus.")) {
             if (Configs.JawbusWarn) {
-                warn();
+                warn(0.001);
             }
         }
         if (!shouldMove) return;
@@ -140,11 +140,24 @@ public class Fishing {
         }
     }
 
-    public static void warn() {
+    public static void warn(double val) {
         new Thread(() -> {
-            SoundHandler.playSound(Sounds.destiny);
+            double d = Math.random();
+            int mf = (int) (Math.random() * 1000);
+            ChatLib.debug("Rolled d: " + d);
+
+            if (d < val) {
+                ChatLib.chat("&d&lCRAZY RARE SOUND! &6BENK's roar &b(+" + mf + " ✯ Magic Find!)&r");
+                SoundHandler.playSound(Sounds.bk());
+            } else if (d < val * 2) {
+                ChatLib.chat("&d&lCRAZY RARE SOUND! &6ICY FILL &b(+" + mf + " ✯ Magic Find!)&r");
+                SoundHandler.playSound(Sounds.icyFill());
+            }
+            else SoundHandler.playSound(Sounds.destiny());
         }).start();
     }
+
+    public static long startPushing = 0;
 
     @SubscribeEvent
     public void onTickPushingThread(TickEndEvent event) {
@@ -155,13 +168,13 @@ public class Fishing {
         }
         if (pushingThread == null || !pushingThread.isAlive()) {
             pushingThread = new Thread(() -> {
-                long start = TimeUtils.curTime();
+                startPushing = TimeUtils.curTime();
                 try {
-                    Thread.sleep(Configs.FishCheckCD);
+                    Thread.sleep(Configs.FishCheckCD * 1000);
                     cast();
-                    Thread.sleep(Configs.FishCheckCD);
+                    Thread.sleep(Configs.FishCheckCD * 1000);
                     cast();
-                    Thread.sleep(Configs.FishCheckCD);
+                    Thread.sleep(Configs.FishCheckCD * 1000);
                     ChatLib.chat("Too long since last catch!");
                     stopMove();
                 } catch (InterruptedException ignored) {

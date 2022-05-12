@@ -7,5 +7,23 @@
         "stream": true
       }
     ]
+  },
+  "bk": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "xiaojiaaddons:bk",
+        "stream": true
+      }
+    ]
+  },
+  "icyFill": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "xiaojiaaddons:icyFill",
+        "stream": true
+      }
+    ]
   }
 }

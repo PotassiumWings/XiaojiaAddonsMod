@@ -14,7 +14,10 @@ import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -85,12 +88,6 @@ public class DisplayDayAndCoords {
             DisplayLine line2 = new DisplayLine("pitch: " + MathUtils.getPitch());
             line2.setScale(Configs.DisplayScale / 20F);
             display.addLine(line2);
-//            DisplayLine line3 = new DisplayLine("pro: " + DevWater.process);
-//            line2.setScale(Configs.DisplayScale / 20F);
-//            display.addLine(line3);
-//            DisplayLine line4 = new DisplayLine("sneaky queue: " + AutoSneakyCreeper.getSize());
-//            line4.setScale(Configs.DisplayScale / 20F);
-//            display.addLine(line4);
 
             try {
                 Vec3 vec = XiaojiaAddons.mc.objectMouseOver.hitVec;
@@ -102,6 +99,24 @@ public class DisplayDayAndCoords {
                 for (DisplayLine devLine: DevMode.lines)
                     display.addLine(devLine);
             }
+
+            EntityFishHook entity = getPlayer().fishEntity;
+            if (entity != null) {
+                DisplayLine line3 = new DisplayLine("Fish Entity: " + (entity.isInLava()? "Lava " : "") +
+                        (entity.isInWater()? "Water " : ""));
+                line3.setScale(Configs.DisplayScale / 20F);
+                display.addLine(line3);
+            }
+
+            DisplayLine line4 = new DisplayLine(String.format("%.2f",(TimeUtils.curTime() - Fishing.startPushing) / 1000F));
+            line4.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line4);
+//            DisplayLine line3 = new DisplayLine("pro: " + DevWater.process);
+//            line2.setScale(Configs.DisplayScale / 20F);
+//            display.addLine(line3);
+//            DisplayLine line4 = new DisplayLine("sneaky queue: " + AutoSneakyCreeper.getSize());
+//            line4.setScale(Configs.DisplayScale / 20F);
+//            display.addLine(line4);
         }
     }
 }
