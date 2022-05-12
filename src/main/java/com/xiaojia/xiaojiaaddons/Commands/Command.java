@@ -210,9 +210,7 @@ public class Command extends CommandBase {
                         BlockUtils.getBlockStateAt(new BlockPos(tx, ty, tz)));
                 break;
             case "jawbus":
-                if (strings.length == 1) x = 20;
-                else x = Integer.parseInt(strings[1]);
-                Fishing.warn(x);
+                Fishing.warn();
                 break;
             case "block":
                 if (strings.length == 1) {

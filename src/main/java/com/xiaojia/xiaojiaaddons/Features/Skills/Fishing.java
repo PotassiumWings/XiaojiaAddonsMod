@@ -5,6 +5,9 @@ import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
+import com.xiaojia.xiaojiaaddons.Sounds.SoundHandler;
+import com.xiaojia.xiaojiaaddons.Sounds.Sounds;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
@@ -121,8 +124,13 @@ public class Fishing {
     public void onReceive(ClientChatReceivedEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.AutoMove) return;
-        if (!shouldMove) return;
         String message = ChatLib.removeFormatting(event.message.getUnformattedText());
+        if (message.matches(" ☠ [a-zA-Z0-9_]+ was killed by Lord Jawbus.")) {
+            if (Configs.JawbusWarn) {
+                warn();
+            }
+        }
+        if (!shouldMove) return;
         if (message.equals("The Golden Fish escapes your hook but looks weakened.")) {
             lastReeledIn = TimeUtils.curTime();
             new Thread(this::cast).start();
@@ -131,27 +139,21 @@ public class Fishing {
             lastReeledIn = TimeUtils.curTime();
             new Thread(this::reelIn).start();
         }
-        if (message.matches(" ☠ [a-zA-Z0-9_]+ was killed by Lord Jawbus.")) {
-            if (Configs.JawbusWarn) {
-                new Thread(() -> warn(20)).start();
-            }
-        }
     }
 
-    public static void warn(int num) {
-        try {
-            for (int i = 40; i <= 250; i++) {
-                getPlayer().playSound("random.orb", 1, i / 100F);
-                Thread.sleep(num);
-            }
-        } catch (Exception ignored) {
-        }
+    public static void warn() {
+        new Thread(() -> {
+            SoundHandler.playSound(Sounds.destiny);
+        }).start();
     }
 
     @SubscribeEvent
     public void onTickPushingThread(TickEndEvent event) {
         if (!Checker.enabled) return;
-        if (!shouldMove) return;
+        if (!shouldMove) {
+            if (pushingThread != null) pushingThread.interrupt();
+            return;
+        }
         if (pushingThread == null || !pushingThread.isAlive()) {
             pushingThread = new Thread(() -> {
                 long start = TimeUtils.curTime();

@@ -1,0 +1,11 @@
+{
+  "destiny": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "xiaojiaaddons:destiny",
+        "stream": true
+      }
+    ]
+  }
+}
