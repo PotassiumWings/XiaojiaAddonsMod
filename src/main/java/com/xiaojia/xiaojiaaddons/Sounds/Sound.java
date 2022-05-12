@@ -15,4 +15,8 @@ public abstract class Sound {
         this.sound = new ISound(new ResourceLocation(MODID + ":" + name), volume, 1F);
         this.volume = volume;
     }
+
+    public void setRepeat(boolean repeat) {
+        sound.repeat = repeat;
+    }
 }
