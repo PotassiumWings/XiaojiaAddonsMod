@@ -1598,11 +1598,6 @@ public class Configs {
             min = 100, max = 30000, step = 100, suffix = " ms")
     public static int ReelCD = 600;
 
-    @Property(type = Property.Type.NUMBER, name = "Particle-pull CD", parent = "Fishing",
-            description = "Cooldown between particles approaching and pulling.",
-            min = 50, max = 600, step = 10, suffix = " ms")
-    public static int AutoPullRodCD = 150;
-
     @Property(type = Property.Type.NUMBER, name = "Pull-cast CD", parent = "Fishing",
             description = "Cooldown between pulling and casting.",
             min = 50, max = 6000, step = 10, suffix = " ms")

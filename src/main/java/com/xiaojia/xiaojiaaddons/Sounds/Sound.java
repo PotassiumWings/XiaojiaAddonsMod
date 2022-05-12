@@ -16,7 +16,8 @@ public abstract class Sound {
         this.volume = volume;
     }
 
-    public void setRepeat(boolean repeat) {
+    public Sound setRepeat(boolean repeat) {
         sound.repeat = repeat;
+        return this;
     }
 }

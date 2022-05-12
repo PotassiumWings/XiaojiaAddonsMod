@@ -59,7 +59,6 @@ public class Fishing {
 
     private void reelIn() {
         try {
-            Thread.sleep(Configs.AutoPullRodCD);
             ControlUtils.rightClick();
             if (Configs.FishingMode == 1) {
                 // regular
@@ -196,7 +195,7 @@ public class Fishing {
         if (!shouldMove) return;
 
         EntityFishHook hook = getPlayer().fishEntity;
-        if (hook != null && (hook.isInLava() || hook.isInWater()))
+        if (hook != null && (hook.isInLava() || hook.isInWater()) && pushingThread != null)
             pushingThread.interrupt();
 
         long cur = TimeUtils.curTime();
