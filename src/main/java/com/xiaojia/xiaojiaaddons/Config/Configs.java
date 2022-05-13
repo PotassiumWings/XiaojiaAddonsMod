@@ -978,6 +978,21 @@ public class Configs {
                     "Works bad at Derpy mayor, will fix it later.")
     public static boolean ShowRunicGhost = false;
 
+    //Mythological
+    @Property(type = Property.Type.FOLDER, name = "Mythological", parent = "QOL")
+    public static boolean Mythological = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Burrow Helper", parent = "Mythological",
+            description = "Use Ancestral Spade's ability &6Echo&7 twice\n" +
+                    "to locate griffin borrows.\n" +
+                    "Use the ability once, wait until the particle trail has disappeared,\n" +
+                    "move away a bit and use it again.\n" +
+                    "Only works when you are looking &cright above&7 or &cright below&7.")
+    public static boolean BurrowHelper = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Block Ancestral Spade", parent = "Mythological",
+            description = "Blocks using ancestral spade if the last trail hasn't disappeared")
+    public static boolean BlockAncestralSpade = true;
 
     @Property(type = Property.Type.FOLDER, name = "Other QOLs", parent = "QOL")
     public static boolean OtherQOL = false;
@@ -1613,6 +1628,13 @@ public class Configs {
                     "&c&lDONT FULLY AFK!\n")
     public static boolean AutoMove = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Main Lobby Auto Move", parent = "Fishing",
+            description = "Requires Auto Move enabled!")
+    public static boolean MainLobbyAutoMove = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Safer Auto Move", parent = "Fishing",
+            description = "Disable Auto Move on world change.")
+    public static boolean SafeAutoMove = true;
     @Property(type = Property.Type.BOOLEAN, name = "Auto Move Timer", parent = "Fishing",
             description = "Alarm when you auto-moved for 4min40s.\n" +
                     "Display timer in 'display day and coords'.")

@@ -7,7 +7,6 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Sounds.SoundHandler;
 import com.xiaojia.xiaojiaaddons.Sounds.Sounds;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
@@ -17,7 +16,6 @@ import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
@@ -47,7 +45,9 @@ public class Fishing {
     public void onLoad(WorldEvent.Load event) {
         if (!Checker.enabled) return;
         if (!Configs.AutoMove) return;
+        if (!Configs.SafeAutoMove) return;
         if (!shouldMove) return;
+        shouldMove = false;
         ControlUtils.stopMoving();
         stopMove();
     }
@@ -218,66 +218,81 @@ public class Fishing {
         }
         if (cur - lastMove > 2000) {
             lastMove = cur;
-            new Thread(() -> {
-                try {
-                    int choose = floor(Math.random() * 4);
-                    ControlUtils.sneak();
-                    int time = Configs.AutoMoveTime;
-                    int moveTime = time + floor(Math.random() * time);
-                    switch (choose) {
-                        case 0: {
-                            ControlUtils.moveLeft(moveTime);
-                            Thread.sleep(100);
-                            ControlUtils.moveRight(moveTime);
-                            break;
+            if (Configs.MainLobbyAutoMove) {
+                new Thread(() -> {
+                    try {
+                        ControlUtils.sneak();
+                        ControlUtils.holdJump();
+                        if (!shouldMove) {
+                            ControlUtils.unSneak();
+                            ControlUtils.releaseJump();
                         }
-                        case 1: {
-                            ControlUtils.moveRight(moveTime);
-                            Thread.sleep(100);
-                            ControlUtils.moveLeft(moveTime);
-                            break;
-                        }
-                        case 2: {
-                            ControlUtils.moveForward(moveTime);
-                            Thread.sleep(100);
-                            ControlUtils.moveBackward(moveTime);
-                            break;
-                        }
-                        case 3: {
-                            ControlUtils.moveBackward(moveTime);
-                            Thread.sleep(100);
-                            ControlUtils.moveForward(moveTime);
-                            break;
-                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    Thread.sleep(100);
+                }).start();
+            } else {
+                new Thread(() -> {
+                    try {
+                        int choose = floor(Math.random() * 4);
+                        ControlUtils.sneak();
+                        int time = Configs.AutoMoveTime;
+                        int moveTime = time + floor(Math.random() * time);
+                        switch (choose) {
+                            case 0: {
+                                ControlUtils.moveLeft(moveTime);
+                                Thread.sleep(100);
+                                ControlUtils.moveRight(moveTime);
+                                break;
+                            }
+                            case 1: {
+                                ControlUtils.moveRight(moveTime);
+                                Thread.sleep(100);
+                                ControlUtils.moveLeft(moveTime);
+                                break;
+                            }
+                            case 2: {
+                                ControlUtils.moveForward(moveTime);
+                                Thread.sleep(100);
+                                ControlUtils.moveBackward(moveTime);
+                                break;
+                            }
+                            case 3: {
+                                ControlUtils.moveBackward(moveTime);
+                                Thread.sleep(100);
+                                ControlUtils.moveForward(moveTime);
+                                break;
+                            }
+                        }
+                        Thread.sleep(100);
 
-                    float theta = 0;
-                    float DELTAYAW = 0.1F;
-                    float DELTAPITCH = 0.2F;
-                    float rawYaw = MathUtils.getYaw(), rawPitch = MathUtils.getPitch();
-                    while (theta < 2 * Math.PI && shouldMove) {
-                        float yaw = MathUtils.getYaw(), pitch = MathUtils.getPitch();
-                        yaw += Math.sin(theta) * DELTAYAW + (Math.random() * DELTAYAW * 2 - DELTAYAW) / 4;
-                        pitch += Math.cos(theta) * DELTAPITCH + (Math.random() * DELTAPITCH * 2 - DELTAPITCH) / 4;
-                        theta += Math.PI / (8 + Math.random() * 25);
-                        if (pitch > 90.0) pitch = 180 - pitch;
-                        if (pitch < -90.0) pitch = -180 - pitch;
-                        if (yaw >= 180.0) yaw -= 360;
-                        if (yaw <= -180) yaw += 360;
+                        float theta = 0;
+                        float DELTAYAW = 0.1F;
+                        float DELTAPITCH = 0.2F;
+                        float rawYaw = MathUtils.getYaw(), rawPitch = MathUtils.getPitch();
+                        while (theta < 2 * Math.PI && shouldMove) {
+                            float yaw = MathUtils.getYaw(), pitch = MathUtils.getPitch();
+                            yaw += Math.sin(theta) * DELTAYAW + (Math.random() * DELTAYAW * 2 - DELTAYAW) / 4;
+                            pitch += Math.cos(theta) * DELTAPITCH + (Math.random() * DELTAPITCH * 2 - DELTAPITCH) / 4;
+                            theta += Math.PI / (8 + Math.random() * 25);
+                            if (pitch > 90.0) pitch = 180 - pitch;
+                            if (pitch < -90.0) pitch = -180 - pitch;
+                            if (yaw >= 180.0) yaw -= 360;
+                            if (yaw <= -180) yaw += 360;
 
-                        ControlUtils.changeDirection(yaw, pitch);
-                        Thread.sleep(20);
-                        ControlUtils.checkDirection(yaw, pitch, true);
+                            ControlUtils.changeDirection(yaw, pitch);
+                            Thread.sleep(20);
+                            ControlUtils.checkDirection(yaw, pitch, true);
+                        }
+                        ControlUtils.changeDirection(
+                                rawYaw + DELTAYAW - 2 * DELTAYAW * (float) Math.random(),
+                                rawPitch + DELTAPITCH - 2 * DELTAPITCH * (float) Math.random()
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    ControlUtils.changeDirection(
-                            rawYaw + DELTAYAW - 2 * DELTAYAW * (float) Math.random(),
-                            rawPitch + DELTAPITCH - 2 * DELTAPITCH * (float) Math.random()
-                    );
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
+                }).start();
+            }
         }
         if (cur - startTime >= 280 * 1000 && Configs.AutoMoveTimer) {
             getPlayer().playSound("random.successful_hit", 1000, 1);
