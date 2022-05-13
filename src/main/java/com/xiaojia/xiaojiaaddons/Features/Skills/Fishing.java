@@ -12,6 +12,7 @@ import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.EnumParticleTypes;
@@ -20,8 +21,15 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.floor;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Fishing {
     private static long startTime = 0;
@@ -190,6 +198,32 @@ public class Fishing {
         startTime = 0;
         ChatLib.chat("Auto Move &cdeactivated");
         ControlUtils.unSneak();
+    }
+
+    public static long lastUnload = 0;
+
+    @SubscribeEvent
+    public void onTick(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.UnloadUnusedNPCEntity) return;
+        if (getWorld() == null) return;
+
+        // unload every 100 seconds
+        if (TimeUtils.curTime() - lastUnload < 100 * 1000) return;
+        lastUnload = TimeUtils.curTime();
+
+        List<Entity> entities = new ArrayList<>(getWorld().loadedEntityList);
+        entities.removeIf(entity -> !(MathUtils.equal(getX(entity), 0) && MathUtils.equal(getY(entity), 0) && MathUtils.equal(getZ(entity), 0)));
+        entities.removeIf(entity -> !ChatLib.removeFormatting(entity.getName()).matches("[a-zA-Z ]+"));
+        getWorld().unloadEntities(entities);
+        int count = entities.size();
+        if (count == 0) return;
+
+        ChatLib.chat(String.format("Unloaded %s entities.", count));
+        StringBuilder res = new StringBuilder();
+        for (Entity entity : entities)
+            res.append(entity.getName()).append(" ");
+        ChatLib.debug("Removed: " + res);
     }
 
     @SubscribeEvent

@@ -1589,6 +1589,10 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Fishing", parent = "Skills")
     public static boolean FishingFeatures = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Unload Useless Entities", parent = "Fishing",
+            description = "Unload useless entities that let your fps drop.")
+    public static boolean UnloadUnusedNPCEntity = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Auto Pulling Rod", parent = "Fishing", illegal = true,
             description = "Auto Pull Rod When fishing.\n" +
                     "Water / lava fishing are supported.")
@@ -1641,8 +1645,7 @@ public class Configs {
     public static boolean AutoMoveTimer = true;
 
     @Property(type = Property.Type.BOOLEAN, name = "Jawbus Warn", parent = "Fishing",
-            description = "Alarm when someone in your lobby dies to a jawbus.\n" +
-                    "&c/xj jawbus&r to test this alarm.")
+            description = "Alarm when someone in your lobby dies to a jawbus.")
     public static boolean JawbusWarn = true;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Move Recast", parent = "Fishing",

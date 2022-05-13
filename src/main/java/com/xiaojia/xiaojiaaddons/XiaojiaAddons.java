@@ -136,6 +136,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayHandler;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.ScoreBoard;
 import com.xiaojia.xiaojiaaddons.Objects.TestCubeGUI;
+import com.xiaojia.xiaojiaaddons.Sounds.SoundHandler;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CipherUtils;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
@@ -208,6 +209,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(this);
 
         MinecraftForge.EVENT_BUS.register(new DisplayHandler());
+        MinecraftForge.EVENT_BUS.register(new SoundHandler());
 
         // Utils
         MinecraftForge.EVENT_BUS.register(new ControlUtils());
