@@ -47,7 +47,6 @@ public class Fishing {
         if (!Configs.AutoMove) return;
         if (!Configs.SafeAutoMove) return;
         if (!shouldMove) return;
-        shouldMove = false;
         ControlUtils.stopMoving();
         stopMove();
     }
@@ -176,6 +175,7 @@ public class Fishing {
                     cast();
                     Thread.sleep(Configs.FishCheckCD * 1000);
                     ChatLib.chat("Too long since last catch!");
+                    getPlayer().playSound("random.successful_hit", 1000, 1);
                     stopMove();
                 } catch (InterruptedException ignored) {
 

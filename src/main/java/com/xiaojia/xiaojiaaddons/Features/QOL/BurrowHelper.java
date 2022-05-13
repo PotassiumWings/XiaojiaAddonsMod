@@ -1,29 +1,29 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
-import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
-import net.minecraft.block.Block;
+import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S2APacketParticles;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.StringUtils;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
-
-public class BorrowHelper {
-
-    public static Block getBlockAt(BlockPos pos) {
-        if(getWorld() == null || pos == null) return null;
-        return getWorld().getBlockState(pos).getBlock();
-    }
+public class BurrowHelper {
+    private BlockPos solution;
     private boolean awaiting = false;
     private int particleCount = 0;
     private long lastItem = -1L;
@@ -32,9 +32,7 @@ public class BorrowHelper {
     private Vec3 vec1 = null;
     private Vec3 vec2 = null;
 
-    BlockPos solution;
     public void clear() {
-        GuiUtils.disableESP();
         pos1 = null;
         pos2 = null;
         vec1 = null;
@@ -44,13 +42,17 @@ public class BorrowHelper {
         lastItem = -1L;
         particleCount = 0;
     }
+
     @SubscribeEvent
     public void onPacketReceived(PacketReceivedEvent event) {
+        if (!Checker.enabled) return;
         if (!Configs.BurrowHelper) return;
         if (event.packet instanceof S2APacketParticles) {
             S2APacketParticles packet = (S2APacketParticles) event.packet;
             if (packet.getParticleType() == EnumParticleTypes.FIREWORKS_SPARK &&
-                    packet.getXOffset() == 0f && packet.getYOffset() == 0f && packet.getZOffset() == 0f) {
+                    MathUtils.equal(packet.getXOffset(), 0) &&
+                    MathUtils.equal(packet.getYOffset(), 0) &&
+                    MathUtils.equal(packet.getZOffset(), 0)) {
                 particleCount++;
                 if (awaiting) {
                     if (particleCount == 10 && pos1 == null) {
@@ -74,6 +76,7 @@ public class BorrowHelper {
 
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent event) {
+        if (!Checker.enabled) return;
         if (!Configs.BurrowHelper) return;
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             ItemStack item = Minecraft.getMinecraft().thePlayer.getHeldItem();
@@ -95,8 +98,10 @@ public class BorrowHelper {
     public void onWorldLoad(WorldEvent.Load event) {
         clear();
     }
+
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
+        if (!Checker.enabled) return;
         if (!Configs.BurrowHelper) return;
         if (event.type != 0) return;
         String message = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
@@ -128,23 +133,22 @@ public class BorrowHelper {
         double y;
         for (y = 255; y > 0; y--) {
             solution = new BlockPos(x, y, z);
-            if (getBlockAt(solution) == Blocks.grass || getBlockAt(solution) == Blocks.dirt) {
-                y++;
-                solution = new BlockPos(x, y, z);
+            if (BlockUtils.getBlockAt(solution) == Blocks.grass || BlockUtils.getBlockAt(solution) == Blocks.dirt) {
+                solution = new BlockPos(x, y + 1, z);
                 break;
             }
         }
         ChatLib.chat("Solution: (" + solution.getX() + ", " + solution.getZ() + ")");
 
-
         pos1 = pos2 = vec1 = vec2 = null;
-
     }
+
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
+        if (!Checker.enabled) return;
         if (solution == null) return;
         GuiUtils.enableESP();
-        GuiUtils.renderBeaconBeam(solution, 0xfc03ec, 0.3f, event.partialTicks);
+        GuiUtils.renderBeaconBeam(solution, 0xfc03ec, 0.3f);
         GuiUtils.disableESP();
     }
 }
