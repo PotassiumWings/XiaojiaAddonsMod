@@ -54,6 +54,6 @@ public class SessionUtils {
     }
 
     public static boolean isDev() {
-        return getUUID().equals("1c6d48a96cb3465681382590ec82fa68");
+        return (getUUID().equals("1c6d48a96cb3465681382590ec82fa68") || getUUID().equals("7423f6c86a02435c9a350f5984e1231f"));
     }
 }

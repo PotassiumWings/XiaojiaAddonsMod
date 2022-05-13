@@ -448,6 +448,10 @@ public class ControlUtils {
         KeyBinding.setKeyBindState(moveRightKeyBind.mcKeyBinding().getKeyCode(), false);
     }
 
+    public static void holdJump() {
+        KeyBinding.setKeyBindState(jumpKeyBind.mcKeyBinding().getKeyCode(), true);
+    }
+
     public static void releaseJump() {
         KeyBinding.setKeyBindState(jumpKeyBind.mcKeyBinding().getKeyCode(), false);
     }
