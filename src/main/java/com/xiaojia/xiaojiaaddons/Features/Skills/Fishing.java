@@ -7,16 +7,19 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Sounds.SoundHandler;
 import com.xiaojia.xiaojiaaddons.Sounds.Sounds;
+import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
@@ -55,7 +58,6 @@ public class Fishing {
         if (!Configs.AutoMove) return;
         if (!Configs.SafeAutoMove) return;
         if (!shouldMove) return;
-        ControlUtils.stopMoving();
         stopMove();
     }
 
@@ -145,6 +147,11 @@ public class Fishing {
             lastReeledIn = TimeUtils.curTime();
             new Thread(this::reelIn).start();
         }
+        if (message.equals("NEW DISCOVERY")) {
+            if (Configs.StopWhenNewDiscovery) {
+                stopMove();
+            }
+        }
     }
 
     public static void warn(double val) {
@@ -197,10 +204,22 @@ public class Fishing {
         shouldMove = false;
         startTime = 0;
         ChatLib.chat("Auto Move &cdeactivated");
-        ControlUtils.unSneak();
+        ControlUtils.stopMoving();
     }
 
     public static long lastUnload = 0;
+
+    @SubscribeEvent
+    public void onEntitySpawn(EntityJoinWorldEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.UnloadUnusedNPCEntity) return;
+        Entity entity = event.entity;
+        if (entity == null) return;
+        if (!(MathUtils.equal(getX(entity), 0) && MathUtils.equal(getY(entity), 0) && MathUtils.equal(getZ(entity), 0))) return;
+        if (!entity.getName().matches("\u00a7(d|5)[A-Z][a-z]+ ")) return;
+//        if (XiaojiaAddons.isDebug()) ChatLib.chat("Blocked: " + entity.getName());
+        event.setCanceled(true);
+    }
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -214,7 +233,7 @@ public class Fishing {
 
         List<Entity> entities = new ArrayList<>(getWorld().loadedEntityList);
         entities.removeIf(entity -> !(MathUtils.equal(getX(entity), 0) && MathUtils.equal(getY(entity), 0) && MathUtils.equal(getZ(entity), 0)));
-        entities.removeIf(entity -> !ChatLib.removeFormatting(entity.getName()).matches("[a-zA-Z ]+"));
+        entities.removeIf(entity -> !entity.getName().matches("\u00a7(d|5)[A-Z][a-z]+ "));
         getWorld().unloadEntities(entities);
         int count = entities.size();
         if (count == 0) return;
@@ -276,24 +295,28 @@ public class Fishing {
                             case 0: {
                                 ControlUtils.moveLeft(moveTime);
                                 Thread.sleep(100);
+                                if (!shouldMove) return;
                                 ControlUtils.moveRight(moveTime);
                                 break;
                             }
                             case 1: {
                                 ControlUtils.moveRight(moveTime);
                                 Thread.sleep(100);
+                                if (!shouldMove) return;
                                 ControlUtils.moveLeft(moveTime);
                                 break;
                             }
                             case 2: {
                                 ControlUtils.moveForward(moveTime);
                                 Thread.sleep(100);
+                                if (!shouldMove) return;
                                 ControlUtils.moveBackward(moveTime);
                                 break;
                             }
                             case 3: {
                                 ControlUtils.moveBackward(moveTime);
                                 Thread.sleep(100);
+                                if (!shouldMove) return;
                                 ControlUtils.moveForward(moveTime);
                                 break;
                             }

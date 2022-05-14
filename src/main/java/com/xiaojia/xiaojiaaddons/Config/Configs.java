@@ -1632,6 +1632,9 @@ public class Configs {
                     "&c&lDONT FULLY AFK!\n")
     public static boolean AutoMove = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Move - Stop When New Discovery", parent = "Fishing")
+    public static boolean StopWhenNewDiscovery = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Main Lobby Auto Move", parent = "Fishing",
             description = "Requires Auto Move enabled!")
     public static boolean MainLobbyAutoMove = false;
