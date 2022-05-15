@@ -58,13 +58,21 @@ public class EntityQOL {
     }
 
     private static boolean isLaser(Entity entity) {
-        String owner = EntityUtils.getHeadOwner(entity);
-        return (owner != null && owner.equals("7a237e5c-ca9a-3dc1-b1d9-b385fc200aa7"));
+        if (entity instanceof EntityArmorStand) {
+            EntityArmorStand as = (EntityArmorStand) entity;
+            if (!as.isInvisible()) return false;
+            if (!as.getName().matches("\u00a77\\d+")) return false;
+            for (int i = 0; i < 5; i++)
+                if (as.getEquipmentInSlot(i) != null)
+                    return false;
+            return true;
+        }
+        return false;
     }
 
     private static boolean isGoldenFish(Entity entity) {
-        String owner = EntityUtils.getHeadOwner(entity);
-        return (owner != null && owner.equals("51760500-acd8-4ea4-8b5e-a4ee20fcd894"));
+        String texture = EntityUtils.getHeadTexture(entity);
+        return (texture != null && texture.equals("ewogICJ0aW1lc3RhbXAiIDogMTY0MzgzMTA2MDE5OCwKICAicHJvZmlsZUlkIiA6ICJiN2ZkYmU2N2NkMDA0NjgzYjlmYTllM2UxNzczODI1NCIsCiAgInByb2ZpbGVOYW1lIiA6ICJDVUNGTDE0IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzEyMGNmM2MwYTQwZmM2N2UwZTVmZTBjNDZiMGFlNDA5YWM3MTAzMGE3NjU2ZGExN2IxMWVkMDAxNjQ1ODg4ZmUiCiAgICB9CiAgfQp9=="));
     }
 
     @SubscribeEvent

@@ -24,7 +24,6 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmVertical;
-import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Blaze;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Tests.CopyWorldInfo;
@@ -32,6 +31,7 @@ import com.xiaojia.xiaojiaaddons.Tests.TestM7;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.MinecraftUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -228,7 +228,8 @@ public class Command extends CommandBase {
                 List<Entity> list = getWorld().loadedEntityList;
                 for (Entity entity : list) {
                     ChatLib.chat(entity.hasCustomName() + ", " + entity.getName() + ", " + MathUtils.getPosString(entity) +
-                            (entity instanceof EntityLivingBase ? ((EntityLivingBase) entity).getHealth() : ""));
+                            (entity instanceof EntityLivingBase ? ((EntityLivingBase) entity).getHealth() : "" +
+                                    (strings.length == 1 ? "" : EntityUtils.getHeadTexture(entity))));
                 }
                 break;
             case "m7":

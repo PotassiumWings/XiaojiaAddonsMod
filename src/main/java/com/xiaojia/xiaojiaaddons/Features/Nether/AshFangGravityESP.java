@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
@@ -54,17 +55,7 @@ public class AshFangGravityESP  extends RenderEntityESP {
     }
 
     private boolean isGravityCenter(Entity entity) {
-        if (!(entity instanceof EntityArmorStand)) return false;
-        try {
-            ItemStack helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);
-            if (helm == null) return false;
-            if (helm.getItem() != Items.skull || helm.getMetadata() != 3) return false;
-            return helm.getTagCompound()
-                    .getCompoundTag("SkullOwner")
-                    .getString("Id")
-                    .equals("645e1499-e947-4dc7-bc49-62a04cd96a66");
-        } catch (Exception e) {
-            return false;
-        }
+        String texture = EntityUtils.getHeadTexture(entity);
+        return texture != null && texture.equals("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWE2OWNjZjdhZDkwNGM5YTg1MmVhMmZmM2Y1YjRlMjNhZGViZjcyZWQxMmQ1ZjI0Yjc4Y2UyZDQ0YjRhMiJ9fX0=");
     }
 }

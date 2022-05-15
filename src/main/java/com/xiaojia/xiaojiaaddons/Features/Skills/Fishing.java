@@ -217,7 +217,7 @@ public class Fishing {
         if (entity == null) return;
         if (!(MathUtils.equal(getX(entity), 0) && MathUtils.equal(getY(entity), 0) && MathUtils.equal(getZ(entity), 0))) return;
         if (!entity.getName().matches("\u00a7(d|5)[A-Z][a-z]+ ")) return;
-//        if (XiaojiaAddons.isDebug()) ChatLib.chat("Blocked: " + entity.getName());
+        if (XiaojiaAddons.isDebug()) ChatLib.chat("Blocked: " + entity.getName() + ", " + entity.forceSpawn);
         event.setCanceled(true);
     }
 
@@ -227,8 +227,8 @@ public class Fishing {
         if (!Configs.UnloadUnusedNPCEntity) return;
         if (getWorld() == null) return;
 
-        // unload every 100 seconds
-        if (TimeUtils.curTime() - lastUnload < 100 * 1000) return;
+        // unload every 2 seconds
+        if (TimeUtils.curTime() - lastUnload < 2 * 1000) return;
         lastUnload = TimeUtils.curTime();
 
         List<Entity> entities = new ArrayList<>(getWorld().loadedEntityList);

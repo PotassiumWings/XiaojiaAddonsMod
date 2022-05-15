@@ -839,13 +839,10 @@ public class Configs {
             description = "Act like the summons dont exist, can click through")
     public static boolean HideSummons = false;
 
-    // TODO
-    @Property(type = Property.Type.BOOLEAN, name = "Hide Golden Fish", parent = "Hide Entity Features",
-            description = "Debugging, useless rn")
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Golden Fish", parent = "Hide Entity Features")
     public static boolean HideGoldenFish = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Hide Guardian Laser", parent = "Hide Entity Features",
-            description = "Debugging, useless rn")
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Guardian Laser", parent = "Hide Entity Features")
     public static boolean HideGuardianLaser = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Hide Nearby Players", parent = "Hide Entity Features", illegal = true,

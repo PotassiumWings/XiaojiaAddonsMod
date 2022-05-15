@@ -36,7 +36,8 @@ public class TestM7 {
                 ItemStack helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);
                 String helmString = "";
                 if (helm != null) helmString = helm.getDisplayName();
-                ChatLib.chat(String.format("name %s, helm %s, %.2f %.2f %.2f", name, helmString, entity.posX, entity.posY, entity.posZ));
+                ChatLib.chat(String.format("name %s, helm %s, texture %s, %.2f %.2f %.2f",
+                        name, helmString, EntityUtils.getHeadTexture(entity), entity.posX, entity.posY, entity.posZ));
             }
         }
     }
