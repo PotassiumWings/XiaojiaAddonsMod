@@ -10,6 +10,7 @@ import com.xiaojia.xiaojiaaddons.Sounds.Sounds;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
@@ -231,7 +232,7 @@ public class Fishing {
         if (TimeUtils.curTime() - lastUnload < 2 * 1000) return;
         lastUnload = TimeUtils.curTime();
 
-        List<Entity> entities = new ArrayList<>(getWorld().loadedEntityList);
+        List<Entity> entities = EntityUtils.getEntities();
         entities.removeIf(entity -> !(MathUtils.equal(getX(entity), 0) && MathUtils.equal(getY(entity), 0) && MathUtils.equal(getZ(entity), 0)));
         entities.removeIf(entity -> !entity.getName().matches("\u00a7(d|5)[A-Z][a-z]+ "));
         getWorld().unloadEntities(entities);

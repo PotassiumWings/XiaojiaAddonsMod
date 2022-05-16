@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
@@ -62,7 +63,7 @@ public class Mastery {
         if (!Checker.enabled) return;
         if (!Configs.MasteryHelper) return;
         if (DojoUtils.getTask() != EnumDojoTask.MASTERY) return;
-        List<Entity> entities = new ArrayList<>(getWorld().loadedEntityList);
+        List<Entity> entities = EntityUtils.getEntities();
         HashMap<Integer, BlockPos> tempLink = new HashMap<>();
         for (Entity entity : entities) {
             String name = entity.getName();
@@ -101,8 +102,7 @@ public class Mastery {
             System.err.println(pos);
         }
         System.err.println("Mastery entities:");
-        List<Entity> entities = new ArrayList<>(getWorld().loadedEntityList);
-        for (Entity entity : entities) {
+        for (Entity entity : EntityUtils.getEntities()) {
             String name = entity.getName();
             Pattern pattern = Pattern.compile("^\u00a7(\\w)\u00a7l([\\d:]+)$");
             Matcher matcher = pattern.matcher(name);
@@ -147,7 +147,7 @@ public class Mastery {
             );
         }
         GuiUtils.enableESP();
-        for (Entity entity : getWorld().loadedEntityList) {
+        for (Entity entity : EntityUtils.getEntities()) {
             int id = entity.getEntityId();
             if (!link.containsKey(id)) continue;
             BlockPos pos = link.get(id);

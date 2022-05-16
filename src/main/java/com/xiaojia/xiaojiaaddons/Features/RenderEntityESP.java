@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -42,7 +43,7 @@ public abstract class RenderEntityESP {
     }
 
     public List<Entity> getEntities() {
-        return getWorld().loadedEntityList;
+        return EntityUtils.getEntities();
     }
 
     @SubscribeEvent

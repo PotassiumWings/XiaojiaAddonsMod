@@ -9,6 +9,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -149,7 +150,7 @@ public class M7Dragon {
                 HashMap<String, ArrayList<EntityArmorStand>> relics = new HashMap<>();
                 ArrayList<EntityDragon> dragons = new ArrayList<>();
                 StringBuilder log = new StringBuilder();
-                for (Entity entity : getWorld().loadedEntityList) {
+                for (Entity entity : EntityUtils.getEntities()) {
                     if (entity instanceof EntityArmorStand) {
                         ItemStack helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);
                         if (helm == null) continue;
@@ -264,7 +265,7 @@ public class M7Dragon {
             line5.setScale(Configs.dragonInfoScale / 20F * getScale(13));
             display.addLine(line5);
         }
-        for (Entity entity : getWorld().loadedEntityList) {
+        for (Entity entity : EntityUtils.getEntities()) {
             if (entity instanceof EntityDragon) {
                 if (!dragonsMap.containsKey(entity)) continue;
                 DragonInfo info = dragonsMap.get(entity);

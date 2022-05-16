@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -47,7 +48,7 @@ public class Spider extends RenderEntityESP {
         if (!Checker.enabled) return;
         if (!SkyblockUtils.isInSpiderDen() || !Configs.SpiderDenShadowfuryPoint) return;
         List<Entity> shadowFuryEntities = new ArrayList<>();
-        List<Entity> list = getWorld().loadedEntityList;
+        List<Entity> list = EntityUtils.getEntities();
         for (Entity entity : list) {
             if (entity instanceof EntityArmorStand) {
                 double ex = getX(entity), ey = getY(entity), ez = getZ(entity);

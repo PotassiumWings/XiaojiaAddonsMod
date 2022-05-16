@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -20,8 +21,7 @@ public class HideCreepers {
         if (getWorld() == null) return;
         if (SkyblockUtils.isInDungeon()) return;
 
-        List<Entity> allEntities = getWorld().loadedEntityList;
-        for (Entity entity : allEntities) {
+        for (Entity entity : EntityUtils.getEntities()) {
             if (entity instanceof EntityCreeper) {
                 entity.posY = entity.lastTickPosY = 9999;
             }

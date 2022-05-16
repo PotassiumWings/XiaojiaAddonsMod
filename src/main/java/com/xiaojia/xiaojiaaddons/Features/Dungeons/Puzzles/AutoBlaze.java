@@ -12,6 +12,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Line;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.PacketUtils;
@@ -630,7 +631,7 @@ public class AutoBlaze {
 
     public void calculateBlazes() {
         List<BlazeInfo> newBlaze = new ArrayList<>();
-        for (Entity entity : getWorld().loadedEntityList) {
+        for (Entity entity : EntityUtils.getEntities()) {
             String name = entity.getName();
             if (name.contains("Blaze") && name.contains("/")) {
                 String blazeName = ChatLib.removeFormatting(entity.getName());

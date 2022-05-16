@@ -86,7 +86,7 @@ public class EntityQOL {
         if (!Checker.enabled) return;
         if (SkyblockUtils.isInDungeon()) return;
         if (getWorld() == null) return;
-        List<Entity> allEntities = getWorld().loadedEntityList;
+        List<Entity> allEntities = EntityUtils.getEntities();
         count = 0;
         for (Entity entity : allEntities) {
             if (isPlayer(entity)) {

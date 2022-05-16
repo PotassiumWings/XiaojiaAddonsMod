@@ -11,6 +11,7 @@ import com.xiaojia.xiaojiaaddons.Features.Remote.RemoteUtils;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
@@ -113,7 +114,7 @@ public class Quiz {
         if (block != Blocks.stone_button && block != Blocks.double_stone_slab || answer == null) return;
         if (!Dungeon.currentRoom.equals("Quiz")) return;
         EntityArmorStand answerEntity = null;
-        for (Entity entity : getWorld().loadedEntityList) {
+        for (Entity entity : EntityUtils.getEntities()) {
             if (!(entity instanceof EntityArmorStand)) continue;
             if (!entity.hasCustomName()) continue;
             String name = entity.getCustomNameTag();
@@ -135,7 +136,7 @@ public class Quiz {
         if (!Configs.QuizSolver) return;
         if (!SkyblockUtils.isInDungeon()) return;
         if (getWorld() == null) return;
-        List<Entity> allEntities = getWorld().loadedEntityList;
+        List<Entity> allEntities = EntityUtils.getEntities();
         for (Entity entity : allEntities) {
             if (!(entity instanceof EntityArmorStand)) continue;
             if (!entity.hasCustomName()) continue;

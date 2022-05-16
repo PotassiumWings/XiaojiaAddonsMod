@@ -7,6 +7,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
@@ -48,7 +49,7 @@ public class AutoBlood {
             target = null;
             faceTime = 0;
             // recalculate target
-            for (Entity entity : getWorld().loadedEntityList) {
+            for (Entity entity : EntityUtils.getEntities()) {
                 if (!(entity instanceof EntityPlayer) || entity.isDead || killed.contains(entity)) continue;
                 if (entity.getDistanceToEntity(getPlayer()) > 20.0F) continue;
                 for (String name : bloodMobs)

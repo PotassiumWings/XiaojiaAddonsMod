@@ -8,6 +8,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import com.xiaojia.xiaojiaaddons.utils.NetUtils;
@@ -134,7 +135,7 @@ public class Blaze {
             line.setScale(1.51F * Configs.PillarScale / 20);
             display.addLine(line);
         }
-        for (Entity entity : getWorld().loadedEntityList) {
+        for (Entity entity : EntityUtils.getEntities()) {
             String name = ChatLib.removeFormatting(entity.getName());
             Pattern pattern = Pattern.compile("(\\d)s (\\d) hits");
             Matcher matcher = pattern.matcher(name);

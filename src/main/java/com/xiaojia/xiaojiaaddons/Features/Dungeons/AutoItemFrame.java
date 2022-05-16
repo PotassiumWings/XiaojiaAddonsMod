@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Vector2i;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.entity.Entity;
@@ -119,7 +120,7 @@ public class AutoItemFrame {
                 if (grid.size() < 25) {
                     // scan all ItemFrames from world
                     ArrayList<EntityItemFrame> frames = new ArrayList<>();
-                    List<Entity> list = getWorld().loadedEntityList;
+                    List<Entity> list = EntityUtils.getEntities();
                     for (Entity entity : list)
                         if (entity instanceof EntityItemFrame && box.contains(entity.getPosition())) {
                             Item displayedItem = ((EntityItemFrame) entity).getDisplayedItem().getItem();

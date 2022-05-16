@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.ShortbowUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -42,7 +43,7 @@ public class AutoShootCrystal {
             return;
         }
         if (shootQueue.size() != 0) return;
-        List<Entity> list = getWorld().loadedEntityList;
+        List<Entity> list = EntityUtils.getEntities();
         for (Entity entity : list) {
             if (entity instanceof EntityEnderCrystal) {
                 shootQueue.add(new Vector3d(entity.posX, entity.posY, entity.posZ));

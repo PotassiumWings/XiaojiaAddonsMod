@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Vector2i;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
@@ -40,7 +41,7 @@ public class BloodAssist {
             System.err.println("skulls: " + entity.getUniqueID().toString());
             if (entity.getEquipmentInSlot(4) != null) System.err.println(entity.getEquipmentInSlot(4).getDisplayName());
         }
-        for (Entity entity : getWorld().loadedEntityList) {
+        for (Entity entity : EntityUtils.getEntities()) {
             if (entity instanceof EntityArmorStand) {
                 System.err.println("entity: " + entity.getUniqueID().toString());
                 if (((EntityArmorStand) entity).getEquipmentInSlot(4) != null)
@@ -185,7 +186,7 @@ public class BloodAssist {
         infos.clear();
         skulls.clear();
         try {
-            for (Entity entity : getWorld().loadedEntityList) {
+            for (Entity entity : EntityUtils.getEntities()) {
                 if (!(entity instanceof EntityArmorStand)) continue;
                 newArmorStands.offerLast((EntityArmorStand) entity);
                 log.append("worldload, ").append(entity.getDisplayName()).append("\n");
@@ -212,7 +213,7 @@ public class BloodAssist {
                 bloodTrunk = new Vector2i(((int) entityArmorStand.posX + 8) / 16 / 2,
                         ((int) entityArmorStand.posZ + 8) / 16 / 2);
                 log.append("Head: ").append(name).append(", trunk: ").append(bloodTrunk).append("\n");
-                for (Entity entity : getWorld().loadedEntityList) {
+                for (Entity entity : EntityUtils.getEntities()) {
                     if (!(entity instanceof EntityArmorStand)) continue;
                     helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);
                     if (helm == null) continue;

@@ -8,6 +8,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.OutlineUtils;
@@ -85,7 +86,7 @@ public class StarredMobESP extends RenderEntityESP {
     public List<Entity> getEntities() {
         if (fixEntities.isEmpty()) return new ArrayList<>();
 
-        List<Entity> list = getWorld().loadedEntityList;
+        List<Entity> list = EntityUtils.getEntities();
         ArrayList<Entity> res = new ArrayList<>();
         for (Entity entity : list) {
             if (fixEntities.contains(entity)) {

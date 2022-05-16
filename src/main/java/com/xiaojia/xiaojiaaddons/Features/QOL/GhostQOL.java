@@ -5,6 +5,7 @@ import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.OutlineUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
@@ -52,7 +53,7 @@ public class GhostQOL extends RenderEntityESP {
         if (!Checker.enabled) return;
         if (!SkyblockUtils.isInMist() || !Configs.ShowRunicGhost) return;
 
-        List<Entity> list = getWorld().loadedEntityList;
+        List<Entity> list = EntityUtils.getEntities();
         for (Entity entity : list) {
             if (!(entity instanceof EntityCreeper)) continue;
             String uuid = entity.getUniqueID().toString();

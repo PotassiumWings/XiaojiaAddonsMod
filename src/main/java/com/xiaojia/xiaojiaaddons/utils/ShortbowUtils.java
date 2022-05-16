@@ -259,7 +259,7 @@ public class ShortbowUtils {
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!enabled) return;
-        for (Entity entity : getWorld().loadedEntityList) {
+        for (Entity entity : EntityUtils.getEntities()) {
             if (entity instanceof EntityArrow) {
                 Cube arrowCube = new Cube(
                         getX(entity), getY(entity) - 0.1F, getZ(entity),

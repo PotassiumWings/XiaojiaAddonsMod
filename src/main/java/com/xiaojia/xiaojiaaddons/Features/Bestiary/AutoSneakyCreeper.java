@@ -8,6 +8,7 @@ import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.Pair;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
@@ -199,7 +200,7 @@ public class AutoSneakyCreeper {
     }
 
     private static List<EntityCreeper> getCreepers() {
-        List<Entity> list = new ArrayList<>(getWorld().loadedEntityList);
+        List<Entity> list = EntityUtils.getEntities();
         List<EntityCreeper> res = new ArrayList<>();
         for (Entity entity : list) {
             if (!(entity instanceof EntityCreeper)) continue;

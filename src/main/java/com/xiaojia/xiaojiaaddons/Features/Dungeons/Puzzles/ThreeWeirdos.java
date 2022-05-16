@@ -10,6 +10,7 @@ import com.xiaojia.xiaojiaaddons.Features.Remote.RemoteUtils;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
@@ -92,7 +93,7 @@ public class ThreeWeirdos {
         if (!Dungeon.currentRoom.equals("Three Weirdos")) return;
         if (npc == null) return;
         BlockPos pos = null;
-        for (Entity entity : getWorld().loadedEntityList) {
+        for (Entity entity : EntityUtils.getEntities()) {
             if (entity instanceof EntityArmorStand && entity.hasCustomName() &&
                     ChatLib.removeFormatting(entity.getCustomNameTag()).equals(npc)) {
                 pos = new BlockPos(entity);
