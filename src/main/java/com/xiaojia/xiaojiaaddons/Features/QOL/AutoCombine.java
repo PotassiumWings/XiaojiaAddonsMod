@@ -3,6 +3,7 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
+import com.xiaojia.xiaojiaaddons.Objects.Pair;
 import com.xiaojia.xiaojiaaddons.Objects.StepEvent;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class AutoCombine extends StepEvent {
+public class AutoCombine extends AutoFuse {
     private static final HashMap<String, Integer> booksLevel = new HashMap<String, Integer>() {{
         put("Feather Falling", 10);
         put("Infinite Quiver", 10);
@@ -39,158 +40,60 @@ public class AutoCombine extends StepEvent {
         put("Charm", 5);
         put("Corruption", 5);
     }};
+    private static final ArrayList<BookTypePos> books = new ArrayList<>();
 
-    private static boolean isFusingBooks = false;
-
-    public AutoCombine() {
-        super(4);
+    public String inventoryName() {
+        return "Anvil";
     }
 
-    private static int getEnchantLevel(String s) {
-        return StringUtils.getNumberFromRoman(s);
+    public void clear() {
+        books.clear();
     }
 
-    private static boolean haveItemsInAnvil() {
-        return !isAir(29) || !isAir(33);
+    public void add(ItemStack item, int i) {
+        if (item == null || !item.hasDisplayName()) return;
+        String itemName = ChatLib.removeFormatting(item.getDisplayName()).toLowerCase();
+        if (!itemName.equals("enchanted book")) return;
+
+        ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(item);
+        if (nameAndLevel.size() != 2) return;
+        // "Feather Falling"
+        String bookName = nameAndLevel.get(0);
+        String levelString = nameAndLevel.get(1);
+        int level = Integer.parseInt(levelString);
+        if (booksLevel.containsKey(bookName) &&
+                level < booksLevel.get(bookName) &&
+                checkKindEnable(bookName)
+        ) {
+            books.add(new BookTypePos(bookName, level, i));
+        }
     }
 
-    private static boolean fusingBooksNotFull() {
-        return isAir(29) || isAir(33);
+    public Pair<Integer, Integer> getNext(ArrayList<Boolean> vis) {
+        for (int x = 0; x < books.size(); x++) {
+            if (vis.get(books.get(x).slot)) continue;
+            for (int y = x + 1; y < books.size(); y++) {
+                if (vis.get(books.get(y).slot)) continue;
+                if (books.get(x).type.equals(books.get(y).type) &&
+                        books.get(x).level == books.get(y).level) {
+                    return new Pair<>(books.get(x).slot, books.get(y).slot);
+                }
+            }
+        }
+        return null;
     }
 
-    private static boolean fusingBooksFull() {
-        return !fusingBooksNotFull();
+    public boolean canFuse() {
+        List<String> loreList = getItemLore(ControlUtils.getOpenedInventory().getItemInSlot(22));
+        return loreList.size() > 5 && ChatLib.removeFormatting(loreList.get(5)).equals("0 Exp Levels");
     }
 
-    private static boolean fusingBooksEqual() {
+    public boolean checkFuse() {
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null) return false;
         return getItemLore(inventory.getItemInSlot(29)).get(1).equals(
                 getItemLore(inventory.getItemInSlot(33)).get(1)
         );
-    }
-
-    private static List<String> getItemLore(ItemStack itemStack) {
-        return NBTUtils.getLore(itemStack);
-    }
-
-    private static boolean isAir(int slot) {
-        ItemStack itemStack = ControlUtils.getItemStackInSlot(slot, false);
-        if (itemStack != null && itemStack.hasDisplayName())
-            return itemStack.getDisplayName().toLowerCase().contains("air");
-        return true;
-    }
-
-    @Override
-    public void execute() {
-        if (!Checker.enabled) return;
-        if (!ControlUtils.getInventoryName().equals("Anvil")) return;
-        Inventory inventory = ControlUtils.getOpenedInventory();
-        if (isFusingBooks || inventory == null) return;
-        isFusingBooks = true;
-        try {
-            if (haveItemsInAnvil()) {
-                isFusingBooks = false;
-                return;
-            }
-            ArrayList<BookTypePos> books = new ArrayList<>();
-            for (int i = 54; i < 90; i++) {
-                ItemStack item = inventory.getItemInSlot(i);
-                if (item == null || !item.hasDisplayName()) continue;
-                String itemName = ChatLib.removeFormatting(item.getDisplayName()).toLowerCase();
-                if (!itemName.equals("enchanted book")) continue;
-                // Feather Falling VI
-                ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(item);
-                if (nameAndLevel.size() != 2) continue;
-                // "Feather Falling"
-                String bookName = nameAndLevel.get(0);
-                String levelString = nameAndLevel.get(1);
-                int level = Integer.parseInt(levelString);
-                if (booksLevel.containsKey(bookName) &&
-                        level < booksLevel.get(bookName) &&
-                        checkKindEnable(bookName)
-                ) {
-                    books.add(new BookTypePos(bookName, level, i));
-                }
-            }
-            new Thread(() -> {
-                try {
-                    ArrayList<Boolean> vis = new ArrayList<>();
-                    for (int p = 0; p < books.size(); p++) vis.add(false);
-
-                    while (!books.isEmpty()) {
-                        int x = -1, y = -1;
-                        boolean found = false;
-                        for (x = 0; x < books.size(); x++) {
-                            if (vis.get(x)) continue;
-                            for (y = x + 1; y < books.size(); y++) {
-                                if (vis.get(y)) continue;
-                                if (books.get(x).type.equals(books.get(y).type) &&
-                                        books.get(x).level == books.get(y).level) {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (found) break;
-                        }
-                        if (!found) break;
-                        while (fusingBooksNotFull()) {
-                            if (ControlUtils.getOpenedInventory().getSize() != 90) {
-                                ChatLib.chat("You quit anvil!");
-                                return;
-                            }
-                            while (fusingBooksNotFull()) {
-                                try {
-                                    Thread.sleep(60);
-                                    ControlUtils.getOpenedInventory().click(books.get(x).slot, true, "LEFT");
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    Thread.sleep(60);
-                                    ControlUtils.getOpenedInventory().click(books.get(y).slot, true, "LEFT");
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            Thread.sleep(60);
-                            // sleep 500ms
-                            int k = 0;
-                            List<String> loreList = getItemLore(ControlUtils.getOpenedInventory().getItemInSlot(22));
-                            while (loreList.size() <= 5 || !loreList.get(5).equals("§5§o§30 Exp Levels")) {
-                                Thread.sleep(5);
-                                k++;
-                                loreList = getItemLore(ControlUtils.getOpenedInventory().getItemInSlot(22));
-                                if (k > 100) break;
-                            }
-                        }
-                        if (fusingBooksFull() && fusingBooksEqual()) {
-                            ControlUtils.getOpenedInventory().click(22);
-                            ItemStack itemStack = ControlUtils.getOpenedInventory().getItemInSlot(13);
-                            while (itemStack == null || !itemStack.hasDisplayName()
-                                    || !itemStack.getDisplayName().contains("Anvil")
-                            ) {
-                                Thread.sleep(150);
-                                if (ControlUtils.getOpenedInventory().getSize() != 90) {
-                                    ChatLib.chat("You quit anvil!");
-                                    return;
-                                }
-                                ControlUtils.getOpenedInventory().click(22);
-                                itemStack = ControlUtils.getOpenedInventory().getItemInSlot(13);
-                            }
-                        } else ChatLib.chat("WTF? Something wrong happened");
-                        vis.set(x, true);
-                        vis.set(y, true);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    isFusingBooks = false;
-                }
-            }).start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private boolean checkKindEnable(String bookName) {

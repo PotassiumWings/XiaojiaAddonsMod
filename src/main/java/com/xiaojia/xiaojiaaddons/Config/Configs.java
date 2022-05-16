@@ -750,6 +750,19 @@ public class Configs {
             description = "Delay 3-4 ticks between actions.")
     public static boolean LegitAutoItem = false;
 
+    // AutoAttribute
+    @Property(type = Property.Type.FOLDER, name = "Auto Fuse Attribute", parent = "QOL")
+    public static boolean FuseAttributeEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Fuse Attribute Enabled", parent = "Auto Fuse Attribute")
+    public static boolean FuseAttribute = false;
+
+    @Property(type = Property.Type.TEXT, name = "Auto Fuse - Attribute 1", parent = "Auto Fuse Attribute")
+    public static String FuseAttribute1 = "double_hook";
+
+    @Property(type = Property.Type.TEXT, name = "Auto Fuse - Attribute 2", parent = "Auto Fuse Attribute")
+    public static String FuseAttribute2 = "fishing_speed";
+
     // AutoCombine
     @Property(type = Property.Type.FOLDER, name = "Auto Combine", parent = "QOL",
             description = "Auto Combine books in anvil menu.")
@@ -922,7 +935,7 @@ public class Configs {
         description = "Display mask of attributes on an item.")
     public static boolean ItemAttributeFilterEnable = false;
 
-    @Property(type = Property.Type.FOLDER, name = "Item Attribute Filter Enable", parent = "Item Attribute Filter")
+    @Property(type = Property.Type.BOOLEAN, name = "Item Attribute Filter Enable", parent = "Item Attribute Filter")
     public static boolean ItemAttributeFilter = false;
 
     @Property(type = Property.Type.TEXT, name = "Attribute 1", parent = "Item Attribute Filter")

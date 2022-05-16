@@ -76,6 +76,7 @@ import com.xiaojia.xiaojiaaddons.Features.Nether.PrismarineESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.SpongeESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.XYZ;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AttributeFilter;
+import com.xiaojia.xiaojiaaddons.Features.QOL.AutoAttribute;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
@@ -304,6 +305,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new RelicESP());
         MinecraftForge.EVENT_BUS.register(new AutoSnowball());
         MinecraftForge.EVENT_BUS.register(new AutoCombine());
+        MinecraftForge.EVENT_BUS.register(new AutoAttribute());
         MinecraftForge.EVENT_BUS.register(new AutoHarp());
         MinecraftForge.EVENT_BUS.register(new AutoJerryBox());
         MinecraftForge.EVENT_BUS.register(new AutoLobby());
