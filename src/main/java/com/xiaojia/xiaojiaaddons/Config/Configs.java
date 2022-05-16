@@ -855,8 +855,8 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Hide Golden Fish", parent = "Hide Entity Features")
     public static boolean HideGoldenFish = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Hide Guardian Laser", parent = "Hide Entity Features")
-    public static boolean HideGuardianLaser = false;
+    @Property(type = Property.Type.BOOLEAN, name = "Hide Empty Armor Stand", parent = "Hide Entity Features")
+    public static boolean HideEmptyArmorStand = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Hide Nearby Players", parent = "Hide Entity Features", illegal = true,
             description = "Act like the players dont exist, can click through")

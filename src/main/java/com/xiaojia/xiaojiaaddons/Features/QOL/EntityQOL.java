@@ -32,6 +32,12 @@ public class EntityQOL {
             Arrays.asList("HEAVY_HELMET", "ZOMBIE_KNIGHT_HELMET", "SKELETOR_HELMET", "SUPER_HEAVY_HELMET")
     );
 
+    private static int count;
+
+    public static int getHiddenEntityCount() {
+        return count;
+    }
+
     private static boolean isSummon(Entity entity) {
         if (entity instanceof EntityPlayer)
             return entity.getName().equals("Lost Adventurer");
@@ -57,11 +63,11 @@ public class EntityQOL {
         return (uuid.version() == 3 || uuid.version() == 4) && !entity.getName().contains(" ");
     }
 
-    private static boolean isLaser(Entity entity) {
+    private static boolean isEmpty(Entity entity) {
         if (entity instanceof EntityArmorStand) {
             EntityArmorStand as = (EntityArmorStand) entity;
             if (!as.isInvisible()) return false;
-            if (!as.getName().matches("\u00a77\\d+")) return false;
+            if (as.hasCustomName()) return false;
             for (int i = 0; i < 5; i++)
                 if (as.getEquipmentInSlot(i) != null)
                     return false;
@@ -81,6 +87,7 @@ public class EntityQOL {
         if (SkyblockUtils.isInDungeon()) return;
         if (getWorld() == null) return;
         List<Entity> allEntities = getWorld().loadedEntityList;
+        count = 0;
         for (Entity entity : allEntities) {
             if (isPlayer(entity)) {
                 if (Configs.HidePlayers && MathUtils.distanceSquareFromPlayer(entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius) {
@@ -94,9 +101,10 @@ public class EntityQOL {
                 if (Configs.HideGoldenFish) {
                     entity.posY = entity.lastTickPosY = 9999;
                 }
-            } else if (isLaser(entity)) {
-                if (Configs.HideGuardianLaser) {
+            } else if (isEmpty(entity)) {
+                if (Configs.HideEmptyArmorStand) {
                     entity.posY = entity.lastTickPosY = 9999;
+                    count++;
                 }
             }
         }

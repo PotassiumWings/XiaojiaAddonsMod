@@ -89,28 +89,32 @@ public class DisplayDayAndCoords {
             line2.setScale(Configs.DisplayScale / 20F);
             display.addLine(line2);
 
-            try {
-                Vec3 vec = XiaojiaAddons.mc.objectMouseOver.hitVec;
-                DisplayLine line5 = new DisplayLine(String.format("Moving Object: %.2f %.2f %.2f", vec.xCoord, vec.yCoord, vec.zCoord));
-                line5.setScale(Configs.DisplayScale / 20F);
-                display.addLine(line5);
-            } catch (Exception ignored) {}
+//            try {
+//                Vec3 vec = XiaojiaAddons.mc.objectMouseOver.hitVec;
+//                DisplayLine line5 = new DisplayLine(String.format("Moving Object: %.2f %.2f %.2f", vec.xCoord, vec.yCoord, vec.zCoord));
+//                line5.setScale(Configs.DisplayScale / 20F);
+//                display.addLine(line5);
+//            } catch (Exception ignored) {}
             synchronized (DevMode.lines) {
                 for (DisplayLine devLine: DevMode.lines)
                     display.addLine(devLine);
             }
 
-            EntityFishHook entity = getPlayer().fishEntity;
-            if (entity != null) {
-                DisplayLine line3 = new DisplayLine("Fish Entity: " + (entity.isInLava()? "Lava " : "") +
-                        (entity.isInWater()? "Water " : ""));
-                line3.setScale(Configs.DisplayScale / 20F);
-                display.addLine(line3);
-            }
+//            EntityFishHook entity = getPlayer().fishEntity;
+//            if (entity != null) {
+//                DisplayLine line3 = new DisplayLine("Fish Entity: " + (entity.isInLava()? "Lava " : "") +
+//                        (entity.isInWater()? "Water " : ""));
+//                line3.setScale(Configs.DisplayScale / 20F);
+//                display.addLine(line3);
+//            }
+//            DisplayLine line4 = new DisplayLine(String.format("%.2f",(TimeUtils.curTime() - Fishing.startPushing) / 1000F));
+//            line4.setScale(Configs.DisplayScale / 20F);
+//            display.addLine(line4);
 
-            DisplayLine line4 = new DisplayLine(String.format("%.2f",(TimeUtils.curTime() - Fishing.startPushing) / 1000F));
+            DisplayLine line4 = new DisplayLine(String.format("Hidden entity: %d", EntityQOL.getHiddenEntityCount()));
             line4.setScale(Configs.DisplayScale / 20F);
             display.addLine(line4);
+
 //            DisplayLine line3 = new DisplayLine("pro: " + DevWater.process);
 //            line2.setScale(Configs.DisplayScale / 20F);
 //            display.addLine(line3);
