@@ -918,6 +918,19 @@ public class Configs {
     @Property(type = Property.Type.TEXT, name = "Show Attribute Contains", parent = "Show Attribute")
     public static String ShowAttributeName = "Mana Pool";
 
+    @Property(type = Property.Type.FOLDER, name = "Item Attribute Filter", parent = "QOL",
+        description = "Display mask of attributes on an item.")
+    public static boolean ItemAttributeFilterEnable = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Item Attribute Filter Enable", parent = "Item Attribute Filter")
+    public static boolean ItemAttributeFilter = false;
+
+    @Property(type = Property.Type.TEXT, name = "Attribute 1", parent = "Item Attribute Filter")
+    public static String Attribute1 = "double_hook";
+
+    @Property(type = Property.Type.TEXT, name = "Attribute 2", parent = "Item Attribute Filter")
+    public static String Attribute2 = "fishing_speed";
+
     // NoSlowdown
     @Property(type = Property.Type.FOLDER, name = "No Slowdown", parent = "QOL",
             description = "Let using sword not slow down your speed \nnor play blocking animation.\n" +

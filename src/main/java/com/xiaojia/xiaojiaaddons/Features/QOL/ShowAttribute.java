@@ -6,10 +6,8 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
-import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
-import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -55,32 +53,6 @@ public class ShowAttribute {
             }
         }
         if (!nameString.toLowerCase().contains(Configs.ShowAttributeName.toLowerCase())) return;
-
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepth();
-        GlStateManager.disableBlend();
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(event.x, event.y, 1f);
-        GlStateManager.scale(nameScale, nameScale, 1.0);
-        event.renderer.drawString(
-                nameString.substring(0, Math.min(nameString.length(), 3)), 1F, 1F, 0xffffffff, true
-        );
-        GlStateManager.popMatrix();
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(
-                event.x + 16 - MathUtils.ceil(RenderUtils.getStringWidth(levelString) * levelScale),
-                event.y + 16 - MathUtils.ceil(RenderUtils.getStringHeight(levelString) * levelScale),
-                1f
-        );
-        GlStateManager.scale(levelScale, levelScale, 1.0);
-        event.renderer.drawString(
-                levelString, 0, 0, 0xffffffff, true
-        );
-        GlStateManager.popMatrix();
-
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepth();
+        GuiUtils.drawNameAndLevel(event.renderer,nameString, levelString, event.x, event.y, nameScale, levelScale);
     }
 }

@@ -75,6 +75,7 @@ import com.xiaojia.xiaojiaaddons.Features.Nether.Kuudra;
 import com.xiaojia.xiaojiaaddons.Features.Nether.PrismarineESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.SpongeESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.XYZ;
+import com.xiaojia.xiaojiaaddons.Features.QOL.AttributeFilter;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoCombine;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoHarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoIsland;
@@ -328,6 +329,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new HoldRightClick());
         MinecraftForge.EVENT_BUS.register(new TransferBack());
         MinecraftForge.EVENT_BUS.register(new ShowAttribute());
+        MinecraftForge.EVENT_BUS.register(new AttributeFilter());
 
         // Skills
         MinecraftForge.EVENT_BUS.register(new AutoCloseCrystalHollowsChest());

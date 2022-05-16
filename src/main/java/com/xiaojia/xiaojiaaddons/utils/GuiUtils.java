@@ -88,6 +88,35 @@ public class GuiUtils {
         GL11.glTranslated(0, 0, -1);
     }
 
+    public static void drawNameAndLevel(FontRenderer renderer, String nameString, String levelString, int x, int y, double nameScale, double levelScale) {
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+        GlStateManager.disableBlend();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 1f);
+        GlStateManager.scale(nameScale, nameScale, 1.0);
+        renderer.drawString(
+                nameString, 1F, 1F, 0xffffffff, true
+        );
+        GlStateManager.popMatrix();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(
+                x + 16 - MathUtils.ceil(RenderUtils.getStringWidth(levelString) * levelScale),
+                y + 16 - MathUtils.ceil(RenderUtils.getStringHeight(levelString) * levelScale),
+                1f
+        );
+        GlStateManager.scale(levelScale, levelScale, 1.0);
+        renderer.drawString(
+                levelString, 0, 0, 0xffffffff, true
+        );
+        GlStateManager.popMatrix();
+
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
+    }
+
     public static void drawOnSlot(int size, int xSlotPos, int ySlotPos, int colour) {
         Vector2i v = getXYForSlot(size, xSlotPos, ySlotPos);
         int x = v.x, y = v.y;

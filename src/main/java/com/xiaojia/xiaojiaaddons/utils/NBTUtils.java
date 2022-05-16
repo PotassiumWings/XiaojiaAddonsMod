@@ -51,6 +51,12 @@ public class NBTUtils {
         return nbtTagCompound.getBoolean(property);
     }
 
+    public static NBTTagCompound getCompoundFromExtraAttributes(ItemStack itemStack, String property) {
+        NBTTagCompound nbtTagCompound = getExtraAttributes(itemStack);
+        if (nbtTagCompound == null || !nbtTagCompound.hasKey(property)) return null;
+        return nbtTagCompound.getCompoundTag(property);
+    }
+
     public static List<String> getLore(ItemStack itemStack) {
         if (itemStack == null) return new ArrayList<>();
         return itemStack.getTooltip(mc.thePlayer, mc.gameSettings.advancedItemTooltips);
