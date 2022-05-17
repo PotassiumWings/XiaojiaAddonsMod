@@ -208,44 +208,6 @@ public class Fishing {
         ControlUtils.stopMoving();
     }
 
-    public static long lastUnload = 0;
-
-    @SubscribeEvent
-    public void onEntitySpawn(EntityJoinWorldEvent event) {
-        if (!Checker.enabled) return;
-        if (!Configs.UnloadUnusedNPCEntity) return;
-        Entity entity = event.entity;
-        if (entity == null) return;
-        if (!(MathUtils.equal(getX(entity), 0) && MathUtils.equal(getY(entity), 0) && MathUtils.equal(getZ(entity), 0))) return;
-        if (!entity.getName().matches("\u00a7(d|5)[A-Z][a-z]+ ")) return;
-        if (XiaojiaAddons.isDebug()) ChatLib.chat("Blocked: " + entity.getName() + ", " + entity.forceSpawn);
-        event.setCanceled(true);
-    }
-
-    @SubscribeEvent
-    public void onTick(TickEndEvent event) {
-        if (!Checker.enabled) return;
-        if (!Configs.UnloadUnusedNPCEntity) return;
-        if (getWorld() == null) return;
-
-        // unload every 2 seconds
-        if (TimeUtils.curTime() - lastUnload < 2 * 1000) return;
-        lastUnload = TimeUtils.curTime();
-
-        List<Entity> entities = EntityUtils.getEntities();
-        entities.removeIf(entity -> !(MathUtils.equal(getX(entity), 0) && MathUtils.equal(getY(entity), 0) && MathUtils.equal(getZ(entity), 0)));
-        entities.removeIf(entity -> !entity.getName().matches("\u00a7(d|5)[A-Z][a-z]+ "));
-        getWorld().unloadEntities(entities);
-        int count = entities.size();
-        if (count == 0) return;
-
-        ChatLib.chat(String.format("Unloaded %s entities.", count));
-        StringBuilder res = new StringBuilder();
-        for (Entity entity : entities)
-            res.append(entity.getName()).append(" ");
-        ChatLib.debug("Removed: " + res);
-    }
-
     @SubscribeEvent
     public void onTickMove(TickEndEvent event) {
         if (!Checker.enabled) return;

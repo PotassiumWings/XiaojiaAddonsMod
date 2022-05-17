@@ -82,6 +82,6 @@ public class AshFangESP extends RenderEntityESP {
     }
 
     public boolean enabled() {
-        return SkyblockUtils.isInNether();
+        return SkyblockUtils.isInAshFang();
     }
 }

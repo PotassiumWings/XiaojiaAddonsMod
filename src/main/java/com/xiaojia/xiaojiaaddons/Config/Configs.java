@@ -1613,7 +1613,8 @@ public class Configs {
     public static boolean FishingFeatures = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Unload Useless Entities", parent = "Fishing",
-            description = "Unload useless entities that let your fps drop.")
+            description = "Unload useless entities that let your fps drop.\n" +
+                    "Currently debugging, useless.")
     public static boolean UnloadUnusedNPCEntity = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Pulling Rod", parent = "Fishing", illegal = true,

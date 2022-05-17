@@ -221,6 +221,10 @@ public class SkyblockUtils {
         return isInNether;
     }
 
+    public static boolean isInAshFang() {
+        return currentMap.equals("Ruins of Ashfang");
+    }
+
     public static boolean isInMysticMarsh() {
         return currentMap.equals("Mystic Marsh");
     }

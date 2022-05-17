@@ -51,7 +51,7 @@ public class AshFangGravityESP  extends RenderEntityESP {
 
     @Override
     public boolean enabled() {
-        return SkyblockUtils.isInNether();
+        return SkyblockUtils.isInAshFang();
     }
 
     private boolean isGravityCenter(Entity entity) {
