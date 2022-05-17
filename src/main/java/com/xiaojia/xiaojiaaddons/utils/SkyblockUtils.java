@@ -19,6 +19,13 @@ public class SkyblockUtils {
             "Soul Dragon", "Ice Dragon", "Apex Dragon", "Flame Dragon", "Power Dragon", "No Alive Dragons"
     ));
 
+    private static final ArrayList<String> netherMaps = new ArrayList<>(Arrays.asList(
+            "Barbarian Outpost", "The Bastion", "Blazing Volcano", "Burning Desert",
+            "Cathedral", "Crimson Fields", "Dojo", "Dragontail", "Forgotten Skull",
+            "Kuudra's End", "Mage Outpost", "Magma Chamber", "Mystic Marsh",
+            "Odger's Hut", "Ruins of Ashfang", "Stronghold", "The Wasteland"
+    ));
+
     private static final ArrayList<String> maps = new ArrayList<>(Arrays.asList(
             "Ruins", "Forest", "Mountain", "High Level", "Wilderness",
             "Dungeon Hub", "Kuudra's End", "Deep Caverns",
@@ -43,12 +50,6 @@ public class SkyblockUtils {
             "Lost Precursor City", "Precursor Remnants",
             "Magma Fields", "Crystal Nucleus",
             "Khazad", "Dragon's Lair"
-    ));
-    private static final ArrayList<String> netherMaps = new ArrayList<>(Arrays.asList(
-            "Barbarian Outpost", "The Bastion", "Blazing Volcano", "Burning Desert",
-            "Cathedral", "Crimson Fields", "Dojo", "Dragontail", "Forgotten Skull",
-            "Kuudra's End", "Mage Outpost", "Magma Chamber", "Mystic Marsh",
-            "Odger's Hut", "Ruins of Ashfang", "Stronghold", "The Wasteland"
     ));
     public static int calculatedPing = -1;
     public static long[] pings = new long[]{-1, -1, -1, -1, -1};
@@ -111,7 +112,7 @@ public class SkyblockUtils {
             }
         }
 
-        if (result.equals("Others")) {
+        if (result.equals("Others") || result.equals("Ruins")) {
             for (String map : netherMaps) {
                 if (line.contains(map)) {
                     result = map;
