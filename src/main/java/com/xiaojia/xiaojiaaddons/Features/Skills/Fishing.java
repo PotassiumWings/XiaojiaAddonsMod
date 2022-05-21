@@ -251,7 +251,7 @@ public class Fishing {
                 new Thread(() -> {
                     try {
                         int choose = floor(Math.random() * 4);
-                        ControlUtils.sneak();
+                        if (Configs.AutoMoveSneak) ControlUtils.sneak();
                         int time = Configs.AutoMoveTime;
                         int moveTime = time + floor(Math.random() * time);
                         switch (choose) {

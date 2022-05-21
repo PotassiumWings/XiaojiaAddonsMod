@@ -1637,6 +1637,9 @@ public class Configs {
             min = 0, max = 1000, step = 10, suffix = " ms")
     public static int AutoMoveTime = 100;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Move - Press Sneak", parent = "Fishing")
+    public static boolean AutoMoveSneak = true;
+
     @Property(type = Property.Type.NUMBER, name = "Auto Pulling Rod Blob Time", parent = "Fishing",
             description = "Minimum time between 2 pulls.\n" +
                     "If you're grinding slugfish, set this to 30000.\n" +
