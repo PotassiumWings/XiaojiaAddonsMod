@@ -148,7 +148,7 @@ public class BurrowHelper {
         if (!Checker.enabled) return;
         if (solution == null) return;
         GuiUtils.enableESP();
-        GuiUtils.renderBeaconBeam(solution, 0xfc03ec, 0.3f);
+        GuiUtils.renderBeaconBeam(solution, 0xfc03ec, 0.7f);
         GuiUtils.disableESP();
     }
 }

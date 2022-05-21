@@ -197,6 +197,7 @@ public class Fishing {
         shouldMove = false;
         startTime = 0;
         ChatLib.chat("Auto Move &cdeactivated");
+        ControlUtils.releaseJump();
         ControlUtils.unSneak();
     }
 
