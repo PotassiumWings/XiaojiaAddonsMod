@@ -1,11 +1,8 @@
-package com.xiaojia.xiaojiaaddons.Features.Remote;
+package com.xiaojia.xiaojiaaddons.Features.Remote.API;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.xiaojia.xiaojiaaddons.Features.Remote.ApiException;
-import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
-import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
 public class HypixelPlayerData {
 

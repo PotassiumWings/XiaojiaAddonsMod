@@ -5,6 +5,14 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;
 
+    @Property(type = Property.Type.FOLDER, name = "API", parent = "Misc")
+    public static boolean API = false;
+
+    @Property(type = Property.Type.TEXT, name = "API Key", parent = "API",
+            description = "Paste your API Key here\n" +
+                    "or run '/api new' command")
+    public static String APIKey = "";
+
     @Property(type = Property.Type.FOLDER, name = "Protect Items", parent = "Misc",
             description = "Protect items with high value when dropping, selling items.\n" +
                     "&cRequires lowest bin.")
@@ -1462,6 +1470,13 @@ public class Configs {
                     "non-starred item is in salvage menu.")
     public static boolean AutoClickSalvage = false;
 
+    //SecretChecker
+    @Property(type = Property.Type.BOOLEAN, name = "Secret Checker", parent = "Other Dungeon Features",
+            description = "Fetch secrets found before and after dungeon run\n" +
+                    "to calculate secrets found during that run\n" +
+                    "for each teammate.\n" +
+                    "Requires API Key.")
+    public static boolean SecretChecker = false;
 
     // Slayer
     @Property(type = Property.Type.FOLDER, name = "Slayer")

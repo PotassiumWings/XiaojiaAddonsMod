@@ -43,6 +43,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.TeleportMaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.ThreeWeirdos;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.SecretChecker;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShadowAssassinESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShowHiddenMobs;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.SimonSays;
@@ -84,6 +85,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.AutoSnowball;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoUseItem;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.Features.Nether.CorruptedESP;
+import com.xiaojia.xiaojiaaddons.Features.QOL.BurrowHelper;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisableEntityRender;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisplayDayAndCoords;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
@@ -106,6 +108,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.ShowBookName;
 import com.xiaojia.xiaojiaaddons.Features.QOL.ShowEtherwarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
+import com.xiaojia.xiaojiaaddons.Features.Remote.API.ApiKey;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.DungeonLoot;
 import com.xiaojia.xiaojiaaddons.Features.Remote.DupedItems;
@@ -257,6 +260,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new StarredMobESPBox());
         MinecraftForge.EVENT_BUS.register(new StonklessStonk());
         MinecraftForge.EVENT_BUS.register(new TrapChestESP());
+        MinecraftForge.EVENT_BUS.register(new SecretChecker());
         // map
         MinecraftForge.EVENT_BUS.register(new Dungeon());
         MinecraftForge.EVENT_BUS.register(new MapUpdater());
@@ -328,6 +332,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new HoldRightClick());
         MinecraftForge.EVENT_BUS.register(new TransferBack());
         MinecraftForge.EVENT_BUS.register(new ShowAttribute());
+        MinecraftForge.EVENT_BUS.register(new BurrowHelper());
 
         // Skills
         MinecraftForge.EVENT_BUS.register(new AutoCloseCrystalHollowsChest());
@@ -356,6 +361,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new LowestBin());
         MinecraftForge.EVENT_BUS.register(new DupedItems());
         MinecraftForge.EVENT_BUS.register(new ChestProfit());
+        MinecraftForge.EVENT_BUS.register(new ApiKey());
 
         // Tests
 //        MinecraftForge.EVENT_BUS.register(new TestM7());

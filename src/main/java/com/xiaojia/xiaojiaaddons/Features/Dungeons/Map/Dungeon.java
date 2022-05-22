@@ -41,6 +41,7 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.floor;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
@@ -484,7 +485,7 @@ public class Dungeon {
                 if (player.isDead) continue;
                 player.render();
                 ItemStack heldItem = ControlUtils.getHeldItemStack();
-                if ((heldItem != null && heldItem.getDisplayName().contains("Spirit Leap") &&
+                if ((heldItem != null && (heldItem.getDisplayName().contains("Spirit Leap") || heldItem.getDisplayName().contains("Infinileap")) &&
                         Configs.ShowPlayerNames == 1) ||
                         Configs.ShowPlayerNames == 2) {
                     if (!player.name.equals(getPlayer().getName())) {
@@ -598,9 +599,12 @@ public class Dungeon {
     public void onTickUpdateDungeon(TickEndEvent event) {
         if (!Configs.MapEnabled || !SkyblockUtils.isInDungeon()) return;
         String dungeon = SkyblockUtils.getDungeon();
-        if (!isInDungeon) floorInt = Integer.parseInt(dungeon.substring(1));
+        if (!isInDungeon) {
+            if (dungeon.equals("E")) floorInt = 0;
+            else floorInt = Integer.parseInt(dungeon.substring(1));
+        }
         isInDungeon = true;
-        if (floorInt == 1 || floorInt == 2 || floorInt == 3) {
+        if (floorInt == 0 || floorInt == 1 || floorInt == 2 || floorInt == 3) {
             endX = endZ = 158;
         } else if (floorInt == 4) {
             endX = 190;
