@@ -8,12 +8,14 @@ import com.xiaojia.xiaojiaaddons.Features.Remote.API.PhraseSecrets;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.TabUtils;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static java.lang.Math.round;
+
+import static com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon.totalSecrets;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getUUIDFromName;
 
 
@@ -52,7 +54,7 @@ public class SecretChecker {
         if (!Checker.enabled) return;
         if (!Configs.SecretChecker) return;
         if (event.type != 0) return;
-        String message = event.message.getUnformattedText();
+        String message = ChatLib.removeFormatting(event.message.getUnformattedText());
         if (message == null) return;
         if (message.equals("Dungeon starts in 4 seconds.")) {
             start = true;
@@ -96,16 +98,20 @@ public class SecretChecker {
                 if (matcher.find()) players.add(matcher.group("name"));
             }
         }
-        String msg = message.replace(" ", "");
-        if (event.message.toString().startsWith("&r&r&6>&e&lEXTRASTATS&6<")) CommandsUtils.addCommand("/showextrastats");
-        if (msg.startsWith("SecretsFound:")) {
-            if(players == null) return;
-            if(secrets == null) return;
-            fetch();
-        }
+        //if (event.message.toString().startsWith("&r&r&6>&e&lEXTRASTATS&6<")) CommandsUtils.addCommand("/showextrastats");
+        //if (msg.startsWith("SecretsFound:"))
+        if (message.equals("                             > EXTRA STATS <")) {
+                if(players == null) return;
+                if(secrets == null) return;
+                fetch();
+            }
         if (end) {
             end = false;
-            ChatLib.chat("&fSecrets Found:");
+            Matcher matcher = Pattern.compile("Secrets Found: (\\d+)").matcher(TabUtils.getNames().get(31));
+            if (matcher.find()) {
+                if (Configs.MapEnabled) ChatLib.chat("&fTotal Secrets Found: (&b" + matcher.group(1) + "&f/&b" + totalSecrets + "&f)");
+                else ChatLib.chat("&fSecrets Found: &b" + matcher.group(1));
+            } else ChatLib.chat("&fSecrets Found:");
             for (int i = 0; i < playerNum; i++) {
                 ChatLib.chat("&f" + players.get(i) + ": &b" + (secrets.get(i + playerNum) - secrets.get(i)));
             }

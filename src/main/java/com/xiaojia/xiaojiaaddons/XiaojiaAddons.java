@@ -133,6 +133,7 @@ import com.xiaojia.xiaojiaaddons.Features.Slayers.Revenant;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Sven;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Tarantula;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Voidgloom;
+import com.xiaojia.xiaojiaaddons.Features.QOL.ChestFiller;
 import com.xiaojia.xiaojiaaddons.Features.Tests.GuiTest;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayHandler;
@@ -366,6 +367,7 @@ public class XiaojiaAddons {
         // Tests
 //        MinecraftForge.EVENT_BUS.register(new TestM7());
         MinecraftForge.EVENT_BUS.register(new DevWater());
+        MinecraftForge.EVENT_BUS.register(new ChestFiller());
 
         for (KeyBind keyBind : KeyBindUtils.keyBinds) {
             ClientRegistry.registerKeyBinding(keyBind.mcKeyBinding());

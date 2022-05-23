@@ -1,4 +1,4 @@
-package com.xiaojia.xiaojiaaddons.Features.Tests;
+package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -11,12 +11,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.HashSet;
 
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.isDebug;
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 
 
-public class ClickTestV2 {
+public class ChestFiller {
     private static boolean enabled = false, done = false;
 
     private static int lastId = -1;
@@ -25,12 +26,12 @@ public class ClickTestV2 {
         lastId = -1;
         enabled = false;
         done = false;
-        ChatLib.chat("Fill &cdeactivated");
+        ChatLib.chat("Chest Filler &cdeactivated");
     }
 
     public static void toggle() {
         enabled = !enabled;
-        if (enabled) ChatLib.chat("Fill &aactivated");
+        if (enabled) ChatLib.chat("Chest Filler &aactivated");
         else clear();
     }
 
@@ -39,7 +40,7 @@ public class ClickTestV2 {
         mc.playerController.windowClick(
                 windowId, slot, button, mode, getPlayer()
         );
-        ChatLib.debug(String.format("%d %d %d %d", windowId, slot, button, mode));
+        if (isDebug()) ChatLib.debug(String.format("%d %d %d %d", windowId, slot, button, mode));
     }
 
     @SubscribeEvent

@@ -24,8 +24,8 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmVertical;
-import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Blaze;
+import com.xiaojia.xiaojiaaddons.Features.QOL.ChestFiller;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Tests.CopyWorldInfo;
 import com.xiaojia.xiaojiaaddons.Tests.TestM7;
@@ -186,6 +186,9 @@ public class Command extends CommandBase {
                 break;
             case "debug":
                 XiaojiaAddons.setDebug();
+                break;
+            case "fill":
+                ChestFiller.toggle();
                 break;
             case "room":
                 ChatLib.chat("Current Room: " + Dungeon.currentRoom);
