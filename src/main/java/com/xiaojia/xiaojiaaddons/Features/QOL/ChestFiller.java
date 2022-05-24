@@ -31,9 +31,11 @@ public class ChestFiller {
     }
 
     public static void toggle() {
-        if (!enabled) ChatLib.chat("Chest Filler &aactivated");
-        else clear();
-        enabled = !enabled;
+        if (enabled) clear();
+        else {
+            ChatLib.chat("Chest Filler &aactivated");
+            enabled = !enabled;
+        }
     }
 
     public void click(Inventory inventory, int slot, int mode, int button, int incrementWindowId) {
@@ -90,8 +92,8 @@ public class ChestFiller {
                             for (Slot slot1 : emptySlots) click(inventory, slot1.slotNumber, 5, 5, 0);
                             click(inventory, -999, 5, 6, 0);
                             Thread.sleep(100);
-                            click(inventory, i, 0, 0, 0);
-                            Thread.sleep(100);
+                            //click(inventory, i, 0, 0, 0);
+                            //Thread.sleep(100);
                             getPlayer().closeScreen();
                         } else {
                             ChatLib.chat("Please stack your items.");
