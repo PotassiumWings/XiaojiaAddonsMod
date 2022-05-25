@@ -1017,6 +1017,10 @@ public class Configs {
             description = "Blocks using ancestral spade if the last trail hasn't disappeared")
     public static boolean BlockAncestralSpade = true;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Block Ancestral Spade - Invalid Clicks", parent = "Mythological",
+            description = "Blocks using ancestral spade if you are not looking straight up nor down.")
+    public static boolean BlockInvalidClicks = true;
+
     @Property(type = Property.Type.FOLDER, name = "Other QOLs", parent = "QOL")
     public static boolean OtherQOL = false;
 

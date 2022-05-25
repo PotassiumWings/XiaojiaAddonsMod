@@ -86,6 +86,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.AutoSnowball;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoUseItem;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
 import com.xiaojia.xiaojiaaddons.Features.Nether.CorruptedESP;
+import com.xiaojia.xiaojiaaddons.Features.QOL.BurrowHelper;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisableEntityRender;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisplayDayAndCoords;
 import com.xiaojia.xiaojiaaddons.Features.QOL.EntityQOL;
@@ -332,6 +333,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new TransferBack());
         MinecraftForge.EVENT_BUS.register(new ShowAttribute());
         MinecraftForge.EVENT_BUS.register(new AttributeFilter());
+        MinecraftForge.EVENT_BUS.register(new BurrowHelper());
 
         // Skills
         MinecraftForge.EVENT_BUS.register(new AutoCloseCrystalHollowsChest());

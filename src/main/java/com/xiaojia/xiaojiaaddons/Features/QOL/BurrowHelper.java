@@ -2,11 +2,13 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
+import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -21,6 +23,10 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.awt.Color;
+
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class BurrowHelper {
     private BlockPos solution;
@@ -87,6 +93,12 @@ public class BurrowHelper {
                     event.setCanceled(true);
                     return;
                 }
+                double pitch = MathUtils.validPitch(MathUtils.getPitch());
+                if (Configs.BlockInvalidClicks && !MathUtils.equal(pitch, 90) && !MathUtils.equal(pitch, -90) ) {
+                    ChatLib.chat("Look straight up or down!");
+                    event.setCanceled(true);
+                    return;
+                }
                 awaiting = true;
                 particleCount = 0;
                 lastItem = System.currentTimeMillis();
@@ -130,17 +142,34 @@ public class BurrowHelper {
         double b = v2z / v2x * p2x - p2z;
         double x = (a - b) / (v1z / v1x - v2z / v2x);
         double z = v1z / v1x * x - a;
-        double y;
-        for (y = 255; y > 0; y--) {
-            solution = new BlockPos(x, y, z);
-            if (BlockUtils.getBlockAt(solution) == Blocks.grass || BlockUtils.getBlockAt(solution) == Blocks.dirt) {
-                solution = new BlockPos(x, y + 1, z);
-                break;
-            }
-        }
+        solution = new BlockPos(x, calcHighestGrass(x, z), z);
         ChatLib.chat("Solution: (" + solution.getX() + ", " + solution.getZ() + ")");
 
         pos1 = pos2 = vec1 = vec2 = null;
+    }
+
+    private static double calcHighestGrass(double x, double z) {
+        double y;
+        for (y = 255; y > 0; y--) {
+            BlockPos solution = new BlockPos(x, y, z);
+            if (BlockUtils.getBlockAt(solution) == Blocks.grass || BlockUtils.getBlockAt(solution) == Blocks.dirt)
+                break;
+        }
+        return y + 1;
+    }
+
+    private static long lastUpdate = 0;
+
+    @SubscribeEvent
+    public void onTickUpdate(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.BurrowHelper) return;
+        long cur = TimeUtils.curTime();
+        if (solution != null && solution.getY() < 5 && cur - lastUpdate > 1000) {
+            lastUpdate = cur;
+            int x = solution.getX(), z = solution.getZ();
+            solution = new BlockPos(x, calcHighestGrass(x, z), z);
+        }
     }
 
     @SubscribeEvent
@@ -148,7 +177,8 @@ public class BurrowHelper {
         if (!Checker.enabled) return;
         if (solution == null) return;
         GuiUtils.enableESP();
-        GuiUtils.renderBeaconBeam(solution, 0xfc03ec, 0.3f);
+        GuiUtils.renderBeaconBeam(solution, 0xfc03ec, 0.5f);
+        GuiUtils.drawBoxAtBlock(solution.down(), new Color(0x80FC03EC, true), 1, 1, 0.0020000000949949026F);
         GuiUtils.disableESP();
     }
 }
