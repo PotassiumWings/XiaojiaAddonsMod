@@ -129,6 +129,11 @@ public class InCombatQOL {
                     (levelString.equals("6"))) return true;
             return bookName.equals("Ultimate Jerry") && Configs.AutoSellUltimateJerry;
         }
+
+        // manually
+        if (Configs.AutoSellConfig.length() > 0 && name.contains(Configs.AutoSellConfig.toLowerCase())) {
+            return true;
+        }
         return false;
     }
 

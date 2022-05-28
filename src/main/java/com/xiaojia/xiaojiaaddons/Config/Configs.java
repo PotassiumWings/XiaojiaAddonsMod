@@ -520,6 +520,10 @@ public class Configs {
                     "Can be done while in combat.")
     public static boolean AutoSellEnable = false;
 
+    @Property(type = Property.Type.TEXT, name = "Auto Sell Custom", parent = "Auto Sell",
+            description = "Set display name to auto sell.")
+    public static String AutoSellConfig = "";
+
     @Property(type = Property.Type.NUMBER, name = "Auto Sell CD", parent = "Auto Sell", suffix = " ms",
             min = 50, max = 500, step = 5,
             description = "Cool down between selling two items.")
