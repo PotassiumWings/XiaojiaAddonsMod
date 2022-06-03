@@ -647,6 +647,9 @@ public class Configs {
             description = "Display current ping in ms, &conly works in SkyBlock!")
     public static boolean DisplayPing = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Display Packet Received Frequency", parent = "Information Display")
+    public static boolean DisplayPacketReceived = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Display Coords", parent = "Information Display",
             description = "Display current block you're at.")
     public static boolean DisplayCoords = false;

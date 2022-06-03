@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.DevMode;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.PacketReceive;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
@@ -65,6 +66,11 @@ public class DisplayDayAndCoords {
             DisplayLine line3 = new DisplayLine("Jasper: " + FindFairy.getBlock());
             line3.setScale(Configs.DisplayScale / 20F);
             display.addLine(line3);
+        }
+        if (Configs.DisplayPacketReceived) {
+            DisplayLine line = new DisplayLine("Packet Received: " + PacketReceive.getQueueLength());
+            line.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line);
         }
         String timer = Fishing.timer();
         if (!timer.equals("")) {

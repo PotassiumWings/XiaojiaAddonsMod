@@ -58,6 +58,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.MusicRune;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.NoRotate;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.PacketReceive;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ProtectItems;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
@@ -281,6 +282,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new ShowLowestBin());
         MinecraftForge.EVENT_BUS.register(new DevMode());
         MinecraftForge.EVENT_BUS.register(new MusicRune());
+        MinecraftForge.EVENT_BUS.register(new PacketReceive());
 
         // Nether
         MinecraftForge.EVENT_BUS.register(new CorruptedESP());
