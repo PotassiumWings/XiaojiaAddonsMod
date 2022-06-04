@@ -14,6 +14,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.Patterns;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestFiller;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.MusicRune;
@@ -157,6 +158,17 @@ public class Command extends CommandBase {
                 break;
             case "musicrune":
                 MusicRune.play();
+                break;
+            case "fill":
+                if (ChestFiller.isEnabled()) ChestFiller.disable();
+                else switch (strings.length) {
+                    case (2):
+                        ChestFiller.enable(strings[1], false);
+                        break;
+                    case (3):
+                        ChestFiller.enable(strings[1], strings[2].equals("-6"));
+                        break;
+                }
                 break;
 
             // debug commands

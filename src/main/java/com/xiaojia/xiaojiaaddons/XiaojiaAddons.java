@@ -51,6 +51,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESPBox;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.TrapChestESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChatCopy;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestFiller;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestProfit;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.DevMode;
@@ -273,6 +274,7 @@ public class XiaojiaAddons {
 
         // Miscellaneous
         MinecraftForge.EVENT_BUS.register(new ChatCopy());
+        MinecraftForge.EVENT_BUS.register(new ChestFiller());
         MinecraftForge.EVENT_BUS.register(new ProtectItems());
         MinecraftForge.EVENT_BUS.register(new ColorName());
         MinecraftForge.EVENT_BUS.register(new Velocity());
