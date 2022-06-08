@@ -1,26 +1,17 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
-import com.xiaojia.xiaojiaaddons.Features.Bestiary.AutoSneakyCreeper;
-import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
-import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.DevMode;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.PacketReceive;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.PacketRelated;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
-import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -68,7 +59,12 @@ public class DisplayDayAndCoords {
             display.addLine(line3);
         }
         if (Configs.DisplayPacketReceived) {
-            DisplayLine line = new DisplayLine("Packet Received: " + PacketReceive.getQueueLength());
+            DisplayLine line = new DisplayLine("Packet Received: " + PacketRelated.getReceivedQueueLength());
+            line.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line);
+        }
+        if (Configs.DisplayPacketSent) {
+            DisplayLine line = new DisplayLine("Packet Sent: " + PacketRelated.getSentQueueLength());
             line.setScale(Configs.DisplayScale / 20F);
             display.addLine(line);
         }

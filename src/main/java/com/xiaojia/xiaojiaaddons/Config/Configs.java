@@ -650,6 +650,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Display Packet Received Frequency", parent = "Information Display")
     public static boolean DisplayPacketReceived = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Display Packet Sent Frequency", parent = "Information Display")
+    public static boolean DisplayPacketSent = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Display Coords", parent = "Information Display",
             description = "Display current block you're at.")
     public static boolean DisplayCoords = false;
