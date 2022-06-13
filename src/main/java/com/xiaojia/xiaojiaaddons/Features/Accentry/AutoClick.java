@@ -23,9 +23,10 @@ public class AutoClick {
             should = !should;
             ChatLib.chat(should ? "Auto Left Click &aactivated" : "Auto Left Click &cdeactivated");
         }
+        if (!should) return;
         // 40 cps
         long cur = TimeUtils.curTime();
-        if (cur - lastClicked > 1.0 / Configs.AutoClickCPS) {
+        if (cur - lastClicked > 1000 / Configs.AutoClickCPS) {
             lastClicked = cur;
             ControlUtils.leftClick();
         }

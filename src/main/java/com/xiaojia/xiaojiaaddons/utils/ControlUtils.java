@@ -107,7 +107,8 @@ public class ControlUtils {
 
     public static void rightClick() {
         try {
-            getPlayer().closeScreen();
+            if (Configs.CloseInvWhenClicking)
+                getPlayer().closeScreen();
             Method rightClickMethod;
             try {
                 rightClickMethod = mc.getClass().getDeclaredMethod("rightClickMouse");
@@ -122,7 +123,8 @@ public class ControlUtils {
 
     public static void leftClick() {
         try {
-            getPlayer().closeScreen();
+            if (Configs.CloseInvWhenClicking)
+                getPlayer().closeScreen();
             Method leftClickMethod;
             try {
                 leftClickMethod = mc.getClass().getDeclaredMethod("clickMouse");
@@ -155,7 +157,6 @@ public class ControlUtils {
     }
 
     public static void face(float tx, float ty, float tz) {
-        getPlayer().closeScreen();
         Tuple<Float, Float> res = getFaceYawAndPitch(tx, ty, tz);
         float yaw = res.getFirst(), pitch = res.getSecond();
         changeDirection(yaw, pitch);

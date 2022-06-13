@@ -158,6 +158,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Close Gui When Changing Direction", parent = "General XJA Setting")
     public static boolean CloseInvWhenChangingDirection = true;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Close Gui When Clicking", parent = "General XJA Setting")
+    public static boolean CloseInvWhenClicking = true;
+
     @Property(type = Property.Type.BOOLEAN, name = "General ESP toggle", parent = "General XJA Setting")
     public static boolean GeneralESP = true;
 
