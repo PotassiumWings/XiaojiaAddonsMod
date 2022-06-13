@@ -1,6 +1,19 @@
 package com.xiaojia.xiaojiaaddons.Config;
 
 public class Configs {
+    // Accentry
+    @Property(type = Property.Type.FOLDER, name = "Aria")
+    public static boolean AriaEnabled = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Accentry", parent = "Aria")
+    public static boolean AccentryEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Left Click", parent = "Accentry", description = "KeyBind.")
+    public static boolean AutoLeftClick = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Left Click CPS", parent = "Accentry", min = 1, max = 20)
+    public static int AutoClickCPS = 12;
+
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;
@@ -942,7 +955,7 @@ public class Configs {
     public static String ShowAttributeName = "Mana Pool";
 
     @Property(type = Property.Type.FOLDER, name = "Item Attribute Filter", parent = "QOL",
-        description = "Display mask of attributes on an item.")
+            description = "Display mask of attributes on an item.")
     public static boolean ItemAttributeFilterEnable = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Item Attribute Filter Enable", parent = "Item Attribute Filter")

@@ -11,6 +11,7 @@ import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoClick;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.AutoScatha;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.AutoSneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
@@ -215,6 +216,9 @@ public class XiaojiaAddons {
 
         MinecraftForge.EVENT_BUS.register(new DisplayHandler());
         MinecraftForge.EVENT_BUS.register(new SoundHandler());
+
+        // AriaCraft
+        MinecraftForge.EVENT_BUS.register(new AutoClick());
 
         // Utils
         MinecraftForge.EVENT_BUS.register(new ControlUtils());
