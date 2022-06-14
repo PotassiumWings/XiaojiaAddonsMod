@@ -14,23 +14,15 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.commons.lang3.ArrayUtils;
-import scala.collection.immutable.List;
-import scala.util.parsing.json.JSONArray;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Key;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
