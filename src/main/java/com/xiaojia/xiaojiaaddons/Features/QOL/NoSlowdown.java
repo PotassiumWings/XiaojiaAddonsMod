@@ -17,7 +17,7 @@ public class NoSlowdown {
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!Checker.enabled) return;
-        if (!SkyblockUtils.isInSkyblock()) return;
+        if (!SkyblockUtils.isInSkyblock() && Configs.DisableNoSlowOutofSkyBlock) return;
         try {
             ItemStack itemStack = ControlUtils.getHeldItemStack();
             if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR &&

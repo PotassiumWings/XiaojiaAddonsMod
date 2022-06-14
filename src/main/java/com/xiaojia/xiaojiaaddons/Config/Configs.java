@@ -14,6 +14,9 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Auto Left Click CPS", parent = "Accentry", min = 1, max = 20)
     public static int AutoClickCPS = 12;
 
+    @Property(type = Property.Type.TEXT, name = "Kill All Contains", parent = "Accentry")
+    public static String KillAllName = "Pig";
+
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;
@@ -91,6 +94,9 @@ public class Configs {
 
     @Property(type = Property.Type.NUMBER, name = "Velocity CD", parent = "Velocity", min = 0, max = 2000, step = 10, suffix = " ms")
     public static int VelocityCD = 1000;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Velocity - SkyBlock Only", parent = "Velocity")
+    public static boolean DisableOutofSkyBlock = true;
 
     @Property(type = Property.Type.FOLDER, name = "Dupe Display", parent = "Misc")
     public static boolean DupeDisplay = false;
@@ -987,6 +993,9 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "No Slowdown for All Swords", parent = "No Slowdown")
     public static boolean NoSlowdownAll = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "No Slowdown - SkyBlock Only", parent = "No Slowdown")
+    public static boolean DisableNoSlowOutofSkyBlock = true;
 
     // HoldRightClick
     @Property(type = Property.Type.FOLDER, name = "Hold Right Click", parent = "QOL")

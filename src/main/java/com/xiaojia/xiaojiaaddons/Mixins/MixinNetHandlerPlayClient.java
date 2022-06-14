@@ -57,7 +57,7 @@ public abstract class MixinNetHandlerPlayClient {
     }
 
     private boolean enabled() {
-        return Checker.enabled && Velocity.canDisableKnockBack() && SkyblockUtils.isInSkyblock();
+        return Checker.enabled && Velocity.canDisableKnockBack() && (SkyblockUtils.isInSkyblock() || !Configs.DisableOutofSkyBlock);
     }
 
     @Inject(method = "handleSpawnMob", at = @At("TAIL"))
