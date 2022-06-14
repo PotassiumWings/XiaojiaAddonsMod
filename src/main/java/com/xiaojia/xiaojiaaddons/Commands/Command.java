@@ -201,6 +201,10 @@ public class Command extends CommandBase {
                         String command = String.join(" ", Arrays.copyOfRange(strings, 2, strings.length));
                         if (strings[1].equalsIgnoreCase("add")) CommandKeybind.add(command);
                         else if (strings[1].equalsIgnoreCase("remove")) CommandKeybind.remove(command);
+                        else if (strings[1].equalsIgnoreCase("removeWithKey")) {
+                            command = String.join(" ", Arrays.copyOfRange(strings, 3, strings.length));
+                            CommandKeybind.remove(command, strings[2]);
+                        }
                         else ChatLib.chat(CommandKeybind.getUsage());
                         break;
                 }

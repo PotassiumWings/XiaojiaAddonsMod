@@ -10,6 +10,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -23,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import org.lwjgl.input.Keyboard;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
@@ -43,9 +45,9 @@ public class CommandKeybind {
             KeyEvent key = new KeyEvent;
             key.setKeyCode(keybind.getBind().getKeyCode());
             */
-            IChatComponent chatComponent = new ChatComponentText(ChatLib.addColor("&9[XJA] > &e" + keybind.getCommand() + " &b(" + keybind.getBind().getKeyCode() + ") &r&c&l[REMOVE]"));
+            IChatComponent chatComponent = new ChatComponentText(ChatLib.addColor("&9[XJA] > &e" + keybind.getCommand() + " &b(" + Keyboard.getKeyName(keybind.getBind().getKeyCode()) + ") &r&c&l[REMOVE]"));
             ChatStyle chatStyle = new ChatStyle();
-            chatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/xj keybind remove " + keybind.getCommand()));
+            chatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/xj keybind removeWithKey " + keybind.getBind().getKeyCode() + " " + keybind.getCommand()));
             chatStyle.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("Click to remove this keybind")));
             chatComponent.setChatStyle(chatStyle);
             mc.thePlayer.addChatMessage(chatComponent);
@@ -71,12 +73,34 @@ public class CommandKeybind {
         ChatLib.chat("&cRemoved&b keybind \"&e" + command + "&b\"!");
     }
 
+    public static void remove(String command, String keyStr) {
+        int key;
+        try {
+            key = Integer.parseInt(keyStr);
+        }
+        catch (Exception e) {
+            ChatLib.chat("Not a number!");
+            return;
+        }
+        Keybind bind = Keybind.getKeybind(command, key);
+        if (bind == null) {
+            ChatLib.chat("No such keybind! Are the cases and keycode matching correctly?");
+            return;
+        }
+        mc.gameSettings.keyBindings = (KeyBinding[])ArrayUtils.removeElement((Object[])mc.gameSettings.keyBindings, bind.getBind());
+        Keybind.keybinds.remove(bind);
+        saveKeybinds();
+        ChatLib.chat("&cRemoved&b keybind \"&e" + command + "&b\" (" + Keyboard.getKeyName(bind.getBind().getKeyCode()) + ") !");
+    }
+
     @SubscribeEvent
     public void onKey(InputEvent.KeyInputEvent event) {
         for (Keybind keybind : Keybind.keybinds)
             if (keybind.getBind().isPressed()) {
-                 //mc.ingameGUI.getChatGUI().addToSentMessages(keybind.getCommand());
-                 mc.thePlayer.sendChatMessage(keybind.getCommand()); //todo: add client side commands support
+                //mc.ingameGUI.getChatGUI().addToSentMessages(keybind.getCommand());
+                if (keybind.getCommand().startsWith("/") &&
+                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, keybind.getCommand()) != 0) continue;
+                mc.thePlayer.sendChatMessage(keybind.getCommand());
             }
     }
 
@@ -89,13 +113,13 @@ public class CommandKeybind {
                 Reader reader = Files.newBufferedReader(Paths.get(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg"));
                 Type type = (new TypeToken<ArrayList<Keybind>>() {}).getType();
                 ArrayList<Keybind> settingsFromConfig = (new Gson()).fromJson(reader, type);
-                Keybind.keybinds.addAll(settingsFromConfig);
+                for (Keybind keybind : settingsFromConfig)
+                    Keybind.keybinds.add(new Keybind(keybind.getCommand(), keybind.getBind().getKeyCode()));
             }
         } catch (Exception exception) {}
         KeyBinding h = new KeyBinding("Use /xj keybind to add keybinds!", 0, "Keybinds - XiaoJiaAddons");
         ClientRegistry.registerKeyBinding(h);
-       /* for (Keybind keybind : Keybind.keybinds)
-            ClientRegistry.registerKeyBinding(keybind.getBind());*/
+
     }
 
     public static void saveKeybinds() {
