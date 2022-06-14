@@ -15,6 +15,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.Patterns;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.CommandKeybind;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.MusicRune;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.DojoUtils;
@@ -189,6 +190,23 @@ public class Command extends CommandBase {
                 break;
             case "fill":
                 ChestFiller.toggle();
+                break;
+            case "keybind":
+                switch (strings.length) {
+                    case 1:
+                    case 2:
+                        ChatLib.chat(CommandKeybind.getUsage());
+                        break;
+                    default:
+                        String command = String.join(" ", Arrays.copyOfRange(strings, 2, strings.length));
+                        if (strings[1].equalsIgnoreCase("add")) CommandKeybind.add(command);
+                        else if (strings[1].equalsIgnoreCase("remove")) CommandKeybind.remove(command);
+                        else ChatLib.chat(CommandKeybind.getUsage());
+                        break;
+                }
+                break;
+            case "keybinds":
+                CommandKeybind.list();
                 break;
             case "room":
                 ChatLib.chat("Current Room: " + Dungeon.currentRoom);

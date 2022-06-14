@@ -14,7 +14,7 @@ import java.util.HashSet;
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.isDebug;
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
-
+import static com.xiaojia.xiaojiaaddons.utils.SessionUtils.isDev;
 
 
 public class ChestFiller {
@@ -32,6 +32,7 @@ public class ChestFiller {
 
     public static void toggle() {
         if (enabled) clear();
+        else if (!isDev()) ChatLib.chat("&cCheaters get banned");
         else {
             ChatLib.chat("Chest Filler &aactivated");
             enabled = !enabled;

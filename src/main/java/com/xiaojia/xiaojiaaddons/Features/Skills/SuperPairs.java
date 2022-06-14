@@ -44,7 +44,7 @@ public class SuperPairs {
             if (item.getDisplayName().contains("Click any button") ||
                     item.getDisplayName().contains("Click a second button") ||
                     item.getDisplayName().contains("Next button is instantly rewarded") ||
-                    item.getDisplayName().contains("Stained Glass")) {
+                    item.getDisplayName().contains("?")){
                 Slot slot = ((GuiChest) mc.currentScreen).getSlotUnderMouse();
                 ItemStack itemStack = experimentTableSlots[slot.getSlotIndex()];
                 if (itemStack == null) return;

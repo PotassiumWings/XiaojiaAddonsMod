@@ -54,6 +54,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.TrapChestESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChatCopy;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestProfit;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.CommandKeybind;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.DevMode;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
@@ -161,6 +162,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
+
+import static com.xiaojia.xiaojiaaddons.Features.Miscellaneous.CommandKeybind.loadKeybinds;
 
 @Mod(modid = XiaojiaAddons.MODID, version = XiaojiaAddons.VERSION)
 public class XiaojiaAddons {
@@ -368,7 +371,8 @@ public class XiaojiaAddons {
 //        MinecraftForge.EVENT_BUS.register(new TestM7());
         MinecraftForge.EVENT_BUS.register(new DevWater());
         MinecraftForge.EVENT_BUS.register(new ChestFiller());
-
+        MinecraftForge.EVENT_BUS.register(new CommandKeybind());
+        loadKeybinds();
         for (KeyBind keyBind : KeyBindUtils.keyBinds) {
             ClientRegistry.registerKeyBinding(keyBind.mcKeyBinding());
         }
