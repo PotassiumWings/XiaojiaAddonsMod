@@ -17,6 +17,9 @@ public class Configs {
     @Property(type = Property.Type.TEXT, name = "Kill All Contains", parent = "Accentry")
     public static String KillAllName = "Pig";
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Meat", parent = "Accentry")
+    public static boolean AutoMeat = false;
+
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;

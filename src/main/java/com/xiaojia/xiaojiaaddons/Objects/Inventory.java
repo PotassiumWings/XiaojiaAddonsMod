@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
+import net.minecraft.inventory.ContainerMerchant;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -14,7 +15,7 @@ import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class Inventory {
-    private final Container container;
+    public final Container container;
 
     public Inventory(Container container) {
         this.container = container;
@@ -48,6 +49,9 @@ public class Inventory {
     public final String getName() {
         if (container instanceof ContainerChest) {
             return ((ContainerChest) container).getLowerChestInventory().getName();
+        }
+        if (container instanceof ContainerMerchant) {
+            return ((ContainerMerchant) container).getMerchantInventory().getName();
         }
         return "container";
     }

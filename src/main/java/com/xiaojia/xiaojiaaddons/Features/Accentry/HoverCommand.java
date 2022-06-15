@@ -16,8 +16,7 @@ public class HoverCommand {
     public void onMessageReceived(ClientChatReceivedEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.ChatHoverCommand) return;
-        ChatLib.chat(event.type + " " + event.message.getUnformattedText());
-        if (event.type != 0) return;
+        if (event.type == 2) return;
         IChatComponent component = event.message;
         convert(component);
     }

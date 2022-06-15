@@ -203,7 +203,7 @@ public class ColorName {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onMessageReceived(ClientChatReceivedEvent event) {
         if (!Checker.enabled) return;
-        if (event.type != 0) return;
+        if (event.type == 2) return;
         if (!Configs.ColorNameChat) return;
         IChatComponent message = event.message.createCopy();
         event.message = convert(message);

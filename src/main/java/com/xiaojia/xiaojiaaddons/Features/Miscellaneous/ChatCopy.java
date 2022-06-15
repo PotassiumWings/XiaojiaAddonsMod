@@ -17,7 +17,7 @@ public class ChatCopy {
     public void onMessageReceived(ClientChatReceivedEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.ChatCopy) return;
-        if (event.type != 0) return;
+        if (event.type == 2) return;
         String message = event.message.getFormattedText();
         String noColorMessage = ChatLib.removeFormatting(event.message.getUnformattedText());
         if (noColorMessage.matches("^[-▬=]+$") && noColorMessage.length() >= 4) {
