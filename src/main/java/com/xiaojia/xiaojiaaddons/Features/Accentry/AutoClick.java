@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Accentry;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.PacketRelated;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
@@ -26,7 +27,7 @@ public class AutoClick {
         if (!should) return;
         // 40 cps
         long cur = TimeUtils.curTime();
-        if (cur - lastClicked > 1000 / Configs.AutoClickCPS) {
+        if (cur - lastClicked > 1000 / Configs.AutoClickCPS && PacketRelated.getReceivedQueueLength() != 0) {
             lastClicked = cur;
             ControlUtils.leftClick();
         }

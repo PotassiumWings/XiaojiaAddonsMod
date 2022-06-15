@@ -41,13 +41,10 @@ public class KillAll {
                 }
             }
             entities.sort((a, b) -> (int) (MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
-            entities.removeIf(e -> MathUtils.distanceSquareFromPlayer(e) > 6.5 * 6.5);
+            entities.removeIf(e -> MathUtils.distanceSquareFromPlayer(e) > 8 * 8);
             if (entities.size() == 0) return;
             Entity entity = entities.get(0);
             XiaojiaAddons.mc.playerController.attackEntity(getPlayer(), entity);
-//            ChatLib.chat("Attacked" + entity + " " + entity.getName() + " "
-//                    + ((EntityPig) entity).getHealth()
-//                    + String.format(" at %s", MathUtils.getPosString(entity)));
         }
     }
 }

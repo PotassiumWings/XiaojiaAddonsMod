@@ -7,10 +7,14 @@ import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
+import com.xiaojia.xiaojiaaddons.Objects.Inventory;
+import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -65,6 +69,17 @@ public class DisplayDayAndCoords {
         }
         if (Configs.DisplayPacketSent) {
             DisplayLine line = new DisplayLine("Packet Sent: " + PacketRelated.getSentQueueLength());
+            line.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line);
+        }
+        if (Configs.DisplayBricks) {
+            int bricks = 0;
+            Inventory inventory = ControlUtils.getOpenedInventory();
+            if (inventory != null)
+                for (ItemStack itemStack : inventory.getItemStacks())
+                    if (itemStack != null && itemStack.getItem() == Items.brick)
+                        bricks += itemStack.stackSize;
+            DisplayLine line = new DisplayLine("Bricks: &4" + bricks);
             line.setScale(Configs.DisplayScale / 20F);
             display.addLine(line);
         }

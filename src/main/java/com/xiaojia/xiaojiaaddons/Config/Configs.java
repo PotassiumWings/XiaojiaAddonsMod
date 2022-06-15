@@ -199,6 +199,15 @@ public class Configs {
             description = "Render rank on top of heads.")
     public static boolean RenderRank = true;
 
+    // HoverCommand
+    @Property(type = Property.Type.FOLDER, name = "Chat Hover", parent = "Misc",
+            description = "Shows what command clicking it will execute."
+    )
+    public static boolean ChatHoverCommandEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Chat Hover Enabled", parent = "Chat Hover")
+    public static boolean ChatHoverCommand = true;
+
     // ColorName
     @Property(type = Property.Type.FOLDER, name = "Color Name", parent = "Misc",
             description = "Replace all ranked name, like &b[MVP+] Xiaojia,\n" +
@@ -674,6 +683,9 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Display Packet Sent Frequency", parent = "Information Display")
     public static boolean DisplayPacketSent = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Display Bricks", parent = "Information Display")
+    public static boolean DisplayBricks = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Display Coords", parent = "Information Display",
             description = "Display current block you're at.")
