@@ -23,6 +23,10 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Question", parent = "Accentry")
     public static boolean AutoQuestion = false;
 
+    @Property(type = Property.Type.NUMBER, name = "Auto Question CD", parent = "Accentry", suffix = " ms",
+            min = 0, max = 2000, step = 20)
+    public static int AutoQuestionCD = 1000;
+
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;

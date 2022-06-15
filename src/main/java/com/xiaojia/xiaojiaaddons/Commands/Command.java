@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoQuestion;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.AutoSneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
@@ -279,6 +280,9 @@ public class Command extends CommandBase {
                 break;
             case "paste":
                 CopyWorldInfo.paste();
+                break;
+            case "questions":
+                AutoQuestion.display();
                 break;
             default:
                 if (XiaojiaAddons.isDebug()) SkyblockUtils.setCurrentMap(String.join(" ", strings));

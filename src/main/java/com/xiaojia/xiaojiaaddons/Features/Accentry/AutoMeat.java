@@ -8,6 +8,7 @@ import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.ContainerMerchant;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -47,9 +48,11 @@ public class AutoMeat {
         if (inventory == null) return false;
         if (XiaojiaAddons.isDebug()) ChatLib.chat(inventory.container.getClass() + ", " + inventory.getName());
         if (!(inventory.container instanceof ContainerMerchant)) return false;
-        if (!inventory.getName().contains("精盐贤者")) return false;
         MerchantRecipe recipe = ((ContainerMerchant) inventory.container).getMerchantInventory().getCurrentRecipe();
+        if (recipe == null) return false;
         ItemStack itemStack = recipe.getItemToSell();
-        return itemStack.getItem() == Item.getItemFromBlock(Blocks.beacon);
+        ItemStack first = recipe.getItemToBuy();
+        ItemStack second = recipe.getSecondItemToBuy();
+        return itemStack.getItem() == Item.getItemFromBlock(Blocks.beacon) && first.getItem() == Items.porkchop;
     }
 }
