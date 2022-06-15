@@ -20,6 +20,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Meat", parent = "Accentry")
     public static boolean AutoMeat = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Question", parent = "Accentry")
+    public static boolean AutoQuestion = false;
+
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;

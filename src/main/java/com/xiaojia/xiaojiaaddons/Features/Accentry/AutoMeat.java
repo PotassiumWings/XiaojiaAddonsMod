@@ -7,16 +7,12 @@ import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.ContainerMerchant;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.List;
 
 public class AutoMeat {
     private Thread sellThread = null;
@@ -48,11 +44,12 @@ public class AutoMeat {
     private boolean should() {
         if (!Checker.enabled || !Configs.AutoMeat) return false;
         Inventory inventory = ControlUtils.getOpenedInventory();
+        if (inventory == null) return false;
+        if (XiaojiaAddons.isDebug()) ChatLib.chat(inventory.container.getClass() + ", " + inventory.getName());
         if (!(inventory.container instanceof ContainerMerchant)) return false;
         if (!inventory.getName().contains("精盐贤者")) return false;
         MerchantRecipe recipe = ((ContainerMerchant) inventory.container).getMerchantInventory().getCurrentRecipe();
         ItemStack itemStack = recipe.getItemToSell();
-        if (itemStack.getItem() != Item.getItemFromBlock(Blocks.beacon)) return false;
-        return true;
+        return itemStack.getItem() == Item.getItemFromBlock(Blocks.beacon);
     }
 }

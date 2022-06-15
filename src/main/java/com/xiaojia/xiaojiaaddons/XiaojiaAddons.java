@@ -13,6 +13,7 @@ import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoClick;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMeat;
+import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoQuestion;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.HoverCommand;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.KillAll;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.AutoScatha;
@@ -225,6 +226,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new KillAll());
         MinecraftForge.EVENT_BUS.register(new HoverCommand());
         MinecraftForge.EVENT_BUS.register(new AutoMeat());
+        MinecraftForge.EVENT_BUS.register(new AutoQuestion());
 
         // Utils
         MinecraftForge.EVENT_BUS.register(new ControlUtils());
