@@ -284,6 +284,14 @@ public class Command extends CommandBase {
             case "questions":
                 AutoQuestion.display();
                 break;
+            case "tp":
+                x = Integer.parseInt(strings[1]);
+                y = Integer.parseInt(strings[2]);
+                z = Integer.parseInt(strings[3]);
+                XiaojiaAddons.mc.thePlayer.posX = x;
+                XiaojiaAddons.mc.thePlayer.posY = y;
+                XiaojiaAddons.mc.thePlayer.posZ = z;
+                break;
             default:
                 if (XiaojiaAddons.isDebug()) SkyblockUtils.setCurrentMap(String.join(" ", strings));
                 else ChatLib.chat(getUsage());

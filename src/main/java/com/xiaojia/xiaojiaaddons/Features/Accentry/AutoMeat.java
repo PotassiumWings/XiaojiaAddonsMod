@@ -4,23 +4,21 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import net.minecraft.entity.IMerchant;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.ContainerMerchant;
-import net.minecraft.inventory.InventoryMerchant;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Field;
 
+enum EnumNPC {
+    NONE, JY, XNH
+}
+
 public class AutoMeat {
-    private Thread sellThread = null;
     private static Field merchantField = null;
+
     static {
         try {
             merchantField = ContainerMerchant.class.getDeclaredField("field_75178_e");
@@ -34,17 +32,22 @@ public class AutoMeat {
         merchantField.setAccessible(true);
     }
 
+    private Thread sellThread = null;
+
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
-        if (should() && (sellThread == null || !sellThread.isAlive())) {
+        if (should() != EnumNPC.NONE && (sellThread == null || !sellThread.isAlive())) {
             sellThread = new Thread(() -> {
                 try {
                     for (int i = 3; i < 39; i++) {
-                        if (!should()) return;
+                        EnumNPC npc = should();
+                        if (npc == EnumNPC.NONE) return;
                         Inventory inventory = ControlUtils.getOpenedInventory();
                         if (inventory == null) return;
                         ItemStack itemStack = inventory.getItemInSlot(i);
-                        if (itemStack == null || !itemStack.getDisplayName().contains("精盐肉块") ||
+                        if (itemStack == null ||
+                                (npc == EnumNPC.JY && !itemStack.getDisplayName().contains("精盐肉块")) ||
+                                (npc == EnumNPC.XNH && !itemStack.getDisplayName().contains("臭肉")) ||
                                 itemStack.stackSize != 64) continue;
                         inventory.click(i, false, "LEFT", 0);
                         inventory.click(0, false, "LEFT", 0);
@@ -58,14 +61,14 @@ public class AutoMeat {
         }
     }
 
-    private boolean should() {
-        if (!Checker.enabled || !Configs.AutoMeat) return false;
+    private EnumNPC should() {
+        if (!Checker.enabled || !Configs.AutoMeat) return EnumNPC.NONE;
         Inventory inventory = ControlUtils.getOpenedInventory();
-        if (inventory == null) return false;
+        if (inventory == null) return EnumNPC.NONE;
         // recipe filled
-        if (inventory.getItemInSlot(2) != null) return false;
+        if (inventory.getItemInSlot(2) != null) return EnumNPC.NONE;
 
-        if (!(inventory.container instanceof ContainerMerchant)) return false;
+        if (!(inventory.container instanceof ContainerMerchant)) return EnumNPC.NONE;
 
         ContainerMerchant merchant = ((ContainerMerchant) inventory.container);
         String name = "";
@@ -73,6 +76,8 @@ public class AutoMeat {
             name = (((IMerchant) merchantField.get(merchant)).getDisplayName().getFormattedText());
         } catch (IllegalAccessException ignored) {
         }
-        return name.contains("精盐贤者");
+        return name.contains("精盐贤者") ? EnumNPC.JY :
+                name.contains("小男孩") ? EnumNPC.XNH :
+                        EnumNPC.NONE;
     }
 }

@@ -36,6 +36,7 @@ public class AutoQuestion {
         put("如果有人在公屏上骂人，你怎么做? [单选题]", new String[]{"[屏蔽他]"});
         put("如果有人蹭经验怎么办？ [单选题]", new String[]{"[找管理举报并按制度处罚该玩家]"});
         put("梦境遇事找谁处理？ [简答题]", new String[]{"管理"});
+        put("服务器允许注册小号么？ [单选题]", new String[]{"[不允许，只能注册1个]"});
     }};
     public String currentQuestion = "";
 
