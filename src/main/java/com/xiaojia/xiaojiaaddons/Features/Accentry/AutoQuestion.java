@@ -38,7 +38,7 @@ public class AutoQuestion {
         put("梦境遇事找谁处理？ [简答题]", new String[]{"管理"});
         put("服务器允许注册小号么？ [单选题]", new String[]{"[不允许，只能注册1个]"});
     }};
-    public String currentQuestion = "";
+    public static String currentQuestion = "";
 
     public static HashSet<String> newQuestions = new HashSet<>();
 
@@ -86,6 +86,7 @@ public class AutoQuestion {
     }
 
     public static void display() {
+        ChatLib.chat("Current question: " + currentQuestion);
         for (String question : newQuestions) {
             ChatLib.chat("Q: " + question);
         }

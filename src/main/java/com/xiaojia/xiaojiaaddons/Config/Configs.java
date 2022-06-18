@@ -27,6 +27,9 @@ public class Configs {
             min = 0, max = 2000, step = 20)
     public static int AutoQuestionCD = 1000;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Fast Eat", parent = "Accentry")
+    public static boolean FastUse = false;
+
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;

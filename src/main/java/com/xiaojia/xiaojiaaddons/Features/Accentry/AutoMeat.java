@@ -76,7 +76,7 @@ public class AutoMeat {
             name = (((IMerchant) merchantField.get(merchant)).getDisplayName().getFormattedText());
         } catch (IllegalAccessException ignored) {
         }
-        return name.contains("精盐贤者") ? EnumNPC.JY :
+        return name.contains("精盐贤者") || name.contains("Villager") ? EnumNPC.JY :
                 name.contains("小男孩") ? EnumNPC.XNH :
                         EnumNPC.NONE;
     }
