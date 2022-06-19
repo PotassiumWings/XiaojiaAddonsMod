@@ -79,7 +79,18 @@ public class DisplayDayAndCoords {
                 for (ItemStack itemStack : inventory.getItemStacks())
                     if (itemStack != null && itemStack.getItem() == Items.brick)
                         bricks += itemStack.stackSize;
-            DisplayLine line = new DisplayLine("Bricks: &4" + bricks);
+            DisplayLine line = new DisplayLine("Bricks: &c&l" + bricks);
+            line.setScale(Configs.DisplayScale / 20F);
+            display.addLine(line);
+        }
+        if (Configs.DisplayIronIngots) {
+            int ironIngots = 0;
+            Inventory inventory = ControlUtils.getOpenedInventory();
+            if (inventory != null)
+                for (ItemStack itemStack : inventory.getItemStacks())
+                    if (itemStack != null && itemStack.getItem() == Items.iron_ingot)
+                        ironIngots += itemStack.stackSize;
+            DisplayLine line = new DisplayLine("Iron Ingots: &0&l" + ironIngots);
             line.setScale(Configs.DisplayScale / 20F);
             display.addLine(line);
         }

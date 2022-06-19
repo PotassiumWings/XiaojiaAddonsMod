@@ -1,18 +1,14 @@
 package com.xiaojia.xiaojiaaddons.Features.Accentry;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
-import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
-import com.xiaojia.xiaojiaaddons.utils.PacketUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
-import net.minecraft.network.play.server.S19PacketEntityStatus;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -31,8 +27,10 @@ public class FastUse {
         ItemStack held = ControlUtils.getHeldItemStack();
         if (held != null && held.getItem() instanceof ItemFood) {
             event.setCanceled(true);
-            XiaojiaAddons.mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(held));
-
+            for (int i = 0; i < 35; i++) {
+                XiaojiaAddons.mc.getNetHandler().addToSendQueue(new C03PacketPlayer(getPlayer().onGround));
+            }
+            ChatLib.debug("Fast Use!");
         }
     }
 }

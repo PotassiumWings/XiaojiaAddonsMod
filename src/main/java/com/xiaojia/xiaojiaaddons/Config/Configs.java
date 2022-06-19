@@ -709,6 +709,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Display Bricks", parent = "Information Display")
     public static boolean DisplayBricks = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Display Iron Ingots", parent = "Information Display")
+    public static boolean DisplayIronIngots = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Display Coords", parent = "Information Display",
             description = "Display current block you're at.")
     public static boolean DisplayCoords = false;
