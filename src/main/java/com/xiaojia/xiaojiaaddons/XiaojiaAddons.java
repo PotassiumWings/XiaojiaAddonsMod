@@ -15,6 +15,7 @@ import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoBack;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoClick;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMeat;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMiNi;
+import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMiQi;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoQuestion;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.FastUse;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.HoverCommand;
@@ -75,6 +76,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
 import com.xiaojia.xiaojiaaddons.Features.Nether.AshFangESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.AshFangGravityESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.ConvergenceESP;
+import com.xiaojia.xiaojiaaddons.Features.Nether.CorruptedESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Discipline;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.DojoUtils;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.Force;
@@ -95,7 +97,6 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.AutoLobby;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoSnowball;
 import com.xiaojia.xiaojiaaddons.Features.QOL.AutoUseItem;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BlockAbility;
-import com.xiaojia.xiaojiaaddons.Features.Nether.CorruptedESP;
 import com.xiaojia.xiaojiaaddons.Features.QOL.BurrowHelper;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisableEntityRender;
 import com.xiaojia.xiaojiaaddons.Features.QOL.DisplayDayAndCoords;
@@ -179,9 +180,8 @@ public class XiaojiaAddons {
     public static ArrayList<Setting> settings = Config.collect(Configs.class);
     public static GuiScreen guiToOpen = null;
     public static CipherUtils cipherUtils;
-    private static boolean debug = false;
-
     public static AutoSneakyCreeper autoSneakyCreeper;
+    private static boolean debug = false;
 
     public static void setDebug() {
         debug = !debug;
@@ -235,7 +235,10 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoQuestion());
         AutoMiNi mini = new AutoMiNi();
         mini.init();
+        AutoMiQi miqi = new AutoMiQi();
+        miqi.init();
         MinecraftForge.EVENT_BUS.register(mini);
+        MinecraftForge.EVENT_BUS.register(miqi);
         MinecraftForge.EVENT_BUS.register(new AutoBack());
 
         // Utils

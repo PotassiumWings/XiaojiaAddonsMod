@@ -11,22 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AutoMiNi extends AutoWalk {
-    private static final BlockPos center = new BlockPos(326, 146, 200);
-
-    private static final ArrayList<BlockPos> positions = new ArrayList<>(Arrays.asList(
-            center.add(-4, 0, -1),
-            center.add(-3, 0, -3),
-            center.add(-1, 0, -4),
-            center.add(1, 0, -4),
-            center.add(3, 0, -3),
-            center.add(4, 0, -1),
-            center.add(4, 0, 1),
-            center.add(3, 0, 3),
-            center.add(1, 0, 4),
-            center.add(-1, 0, 4),
-            center.add(-3, 0, 3),
-            center.add(-4, 0, 1)
-    ));
+    public static BlockPos center = new BlockPos(326, 146, 200);
 
     private static final ArrayList<Pair<Integer, Integer>> edges = new ArrayList<>(Arrays.asList(
             new Pair<>(0, 1), new Pair<>(1, 2), new Pair<>(2, 3), new Pair<>(3, 4),
@@ -36,7 +21,20 @@ public class AutoMiNi extends AutoWalk {
 
     @Override
     public ArrayList<BlockPos> getPositions() {
-        return positions;
+        return new ArrayList<>(Arrays.asList(
+                center.add(-4, 0, -1),
+                center.add(-3, 0, -3),
+                center.add(-1, 0, -4),
+                center.add(1, 0, -4),
+                center.add(3, 0, -3),
+                center.add(4, 0, -1),
+                center.add(4, 0, 1),
+                center.add(3, 0, 3),
+                center.add(1, 0, 4),
+                center.add(-1, 0, 4),
+                center.add(-3, 0, 3),
+                center.add(-4, 0, 1)
+        ));
     }
 
     @Override
