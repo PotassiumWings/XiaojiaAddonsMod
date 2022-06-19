@@ -2,21 +2,13 @@ package com.xiaojia.xiaojiaaddons.Features.Accentry;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.AutoWalk;
-import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.Pair;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
-import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import net.minecraft.util.BlockPos;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class AutoMiNi extends AutoWalk {
     private static final BlockPos center = new BlockPos(326, 146, 200);
@@ -70,16 +62,5 @@ public class AutoMiNi extends AutoWalk {
     @Override
     public double getJudgeDistance() {
         return 2;
-    }
-
-    @SubscribeEvent
-    public void onReceive(ClientChatReceivedEvent event) {
-        if (!Checker.enabled) return;
-        if (!enabled()) return;
-        if (!should) return;
-        String message = ChatLib.removeFormatting(event.message.getUnformattedText());
-        if (message.startsWith("死亡 >> 玩家 " + getPlayer().getName())) {
-            CommandsUtils.addCommand("/back");
-        }
     }
 }

@@ -33,6 +33,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Ni", parent = "Accentry")
     public static boolean AutoMiNi = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Back", parent = "Accentry")
+    public static boolean AutoBack = false;
+
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;
