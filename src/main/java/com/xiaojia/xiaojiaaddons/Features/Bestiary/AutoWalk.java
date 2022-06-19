@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.PacketRelated;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
@@ -36,7 +37,7 @@ public abstract class AutoWalk {
     public int index = 0;
     public boolean shouldShow = false;
     public HashSet<Integer> toBeKilled = new HashSet<>();
-    private boolean should = false;
+    public boolean should = false;
     private boolean tryingEnable = false;
     private long lastForceClose = 0;
     private StringBuilder log = new StringBuilder();
@@ -244,8 +245,8 @@ public abstract class AutoWalk {
                             facingThread.start();
                         }
 
-                        // stop if there's creeper nearby
-                        while (existCreeperBeside() && should) {
+                        // stop if there's creeper nearby, or 0 packet received in last 1s
+                        while ((PacketRelated.getReceivedQueueLength() == 0 || existCreeperBeside()) && should) {
                             ControlUtils.stopMoving();
                             Thread.sleep(20);
                         }
