@@ -15,7 +15,10 @@ public class AutoBack {
         if (!Checker.enabled) return;
         if (!Configs.AutoBack) return;
         String message = ChatLib.removeFormatting(event.message.getUnformattedText());
-        if (message.startsWith("死亡 >> 玩家 " + getPlayer().getName())) {
+        String name = getPlayer().getName();
+        if (message.startsWith("死亡 >> 玩家 " + name) ||
+                message.matches("系统 >> .* 杀死了 " + name) ||
+                message.equals(name + " 被祭祀大人给炸毛了qwq")) {
             CommandsUtils.addCommand("/back");
         }
     }
