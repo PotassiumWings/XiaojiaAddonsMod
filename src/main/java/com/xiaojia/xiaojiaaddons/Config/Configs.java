@@ -30,6 +30,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Fast Eat", parent = "Accentry")
     public static boolean FastUse = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Ni", parent = "Accentry")
+    public static boolean AutoMiNi = false;
+
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;

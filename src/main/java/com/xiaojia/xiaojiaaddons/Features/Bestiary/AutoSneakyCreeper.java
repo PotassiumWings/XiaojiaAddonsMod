@@ -1,46 +1,31 @@
 package com.xiaojia.xiaojiaaddons.Features.Bestiary;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
-import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
-import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.Pair;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
-import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
-import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
 import javax.vecmath.Vector2f;
-import javax.vecmath.Vector3d;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getYaw;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
-public class AutoSneakyCreeper {
+public class AutoSneakyCreeper extends AutoWalk {
     private static final ArrayList<BlockPos> positions = new ArrayList<>(Arrays.asList(
             new BlockPos(3, 152, 30),
             new BlockPos(-12, 153, 28),
@@ -106,110 +91,6 @@ public class AutoSneakyCreeper {
             new Pair<>(34, 35), new Pair<>(35, 36), new Pair<>(36, 37), new Pair<>(37, 32),
             new Pair<>(19, 34)
     ));
-    private static final HashMap<Integer, ArrayList<Integer>> graph = new HashMap<>();
-    private static final KeyBind keyBind = new KeyBind("Auto Sneaky Creeper", Keyboard.KEY_NONE);
-    private static final ConcurrentLinkedDeque<Integer> indexes = new ConcurrentLinkedDeque<>();
-    public static Image defaultIcon = new Image("defaultPlayerIcon.png");
-    private static boolean should = false;
-    private static BlockPos goingTo = null;
-    private static int index = 0;
-    private static boolean shouldShow = false;
-    private static boolean tryingEnable = false;
-    private static long lastForceClose = 0;
-    private static StringBuilder log = new StringBuilder();
-    private static HashSet<Integer> toBeKilled = new HashSet<>();
-
-    private static BlockPos ghostBlockPos = new BlockPos(0, 0, 0);
-
-    static {
-        for (int i = 0; i < positions.size(); i++)
-            graph.put(i, new ArrayList<>());
-        for (Pair<Integer, Integer> edge : edges) {
-            graph.get(edge.getKey()).add(edge.getValue());
-        }
-    }
-
-    private Thread runningThread = null;
-
-    private static void stop() {
-        ControlUtils.stopMoving();
-        if (should) {
-            should = false;
-            ChatLib.chat("Auto Sneaky Creeper &cdeactivated");
-            if (!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) return;
-            new Thread(() -> {
-                try {
-                    tryingEnable = true;
-                    ChatLib.chat("Waiting 2s for re-enable...");
-                    Thread.sleep(2000);
-                    if (TimeUtils.curTime() - lastForceClose > 2022) {
-                        ChatLib.chat("Re-enabling...");
-                        should = true;
-                    } else {
-                        should = false;
-                    }
-                    tryingEnable = false;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }
-    }
-
-    public static int getSize() {
-        return indexes.size();
-    }
-
-    // return added set for killed
-    private static HashSet<Integer> dfs(int index, double cap, HashSet<Integer> killed, List<EntityCreeper> creepers) {
-        if (cap < 0) return new HashSet<>();
-
-        HashSet<Integer> result = new HashSet<>(killed);
-        for (int next : graph.get(index)) {
-            double dis = distanceBetween(index, next);
-            HashSet<Integer> added = dfs(next, cap - dis, killed, creepers);
-            HashSet<Integer> along = getCreepersAlong(index, next, killed, added, creepers);
-            if (result.size() < added.size() + along.size()) {
-                added.addAll(along);
-                result = added;
-            }
-        }
-        return result;
-    }
-
-    private static double distanceBetween(int from, int to) {
-        return Math.sqrt(positions.get(from).distanceSq(positions.get(to)));
-    }
-
-    private static HashSet<Integer> getCreepersAlong(int s, int t, HashSet<Integer> s1, HashSet<Integer> s2, List<EntityCreeper> creepers) {
-        BlockPos from = positions.get(s);
-        BlockPos to = positions.get(t);
-        HashSet<Integer> res = new HashSet<>();
-        int MAX_DELTA = Configs.SneakySplit;
-        for (int delta = 0; delta <= MAX_DELTA; delta++) {
-            Vector3d v = new Vector3d(from.getX() + 0.5, from.getY() + 0.5, from.getZ() + 0.5);
-            Vector3d diff = new Vector3d(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ());
-            diff.scale(delta * 1.0 / MAX_DELTA);
-            v.add(diff);
-            // calculate from v
-            for (EntityCreeper creeper : creepers)
-                if (creeper.getDistance(v.x, v.y, v.z) < Configs.SneakySearchRadius / 10F)
-                    res.add(creeper.getEntityId());
-        }
-        return res;
-    }
-
-    private static List<EntityCreeper> getCreepers() {
-        List<Entity> list = EntityUtils.getEntities();
-        List<EntityCreeper> res = new ArrayList<>();
-        for (Entity entity : list) {
-            if (!(entity instanceof EntityCreeper)) continue;
-            EntityCreeper e = ((EntityCreeper) entity);
-            if (e.getHealth() < 1) continue;
-            res.add(e);
-        }
-        return res;
-    }
 
     private static void translateTo(double x, double z) {
         RenderUtils.translate(
@@ -218,161 +99,39 @@ public class AutoSneakyCreeper {
         );
     }
 
-    public static void printLog() {
-        System.err.println("AutoSneakyCreeper Log:");
-        System.err.println(log);
-        System.err.println();
+    @Override
+    public ArrayList<BlockPos> getPositions() {
+        return positions;
     }
 
-    @SubscribeEvent
-    public void onTick(TickEndEvent event) {
-        if (!Checker.enabled) return;
-        if ((!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) && should) stop();
-        if (keyBind.isPressed()) {
-            // re-enable
-            if (!should && tryingEnable) {
-                lastForceClose = TimeUtils.curTime();
-                ChatLib.chat("Stopped from re-enabling.");
-                return;
-            }
-
-            should = !should;
-            if (should) {
-                if (!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) stop();
-                ChatLib.chat("Auto Sneaky Creeper &aactivated");
-            } else {
-                goingTo = null;
-                stop();
-            }
-        }
-        if (!should) return;
-        if (runningThread != null && runningThread.isAlive()) return;
-        runningThread = new Thread(() -> {
-            try {
-                ChatLib.chat("Starting a new Thread...");
-                if (goingTo == null) {
-                    shouldShow = true;
-                    goingTo = positions.get(index);
-                    ChatLib.chat("Start moving automatically.");
-                    ControlUtils.stopMoving();
-                    shouldShow = false;
-                    Thread.sleep(1000); // waiting for fall down
-
-                    ControlUtils.face(positions.get(index));
-                }
-                while (should) {
-                    goingTo = positions.get(index);
-                    ControlUtils.holdForward();
-                    Thread facingThread = null;
-
-                    // stuck detection
-                    BlockPos lastDetectPos = getPlayer().getPosition();
-                    long lastTime = TimeUtils.curTime();
-
-                    while (MathUtils.distanceSquareFromPlayer(
-                            goingTo.getX(), getY(getPlayer()) + 1.5F, goingTo.getZ())
-                            > 3.5 * 3.5 && should) {
-                        BlockPos pos = getPlayer().getPosition();
-                        if (pos.getX() != lastDetectPos.getX() || lastDetectPos.getZ() != pos.getZ()) {
-                            lastDetectPos = pos;
-                            lastTime = TimeUtils.curTime();
-                        }
-                        if (TimeUtils.curTime() - lastTime > 4000) ControlUtils.jump();
-                        if (TimeUtils.curTime() - lastTime > 6000) {
-                            Integer integer = indexes.pollLast();
-                            if (integer == null) {
-                                stop();
-                                getPlayer().playSound("random.successful_hit", 1000, 1);
-                                return;
-                            }
-                            index = integer;
-                            goingTo = positions.get(index);
-                            ChatLib.chat("Backwards 1 step!");
-                            lastTime = TimeUtils.curTime();
-                        }
-
-                        if (facingThread == null || !facingThread.isAlive()) {
-                            facingThread = new Thread(() -> {
-                                try {
-                                    ControlUtils.faceSlowly(goingTo.getX(),
-                                            getY(getPlayer()) + getPlayer().getEyeHeight(), goingTo.getZ());
-                                } catch (Exception e) {
-                                    stop();
-                                    getPlayer().playSound("random.successful_hit", 1000, 1);
-                                    BlockPos playerPos = getPlayer().getPosition();
-                                    if (playerPos.distanceSq(ghostBlockPos) < 2 * 2) {
-                                        try {
-                                            ControlUtils.moveBackward(200);
-                                        } catch (InterruptedException e1) {
-                                            e1.printStackTrace();
-                                        }
-                                    }
-                                    ghostBlockPos = playerPos;
-                                }
-                            });
-                            facingThread.start();
-                        }
-
-                        // stop if there's creeper nearby
-                        while (existCreeperBeside() && should) {
-                            ControlUtils.stopMoving();
-                            Thread.sleep(20);
-                        }
-                        if (!should) return;
-                        ControlUtils.holdForward();
-                        // jump if need
-                        if (goingTo.getY() > getY(getPlayer()))
-                            ControlUtils.jump();
-                        else ControlUtils.releaseJump();
-                        // just move
-                        Thread.sleep(20);
-                    }
-                    if (should) {
-                        indexes.offerLast(index);
-                        if (indexes.size() > 100) indexes.pollFirst();
-                        index = getNext(index);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        runningThread.start();
+    @Override
+    public ArrayList<Pair<Integer, Integer>> getEdges() {
+        return edges;
     }
 
-    private int getNext(int index) {
-        int res = -1;
-        List<EntityCreeper> list = getCreepers();
-        ArrayList<Integer> nextIndexes = new ArrayList<>();
-        ArrayList<HashSet<Integer>> toKilledCreepers = new ArrayList<>();
-        double MAX_LEN = Configs.SNMaxLen;
-        log.append("Getting next: " + index + "\n");
-        for (int next : graph.get(index)) {
-            HashSet<Integer> along = getCreepersAlong(index, next, new HashSet<>(), new HashSet<>(), list);
-            HashSet<Integer> search = dfs(next, MAX_LEN - distanceBetween(index, next), along, list);
-            along.addAll(search);
-            if (along.size() > res) {
-                res = along.size();
-                nextIndexes = new ArrayList<>();
-                toKilledCreepers = new ArrayList<>();
-                nextIndexes.add(next);
-                toKilledCreepers.add(along);
-            } else if (along.size() == res) {
-                nextIndexes.add(next);
-                toKilledCreepers.add(along);
-            }
-            log.append("   next: " + next + ", along: " + (along.size() - search.size())
-                    + ", search: " + search.size() + ", size " + nextIndexes.size() + "\n");
-        }
-        int ind = (int) (nextIndexes.size() * Math.random());
-        toBeKilled = toKilledCreepers.get(ind);
-        return nextIndexes.get(ind);
+    public boolean enabled() {
+        return Configs.AutoSneakyCreeper && SkyblockUtils.isInGunpowderMines();
+    }
+
+    @Override
+    public String getName() {
+        return "Auto Sneaky Creeper";
+    }
+
+    @Override
+    public KeyBind getKeyBind() {
+        return new KeyBind(getName(), Keyboard.KEY_NONE);
+    }
+
+    @Override
+    public double getJudgeDistance() {
+        return 3.5;
     }
 
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Pre event) {
         if (!Checker.enabled) return;
-        if (!Configs.AutoSneakyCreeper || !SkyblockUtils.isInGunpowderMines()) return;
+        if (!enabled()) return;
         if (!Configs.SneakyCreeperMap) return;
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
         RenderUtils.start();
@@ -415,10 +174,6 @@ public class AutoSneakyCreeper {
                     Configs.SNMapScale, Configs.SNMapScale);
         }
         RenderUtils.end();
-    }
-
-    private boolean existCreeperBeside() {
-        return getCreepers().stream().anyMatch(e -> MathUtils.distanceSquareFromPlayer(e) < 5 * 5);
     }
 
     @SubscribeEvent
@@ -465,15 +220,6 @@ public class AutoSneakyCreeper {
                 );
             }
             GuiUtils.disableESP();
-        }
-    }
-
-    @SubscribeEvent
-    public void onLoad(WorldEvent.Load event) {
-        log = new StringBuilder();
-        toBeKilled.clear();
-        for (int i = 0; i < positions.size(); i++) {
-            log.append("Graph log - " + i + " " + graph.get(i).size() + "\n");
         }
     }
 }

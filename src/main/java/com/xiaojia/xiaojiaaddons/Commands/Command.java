@@ -111,7 +111,7 @@ public class Command extends CommandBase {
                     break;
                 }
             case "report":
-                AutoSneakyCreeper.printLog();
+                XiaojiaAddons.autoSneakyCreeper.printLog();
                 TabUtils.printTab();
                 Dungeon.showDungeonInfo();
                 AutoItemFrame.printLog();

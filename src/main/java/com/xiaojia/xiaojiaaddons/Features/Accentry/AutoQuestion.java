@@ -47,7 +47,7 @@ public class AutoQuestion {
         if (!Checker.enabled) return;
         if (!Configs.AutoQuestion) return;
         String message = ChatLib.removeFormatting(event.message.getUnformattedText());
-        if (Arrays.asList(answer.get(currentQuestion)).contains(message)) {
+        if (answer.containsKey(currentQuestion) && Arrays.asList(answer.get(currentQuestion)).contains(message)) {
             new Thread(() -> {
                 try {
                     Thread.sleep(Configs.AutoQuestionCD);
