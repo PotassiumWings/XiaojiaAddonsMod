@@ -72,6 +72,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Entity Join Message", parent = "Dev Mode")
     public static boolean EntityJoinEvent = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Packet Sent Message", parent = "Dev Mode")
+    public static boolean PacketSent = false;
+
     @Property(type = Property.Type.FOLDER, name = "Dangerous Features", parent = "Misc",
             description = "DO NOT USE THESE FEATURES.")
     public static boolean DangerousFeatures = false;

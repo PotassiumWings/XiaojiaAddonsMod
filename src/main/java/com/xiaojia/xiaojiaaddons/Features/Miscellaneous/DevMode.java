@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Miscellaneous;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
+import com.xiaojia.xiaojiaaddons.Events.PacketSendEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
@@ -87,6 +88,14 @@ public class DevMode {
         if (!SessionUtils.isDev()) return;
         if (!Configs.EntityJoinEvent) return;
         ChatLib.debug(getLog(event.entity));
+    }
+
+    @SubscribeEvent
+    public void onPacketSent(PacketSendEvent event) {
+        if (!Checker.enabled) return;
+        if (!SessionUtils.isDev()) return;
+        if (!Configs.PacketSent) return;
+        ChatLib.debug(event.packet.getClass().toString());
     }
 
     public static final ArrayList<DisplayLine> lines = new ArrayList<>();
