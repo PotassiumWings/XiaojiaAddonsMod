@@ -29,7 +29,7 @@ public class AutoEat {
 
         int level = player.getFoodStats().getFoodLevel();
         long cur = TimeUtils.curTime();
-        if (level == 0 && cur - lastEat > 5 * 1000) {
+        if (level < 6 && cur - lastEat > 5 * 1000) {
             int index = -1;
             for (int i = 0; i < 9; i++) {
                 ItemStack itemStack = inventory.getItemInSlot(inventory.getSize() - 9 + i);
@@ -40,11 +40,22 @@ public class AutoEat {
             }
             if (index == -1) return;
             lastEat = cur;
+            int curIndex = ControlUtils.getHeldItemIndex();
             ControlUtils.setHeldItemIndex(index);
-            ItemStack held = player.inventory.getCurrentItem();
+            ItemStack held = inventory.getItemInSlot(inventory.getSize() - 9 + index);
             if (XiaojiaAddons.mc.playerController.sendUseItem(player, getWorld(), held)) {
                 XiaojiaAddons.mc.entityRenderer.itemRenderer.resetEquippedProgress2();
             }
+            new Thread(() -> {
+                try {
+                    ControlUtils.holdRightClick();
+                    Thread.sleep(500);
+                    ControlUtils.setHeldItemIndex(curIndex);
+                    ControlUtils.releaseRightClick();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
         }
     }
 }

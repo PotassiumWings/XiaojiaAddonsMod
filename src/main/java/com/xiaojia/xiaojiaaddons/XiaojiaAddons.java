@@ -13,6 +13,7 @@ import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoBack;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoClick;
+import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoEat;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMeat;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMiNi;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMiQi;
@@ -240,6 +241,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(mini);
         MinecraftForge.EVENT_BUS.register(miqi);
         MinecraftForge.EVENT_BUS.register(new AutoBack());
+        MinecraftForge.EVENT_BUS.register(new AutoEat());
 
         // Utils
         MinecraftForge.EVENT_BUS.register(new ControlUtils());
