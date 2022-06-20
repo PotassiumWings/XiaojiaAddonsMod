@@ -43,7 +43,11 @@ public class Inventory {
 
     public final ItemStack getItemInSlot(int slot) {
         if (getSize() <= slot) return null;
-        return container.getSlot(slot).getStack();
+        try {
+            return container.getSlot(slot).getStack();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public final String getName() {
