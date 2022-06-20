@@ -16,6 +16,7 @@
         "MixinItemStack",
         "MixinEntity",
         "MixinEntityPlayerSP",
+        "MixinEntityPlayer",
         "MixinEntityRenderer",
         "MixinNetworkManager",
         "MixinNetHandlerPlayClient",
