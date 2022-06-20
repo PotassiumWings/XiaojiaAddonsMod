@@ -29,7 +29,7 @@ public class AutoEat {
 
         int level = player.getFoodStats().getFoodLevel();
         long cur = TimeUtils.curTime();
-        if (level < 6 && cur - lastEat > 5 * 1000) {
+        if (level <= Configs.AutoEatHunger && cur - lastEat > 5 * 1000) {
             int index = -1;
             for (int i = 0; i < 9; i++) {
                 ItemStack itemStack = inventory.getItemInSlot(inventory.getSize() - 9 + i);
@@ -49,7 +49,7 @@ public class AutoEat {
             new Thread(() -> {
                 try {
                     ControlUtils.holdRightClick();
-                    Thread.sleep(500);
+                    Thread.sleep(200);
                     ControlUtils.setHeldItemIndex(curIndex);
                     ControlUtils.releaseRightClick();
                 } catch (Exception e) {

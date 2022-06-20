@@ -60,6 +60,8 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Eat", parent = "Combat Related")
     public static boolean AutoEat = false;
 
+    @Property(type = Property.Type.NUMBER, name = "Auto Eat Hunger", parent = "Combat Related", min = 0, max = 19)
+    public static int AutoEatHunger = 14;
 
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")
