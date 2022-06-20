@@ -2,42 +2,64 @@ package com.xiaojia.xiaojiaaddons.Config;
 
 public class Configs {
     // Accentry
-    @Property(type = Property.Type.FOLDER, name = "Aria")
+    @Property(type = Property.Type.FOLDER, name = "Accentry")
     public static boolean AriaEnabled = false;
 
-    @Property(type = Property.Type.FOLDER, name = "Accentry", parent = "Aria")
-    public static boolean AccentryEnabled = false;
+    @Property(type = Property.Type.FOLDER, name = "Auto Left Click", parent = "Accentry")
+    public static boolean AutoLeftClickEnabled = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Left Click", parent = "Accentry", description = "KeyBind.")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Left Click Enable", parent = "Auto Left Click", description = "KeyBind.")
     public static boolean AutoLeftClick = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Left Click CPS", parent = "Accentry", min = 1, max = 20)
+    @Property(type = Property.Type.NUMBER, name = "Auto Left Click CPS", parent = "Auto Left Click", min = 1, max = 20)
     public static int AutoClickCPS = 12;
 
-    @Property(type = Property.Type.TEXT, name = "Kill All Contains", parent = "Accentry")
+    @Property(type = Property.Type.FOLDER, name = "Kill All", parent = "Accentry")
+    public static boolean KilAllEnabled = false;
+
+    @Property(type = Property.Type.TEXT, name = "Kill All Contains", parent = "Kill All")
     public static String KillAllName = "Pig";
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Meat", parent = "Accentry")
+    @Property(type = Property.Type.NUMBER, name = "Kill All Stop Radius", parent = "Kill All", min = 1, max = 40)
+    public static int KillAllStopRadius = 15;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Kill All Stop When Player Neaby", parent = "Kill All")
+    public static boolean KillAllStop = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Trades", parent = "Accentry")
+    public static boolean Trades = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Meat", parent = "Trades")
     public static boolean AutoMeat = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Question", parent = "Accentry")
+    @Property(type = Property.Type.FOLDER, name = "Auto Question", parent = "Accentry")
+    public static boolean AutoQuestionEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Question Enable", parent = "Auto Question")
     public static boolean AutoQuestion = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Question CD", parent = "Accentry", suffix = " ms",
+    @Property(type = Property.Type.NUMBER, name = "Auto Question CD", parent = "Auto Question", suffix = " ms",
             min = 0, max = 2000, step = 20)
     public static int AutoQuestionCD = 1000;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Fast Eat", parent = "Accentry")
+    @Property(type = Property.Type.FOLDER, name = "Combat Related", parent = "Accentry")
+    public static boolean CombatRelated = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Fast Eat", parent = "Combat Related")
     public static boolean FastUse = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Ni", parent = "Accentry")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Ni", parent = "Combat Related")
     public static boolean AutoMiNi = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Qi", parent = "Accentry")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Qi", parent = "Combat Related")
     public static boolean AutoMiQi = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Back", parent = "Accentry")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Back", parent = "Combat Related")
     public static boolean AutoBack = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Eat", parent = "Combat Related")
+    public static boolean AutoEat = false;
+
 
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")

@@ -20,7 +20,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class KillAll {
     private final KeyBind keyBind = new KeyBind("Kill All", Keyboard.KEY_NONE);
-    private boolean should = false;
+    private static boolean should = false;
     private long lastClicked = 0;
 
     @SubscribeEvent
@@ -47,6 +47,17 @@ public class KillAll {
                 Entity entity = entities.get(i);
                 XiaojiaAddons.mc.playerController.attackEntity(getPlayer(), entity);
             }
+        }
+    }
+
+    public static void onPlayerNearby(Entity player) {
+        if (!Configs.KillAllStop) return;
+        int r = Configs.KillAllStopRadius;
+        if (MathUtils.distanceSquareFromPlayer(player) > r * r) return;
+        if (should) {
+            should = false;
+            getPlayer().playSound("random.successful_hit", 1000, 1);
+            ChatLib.chat("Kill All &cdeactivated");
         }
     }
 }
