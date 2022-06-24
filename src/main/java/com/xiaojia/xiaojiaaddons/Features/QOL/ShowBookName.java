@@ -33,7 +33,9 @@ public class ShowBookName {
         ItemStack itemStack = event.itemStack;
         if (itemStack == null || !itemStack.hasDisplayName()) return;
         String name = ChatLib.removeFormatting(itemStack.getDisplayName()).toLowerCase();
-        if (!name.startsWith("enchanted book")) return;
+        if (!itemStack.getUnlocalizedName().contains("enchantedBook")) return;
+        if (!name.startsWith("enchanted book") && !(inventory.getName().contains("Auction") || inventory.getName().contains("Bids"))) return;
+
         String nameString = "";
         String levelString = "";
         if (cachedStrings.containsKey(itemStack)) {

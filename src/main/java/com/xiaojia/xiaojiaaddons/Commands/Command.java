@@ -15,6 +15,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.Patterns;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.BugReport;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.CommandKeybind;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.MusicRune;
 import com.xiaojia.xiaojiaaddons.Features.Nether.Dojo.DojoUtils;
@@ -24,8 +25,8 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.InCombatQOL;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ShowItem;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmVertical;
-import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Blaze;
+import com.xiaojia.xiaojiaaddons.Features.QOL.ChestFiller;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Tests.CopyWorldInfo;
 import com.xiaojia.xiaojiaaddons.Tests.TestM7;
@@ -187,6 +188,30 @@ public class Command extends CommandBase {
             case "debug":
                 XiaojiaAddons.setDebug();
                 break;
+            case "fill":
+                ChestFiller.toggle();
+                break;
+            case "keybind":
+                switch (strings.length) {
+                    case 1:
+                    case 2:
+                        ChatLib.chat(CommandKeybind.getUsage());
+                        break;
+                    default:
+                        String command = String.join(" ", Arrays.copyOfRange(strings, 2, strings.length));
+                        if (strings[1].equalsIgnoreCase("add")) CommandKeybind.add(command);
+                        else if (strings[1].equalsIgnoreCase("remove")) CommandKeybind.remove(command);
+                        else if (strings[1].equalsIgnoreCase("removeWithKey")) {
+                            command = String.join(" ", Arrays.copyOfRange(strings, 3, strings.length));
+                            CommandKeybind.remove(command, strings[2]);
+                        }
+                        else ChatLib.chat(CommandKeybind.getUsage());
+                        break;
+                }
+                break;
+            case "keybinds":
+                CommandKeybind.list();
+                break;
             case "room":
                 ChatLib.chat("Current Room: " + Dungeon.currentRoom);
                 break;
@@ -283,6 +308,7 @@ public class Command extends CommandBase {
                 "&c/xj show dungarmor&b, &c/xj show dungtrash&b, and &c/xj show runes&b to show auto-sell dungeon armors/dungeon trash/runes seperately.\n" +
                 "&c/xj rename&b to rename items.\n" +
                 "&c/xj showitem&b to show held item.\n" +
+                "&c/xj keybind&b to set keybinds.\n" +
                 "&c/xj report&b to report a bug.";
     }
 
