@@ -194,7 +194,6 @@ public class Fishing {
                     getPlayer().playSound("random.successful_hit", 1000, 1);
                     stopMove();
                 } catch (InterruptedException ignored) {
-
                 }
             });
             pushingThread.start();

@@ -53,6 +53,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.TeleportMaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.ThreeWeirdos;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.SecretChecker;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShadowAssassinESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShowHiddenMobs;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.SimonSays;
@@ -64,6 +65,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChatCopy;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestFiller;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestProfit;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.CommandKeybind;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.DevMode;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
@@ -121,6 +123,7 @@ import com.xiaojia.xiaojiaaddons.Features.QOL.ShowBookName;
 import com.xiaojia.xiaojiaaddons.Features.QOL.ShowEtherwarp;
 import com.xiaojia.xiaojiaaddons.Features.QOL.SwordSwap;
 import com.xiaojia.xiaojiaaddons.Features.QOL.TransferBack;
+import com.xiaojia.xiaojiaaddons.Features.Remote.API.ApiKey;
 import com.xiaojia.xiaojiaaddons.Features.Remote.ClientSocket;
 import com.xiaojia.xiaojiaaddons.Features.Remote.DungeonLoot;
 import com.xiaojia.xiaojiaaddons.Features.Remote.DupedItems;
@@ -290,6 +293,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new StarredMobESPBox());
         MinecraftForge.EVENT_BUS.register(new StonklessStonk());
         MinecraftForge.EVENT_BUS.register(new TrapChestESP());
+        MinecraftForge.EVENT_BUS.register(new SecretChecker());
         // map
         MinecraftForge.EVENT_BUS.register(new Dungeon());
         MinecraftForge.EVENT_BUS.register(new MapUpdater());
@@ -394,10 +398,14 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new LowestBin());
         MinecraftForge.EVENT_BUS.register(new DupedItems());
         MinecraftForge.EVENT_BUS.register(new ChestProfit());
+        MinecraftForge.EVENT_BUS.register(new ApiKey());
 
         // Tests
 //        MinecraftForge.EVENT_BUS.register(new TestM7());
         MinecraftForge.EVENT_BUS.register(new DevWater());
+
+        MinecraftForge.EVENT_BUS.register(new CommandKeybind());
+        CommandKeybind.loadKeybinds();
 
         for (KeyBind keyBind : KeyBindUtils.keyBinds) {
             ClientRegistry.registerKeyBinding(keyBind.mcKeyBinding());
