@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.util.List;
 
 public class AutoLeap {
-    //TODO: add Infinileap
     private final String[] names = new String[10];
     private long lastClick = 0;
 
