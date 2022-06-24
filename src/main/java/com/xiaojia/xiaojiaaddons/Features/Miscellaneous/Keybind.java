@@ -13,7 +13,7 @@ public class Keybind {
 
     public Keybind(String command, int key) {
         this.command = command;
-        this.bind = new KeyBinding(command, key, "Keybinds - XiaoJiaAddons");
+        this.bind = new KeyBinding(command, key, "Addons - XiaojiaAddons KeyBind");
         ClientRegistry.registerKeyBinding(this.bind);
     }
 

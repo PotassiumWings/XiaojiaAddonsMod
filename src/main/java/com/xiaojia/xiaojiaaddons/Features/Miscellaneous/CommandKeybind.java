@@ -113,7 +113,7 @@ public class CommandKeybind {
                     Keybind.keybinds.add(new Keybind(keybind.getCommand(), keybind.getBind().getKeyCode()));
             }
         } catch (Exception exception) {}
-        KeyBinding h = new KeyBinding("Use /xj keybind to add keybinds!", 0, "Keybinds - XiaoJiaAddons");
+        KeyBinding h = new KeyBinding("Use /xj keybind to add keybinds!", 0, "Addons - XiaojiaAddons KeyBind");
         ClientRegistry.registerKeyBinding(h);
 
     }
