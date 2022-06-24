@@ -64,7 +64,7 @@ public class CommandKeybind {
             ChatLib.chat("No such keybind! Are the cases matching correctly?");
             return;
         }
-        mc.gameSettings.keyBindings = (KeyBinding[])ArrayUtils.removeElement((Object[])mc.gameSettings.keyBindings, bind.getBind());
+        mc.gameSettings.keyBindings = (KeyBinding[]) ArrayUtils.removeElement((Object[]) mc.gameSettings.keyBindings, bind.getBind());
         Keybind.keybinds.remove(bind);
         saveKeybinds();
         ChatLib.chat("&cRemoved&b keybind \"&e" + command + "&b\"!");
