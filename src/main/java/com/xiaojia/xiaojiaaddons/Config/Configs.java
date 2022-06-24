@@ -14,7 +14,9 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Auto Left Click CPS", parent = "Auto Left Click", min = 1, max = 20)
     public static int AutoClickCPS = 12;
 
-    @Property(type = Property.Type.FOLDER, name = "Kill All", parent = "Accentry")
+    @Property(type = Property.Type.FOLDER, name = "Kill All", parent = "Accentry", description = "&c&lVERY DANGEROUS.\n" +
+            "&c&lDON'T USE THIS IN ANY SERVER WITH ANTI CHEAT.\n" +
+            "Automatically attack nearby entities without aiming or swinging.")
     public static boolean KilAllEnabled = false;
 
     @Property(type = Property.Type.TEXT, name = "Kill All Contains", parent = "Kill All")
@@ -29,7 +31,8 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Trades", parent = "Accentry")
     public static boolean Trades = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Meat", parent = "Trades")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Meat", parent = "Trades",
+            description = "Automatically put meat in merchant menu.")
     public static boolean AutoMeat = false;
 
     @Property(type = Property.Type.FOLDER, name = "Auto Question", parent = "Accentry")
@@ -45,7 +48,10 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Combat Related", parent = "Accentry")
     public static boolean CombatRelated = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Fast Eat", parent = "Combat Related")
+    @Property(type = Property.Type.BOOLEAN, name = "Fast Eat", parent = "Combat Related",
+            description = "&c&lVERY DANGEROUS.\n" + "" +
+                    "&c&lDON'T USE THIS IN ANY SERVER WITH ANTI CHEAT.\n" +
+                    "Right click a food, and you ate it.")
     public static boolean FastUse = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Ni", parent = "Combat Related")
@@ -54,10 +60,11 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Qi", parent = "Combat Related")
     public static boolean AutoMiQi = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Back", parent = "Combat Related")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Back", parent = "Combat Related", description = "WIP")
     public static boolean AutoBack = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Eat", parent = "Combat Related")
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Eat", parent = "Combat Related",
+            description = "Auto eat when low saturation.")
     public static boolean AutoEat = false;
 
     @Property(type = Property.Type.NUMBER, name = "Auto Eat Hunger", parent = "Combat Related", min = 0, max = 19)
