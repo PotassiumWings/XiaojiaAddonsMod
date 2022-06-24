@@ -103,11 +103,11 @@ public class SecretChecker {
             end = false;
             Matcher matcher = Pattern.compile("Secrets Found: (\\d+)").matcher(TabUtils.getNames().get(31));
             if (matcher.find()) {
-                if (Configs.MapEnabled) ChatLib.chat("&fTotal Secrets Found: (&b" + matcher.group(1) + "&f/&b" + Dungeon.totalSecrets + "&f)");
+                if (Configs.MapEnabled) ChatLib.chat("&fSecrets Found: (&b" + matcher.group(1) + "&f/&b" + Dungeon.totalSecrets + "&f)");
                 else ChatLib.chat("&fSecrets Found: &b" + matcher.group(1));
             } else ChatLib.chat("&fSecrets Found:");
             for (int i = 0; i < playerNum; i++) {
-                ChatLib.chat("&f" + players.get(i) + ": &b" + (secrets.get(i + playerNum) - secrets.get(i)));
+                ChatLib.chat("  &f" + players.get(i) + ": &b" + (secrets.get(i + playerNum) - secrets.get(i)));
             }
         }
     }
