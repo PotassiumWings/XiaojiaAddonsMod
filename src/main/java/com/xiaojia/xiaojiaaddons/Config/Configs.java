@@ -1470,7 +1470,7 @@ public class Configs {
                     "non-starred item is in salvage menu.")
     public static boolean AutoClickSalvage = false;
 
-    //SecretChecker
+    // SecretChecker
     @Property(type = Property.Type.BOOLEAN, name = "Secret Checker", parent = "Other Dungeon Features",
             description = "Fetch secrets found before and after dungeon run\n" +
                     "to calculate secrets found during that run\n" +

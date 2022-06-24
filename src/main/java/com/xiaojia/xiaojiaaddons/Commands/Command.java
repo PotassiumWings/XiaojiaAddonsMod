@@ -308,6 +308,7 @@ public class Command extends CommandBase {
                 "&c/xj show dungarmor&b, &c/xj show dungtrash&b, and &c/xj show runes&b to show auto-sell dungeon armors/dungeon trash/runes seperately.\n" +
                 "&c/xj rename&b to rename items.\n" +
                 "&c/xj showitem&b to show held item.\n" +
+                "&c/xj keybind&b to set keybinds.\n" +
                 "&c/xj report&b to report a bug.";
     }
 

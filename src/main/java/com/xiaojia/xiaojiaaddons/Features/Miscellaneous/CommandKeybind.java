@@ -32,7 +32,8 @@ public class CommandKeybind {
     public static String getUsage() {
         return "&c/xj keybind add &ecommand&b to add keybind.\n" +
                 "&c/xj keybind remove &ecommand&b to remove keybind.\n" +
-                "&c/xj keybinds &bto list all keybinds.";
+                "&c/xj keybinds &bto list all keybinds.\n" +
+                "&eKeybinds are set in Options -> Controls.";
     }
 
     public static void list() {
@@ -41,10 +42,6 @@ public class CommandKeybind {
             return;
         }
         for (Keybind keybind : Keybind.keybinds) {
-            /*
-            KeyEvent key = new KeyEvent;
-            key.setKeyCode(keybind.getBind().getKeyCode());
-            */
             IChatComponent chatComponent = new ChatComponentText(ChatLib.addColor("&9[XJA] > &e" + keybind.getCommand() + " &b(" + Keyboard.getKeyName(keybind.getBind().getKeyCode()) + ") &r&c&l[REMOVE]"));
             ChatStyle chatStyle = new ChatStyle();
             chatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/xj keybind removeWithKey " + keybind.getBind().getKeyCode() + " " + keybind.getCommand()));
@@ -55,14 +52,14 @@ public class CommandKeybind {
     }
 
     public static void add(String command) {
-        Keybind bind = new Keybind(command);
+        Keybind bind = new Keybind(command, 0);
         Keybind.keybinds.add(bind);
         saveKeybinds();
         ChatLib.chat("&aAdded&b keybind \"&e" + command + "&b\"!");
     }
 
     public static void remove(String command) {
-        Keybind bind = Keybind.getKeybindByName(command);
+        Keybind bind = Keybind.getKeybind(command, -1);
         if (bind == null) {
             ChatLib.chat("No such keybind! Are the cases matching correctly?");
             return;
@@ -77,8 +74,7 @@ public class CommandKeybind {
         int key;
         try {
             key = Integer.parseInt(keyStr);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             ChatLib.chat("Not a number!");
             return;
         }
@@ -106,9 +102,9 @@ public class CommandKeybind {
 
     public static void loadKeybinds() {
         try {
-            File XiaoJiaKeybinds = new File(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg");
-            if (!XiaoJiaKeybinds.exists()) {
-                XiaoJiaKeybinds.createNewFile();
+            File xiaoJiaKeybinds = new File(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg");
+            if (!xiaoJiaKeybinds.exists()) {
+                xiaoJiaKeybinds.createNewFile();
             } else {
                 Reader reader = Files.newBufferedReader(Paths.get(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg"));
                 Type type = (new TypeToken<ArrayList<Keybind>>() {}).getType();
@@ -126,7 +122,7 @@ public class CommandKeybind {
         try {
             String json = (new Gson()).toJson(Keybind.keybinds);
             Path path = Paths.get(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg");
-            Files.write(path, json.getBytes(StandardCharsets.UTF_8)); //todo: save command only
+            Files.write(path, json.getBytes(StandardCharsets.UTF_8));
         } catch (Exception exception) {}
     }
 }

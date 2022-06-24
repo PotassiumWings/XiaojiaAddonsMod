@@ -1,23 +1,20 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons;
 
-
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon;
 import com.xiaojia.xiaojiaaddons.Features.Remote.API.ApiException;
 import com.xiaojia.xiaojiaaddons.Features.Remote.API.HypixelPlayerData;
 import com.xiaojia.xiaojiaaddons.Features.Remote.API.PhraseSecrets;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.MinecraftUtils;
 import com.xiaojia.xiaojiaaddons.utils.TabUtils;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.xiaojia.xiaojiaaddons.Features.Dungeons.Map.Dungeon.totalSecrets;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getUUIDFromName;
-
 
 public class SecretChecker {
     private static final String rankPattern = "(?:\\[VIP\\+?] |\\[MVP\\+*] |\\[YOUTUBE] |\\[GM] |\\[ADMIN] |)";
@@ -36,11 +33,10 @@ public class SecretChecker {
         new Thread(() -> {
             for (String player : players) {
                 try {
-                    String uuid = getUUIDFromName(player);
+                    String uuid = MinecraftUtils.getUUIDFromName(player);
                     HypixelPlayerData playerData = new HypixelPlayerData(uuid, Configs.APIKey);
                     PhraseSecrets secret = new PhraseSecrets(playerData.getPlayerData());
                     secrets.add(secret.getSecrets());
-                    //ChatLib.chat(String.valueOf(secret.getSecrets()));
                 } catch (ApiException e) {
                     ChatLib.chat(e.getMessage());
                 }
@@ -98,8 +94,6 @@ public class SecretChecker {
                 if (matcher.find()) players.add(matcher.group("name"));
             }
         }
-        //if (event.message.toString().startsWith("&r&r&6>&e&lEXTRASTATS&6<")) CommandsUtils.addCommand("/showextrastats");
-        //if (msg.startsWith("SecretsFound:"))
         if (message.equals("                             > EXTRA STATS <")) {
                 if(players == null) return;
                 if(secrets == null) return;
@@ -109,7 +103,7 @@ public class SecretChecker {
             end = false;
             Matcher matcher = Pattern.compile("Secrets Found: (\\d+)").matcher(TabUtils.getNames().get(31));
             if (matcher.find()) {
-                if (Configs.MapEnabled) ChatLib.chat("&fTotal Secrets Found: (&b" + matcher.group(1) + "&f/&b" + totalSecrets + "&f)");
+                if (Configs.MapEnabled) ChatLib.chat("&fTotal Secrets Found: (&b" + matcher.group(1) + "&f/&b" + Dungeon.totalSecrets + "&f)");
                 else ChatLib.chat("&fSecrets Found: &b" + matcher.group(1));
             } else ChatLib.chat("&fSecrets Found:");
             for (int i = 0; i < playerNum; i++) {

@@ -96,7 +96,7 @@ public class ColorName {
             IChatComponent component = siblings.get(i);
             ClickEvent clickEvent = component.getChatStyle().getChatClickEvent();
             HoverEvent hoverEvent = component.getChatStyle().getChatHoverEvent();
-            if (clickEvent == null && hoverEvent == null) {
+            if ((clickEvent == null || clickEvent.getAction() == ClickEvent.Action.SUGGEST_COMMAND) && hoverEvent == null) {
                 str.append(component.getFormattedText());
             } else {
                 res.add(new ChatComponentText(str.toString()));
