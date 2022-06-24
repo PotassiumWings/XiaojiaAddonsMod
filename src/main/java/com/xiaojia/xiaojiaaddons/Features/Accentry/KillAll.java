@@ -26,6 +26,7 @@ public class KillAll {
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
+        if (getWorld() == null) return;
         if (keyBind.isPressed()) {
             should = !should;
             ChatLib.chat(should ? "Kill All &aactivated" : "Kill All &cdeactivated");
