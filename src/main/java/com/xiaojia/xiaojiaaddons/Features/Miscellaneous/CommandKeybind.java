@@ -44,7 +44,7 @@ public class CommandKeybind {
             ChatLib.chat("You have no keybind.");
             return;
         }
-        for (XiaojiaKeyBind keybind : XiaojiaKeyBind.keyBinds) {
+        for (XiaojiaKeyBind keybind : XiaojiaKeyBind.keyBinds.values()) {
             IChatComponent chatComponent = new ChatComponentText(ChatLib.addColor("&9[XJA] > &e" + keybind.getCommand() + " &b(" + Keyboard.getKeyName(keybind.getBind().getKeyCode()) + ") &r&c&l[REMOVE]"));
             ChatStyle chatStyle = new ChatStyle();
             chatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/xj keybind removeWithKey " + keybind.getBind().getKeyCode() + " " + keybind.getCommand()));
@@ -56,11 +56,11 @@ public class CommandKeybind {
 
     public static void add(String command) {
         XiaojiaKeyBind bind = new XiaojiaKeyBind(command, 0);
-        if (XiaojiaKeyBind.keyBinds.contains(bind)) {
+        if (XiaojiaKeyBind.keyBinds.containsKey(command)) {
             ChatLib.chat("Keybind already exists!");
             return;
         }
-        XiaojiaKeyBind.keyBinds.add(bind);
+        XiaojiaKeyBind.keyBinds.put(command, bind);
         saveKeyBinds();
         ChatLib.chat("&aAdded&b keybind \"&e" + command + "&b\"!");
     }
@@ -72,7 +72,7 @@ public class CommandKeybind {
             return;
         }
         mc.gameSettings.keyBindings = (KeyBinding[]) ArrayUtils.removeElement((Object[]) mc.gameSettings.keyBindings, bind.getBind());
-        XiaojiaKeyBind.keyBinds.remove(bind);
+        XiaojiaKeyBind.keyBinds.remove(command);
         saveKeyBinds();
         ChatLib.chat("&cRemoved&b keybind \"&e" + command + "&b\"!");
     }
@@ -91,7 +91,7 @@ public class CommandKeybind {
             return;
         }
         mc.gameSettings.keyBindings = (KeyBinding[]) ArrayUtils.removeElement((Object[]) mc.gameSettings.keyBindings, bind.getBind());
-        XiaojiaKeyBind.keyBinds.remove(bind);
+        XiaojiaKeyBind.keyBinds.remove(command);
         saveKeyBinds();
         ChatLib.chat("&cRemoved&b keybind \"&e" + command + "&b\" (" + Keyboard.getKeyName(bind.getBind().getKeyCode()) + ") !");
     }
@@ -105,7 +105,7 @@ public class CommandKeybind {
                 }).getType();
                 HashMap<String, Integer> settingsFromConfig = (new Gson()).fromJson(reader, type);
                 for (Map.Entry<String, Integer> entry : settingsFromConfig.entrySet())
-                    XiaojiaKeyBind.keyBinds.add(new XiaojiaKeyBind(entry.getKey(), entry.getValue()));
+                    XiaojiaKeyBind.keyBinds.put(entry.getKey(), new XiaojiaKeyBind(entry.getKey(), entry.getValue()));
             }
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -118,7 +118,7 @@ public class CommandKeybind {
     public static void saveKeyBinds() {
         try {
             HashMap<String, Integer> convertedKeyBinds = new HashMap<>();
-            for (XiaojiaKeyBind keyBind : XiaojiaKeyBind.keyBinds)
+            for (XiaojiaKeyBind keyBind : XiaojiaKeyBind.keyBinds.values())
                 convertedKeyBinds.put(keyBind.getCommand(), keyBind.getBind().getKeyCode());
             String json = (new Gson()).toJson(convertedKeyBinds);
             Path path = Paths.get("config/XiaoJiaAddonsKeybinds.cfg");
@@ -131,7 +131,7 @@ public class CommandKeybind {
 
     @SubscribeEvent
     public void onKey(InputEvent.KeyInputEvent event) {
-        for (XiaojiaKeyBind keybind : XiaojiaKeyBind.keyBinds)
+        for (XiaojiaKeyBind keybind : XiaojiaKeyBind.keyBinds.values())
             if (keybind.getBind().isPressed()) {
                 if (keybind.getCommand().startsWith("/") &&
                         ClientCommandHandler.instance.executeCommand(mc.thePlayer, keybind.getCommand()) != 0) continue;

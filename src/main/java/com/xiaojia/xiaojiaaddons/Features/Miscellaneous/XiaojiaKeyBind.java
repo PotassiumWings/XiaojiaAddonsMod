@@ -3,10 +3,10 @@ package com.xiaojia.xiaojiaaddons.Features.Miscellaneous;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
-import java.util.HashSet;
+import java.util.HashMap;
 
 public class XiaojiaKeyBind {
-    public static HashSet<XiaojiaKeyBind> keyBinds = new HashSet<>();
+    public static HashMap<String, XiaojiaKeyBind> keyBinds = new HashMap<>();
 
     private final String command;
     private final KeyBinding bind;
@@ -15,6 +15,13 @@ public class XiaojiaKeyBind {
         this.command = command;
         this.bind = new KeyBinding(command, key, "Addons - XiaojiaAddons KeyBind");
         ClientRegistry.registerKeyBinding(this.bind);
+    }
+
+    public static XiaojiaKeyBind getKeybind(String name, int key) {
+        XiaojiaKeyBind keyBind = keyBinds.get(name);
+        if (keyBind != null && (key == -1 || keyBind.getBind().getKeyCode() == key))
+            return keyBind;
+        return null;
     }
 
     public boolean equals(Object o) {
@@ -34,13 +41,5 @@ public class XiaojiaKeyBind {
 
     public KeyBinding getBind() {
         return this.bind;
-    }
-
-    public static XiaojiaKeyBind getKeybind(String name, int key) {
-        for (XiaojiaKeyBind keyBind : keyBinds) {
-            if (keyBind.getCommand().equalsIgnoreCase(name) && (key == -1 || keyBind.getBind().getKeyCode() == key))
-                return keyBind;
-        }
-        return null;
     }
 }
