@@ -56,6 +56,10 @@ public class CommandKeybind {
 
     public static void add(String command) {
         XiaojiaKeyBind bind = new XiaojiaKeyBind(command, 0);
+        if (XiaojiaKeyBind.keyBinds.contains(bind)) {
+            ChatLib.chat("Keybind already exists!");
+            return;
+        }
         XiaojiaKeyBind.keyBinds.add(bind);
         saveKeyBinds();
         ChatLib.chat("&aAdded&b keybind \"&e" + command + "&b\"!");
