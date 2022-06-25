@@ -25,7 +25,6 @@ import java.util.List;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Spider extends RenderEntityESP {
     private static final String ARACHNEKEEPER_STRING = "Arachne's Keeper";

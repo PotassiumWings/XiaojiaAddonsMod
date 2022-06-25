@@ -11,7 +11,6 @@ import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.DisplayUtils;
 import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
-import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
@@ -340,7 +339,7 @@ class DragonInfo {
     }
 
     public boolean equals(Object o) {
-        if (o instanceof  DragonInfo) {
+        if (o instanceof DragonInfo) {
             return o.hashCode() == hashCode();
         }
         return false;

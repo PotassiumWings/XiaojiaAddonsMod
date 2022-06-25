@@ -3,7 +3,6 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Features.RenderEntityESP;
 import com.xiaojia.xiaojiaaddons.Objects.EntityInfo;
-import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Items;
@@ -36,8 +35,8 @@ public class FairySoul extends RenderEntityESP {
             hashMap.put("height", 0.7F);
             hashMap.put("fontColor", 0x33ff33);
             hashMap.put("isFilled", true);
-                hashMap.put("kind", "Fairy Soul");
-                return new EntityInfo(hashMap);
+            hashMap.put("kind", "Fairy Soul");
+            return new EntityInfo(hashMap);
         }
         return null;
     }

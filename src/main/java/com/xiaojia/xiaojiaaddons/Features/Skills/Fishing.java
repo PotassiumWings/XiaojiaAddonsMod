@@ -7,35 +7,24 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Sounds.SoundHandler;
 import com.xiaojia.xiaojiaaddons.Sounds.Sounds;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
-import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
-import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.floor;
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Fishing {
+    public static long startPushing = 0;
     private static long startTime = 0;
     private final KeyBind autoMoveKeyBind = new KeyBind("Auto Move", Keyboard.KEY_NONE);
     private long lastReeledIn = 0;
@@ -51,6 +40,22 @@ public class Fishing {
         int min = sec / 60;
         int remSec = sec % 60;
         return String.format("%02d:%02d", min, remSec);
+    }
+
+    public static void warn(double val) {
+        new Thread(() -> {
+            double d = Math.random();
+            int mf = (int) (Math.random() * 1000);
+            ChatLib.debug("Rolled d: " + d);
+
+            if (d < val) {
+                ChatLib.chat("&d&lCRAZY RARE SOUND! &6BENK's roar &b(+" + mf + " ✯ Magic Find!)&r");
+                SoundHandler.playSound(Sounds.bk());
+            } else if (d < val * 2) {
+                ChatLib.chat("&d&lCRAZY RARE SOUND! &6ICY FILL &b(+" + mf + " ✯ Magic Find!)&r");
+                SoundHandler.playSound(Sounds.icyFill());
+            } else SoundHandler.playSound(Sounds.destiny());
+        }).start();
     }
 
     @SubscribeEvent
@@ -154,25 +159,6 @@ public class Fishing {
             }
         }
     }
-
-    public static void warn(double val) {
-        new Thread(() -> {
-            double d = Math.random();
-            int mf = (int) (Math.random() * 1000);
-            ChatLib.debug("Rolled d: " + d);
-
-            if (d < val) {
-                ChatLib.chat("&d&lCRAZY RARE SOUND! &6BENK's roar &b(+" + mf + " ✯ Magic Find!)&r");
-                SoundHandler.playSound(Sounds.bk());
-            } else if (d < val * 2) {
-                ChatLib.chat("&d&lCRAZY RARE SOUND! &6ICY FILL &b(+" + mf + " ✯ Magic Find!)&r");
-                SoundHandler.playSound(Sounds.icyFill());
-            }
-            else SoundHandler.playSound(Sounds.destiny());
-        }).start();
-    }
-
-    public static long startPushing = 0;
 
     @SubscribeEvent
     public void onTickPushingThread(TickEndEvent event) {

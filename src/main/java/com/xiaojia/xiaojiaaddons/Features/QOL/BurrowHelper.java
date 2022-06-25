@@ -26,9 +26,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.Color;
 
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
-
 public class BurrowHelper {
+    private static long lastUpdate = 0;
     private BlockPos solution;
     private boolean awaiting = false;
     private int particleCount = 0;
@@ -37,6 +36,16 @@ public class BurrowHelper {
     private Vec3 pos2 = null;
     private Vec3 vec1 = null;
     private Vec3 vec2 = null;
+
+    private static double calcHighestGrass(double x, double z) {
+        double y;
+        for (y = 255; y > 0; y--) {
+            BlockPos solution = new BlockPos(x, y, z);
+            if (BlockUtils.getBlockAt(solution) == Blocks.grass || BlockUtils.getBlockAt(solution) == Blocks.dirt)
+                break;
+        }
+        return y + 1;
+    }
 
     public void clear() {
         pos1 = null;
@@ -94,7 +103,7 @@ public class BurrowHelper {
                     return;
                 }
                 double pitch = MathUtils.validPitch(MathUtils.getPitch());
-                if (Configs.BlockInvalidClicks && !MathUtils.equal(pitch, 90) && !MathUtils.equal(pitch, -90) ) {
+                if (Configs.BlockInvalidClicks && !MathUtils.equal(pitch, 90) && !MathUtils.equal(pitch, -90)) {
                     ChatLib.chat("Look straight up or down!");
                     event.setCanceled(true);
                     return;
@@ -147,18 +156,6 @@ public class BurrowHelper {
 
         pos1 = pos2 = vec1 = vec2 = null;
     }
-
-    private static double calcHighestGrass(double x, double z) {
-        double y;
-        for (y = 255; y > 0; y--) {
-            BlockPos solution = new BlockPos(x, y, z);
-            if (BlockUtils.getBlockAt(solution) == Blocks.grass || BlockUtils.getBlockAt(solution) == Blocks.dirt)
-                break;
-        }
-        return y + 1;
-    }
-
-    private static long lastUpdate = 0;
 
     @SubscribeEvent
     public void onTickUpdate(TickEndEvent event) {

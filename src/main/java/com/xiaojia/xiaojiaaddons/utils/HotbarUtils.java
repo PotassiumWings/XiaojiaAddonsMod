@@ -44,6 +44,20 @@ public class HotbarUtils {
         return checkHotbarItem(emeraldBladeSlot, "Emerald Blade") || checkHotbarItem(emeraldBladeSlot, "Giant's Sword");
     }
 
+    public static int getIndex(String sbId) {
+        Inventory inventory = ControlUtils.getOpenedInventory();
+        if (inventory == null || inventory.getSize() < 9) return -1;
+        int size = inventory.getSize();
+        List<ItemStack> items = inventory.getItemStacks().subList(size - 9, size);
+        for (int i = 0; i < 9; i++) {
+            ItemStack item = items.get(i);
+            if (item == null) continue;
+            String id = NBTUtils.getSkyBlockID(item);
+            if (id.equals(sbId)) return i;
+        }
+        return -1;
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onTick(TickEndEvent event) {
         Inventory inventory = ControlUtils.getOpenedInventory();
@@ -139,19 +153,5 @@ public class HotbarUtils {
         if (!dirt) dirtWandSlot = -1;
         if (!charm) charmSlot = -1;
         if (!harvest) harvestSlot = -1;
-    }
-
-    public static int getIndex(String sbId) {
-        Inventory inventory = ControlUtils.getOpenedInventory();
-        if (inventory == null || inventory.getSize() < 9) return -1;
-        int size = inventory.getSize();
-        List<ItemStack> items = inventory.getItemStacks().subList(size - 9, size);
-        for (int i = 0; i < 9; i++) {
-            ItemStack item = items.get(i);
-            if (item == null) continue;
-            String id = NBTUtils.getSkyBlockID(item);
-            if (id.equals(sbId)) return i;
-        }
-        return -1;
     }
 }

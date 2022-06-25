@@ -12,14 +12,6 @@ import java.util.ArrayList;
 public class DojoUtils {
     private static EnumDojoTask currentTask;
 
-    @SubscribeEvent
-    public void onTick(TickEndEvent event) {
-        EnumDojoTask preTask = currentTask;
-        currentTask = getCurrentTask();
-        if (currentTask != EnumDojoTask.MASTERY) Mastery.clear();
-        if (currentTask != preTask && currentTask == EnumDojoTask.MASTERY) Mastery.onEnter();
-    }
-
     public static EnumDojoTask getTask() {
         return currentTask;
     }
@@ -42,5 +34,13 @@ public class DojoUtils {
             }
         }
         return null;
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEndEvent event) {
+        EnumDojoTask preTask = currentTask;
+        currentTask = getCurrentTask();
+        if (currentTask != EnumDojoTask.MASTERY) Mastery.clear();
+        if (currentTask != preTask && currentTask == EnumDojoTask.MASTERY) Mastery.onEnter();
     }
 }

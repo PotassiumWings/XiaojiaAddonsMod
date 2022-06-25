@@ -5,7 +5,6 @@ import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StringUtils;
@@ -18,10 +17,9 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class ChestFiller {
     private static boolean enabled = false, done = false, six = false;
-    private Thread pushingThread = null;
     private static int lastId = -1;
-
     private static String name = null;
+    private Thread pushingThread = null;
 
     public static boolean isEnabled() {
         return enabled;

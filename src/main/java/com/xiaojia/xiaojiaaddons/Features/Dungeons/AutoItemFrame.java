@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 enum Type {
     EMPTY, PATH, START, END

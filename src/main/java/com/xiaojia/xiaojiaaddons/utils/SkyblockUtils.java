@@ -31,7 +31,7 @@ public class SkyblockUtils {
             "Dungeon Hub", "Kuudra's End", "Deep Caverns",
             "Hub", "Spider's Den", "Gunpowder Mines", "Void Sepulture", "Dragon's Nest",
             "The End", "The Mist", "Blazing Fortress", "The Catacombs", "Howling Cave",
-            "Your Island", "Dojo Arena",  "None"
+            "Your Island", "Dojo Arena", "None"
     ));
 
     private static final ArrayList<String> dwarvenMaps = new ArrayList<>(Arrays.asList(
@@ -204,7 +204,9 @@ public class SkyblockUtils {
         return isInCrystalHollows;
     }
 
-    public static boolean isInDojo() {return currentMap.equals("Dojo Arena");}
+    public static boolean isInDojo() {
+        return currentMap.equals("Dojo Arena");
+    }
 
     public static boolean isInDwarven() {
         return isInDwarven;

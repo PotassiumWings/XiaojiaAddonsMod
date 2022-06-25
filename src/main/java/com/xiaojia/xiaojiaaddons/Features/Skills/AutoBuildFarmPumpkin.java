@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
@@ -18,9 +17,9 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class AutoBuildFarmPumpkin {
-    private static int from, to;
     private static final ArrayList<BlockPos> dirt = new ArrayList<>();
     private static final ArrayList<BlockPos> light = new ArrayList<>();
+    private static int from, to;
 
     public static void setFarmingPoint(int fromZ, int toZ) {
         float x = getX(getPlayer());
@@ -55,11 +54,11 @@ public class AutoBuildFarmPumpkin {
     public void onRender(RenderWorldLastEvent event) {
         for (BlockPos pos : dirt) {
             if (BlockUtils.isBlockAir(pos))
-                GuiUtils.drawBoxAtBlock(pos, new Color(72, 50, 34, 120),1, 1, 0);
+                GuiUtils.drawBoxAtBlock(pos, new Color(72, 50, 34, 120), 1, 1, 0);
         }
         for (BlockPos pos : light) {
             if (BlockUtils.isBlockAir(pos))
-                GuiUtils.drawBoxAtBlock(pos, new Color(0x3C, 0x3C, 0xDE, 120),1, 1, 0);
+                GuiUtils.drawBoxAtBlock(pos, new Color(0x3C, 0x3C, 0xDE, 120), 1, 1, 0);
         }
     }
 

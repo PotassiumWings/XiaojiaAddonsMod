@@ -19,7 +19,6 @@ import org.lwjgl.input.Keyboard;
 import java.util.ArrayList;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class AutoBlood {
     public static final String[] bloodMobs = new String[]{

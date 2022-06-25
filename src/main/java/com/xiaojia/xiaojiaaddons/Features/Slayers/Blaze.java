@@ -9,10 +9,8 @@ import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
-import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
 import com.xiaojia.xiaojiaaddons.utils.NetUtils;
-import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -20,10 +18,8 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,35 +30,21 @@ import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Blaze {
-    private AxisAlignedBB box = null;
-    private static long lastSwapSPICRY = 0;
-    private static long lastSwapASHAUR = 0;
     private static final ArrayList<String> states = new ArrayList<>(Arrays.asList(
             "SPIRIT", "CRYSTAL",
             "ASHEN", "AURIC"
     ));
+    // pillar display
+    private static final Display display = new Display();
+    private static long lastSwapSPICRY = 0;
+    private static long lastSwapASHAUR = 0;
+    private AxisAlignedBB box = null;
 
-    @SubscribeEvent
-    public void onLeftClick(LeftClickEvent event) {
-        if (!Checker.enabled) return;
-        if (!Configs.BlazeSlayerHelper) return;
-        MovingObjectPosition moving = mc.objectMouseOver;
-        if (moving == null) return;
-        Entity entity = moving.entityHit;
-        if (entity == null) return;
-
-        box = entity.getEntityBoundingBox().addCoord(0, 1, 0);
-        List<Entity> entitiesInRange = getWorld().getEntitiesWithinAABBExcludingEntity(entity, box);
-        for (Entity possible : entitiesInRange) {
-            if (!possible.hasCustomName()) continue;
-            String name = possible.getCustomNameTag();
-            for (String state : states) {
-                if (name.contains(state)) {
-                    doSwap(state);
-                    return;
-                }
-            }
-        }
+    public Blaze() {
+        display.setShouldRender(false);
+        display.setBackground("full");
+        display.setBackgroundColor(0);
+        display.setAlign("center");
     }
 
     public static void doSwap(String state) {
@@ -71,7 +53,8 @@ public class Blaze {
         int swapIndex = -1;
         ArrayList<String> daggerIds;
         boolean isASHAUR = state.equals("ASHEN") || state.equals("AURIC");
-        if (isASHAUR) daggerIds = new ArrayList<>(Arrays.asList("FIREDUST_DAGGER", "BURSTFIRE_DAGGER", "HEARTFIRE_DAGGER"));
+        if (isASHAUR)
+            daggerIds = new ArrayList<>(Arrays.asList("FIREDUST_DAGGER", "BURSTFIRE_DAGGER", "HEARTFIRE_DAGGER"));
         else daggerIds = new ArrayList<>(Arrays.asList("MAWDUST_DAGGER", "BURSTMAW_DAGGER", "HEARTMAW_DAGGER"));
 
         for (int i = 0; i < 8; i++) {
@@ -97,7 +80,7 @@ public class Blaze {
         ControlUtils.setHeldItemIndex(swapIndex);
         if (shouldClick) {
             long cur = TimeUtils.curTime();
-            long delta = cur - (isASHAUR? lastSwapASHAUR:lastSwapSPICRY);
+            long delta = cur - (isASHAUR ? lastSwapASHAUR : lastSwapSPICRY);
             if (delta < Configs.BlazeHelperCD) return;
 
             if (isASHAUR) lastSwapASHAUR = cur;
@@ -112,14 +95,27 @@ public class Blaze {
         }
     }
 
-    // pillar display
-    private static final Display display = new Display();
+    @SubscribeEvent
+    public void onLeftClick(LeftClickEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.BlazeSlayerHelper) return;
+        MovingObjectPosition moving = mc.objectMouseOver;
+        if (moving == null) return;
+        Entity entity = moving.entityHit;
+        if (entity == null) return;
 
-    public Blaze() {
-        display.setShouldRender(false);
-        display.setBackground("full");
-        display.setBackgroundColor(0);
-        display.setAlign("center");
+        box = entity.getEntityBoundingBox().addCoord(0, 1, 0);
+        List<Entity> entitiesInRange = getWorld().getEntitiesWithinAABBExcludingEntity(entity, box);
+        for (Entity possible : entitiesInRange) {
+            if (!possible.hasCustomName()) continue;
+            String name = possible.getCustomNameTag();
+            for (String state : states) {
+                if (name.contains(state)) {
+                    doSwap(state);
+                    return;
+                }
+            }
+        }
     }
 
     @SubscribeEvent

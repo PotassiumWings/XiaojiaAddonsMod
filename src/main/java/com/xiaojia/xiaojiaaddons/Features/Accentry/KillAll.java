@@ -9,7 +9,6 @@ import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
@@ -19,9 +18,20 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class KillAll {
-    private final KeyBind keyBind = new KeyBind("Kill All", Keyboard.KEY_NONE);
     private static boolean should = false;
+    private final KeyBind keyBind = new KeyBind("Kill All", Keyboard.KEY_NONE);
     private long lastClicked = 0;
+
+    public static void onPlayerNearby(Entity player) {
+        if (!Configs.KillAllStop) return;
+        int r = Configs.KillAllStopRadius;
+        if (MathUtils.distanceSquareFromPlayer(player) > r * r) return;
+        if (should) {
+            should = false;
+            getPlayer().playSound("random.successful_hit", 1000, 1);
+            ChatLib.chat("Kill All &cdeactivated");
+        }
+    }
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -48,17 +58,6 @@ public class KillAll {
                 Entity entity = entities.get(i);
                 XiaojiaAddons.mc.playerController.attackEntity(getPlayer(), entity);
             }
-        }
-    }
-
-    public static void onPlayerNearby(Entity player) {
-        if (!Configs.KillAllStop) return;
-        int r = Configs.KillAllStopRadius;
-        if (MathUtils.distanceSquareFromPlayer(player) > r * r) return;
-        if (should) {
-            should = false;
-            getPlayer().playSound("random.successful_hit", 1000, 1);
-            ChatLib.chat("Kill All &cdeactivated");
         }
     }
 }

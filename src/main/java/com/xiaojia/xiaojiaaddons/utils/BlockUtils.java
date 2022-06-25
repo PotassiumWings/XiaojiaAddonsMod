@@ -186,7 +186,7 @@ public class BlockUtils {
     }
 
     public static boolean isBlockAir(float x, float y, float z) {
-        return isBlockAir((double) x, (double) y, (double) z);
+        return isBlockAir(x, y, (double) z);
     }
 
     public static boolean isBlockAir(double x, double y, double z) {

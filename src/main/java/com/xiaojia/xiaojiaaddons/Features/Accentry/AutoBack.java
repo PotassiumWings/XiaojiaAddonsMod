@@ -34,7 +34,7 @@ public class AutoBack {
             S45PacketTitle packet = (S45PacketTitle) event.packet;
             IChatComponent component = PacketUtils.getMessage(packet);
             if (component == null) return;
-            ChatLib.debug(component.getFormattedText());
+//            ChatLib.debug(component.getFormattedText());
             String title = ChatLib.removeFormatting(component.getUnformattedText());
             if (title.contains("你失败了")) {
                 CommandsUtils.addCommand("/back");

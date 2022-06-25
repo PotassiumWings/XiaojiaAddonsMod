@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.utils.ControlUtils.rightClick;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class AutoShootCrystal {
     private static final KeyBind autoShootCrystalKeybind = new KeyBind("Auto Crystal", Keyboard.KEY_NONE);

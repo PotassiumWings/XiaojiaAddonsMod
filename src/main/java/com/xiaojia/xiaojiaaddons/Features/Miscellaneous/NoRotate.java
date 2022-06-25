@@ -80,7 +80,7 @@ public class NoRotate {
                     ChatLib.chat("Changing direction");
                     ControlUtils.randomChangeDirection(0.001);
                 }
-            } catch (Exception ignored){
+            } catch (Exception ignored) {
             }
         }).start();
     }

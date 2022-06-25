@@ -9,12 +9,12 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
-
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 import java.io.Reader;
@@ -24,10 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-
-import org.lwjgl.input.Keyboard;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
@@ -123,7 +120,7 @@ public class CommandKeybind {
             String json = (new Gson()).toJson(convertedKeyBinds);
             Path path = Paths.get("config/XiaoJiaAddonsKeybinds.cfg");
             Files.write(path, json.getBytes(StandardCharsets.UTF_8));
-            ChatLib.chat("Saved! " + json);
+//            ChatLib.chat("Saved! " + json);
         } catch (Exception exception) {
             exception.printStackTrace();
         }

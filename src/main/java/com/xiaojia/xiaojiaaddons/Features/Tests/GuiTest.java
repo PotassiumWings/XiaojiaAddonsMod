@@ -3,12 +3,10 @@ package com.xiaojia.xiaojiaaddons.Features.Tests;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
-import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.vecmath.Vector3d;
-import java.awt.Color;
 import java.util.ArrayList;
 
 public class GuiTest {
@@ -19,6 +17,7 @@ public class GuiTest {
             blocks.add(pos);
         }
     }
+
     public static void clear() {
         synchronized (blocks) {
             blocks.clear();
@@ -34,7 +33,7 @@ public class GuiTest {
         synchronized (blocks) {
             for (Vector3d pos : blocks) {
                 GuiUtils.drawBoxAtPos(
-                        (float) pos.x, (float)pos.y, (float)pos.z,
+                        (float) pos.x, (float) pos.y, (float) pos.z,
                         100, 160, 240, 255,
                         0.1F, 0.1F, 0
                 );

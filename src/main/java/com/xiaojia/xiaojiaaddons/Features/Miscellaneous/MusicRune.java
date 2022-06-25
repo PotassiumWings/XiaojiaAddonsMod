@@ -1,6 +1,5 @@
 package com.xiaojia.xiaojiaaddons.Features.Miscellaneous;
 
-import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -8,11 +7,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class MusicRune {
-    @SubscribeEvent
-    public void onTick(TickEndEvent event) {
-        if (!Checker.enabled) return;
-    }
-
     public static void play() {
         new Thread(() -> {
             int r = (int) (Math.random() * 10);
@@ -28,5 +22,10 @@ public class MusicRune {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEndEvent event) {
+        if (!Checker.enabled) return;
     }
 }

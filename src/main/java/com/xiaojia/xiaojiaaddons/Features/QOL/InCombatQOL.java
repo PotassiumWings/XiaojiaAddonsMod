@@ -131,10 +131,7 @@ public class InCombatQOL {
         }
 
         // manually
-        if (Configs.AutoSellConfig.length() > 0 && name.contains(Configs.AutoSellConfig.toLowerCase())) {
-            return true;
-        }
-        return false;
+        return Configs.AutoSellConfig.length() > 0 && name.contains(Configs.AutoSellConfig.toLowerCase());
     }
 
     @SubscribeEvent

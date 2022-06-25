@@ -25,8 +25,6 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
-
 public class GhostQOL extends RenderEntityESP {
     public static final String GHOST_STRING = "Ghost";
     private static final HashMap<String, Entity> runicGhostUUIDs = new HashMap<>();

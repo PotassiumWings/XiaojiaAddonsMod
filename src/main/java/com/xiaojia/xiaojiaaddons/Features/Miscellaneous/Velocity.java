@@ -35,6 +35,17 @@ public class Velocity {
                 id.equals("SPIDER_BOOTS");
     }
 
+    public static void onPlayerNearby(Entity player) {
+        if (!Configs.VelocityStop) return;
+        int r = Configs.VelocityStopRadius;
+        if (MathUtils.distanceSquareFromPlayer(player) > r * r) return;
+        if (enabled) {
+            enabled = false;
+            getPlayer().playSound("random.successful_hit", 1000, 1);
+            ChatLib.chat("Velocity &cdeactivated");
+        }
+    }
+
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
@@ -50,20 +61,9 @@ public class Velocity {
             ItemStack item = ControlUtils.getHeldItemStack();
             String sbId = NBTUtils.getSkyBlockID(item);
             if (sbId.equals("BONZO_STAFF") || sbId.equals("JERRY_STAFF") || sbId.equals("STARRED_BONZO_STAFF") ||
-                sbId.equals("GRAPPLING_HOOK")) {
+                    sbId.equals("GRAPPLING_HOOK")) {
                 lastShot = TimeUtils.curTime();
             }
-        }
-    }
-
-    public static void onPlayerNearby(Entity player) {
-        if (!Configs.VelocityStop) return;
-        int r = Configs.VelocityStopRadius;
-        if (MathUtils.distanceSquareFromPlayer(player) > r * r) return;
-        if (enabled) {
-            enabled = false;
-            getPlayer().playSound("random.successful_hit", 1000, 1);
-            ChatLib.chat("Velocity &cdeactivated");
         }
     }
 }

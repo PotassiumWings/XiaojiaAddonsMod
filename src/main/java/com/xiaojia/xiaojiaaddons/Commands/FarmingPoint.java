@@ -7,6 +7,10 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
+enum EnumFarmingType {
+    VERTICAL, PUMPKIN
+}
+
 public class FarmingPoint extends CommandBase {
     private static EnumFarmingType type = EnumFarmingType.VERTICAL;
 
@@ -45,9 +49,4 @@ public class FarmingPoint extends CommandBase {
     public int getRequiredPermissionLevel() {
         return 0;
     }
-}
-
-
-enum EnumFarmingType {
-    VERTICAL, PUMPKIN
 }

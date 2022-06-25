@@ -55,32 +55,6 @@ public class RelicESP {
             new BlockPos(-147, 83, -335)));
     public static String fileName = "config/XiaojiaAddonsRelicFound.cfg";
 
-    @SubscribeEvent
-    public void onRelic(PlayerInteractEvent event) {
-        if (!Checker.enabled) return;
-        if (!Configs.RelicESP) return;
-        if (!SkyblockUtils.isInSpiderDen()) return;
-        if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
-        if (locations.contains(event.pos)) {
-            got.add(locations.indexOf(event.pos));
-            save();
-        }
-    }
-
-    @SubscribeEvent
-    public void onRender(RenderWorldLastEvent event) {
-        if (!Checker.enabled) return;
-        if (!Configs.RelicESP) return;
-        if (!SkyblockUtils.isInSpiderDen()) return;
-        for (int i = 0; i < locations.size(); i++) {
-            if (got.contains(i)) continue;
-            GuiUtils.enableESP();
-            GuiUtils.drawBoxAtBlock(locations.get(i), new Color(0, 255, 255),
-                    1, 1, 0.0020000000949949026F);
-            GuiUtils.disableESP();
-        }
-    }
-
     public static void load() {
         try {
             File file = new File(fileName);
@@ -104,6 +78,32 @@ public class RelicESP {
         } catch (Exception e) {
             System.out.println("Error while saving item rename config file");
             e.printStackTrace();
+        }
+    }
+
+    @SubscribeEvent
+    public void onRelic(PlayerInteractEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.RelicESP) return;
+        if (!SkyblockUtils.isInSpiderDen()) return;
+        if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
+        if (locations.contains(event.pos)) {
+            got.add(locations.indexOf(event.pos));
+            save();
+        }
+    }
+
+    @SubscribeEvent
+    public void onRender(RenderWorldLastEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.RelicESP) return;
+        if (!SkyblockUtils.isInSpiderDen()) return;
+        for (int i = 0; i < locations.size(); i++) {
+            if (got.contains(i)) continue;
+            GuiUtils.enableESP();
+            GuiUtils.drawBoxAtBlock(locations.get(i), new Color(0, 255, 255),
+                    1, 1, 0.0020000000949949026F);
+            GuiUtils.disableESP();
         }
     }
 }

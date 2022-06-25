@@ -17,6 +17,19 @@ public class AutoAttribute extends AutoFuse {
     private static final ArrayList<AttributeTypePos> array2 = new ArrayList<>();
     private static final ArrayList<AttributeTypePos> array3 = new ArrayList<>();
 
+    private static Pair<Integer, Integer> getLevels(ItemStack itemStack) {
+        NBTTagCompound compound = NBTUtils.getCompoundFromExtraAttributes(itemStack, "attributes");
+        if (compound == null) return null;
+        String attribute1 = Configs.FuseAttribute1.toLowerCase().replaceAll(" ", "_");
+        String attribute2 = Configs.FuseAttribute2.toLowerCase().replaceAll(" ", "_");
+        if (!compound.hasKey(attribute1) && !compound.hasKey(attribute2)) return null;
+
+        int level1 = 0, level2 = 0;
+        if (compound.hasKey(attribute1)) level1 = compound.getInteger(attribute1);
+        if (compound.hasKey(attribute2)) level2 = compound.getInteger(attribute2);
+        return new Pair<>(level1, level2);
+    }
+
     public boolean enabled() {
         return Configs.FuseAttribute;
     }
@@ -29,19 +42,6 @@ public class AutoAttribute extends AutoFuse {
         array1.clear();
         array2.clear();
         array3.clear();
-    }
-
-    private static Pair<Integer, Integer> getLevels(ItemStack itemStack) {
-        NBTTagCompound compound = NBTUtils.getCompoundFromExtraAttributes(itemStack, "attributes");
-        if (compound == null) return null;
-        String attribute1 = Configs.FuseAttribute1.toLowerCase().replaceAll(" ", "_");
-        String attribute2 = Configs.FuseAttribute2.toLowerCase().replaceAll(" ", "_");
-        if (!compound.hasKey(attribute1) && !compound.hasKey(attribute2)) return null;
-
-        int level1 = 0, level2 = 0;
-        if (compound.hasKey(attribute1)) level1 = compound.getInteger(attribute1);
-        if (compound.hasKey(attribute2)) level2 = compound.getInteger(attribute2);
-        return new Pair<>(level1, level2);
     }
 
     public void add(ItemStack itemStack, int i) {

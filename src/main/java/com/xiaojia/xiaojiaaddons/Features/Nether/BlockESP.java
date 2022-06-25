@@ -14,7 +14,6 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
@@ -23,8 +22,9 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public abstract class BlockESP {
-    private final HashSet<BlockPos> blocks = new HashSet<>();
+    private static long lastCheck = 0;
     public final Block block = getBlock();
+    private final HashSet<BlockPos> blocks = new HashSet<>();
     private final Color color = getColor();
     private Thread scanThread = null;
 
@@ -66,8 +66,6 @@ public abstract class BlockESP {
             scanThread.start();
         }
     }
-
-    private static long lastCheck = 0;
 
     @SubscribeEvent
     public void onTickCheck(TickEndEvent event) {

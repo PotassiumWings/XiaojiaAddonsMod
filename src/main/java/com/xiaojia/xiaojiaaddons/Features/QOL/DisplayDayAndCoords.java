@@ -124,7 +124,7 @@ public class DisplayDayAndCoords {
 //                display.addLine(line5);
 //            } catch (Exception ignored) {}
             synchronized (DevMode.lines) {
-                for (DisplayLine devLine: DevMode.lines)
+                for (DisplayLine devLine : DevMode.lines)
                     display.addLine(devLine);
             }
 

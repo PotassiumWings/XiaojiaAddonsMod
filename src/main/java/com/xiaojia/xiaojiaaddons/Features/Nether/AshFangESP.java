@@ -9,7 +9,6 @@ import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.Color;
 import java.util.HashMap;

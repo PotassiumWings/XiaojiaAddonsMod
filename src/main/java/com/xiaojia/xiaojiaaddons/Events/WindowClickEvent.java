@@ -9,6 +9,7 @@ public class WindowClickEvent extends Event {
     public int slotId;
     public int mouseButtonClicked;
     public int mode;
+
     public WindowClickEvent(int windowId, int slotId, int mouseButtonClicked, int mode) {
         this.windowId = windowId;
         this.slotId = slotId;

@@ -1,14 +1,14 @@
 package com.xiaojia.xiaojiaaddons.Features.Remote.API;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.xiaojia.xiaojiaaddons.Config.Config;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ApiKey {
     /*
@@ -23,7 +23,7 @@ public class ApiKey {
     }
 
     @SubscribeEvent
-    public void onChatMessage (ClientChatReceivedEvent event) {
+    public void onChatMessage(ClientChatReceivedEvent event) {
         if (!Checker.enabled) return;
         if (event.type != 0) return;
         String message = event.message.getUnformattedText();

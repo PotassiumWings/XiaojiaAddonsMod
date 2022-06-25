@@ -53,6 +53,6 @@ public class ShowAttribute {
             }
         }
         if (!nameString.toLowerCase().contains(Configs.ShowAttributeName.toLowerCase())) return;
-        GuiUtils.drawNameAndLevel(event.renderer,nameString, levelString, event.x, event.y, nameScale, levelScale);
+        GuiUtils.drawNameAndLevel(event.renderer, nameString, levelString, event.x, event.y, nameScale, levelScale);
     }
 }

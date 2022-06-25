@@ -6,7 +6,6 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Image;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
@@ -17,11 +16,10 @@ import org.lwjgl.input.Keyboard;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class DevWater {
-    private static EnumState[][] board = new EnumState[WaterUtils.height][WaterUtils.width];
     public static int process = 0;
+    private static EnumState[][] board = new EnumState[WaterUtils.height][WaterUtils.width];
     private static long lastKey = 0;
     private static BufferedImage map = null;
     private final KeyBind devKeyBind = new KeyBind("Dev Water", Keyboard.KEY_NONE);

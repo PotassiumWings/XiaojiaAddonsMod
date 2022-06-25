@@ -25,7 +25,7 @@ public abstract class RenderEntityESP {
 
     @SubscribeEvent
     public final void onTick(TickEndEvent event) {
-        if (!Checker.enabled || !Configs.GeneralESP || getWorld() == null || !enabled())  {
+        if (!Checker.enabled || !Configs.GeneralESP || getWorld() == null || !enabled()) {
             renderEntities = new ArrayList<>();
             return;
         }

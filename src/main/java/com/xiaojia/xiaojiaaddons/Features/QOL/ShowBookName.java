@@ -7,10 +7,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
-import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
-import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -35,7 +32,8 @@ public class ShowBookName {
         if (itemStack == null || !itemStack.hasDisplayName()) return;
         String name = ChatLib.removeFormatting(itemStack.getDisplayName()).toLowerCase();
         if (!itemStack.getUnlocalizedName().contains("enchantedBook")) return;
-        if (!name.startsWith("enchanted book") && !(inventory.getName().contains("Auction") || inventory.getName().contains("Bids"))) return;
+        if (!name.startsWith("enchanted book") && !(inventory.getName().contains("Auction") || inventory.getName().contains("Bids")))
+            return;
 
         String nameString = "";
         String levelString = "";
@@ -64,6 +62,6 @@ public class ShowBookName {
             }
         }
 
-        GuiUtils.drawNameAndLevel(event.renderer,nameString, levelString, event.x, event.y, nameScale, levelScale);
+        GuiUtils.drawNameAndLevel(event.renderer, nameString, levelString, event.x, event.y, nameScale, levelScale);
     }
 }

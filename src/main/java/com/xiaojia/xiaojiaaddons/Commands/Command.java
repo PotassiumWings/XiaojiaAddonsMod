@@ -3,7 +3,6 @@ package com.xiaojia.xiaojiaaddons.Commands;
 import com.xiaojia.xiaojiaaddons.Config.ConfigGuiNew;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoQuestion;
-import com.xiaojia.xiaojiaaddons.Features.Bestiary.AutoSneakyCreeper;
 import com.xiaojia.xiaojiaaddons.Features.Bestiary.GolemAlert;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.AutoItemFrame;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.BloodAssist;
@@ -214,8 +213,7 @@ public class Command extends CommandBase {
                         else if (strings[1].equalsIgnoreCase("removeWithKey")) {
                             command = String.join(" ", Arrays.copyOfRange(strings, 3, strings.length));
                             CommandKeybind.remove(command, strings[2]);
-                        }
-                        else ChatLib.chat(CommandKeybind.getUsage());
+                        } else ChatLib.chat(CommandKeybind.getUsage());
                         break;
                 }
                 break;

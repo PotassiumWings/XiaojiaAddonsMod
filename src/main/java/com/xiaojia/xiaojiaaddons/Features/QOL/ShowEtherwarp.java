@@ -121,7 +121,7 @@ public class ShowEtherwarp {
                     block == Blocks.anvil || block == Blocks.enchanting_table ||
                     block == Blocks.furnace || block == Blocks.lit_furnace ||
                     block == Blocks.brewing_stand || block == Blocks.dispenser || block == Blocks.dropper
-                    ))
+            ))
                 return false;
 
             // fire -> not collidable

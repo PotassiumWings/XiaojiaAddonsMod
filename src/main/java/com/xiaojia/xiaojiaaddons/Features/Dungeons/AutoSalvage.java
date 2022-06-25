@@ -10,8 +10,6 @@ import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.List;
-
 public class AutoSalvage {
     private long lastSalvage = 0;
 

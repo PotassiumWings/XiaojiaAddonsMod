@@ -2,13 +2,11 @@ package com.xiaojia.xiaojiaaddons.Mixins;
 
 import com.xiaojia.xiaojiaaddons.Events.LeftClickEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.Session;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {

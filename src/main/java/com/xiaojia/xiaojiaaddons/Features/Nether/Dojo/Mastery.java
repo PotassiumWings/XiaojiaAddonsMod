@@ -13,13 +13,11 @@ import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -31,12 +29,12 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
-import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Mastery {
     private final static ConcurrentHashMap<BlockPos, Long> countDown = new ConcurrentHashMap<>();
     private final static ConcurrentHashMap<BlockPos, Integer> officialCountDown = new ConcurrentHashMap<>();
     private final static ConcurrentHashMap<Integer, BlockPos> link = new ConcurrentHashMap<>();
+    private static long lastRelease = 0;
 
     public static void clear() {
         officialCountDown.clear();
@@ -56,6 +54,40 @@ public class Mastery {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    public static void printLog() {
+        System.err.println("Player at: " + MathUtils.getPosString(getPlayer()));
+        System.err.println("Mastery count down set:");
+        for (BlockPos pos : countDown.keySet()) {
+            System.err.println(pos);
+        }
+        System.err.println("Mastery entities:");
+        for (Entity entity : EntityUtils.getEntities()) {
+            String name = entity.getName();
+            Pattern pattern = Pattern.compile("^\u00a7(\\w)\u00a7l([\\d:]+)$");
+            Matcher matcher = pattern.matcher(name);
+            if (!matcher.find()) continue;
+            String color = matcher.group(1);
+            double time = Double.parseDouble(matcher.group(2).replaceAll(":", "."));
+            System.err.println("Entity " + color + " " + time + " at " + MathUtils.getPosString(entity));
+        }
+    }
+
+    public static double getDis(Entity entity, BlockPos pos) {
+        double dis = Math.sqrt(MathUtils.distanceSquareFromPlayer(entity));
+        double dx = (entity.posX - getX(getPlayer())) / dis;
+        double dz = (entity.posZ - getZ(getPlayer())) / dis;
+        return entity.getDistanceSq(pos.getX() + 0.5F - dx, pos.getY() + 3, pos.getZ() + 0.5F - dz);
+    }
+
+    private static Color getColorFromDelta(int delta) {
+        Color color = new Color(0, 0, 255);
+        if (delta >= 3500 && delta <= 7000) color = new Color((7000 - delta) * 255 / 3500, 255, 0);
+        else if (delta >= 500 && delta < 3500) color = new Color(255, 255 - (3500 - delta) * 255 / 3000, 0);
+        else if (delta < 500 && delta > 0) color = new Color(255, 0, 0);
+        else ChatLib.debug(delta + "");
+        return color;
     }
 
     @SubscribeEvent
@@ -93,31 +125,6 @@ public class Mastery {
         }
         link.clear();
         link.putAll(tempLink);
-    }
-
-    public static void printLog() {
-        System.err.println("Player at: " + MathUtils.getPosString(getPlayer()));
-        System.err.println("Mastery count down set:");
-        for (BlockPos pos : countDown.keySet()) {
-            System.err.println(pos);
-        }
-        System.err.println("Mastery entities:");
-        for (Entity entity : EntityUtils.getEntities()) {
-            String name = entity.getName();
-            Pattern pattern = Pattern.compile("^\u00a7(\\w)\u00a7l([\\d:]+)$");
-            Matcher matcher = pattern.matcher(name);
-            if (!matcher.find()) continue;
-            String color = matcher.group(1);
-            double time = Double.parseDouble(matcher.group(2).replaceAll(":", "."));
-            System.err.println("Entity " + color + " " + time + " at " + MathUtils.getPosString(entity));
-        }
-    }
-
-    public static double getDis(Entity entity, BlockPos pos) {
-        double dis = Math.sqrt(MathUtils.distanceSquareFromPlayer(entity));
-        double dx = (entity.posX - getX(getPlayer())) / dis;
-        double dz = (entity.posZ - getZ(getPlayer())) / dis;
-        return entity.getDistanceSq(pos.getX() + 0.5F - dx, pos.getY() + 3, pos.getZ() + 0.5F - dz);
     }
 
     @SubscribeEvent
@@ -163,17 +170,6 @@ public class Mastery {
         }
         GuiUtils.disableESP();
     }
-
-    private static Color getColorFromDelta(int delta) {
-        Color color = new Color(0, 0, 255);
-        if (delta >= 3500 && delta <= 7000) color = new Color((7000 - delta) * 255 / 3500, 255, 0);
-        else if (delta >= 500 && delta < 3500) color = new Color(255, 255 - (3500 - delta) * 255 / 3000, 0);
-        else if (delta < 500 && delta > 0) color = new Color(255, 0, 0);
-        else ChatLib.debug(delta + "");
-        return color;
-    }
-
-    private static long lastRelease = 0;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {

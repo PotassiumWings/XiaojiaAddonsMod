@@ -19,33 +19,43 @@ public abstract class AutoFuse extends StepEvent {
         super(4);
     }
 
-    public abstract String inventoryName();
-    public abstract void clear();
-    public abstract void add(ItemStack itemStack, int i);
-    public abstract Pair<Integer, Integer> getNext(ArrayList<Boolean> vis);
-    public abstract boolean canFuse();
-    public abstract boolean checkFuse();
-    public boolean enabled() {
-        return true;
-    }
-
     private static boolean haveItemsInAnvil() {
         return !isAir(29) || !isAir(33);
     }
+
     private static boolean fusingBooksNotFull() {
         return isAir(29) || isAir(33);
     }
+
     private static boolean fusingBooksFull() {
         return !fusingBooksNotFull();
     }
+
     private static boolean isAir(int slot) {
         ItemStack itemStack = ControlUtils.getItemStackInSlot(slot, false);
         if (itemStack != null && itemStack.hasDisplayName())
             return itemStack.getDisplayName().toLowerCase().contains("air");
         return true;
     }
+
     public static List<String> getItemLore(ItemStack itemStack) {
         return NBTUtils.getLore(itemStack);
+    }
+
+    public abstract String inventoryName();
+
+    public abstract void clear();
+
+    public abstract void add(ItemStack itemStack, int i);
+
+    public abstract Pair<Integer, Integer> getNext(ArrayList<Boolean> vis);
+
+    public abstract boolean canFuse();
+
+    public abstract boolean checkFuse();
+
+    public boolean enabled() {
+        return true;
     }
 
     @Override

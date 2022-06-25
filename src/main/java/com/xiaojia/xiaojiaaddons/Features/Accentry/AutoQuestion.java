@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class AutoQuestion {
+    public static String currentQuestion = "";
+    public static HashSet<String> newQuestions = new HashSet<>();
     public HashMap<String, String[]> answer = new HashMap<String, String[]>() {{
         put("如果你有更强大的副本武器，那么你如何处理你的主线武器？ [单选题]", new String[]{"[以副本武器为辅，来赚钱提升主线武器]"});
         put("如果想催更怎么办？ [单选题]", new String[]{"[忍住不去催更]"});
@@ -38,9 +40,13 @@ public class AutoQuestion {
         put("梦境遇事找谁处理？ [简答题]", new String[]{"管理"});
         put("服务器允许注册小号么？ [单选题]", new String[]{"[允许，但只能注册1个]"});
     }};
-    public static String currentQuestion = "";
 
-    public static HashSet<String> newQuestions = new HashSet<>();
+    public static void display() {
+        ChatLib.chat("Current question: " + currentQuestion);
+        for (String question : newQuestions) {
+            ChatLib.chat("Q: " + question);
+        }
+    }
 
     @SubscribeEvent
     public void onReceive(ClientChatReceivedEvent event) {
@@ -83,12 +89,5 @@ public class AutoQuestion {
         }
         for (IChatComponent sub : component.getSiblings()) if (click(sub)) return true;
         return false;
-    }
-
-    public static void display() {
-        ChatLib.chat("Current question: " + currentQuestion);
-        for (String question : newQuestions) {
-            ChatLib.chat("Q: " + question);
-        }
     }
 }

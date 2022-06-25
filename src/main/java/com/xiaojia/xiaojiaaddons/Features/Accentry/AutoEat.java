@@ -10,7 +10,6 @@ import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;

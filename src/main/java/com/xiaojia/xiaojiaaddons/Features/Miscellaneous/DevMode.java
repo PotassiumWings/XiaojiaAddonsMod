@@ -4,7 +4,6 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
 import com.xiaojia.xiaojiaaddons.Events.PacketSendEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
-import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
@@ -16,7 +15,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.BlockPos;
@@ -26,11 +24,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
-
 public class DevMode {
+    public static final ArrayList<DisplayLine> lines = new ArrayList<>();
+
     private static String getLog(S2APacketParticles packetParticles) {
         StringBuilder s = new StringBuilder();
         for (int x : packetParticles.getParticleArgs())
@@ -97,8 +93,6 @@ public class DevMode {
         if (!Configs.PacketSent) return;
         ChatLib.debug(event.packet.getClass().toString());
     }
-
-    public static final ArrayList<DisplayLine> lines = new ArrayList<>();
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {

@@ -191,11 +191,23 @@ public class AutoBuildFarmVertical {
     private static boolean isLightBlock(ItemStack itemStack) {
         return itemStack != null &&
                 (Block.getBlockFromItem(itemStack.getItem()) == Blocks.glowstone ||
-                Block.getBlockFromItem(itemStack.getItem()) == Blocks.sea_lantern);
+                        Block.getBlockFromItem(itemStack.getItem()) == Blocks.sea_lantern);
     }
 
     private static boolean enabled() {
         return isBuilding && Checker.enabled;
+    }
+
+    private static void stop() {
+        stop(true);
+    }
+
+    private static void stop(boolean b) {
+        if (!isBuilding) return;
+        if (getPlayer() != null && b)
+            getPlayer().playSound("random.successful_hit", 1000, 1);
+        isBuilding = false;
+        ChatLib.chat("Auto Build Farm - " + step + " &cdeactivated");
     }
 
     @SubscribeEvent
@@ -575,18 +587,6 @@ public class AutoBuildFarmVertical {
                         "Couldn't unstash your items! Your inventory is full!")) {
             picked = true;
         }
-    }
-
-    private static void stop() {
-        stop(true);
-    }
-
-    private static void stop(boolean b) {
-        if (!isBuilding) return;
-        if (getPlayer() != null && b)
-            getPlayer().playSound("random.successful_hit", 1000, 1);
-        isBuilding = false;
-        ChatLib.chat("Auto Build Farm - " + step + " &cdeactivated");
     }
 
     @SubscribeEvent

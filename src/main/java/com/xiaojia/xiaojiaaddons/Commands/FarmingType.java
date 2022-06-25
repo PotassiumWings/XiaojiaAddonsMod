@@ -1,6 +1,5 @@
 package com.xiaojia.xiaojiaaddons.Commands;
 
-import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmVertical;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

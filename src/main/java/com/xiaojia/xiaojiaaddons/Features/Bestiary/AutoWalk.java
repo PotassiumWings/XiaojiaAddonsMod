@@ -17,7 +17,6 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Keyboard;
 
 import javax.vecmath.Vector3d;
 import java.util.ArrayList;

@@ -2,13 +2,11 @@ package com.xiaojia.xiaojiaaddons.Commands;
 
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class XiaojiaChat extends CommandBase {
     @Override

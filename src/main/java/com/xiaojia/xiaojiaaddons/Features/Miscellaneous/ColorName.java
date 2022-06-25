@@ -285,7 +285,7 @@ public class ColorName {
         if (event.packet instanceof S45PacketTitle) {
             S45PacketTitle packet = (S45PacketTitle) event.packet;
             IChatComponent component = PacketUtils.getMessage(packet);
-            if (component != null)  PacketUtils.setMessage(packet, convert(component));
+            if (component != null) PacketUtils.setMessage(packet, convert(component));
         }
     }
 
