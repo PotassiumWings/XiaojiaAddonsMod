@@ -92,11 +92,11 @@ public class CommandKeybind {
 
     public static void loadKeyBinds() {
         try {
-            File xiaoJiaKeyBinds = new File(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg");
+            File xiaoJiaKeyBinds = new File("config/XiaoJiaAddonsKeybinds.cfg");
             if (!xiaoJiaKeyBinds.exists()) {
                 xiaoJiaKeyBinds.createNewFile();
             } else {
-                Reader reader = Files.newBufferedReader(Paths.get(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg"));
+                Reader reader = Files.newBufferedReader(Paths.get("config/XiaoJiaAddonsKeybinds.cfg"));
                 Type type = (new TypeToken<ArrayList<XiaojiaKeyBind>>() {
                 }).getType();
                 ArrayList<XiaojiaKeyBind> settingsFromConfig = (new Gson()).fromJson(reader, type);
@@ -114,8 +114,9 @@ public class CommandKeybind {
     public static void saveKeyBinds() {
         try {
             String json = (new Gson()).toJson(XiaojiaKeyBind.keyBinds);
-            Path path = Paths.get(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg");
+            Path path = Paths.get("config/XiaoJiaAddonsKeybinds.cfg");
             Files.write(path, json.getBytes(StandardCharsets.UTF_8));
+            ChatLib.chat("Saved!");
         } catch (Exception exception) {
             exception.printStackTrace();
         }

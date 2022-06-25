@@ -8,6 +8,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Pair;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
+import com.xiaojia.xiaojiaaddons.utils.PacketUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -283,26 +284,8 @@ public class ColorName {
 
         if (event.packet instanceof S45PacketTitle) {
             S45PacketTitle packet = (S45PacketTitle) event.packet;
-
-            Field field = null;
-            try {
-                field = S45PacketTitle.class.getDeclaredField("field_179810_b");
-            } catch (NoSuchFieldException e) {
-                try {
-                    field = S45PacketTitle.class.getDeclaredField("message");
-                } catch (NoSuchFieldException e1) {
-                    return;
-                }
-            }
-            field.setAccessible(true);
-            try {
-                IChatComponent component = (IChatComponent) field.get(packet);
-                if (component != null) {
-                    field.set(packet, convert(component));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            IChatComponent component = PacketUtils.getMessage(packet);
+            if (component != null)  PacketUtils.setMessage(packet, convert(component));
         }
     }
 
