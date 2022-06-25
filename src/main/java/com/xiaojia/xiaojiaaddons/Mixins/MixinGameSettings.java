@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameSettings.class)
 public class MixinGameSettings {
-    @Inject(method = {"setOptionKeyBinding"}, at = @At("HEAD"))
+    @Inject(method = {"setOptionKeyBinding"}, at = @At("RETURN"))
     public void setOptionKeyBinding(CallbackInfo ci) {
         CommandKeybind.saveKeyBinds();
     }
