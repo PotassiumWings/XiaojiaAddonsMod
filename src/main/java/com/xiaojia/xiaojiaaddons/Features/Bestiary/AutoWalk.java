@@ -175,6 +175,7 @@ public abstract class AutoWalk {
             } else {
                 goingTo = null;
                 stop();
+                ChatLib.chat(name + " &cdeactivated");
             }
         }
         if (!should) return;
