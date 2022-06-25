@@ -23,7 +23,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 import org.lwjgl.input.Keyboard;
 
@@ -93,15 +95,13 @@ public class CommandKeybind {
     public static void loadKeyBinds() {
         try {
             File xiaoJiaKeyBinds = new File("config/XiaoJiaAddonsKeybinds.cfg");
-            if (!xiaoJiaKeyBinds.exists()) {
-                xiaoJiaKeyBinds.createNewFile();
-            } else {
+            if (xiaoJiaKeyBinds.exists()) {
                 Reader reader = Files.newBufferedReader(Paths.get("config/XiaoJiaAddonsKeybinds.cfg"));
-                Type type = (new TypeToken<ArrayList<XiaojiaKeyBind>>() {
+                Type type = (new TypeToken<HashMap<String, Integer>>() {
                 }).getType();
-                ArrayList<XiaojiaKeyBind> settingsFromConfig = (new Gson()).fromJson(reader, type);
-                for (XiaojiaKeyBind keyBind : settingsFromConfig)
-                    XiaojiaKeyBind.keyBinds.add(new XiaojiaKeyBind(keyBind.getCommand(), keyBind.getBind().getKeyCode()));
+                HashMap<String, Integer> settingsFromConfig = (new Gson()).fromJson(reader, type);
+                for (Map.Entry<String, Integer> entry : settingsFromConfig.entrySet())
+                    XiaojiaKeyBind.keyBinds.add(new XiaojiaKeyBind(entry.getKey(), entry.getValue()));
             }
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -113,10 +113,13 @@ public class CommandKeybind {
 
     public static void saveKeyBinds() {
         try {
-            String json = (new Gson()).toJson(XiaojiaKeyBind.keyBinds);
+            HashMap<String, Integer> convertedKeyBinds = new HashMap<>();
+            for (XiaojiaKeyBind keyBind : XiaojiaKeyBind.keyBinds)
+                convertedKeyBinds.put(keyBind.getCommand(), keyBind.getBind().getKeyCode());
+            String json = (new Gson()).toJson(convertedKeyBinds);
             Path path = Paths.get("config/XiaoJiaAddonsKeybinds.cfg");
             Files.write(path, json.getBytes(StandardCharsets.UTF_8));
-            ChatLib.chat("Saved!");
+            ChatLib.chat("Saved! " + json);
         } catch (Exception exception) {
             exception.printStackTrace();
         }

@@ -22,7 +22,7 @@ public class Configs {
     @Property(type = Property.Type.TEXT, name = "Kill All Contains", parent = "Kill All")
     public static String KillAllName = "Pig";
 
-    @Property(type = Property.Type.NUMBER, name = "Kill All Stop Radius", parent = "Kill All", min = 1, max = 40)
+    @Property(type = Property.Type.NUMBER, name = "Kill All Stop Radius", parent = "Kill All", min = 1, max = 100)
     public static int KillAllStopRadius = 15;
 
     @Property(type = Property.Type.BOOLEAN, name = "Kill All Stop When Player Neaby", parent = "Kill All")
@@ -161,6 +161,12 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Velocity - SkyBlock Only", parent = "Velocity")
     public static boolean DisableOutofSkyBlock = true;
+
+    @Property(type = Property.Type.NUMBER, name = "Velocity Stop Radius", parent = "Velocity", min = 1, max = 100)
+    public static int VelocityStopRadius = 15;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Velocity Stop When Player Neaby", parent = "Velocity")
+    public static boolean VelocityStop = false;
 
     @Property(type = Property.Type.FOLDER, name = "Dupe Display", parent = "Misc")
     public static boolean DupeDisplay = false;
