@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+
 import org.lwjgl.input.Keyboard;
 
 import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
@@ -37,11 +38,11 @@ public class CommandKeybind {
     }
 
     public static void list() {
-        if (Keybind.keybinds.size() == 0) {
+        if (XiaojiaKeyBind.keyBinds.size() == 0) {
             ChatLib.chat("You have no keybind.");
             return;
         }
-        for (Keybind keybind : Keybind.keybinds) {
+        for (XiaojiaKeyBind keybind : XiaojiaKeyBind.keyBinds) {
             IChatComponent chatComponent = new ChatComponentText(ChatLib.addColor("&9[XJA] > &e" + keybind.getCommand() + " &b(" + Keyboard.getKeyName(keybind.getBind().getKeyCode()) + ") &r&c&l[REMOVE]"));
             ChatStyle chatStyle = new ChatStyle();
             chatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/xj keybind removeWithKey " + keybind.getBind().getKeyCode() + " " + keybind.getCommand()));
@@ -52,21 +53,21 @@ public class CommandKeybind {
     }
 
     public static void add(String command) {
-        Keybind bind = new Keybind(command, 0);
-        Keybind.keybinds.add(bind);
-        saveKeybinds();
+        XiaojiaKeyBind bind = new XiaojiaKeyBind(command, 0);
+        XiaojiaKeyBind.keyBinds.add(bind);
+        saveKeyBinds();
         ChatLib.chat("&aAdded&b keybind \"&e" + command + "&b\"!");
     }
 
     public static void remove(String command) {
-        Keybind bind = Keybind.getKeybind(command, -1);
+        XiaojiaKeyBind bind = XiaojiaKeyBind.getKeybind(command, -1);
         if (bind == null) {
             ChatLib.chat("No such keybind! Are the cases matching correctly?");
             return;
         }
         mc.gameSettings.keyBindings = (KeyBinding[]) ArrayUtils.removeElement((Object[]) mc.gameSettings.keyBindings, bind.getBind());
-        Keybind.keybinds.remove(bind);
-        saveKeybinds();
+        XiaojiaKeyBind.keyBinds.remove(bind);
+        saveKeyBinds();
         ChatLib.chat("&cRemoved&b keybind \"&e" + command + "&b\"!");
     }
 
@@ -78,51 +79,55 @@ public class CommandKeybind {
             ChatLib.chat("Not a number!");
             return;
         }
-        Keybind bind = Keybind.getKeybind(command, key);
+        XiaojiaKeyBind bind = XiaojiaKeyBind.getKeybind(command, key);
         if (bind == null) {
             ChatLib.chat("No such keybind! Are the cases and keycode matching correctly?");
             return;
         }
-        mc.gameSettings.keyBindings = (KeyBinding[])ArrayUtils.removeElement((Object[])mc.gameSettings.keyBindings, bind.getBind());
-        Keybind.keybinds.remove(bind);
-        saveKeybinds();
+        mc.gameSettings.keyBindings = (KeyBinding[]) ArrayUtils.removeElement((Object[]) mc.gameSettings.keyBindings, bind.getBind());
+        XiaojiaKeyBind.keyBinds.remove(bind);
+        saveKeyBinds();
         ChatLib.chat("&cRemoved&b keybind \"&e" + command + "&b\" (" + Keyboard.getKeyName(bind.getBind().getKeyCode()) + ") !");
     }
 
-    @SubscribeEvent
-    public void onKey(InputEvent.KeyInputEvent event) {
-        for (Keybind keybind : Keybind.keybinds)
-            if (keybind.getBind().isPressed()) {
-                //mc.ingameGUI.getChatGUI().addToSentMessages(keybind.getCommand());
-                if (keybind.getCommand().startsWith("/") &&
-                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, keybind.getCommand()) != 0) continue;
-                mc.thePlayer.sendChatMessage(keybind.getCommand());
-            }
-    }
-
-    public static void loadKeybinds() {
+    public static void loadKeyBinds() {
         try {
-            File xiaoJiaKeybinds = new File(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg");
-            if (!xiaoJiaKeybinds.exists()) {
-                xiaoJiaKeybinds.createNewFile();
+            File xiaoJiaKeyBinds = new File(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg");
+            if (!xiaoJiaKeyBinds.exists()) {
+                xiaoJiaKeyBinds.createNewFile();
             } else {
                 Reader reader = Files.newBufferedReader(Paths.get(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg"));
-                Type type = (new TypeToken<ArrayList<Keybind>>() {}).getType();
-                ArrayList<Keybind> settingsFromConfig = (new Gson()).fromJson(reader, type);
-                for (Keybind keybind : settingsFromConfig)
-                    Keybind.keybinds.add(new Keybind(keybind.getCommand(), keybind.getBind().getKeyCode()));
+                Type type = (new TypeToken<ArrayList<XiaojiaKeyBind>>() {
+                }).getType();
+                ArrayList<XiaojiaKeyBind> settingsFromConfig = (new Gson()).fromJson(reader, type);
+                for (XiaojiaKeyBind keyBind : settingsFromConfig)
+                    XiaojiaKeyBind.keyBinds.add(new XiaojiaKeyBind(keyBind.getCommand(), keyBind.getBind().getKeyCode()));
             }
-        } catch (Exception exception) {}
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
         KeyBinding h = new KeyBinding("Use /xj keybind to add keybinds!", 0, "Addons - XiaojiaAddons KeyBind");
         ClientRegistry.registerKeyBinding(h);
 
     }
 
-    public static void saveKeybinds() {
+    public static void saveKeyBinds() {
         try {
-            String json = (new Gson()).toJson(Keybind.keybinds);
+            String json = (new Gson()).toJson(XiaojiaKeyBind.keyBinds);
             Path path = Paths.get(mc.mcDataDir.getPath() + "/config/XiaoJiaAddonsKeybinds.cfg");
             Files.write(path, json.getBytes(StandardCharsets.UTF_8));
-        } catch (Exception exception) {}
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    @SubscribeEvent
+    public void onKey(InputEvent.KeyInputEvent event) {
+        for (XiaojiaKeyBind keybind : XiaojiaKeyBind.keyBinds)
+            if (keybind.getBind().isPressed()) {
+                if (keybind.getCommand().startsWith("/") &&
+                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, keybind.getCommand()) != 0) continue;
+                mc.thePlayer.sendChatMessage(keybind.getCommand());
+            }
     }
 }

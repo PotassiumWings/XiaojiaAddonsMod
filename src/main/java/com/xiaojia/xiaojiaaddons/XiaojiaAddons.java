@@ -405,7 +405,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new DevWater());
 
         MinecraftForge.EVENT_BUS.register(new CommandKeybind());
-        CommandKeybind.loadKeybinds();
+        CommandKeybind.loadKeyBinds();
 
         for (KeyBind keyBind : KeyBindUtils.keyBinds) {
             ClientRegistry.registerKeyBinding(keyBind.mcKeyBinding());

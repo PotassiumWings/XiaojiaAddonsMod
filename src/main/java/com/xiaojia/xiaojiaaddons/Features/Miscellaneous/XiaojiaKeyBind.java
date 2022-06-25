@@ -5,13 +5,13 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import java.util.ArrayList;
 
-public class Keybind {
-    public static ArrayList<Keybind> keybinds = new ArrayList<>();
+public class XiaojiaKeyBind {
+    public static ArrayList<XiaojiaKeyBind> keyBinds = new ArrayList<>();
 
-    private String command;
-    private KeyBinding bind;
+    private final String command;
+    private final KeyBinding bind;
 
-    public Keybind(String command, int key) {
+    public XiaojiaKeyBind(String command, int key) {
         this.command = command;
         this.bind = new KeyBinding(command, key, "Addons - XiaojiaAddons KeyBind");
         ClientRegistry.registerKeyBinding(this.bind);
@@ -25,10 +25,10 @@ public class Keybind {
         return this.bind;
     }
 
-    public static Keybind getKeybind(String name, int key) {
-        for (Keybind keybind : keybinds) {
-            if (keybind.getCommand().equalsIgnoreCase(name) && (key == -1 || keybind.getBind().getKeyCode() == key))
-                return keybind;
+    public static XiaojiaKeyBind getKeybind(String name, int key) {
+        for (XiaojiaKeyBind keyBind : keyBinds) {
+            if (keyBind.getCommand().equalsIgnoreCase(name) && (key == -1 || keyBind.getBind().getKeyCode() == key))
+                return keyBind;
         }
         return null;
     }
