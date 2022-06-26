@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Miscellaneous;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.event.ClickEvent;
@@ -52,11 +53,11 @@ public class CommandKeybind {
     }
 
     public static void add(String command) {
-        XiaojiaKeyBind bind = new XiaojiaKeyBind(command, 0);
         if (XiaojiaKeyBind.keyBinds.containsKey(command)) {
             ChatLib.chat("Keybind already exists!");
             return;
         }
+        XiaojiaKeyBind bind = new XiaojiaKeyBind(command, 0);
         XiaojiaKeyBind.keyBinds.put(command, bind);
         saveKeyBinds();
         ChatLib.chat("&aAdded&b keybind \"&e" + command + "&b\"!");
@@ -128,6 +129,7 @@ public class CommandKeybind {
 
     @SubscribeEvent
     public void onKey(InputEvent.KeyInputEvent event) {
+        if (!Checker.enabled) return;
         for (XiaojiaKeyBind keybind : XiaojiaKeyBind.keyBinds.values())
             if (keybind.getBind().isPressed()) {
                 if (keybind.getCommand().startsWith("/") &&
