@@ -6,6 +6,7 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
@@ -169,7 +170,7 @@ public class XYZ {
                     charmed.add(entity.getEntityId());
                 }
                 if (harvest) swapHarvest();
-                tryClickEntity(entity);
+                EntityUtils.tryRightClickEntity(entity, Configs.XYZReach);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -226,61 +227,6 @@ public class XYZ {
         } else {
             ChatLib.chat("Atominizer in hotbar is required.");
             throw new Exception("Atominizer Not Found");
-        }
-    }
-
-    private void tryClickEntity(Entity entity) {
-        ControlUtils.face(getX(entity), getY(entity) + entity.height / 2, getZ(entity));
-//        ControlUtils.forceFace();
-//        ControlUtils.rightClick();
-
-        Vec3 vec3 = getPlayer().getPositionEyes(1.0F);
-        double d0 = XiaojiaAddons.mc.playerController.getBlockReachDistance();
-        if (Configs.XYZReach > d0) d0 = Configs.XYZReach;
-        Vec3 vec31 = getPlayer().getLook(1.0F);
-        Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
-        float f1 = entity.getCollisionBorderSize();
-        AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expand(f1, f1, f1);
-        MovingObjectPosition moving = axisalignedbb.calculateIntercept(vec3, vec32);
-        if (moving == null) {
-            ChatLib.chat("Failed to click!");
-            return;
-        }
-
-        Vec3 vec = new Vec3(
-                moving.hitVec.xCoord - entity.posX,
-                moving.hitVec.yCoord - entity.posY,
-                moving.hitVec.zCoord - entity.posZ
-        );
-
-//        hitVec = vec;
-//        lookVec = vec31;
-//        entityBox = axisalignedbb;
-//        eyePos = vec3;
-
-        XiaojiaAddons.mc.getNetHandler().getNetworkManager().sendPacket(new C02PacketUseEntity(entity, vec));
-    }
-
-//    @SubscribeEvent
-//    public void onRender(RenderWorldLastEvent event) {
-//        if (entityBox == null || lookVec == null || eyePos == null || hitVec == null) return;
-//        GuiUtils.drawBoundingBox(entityBox, 2, new Color(240, 220, 230, 80));
-//        draw(eyePos, new Color(255, 0, 0, 170));
-//        GuiUtils.drawLine(
-//                eyePos,
-//                eyePos.addVector(lookVec.xCoord * 4.5, lookVec.yCoord * 4.5, lookVec.zCoord * 4.5),
-//                new Color(0, 0, 255), 3
-//        );
-//        draw(hitVec, new Color(0, 255, 0, 170));
-//    }
-
-    private void draw(Vec3 vec, Color color) {
-        if (vec != null) {
-            GuiUtils.drawBoxAtPos(
-                    (float) vec.xCoord, (float) vec.yCoord, (float) vec.zCoord,
-                    color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
-                    0.01F, 0.01F, 0
-            );
         }
     }
 }

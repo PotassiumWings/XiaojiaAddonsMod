@@ -6,14 +6,23 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
+import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.play.client.C02PacketUseEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
+import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
@@ -56,7 +65,8 @@ public class KillAll {
             for (int i = 0; i < 5; i++) {
                 if (entities.size() <= i) return;
                 Entity entity = entities.get(i);
-                XiaojiaAddons.mc.playerController.attackEntity(getPlayer(), entity);
+                if (Configs.KillAllLeft == 0) XiaojiaAddons.mc.playerController.attackEntity(getPlayer(), entity);
+                else EntityUtils.tryRightClickEntity(entity, 7);
             }
         }
     }

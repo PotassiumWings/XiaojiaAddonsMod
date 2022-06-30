@@ -28,6 +28,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Kill All Stop When Player Neaby", parent = "Kill All")
     public static boolean KillAllStop = false;
 
+    @Property(type = Property.Type.SELECT, name = "Kill All Click Mode", parent = "Kill All", options = {"LEFT", "RIGHT"})
+    public static int KillAllLeft = 0;
+
     @Property(type = Property.Type.FOLDER, name = "Trades", parent = "Accentry")
     public static boolean Trades = false;
 
