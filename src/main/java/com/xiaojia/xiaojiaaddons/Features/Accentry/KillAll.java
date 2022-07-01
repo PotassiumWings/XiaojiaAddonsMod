@@ -34,10 +34,12 @@ public class KillAll {
     public static void onPlayerNearby(Entity player) {
         if (!Configs.KillAllStop) return;
         int r = Configs.KillAllStopRadius;
-        if (MathUtils.distanceSquareFromPlayer(player) > r * r) return;
+        double dis = Math.sqrt(MathUtils.distanceSquareFromPlayer(player));
+        if (dis > r) return;
         if (should) {
             should = false;
             getPlayer().playSound("random.successful_hit", 1000, 1);
+            ChatLib.chat(String.format("Found player nearby, stopped. Player: %s, distance: %.2f", player.getName(), dis));
             ChatLib.chat("Kill All &cdeactivated");
         }
     }

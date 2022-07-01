@@ -38,10 +38,12 @@ public class Velocity {
     public static void onPlayerNearby(Entity player) {
         if (!Configs.VelocityStop) return;
         int r = Configs.VelocityStopRadius;
-        if (MathUtils.distanceSquareFromPlayer(player) > r * r) return;
+        double dis = Math.sqrt(MathUtils.distanceSquareFromPlayer(player));
+        if (dis > r) return;
         if (enabled) {
             enabled = false;
             getPlayer().playSound("random.successful_hit", 1000, 1);
+            ChatLib.chat(String.format("Found player nearby, stopped. Player: %s, distance: %.2f", player.getName(), dis));
             ChatLib.chat("Velocity &cdeactivated");
         }
     }
