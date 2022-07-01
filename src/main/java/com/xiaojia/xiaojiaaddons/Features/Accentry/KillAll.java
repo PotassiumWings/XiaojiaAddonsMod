@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
@@ -62,7 +63,8 @@ public class KillAll {
             ArrayList<Entity> entities = new ArrayList<>();
             for (Entity entity : getWorld().loadedEntityList) {
                 if (entity == getPlayer()) continue;
-                if (entity.getName().contains(Configs.KillAllName) && !(entity.isDead)) {
+                String[] names = Configs.KillAllName.split(",");
+                if (Arrays.stream(names).anyMatch(e -> entity.getName().contains(e)) && !(entity.isDead)) {
                     entities.add(entity);
                 }
             }
