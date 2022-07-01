@@ -19,8 +19,9 @@ public class DisplayLine {
         this.text = text;
     }
 
-    public void setScale(float scale) {
+    public DisplayLine setScale(float scale) {
         this.scale = scale;
+        return this;
     }
 
     public void setShadow(boolean shadow) {

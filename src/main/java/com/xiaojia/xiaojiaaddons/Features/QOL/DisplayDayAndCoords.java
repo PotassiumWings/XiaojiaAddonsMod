@@ -9,15 +9,19 @@ import com.xiaojia.xiaojiaaddons.Objects.Display.Display;
 import com.xiaojia.xiaojiaaddons.Objects.Display.DisplayLine;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
+import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.SessionUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
@@ -42,36 +46,18 @@ public class DisplayDayAndCoords {
         int worldDay = MathUtils.floor(player.worldObj.getWorldTime() / 24000.0);
         display.clearLines();
         display.setRenderLoc(Configs.DisplayDayX, Configs.DisplayDayY);
-        if (Configs.DisplayCoords) {
-            DisplayLine line = new DisplayLine("Coords: " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
-            line.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line);
-        }
-        if (Configs.DisplayDay) {
-            DisplayLine line = new DisplayLine("Day " + worldDay);
-            line.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line);
-        }
-        if (Configs.DisplayPing) {
-            DisplayLine line = new DisplayLine("Ping: " + SkyblockUtils.getPing());
-            line.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line);
-        }
-        if (Configs.FindFairyGrottoMap && SkyblockUtils.isInCrystalHollows()) {
-            DisplayLine line3 = new DisplayLine("Jasper: " + FindFairy.getBlock());
-            line3.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line3);
-        }
-        if (Configs.DisplayPacketReceived) {
-            DisplayLine line = new DisplayLine("Packet Received: " + PacketRelated.getReceivedQueueLength());
-            line.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line);
-        }
-        if (Configs.DisplayPacketSent) {
-            DisplayLine line = new DisplayLine("Packet Sent: " + PacketRelated.getSentQueueLength());
-            line.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line);
-        }
+        if (Configs.DisplayCoords)
+            display.addLine(new DisplayLine("Coords: " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ()).setScale(Configs.DisplayScale / 20F));
+        if (Configs.DisplayDay)
+            display.addLine(new DisplayLine("Day " + worldDay).setScale(Configs.DisplayScale / 20F));
+        if (Configs.DisplayPing)
+            display.addLine(new DisplayLine("Ping: " + SkyblockUtils.getPing()).setScale(Configs.DisplayScale / 20F));
+        if (Configs.FindFairyGrottoMap && SkyblockUtils.isInCrystalHollows())
+            display.addLine(new DisplayLine("Jasper: " + FindFairy.getBlock()).setScale(Configs.DisplayScale / 20F));
+        if (Configs.DisplayPacketReceived)
+            display.addLine(new DisplayLine("Packet Received: " + PacketRelated.getReceivedQueueLength()).setScale(Configs.DisplayScale / 20F));
+        if (Configs.DisplayPacketSent)
+            display.addLine(new DisplayLine("Packet Sent: " + PacketRelated.getSentQueueLength()).setScale(Configs.DisplayScale / 20F));
         if (Configs.DisplayBricks) {
             int bricks = 0;
             Inventory inventory = ControlUtils.getOpenedInventory();
@@ -79,9 +65,7 @@ public class DisplayDayAndCoords {
                 for (ItemStack itemStack : inventory.getItemStacks())
                     if (itemStack != null && itemStack.getItem() == Items.brick)
                         bricks += itemStack.stackSize;
-            DisplayLine line = new DisplayLine("Bricks: &c&l" + bricks);
-            line.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line);
+            display.addLine(new DisplayLine("Bricks: &c&l" + bricks).setScale(Configs.DisplayScale / 20F));
         }
         if (Configs.DisplayIronIngots) {
             int ironIngots = 0;
@@ -90,16 +74,11 @@ public class DisplayDayAndCoords {
                 for (ItemStack itemStack : inventory.getItemStacks())
                     if (itemStack != null && itemStack.getItem() == Items.iron_ingot)
                         ironIngots += itemStack.stackSize;
-            DisplayLine line = new DisplayLine("Iron Ingots: &0&l" + ironIngots);
-            line.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line);
+            display.addLine(new DisplayLine("Iron Ingots: &0&l" + ironIngots).setScale(Configs.DisplayScale / 20F));
         }
         String timer = Fishing.timer();
-        if (!timer.equals("")) {
-            DisplayLine line = new DisplayLine("&cFishing Timer: " + timer);
-            line.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line);
-        }
+        if (!timer.equals(""))
+            display.addLine(new DisplayLine("&cFishing Timer: " + timer).setScale(Configs.DisplayScale / 20F));
         if (SessionUtils.isDev()) {
 //            DisplayLine line = new DisplayLine("Name Cache size: " + ColorName.getCacheSize());
 //            line.setScale(Configs.DisplayScale / 20F);
@@ -110,12 +89,8 @@ public class DisplayDayAndCoords {
 //            DisplayLine fixCacheLine = new DisplayLine("Fix Entity size: " + StarredMobESP.getSetSize());
 //            fixCacheLine.setScale(Configs.DisplayScale / 20F);
 //            display.addLine(fixCacheLine);
-            DisplayLine line1 = new DisplayLine("yaw: " + MathUtils.getYaw());
-            line1.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line1);
-            DisplayLine line2 = new DisplayLine("pitch: " + MathUtils.getPitch());
-            line2.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line2);
+            display.addLine(new DisplayLine("yaw: " + MathUtils.getYaw()).setScale(Configs.DisplayScale / 20F));
+            display.addLine(new DisplayLine("pitch: " + MathUtils.getPitch()).setScale(Configs.DisplayScale / 20F));
 
 //            try {
 //                Vec3 vec = XiaojiaAddons.mc.objectMouseOver.hitVec;
@@ -139,9 +114,7 @@ public class DisplayDayAndCoords {
 //            line4.setScale(Configs.DisplayScale / 20F);
 //            display.addLine(line4);
 
-            DisplayLine line4 = new DisplayLine(String.format("Hidden entity: %d", EntityQOL.getHiddenEntityCount()));
-            line4.setScale(Configs.DisplayScale / 20F);
-            display.addLine(line4);
+            display.addLine(new DisplayLine(String.format("Hidden entity: %d", EntityQOL.getHiddenEntityCount())).setScale(Configs.DisplayScale / 20F));
 
 //            DisplayLine line3 = new DisplayLine("pro: " + DevWater.process);
 //            line2.setScale(Configs.DisplayScale / 20F);
@@ -149,6 +122,14 @@ public class DisplayDayAndCoords {
 //            DisplayLine line4 = new DisplayLine("sneaky queue: " + AutoSneakyCreeper.getSize());
 //            line4.setScale(Configs.DisplayScale / 20F);
 //            display.addLine(line4);
+        }
+        if (Configs.DisplayPlayers) {
+            List<Entity> entities = EntityUtils.getEntities();
+            entities.removeIf(e -> !EntityUtils.isPlayer(e));
+            entities.sort((a, b) -> (int) (MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
+
+            display.addLine(new DisplayLine(String.format("&f&lNearby Players: (%d)", entities.size())).setScale(Configs.DisplayScale / 20F));
+            entities.forEach(e -> display.addLine(new DisplayLine(" " + e.getName() + String.format(": &6%.2f", MathUtils.distanceSquareFromPlayer(e))).setScale(Configs.DisplayScale / 20F)));
         }
     }
 }

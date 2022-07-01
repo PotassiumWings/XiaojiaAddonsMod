@@ -2,6 +2,7 @@ package com.xiaojia.xiaojiaaddons.Features.Accentry;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.PacketRelated;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
@@ -9,6 +10,7 @@ import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
+import com.xiaojia.xiaojiaaddons.utils.PacketUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.C02PacketUseEntity;
@@ -53,6 +55,7 @@ public class KillAll {
             ChatLib.chat(should ? "Kill All &aactivated" : "Kill All &cdeactivated");
         }
         if (!should) return;
+        if (PacketRelated.getReceivedQueueLength() == 0) return;
         long cur = TimeUtils.curTime();
         if (cur - lastClicked > 1000 / Configs.AutoClickCPS) {
             lastClicked = cur;
