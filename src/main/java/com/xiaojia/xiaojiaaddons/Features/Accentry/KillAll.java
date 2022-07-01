@@ -61,6 +61,7 @@ public class KillAll {
             lastClicked = cur;
             ArrayList<Entity> entities = new ArrayList<>();
             for (Entity entity : getWorld().loadedEntityList) {
+                if (entity == getPlayer()) continue;
                 if (entity.getName().contains(Configs.KillAllName) && !(entity.isDead)) {
                     entities.add(entity);
                 }
