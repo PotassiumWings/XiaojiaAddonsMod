@@ -17,6 +17,7 @@ import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoEat;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMeat;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMiNi;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMiQi;
+import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoPick;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoQuestion;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.FastUse;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.HoverCommand;
@@ -233,6 +234,7 @@ public class XiaojiaAddons {
         // AriaCraft
         MinecraftForge.EVENT_BUS.register(new AutoClick());
         MinecraftForge.EVENT_BUS.register(new KillAll());
+        MinecraftForge.EVENT_BUS.register(new AutoPick());
         MinecraftForge.EVENT_BUS.register(new HoverCommand());
         MinecraftForge.EVENT_BUS.register(new AutoMeat());
         MinecraftForge.EVENT_BUS.register(new FastUse());

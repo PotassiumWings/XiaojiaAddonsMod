@@ -5,6 +5,20 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Accentry")
     public static boolean AriaEnabled = false;
 
+    @Property(type = Property.Type.FOLDER, name = "Auto Pick", parent = "Accentry",
+            description = "Auto pick up certain items from far away.")
+    public static boolean AutoPickEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Pick Enabled", parent = "Auto Pick")
+    public static boolean AutoPick = false;
+
+    @Property(type = Property.Type.TEXT, name = "Auto Pick Names", parent = "Auto Pick", description = "xx,yy,z")
+    public static String AutoPickNames = "银,金,钻,蜘蛛卵";
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Pick CD", parent = "Auto Pick", description = "CD between 2 picks.",
+            min = 100, max = 5000, step = 20)
+    public static int AutoPickCD = 1000;
+
     @Property(type = Property.Type.FOLDER, name = "Auto Left Click", parent = "Accentry")
     public static boolean AutoLeftClickEnabled = false;
 
