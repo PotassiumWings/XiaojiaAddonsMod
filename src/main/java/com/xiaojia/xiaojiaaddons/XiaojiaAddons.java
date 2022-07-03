@@ -19,6 +19,7 @@ import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMiNi;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMiQi;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoPick;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoQuestion;
+import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoRongYao;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.FastUse;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.HoverCommand;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.KillAll;
@@ -237,6 +238,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoPick());
         MinecraftForge.EVENT_BUS.register(new HoverCommand());
         MinecraftForge.EVENT_BUS.register(new AutoMeat());
+        MinecraftForge.EVENT_BUS.register(new AutoRongYao());
         MinecraftForge.EVENT_BUS.register(new FastUse());
         MinecraftForge.EVENT_BUS.register(new AutoQuestion());
         AutoMiNi mini = new AutoMiNi();

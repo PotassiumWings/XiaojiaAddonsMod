@@ -52,6 +52,10 @@ public class Configs {
             description = "Automatically put meat in merchant menu.")
     public static boolean AutoMeat = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Daily Quest", parent = "Trades",
+            description = "Automatically Finish Daily Quest.")
+    public static boolean AutoRongYao = false;
+
     @Property(type = Property.Type.FOLDER, name = "Auto Question", parent = "Accentry")
     public static boolean AutoQuestionEnabled = false;
 
