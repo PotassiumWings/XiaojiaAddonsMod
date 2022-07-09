@@ -12,6 +12,7 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Config.Setting.Setting;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoBack;
+import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoBottle;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoClick;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoEat;
 import com.xiaojia.xiaojiaaddons.Features.Accentry.AutoMeat;
@@ -69,6 +70,7 @@ import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestProfit;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.CommandKeybind;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.DevMode;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.EasyTrigger;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.MusicRune;
@@ -249,6 +251,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(miqi);
         MinecraftForge.EVENT_BUS.register(new AutoBack());
         MinecraftForge.EVENT_BUS.register(new AutoEat());
+        MinecraftForge.EVENT_BUS.register(new AutoBottle());
 
         // Utils
         MinecraftForge.EVENT_BUS.register(new ControlUtils());
@@ -321,6 +324,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new DevMode());
         MinecraftForge.EVENT_BUS.register(new MusicRune());
         MinecraftForge.EVENT_BUS.register(new PacketRelated());
+        MinecraftForge.EVENT_BUS.register(new EasyTrigger());
 
         // Nether
         MinecraftForge.EVENT_BUS.register(new CorruptedESP());

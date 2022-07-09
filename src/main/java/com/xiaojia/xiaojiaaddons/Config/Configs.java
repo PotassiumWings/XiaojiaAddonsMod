@@ -104,6 +104,81 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;
 
+    @Property(type = Property.Type.FOLDER, name = "Easy Trigger", parent = "Misc",
+            description = "When you receive something matches 'On Receive', do the command in 'Do Command'.\n" +
+                    "Use reg-expression to work. Ignores color code.\n" +
+                    "Be aware that in some cases you might spam the command if you dont know how to use this correctly.\n" +
+                    "So there's a limit where you can trigger at most 5 times in 1 second.")
+    public static boolean EasyTriggerEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Easy Trigger Enabled", parent = "Easy Trigger")
+    public static boolean EasyTrigger = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Easy Trigger Debug Mode", parent = "Easy Trigger")
+    public static boolean EasyTriggerDebugMode = true;
+
+    @Property(type = Property.Type.FOLDER, name = "Easy Trigger Pair 1", parent = "Easy Trigger",
+            description = "This is an example usage.\n" +
+                    "When you receive 'Mimic Dead!' message from party chat, repeat it.")
+    public static boolean EasyTriggerPair1 = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Easy Trigger Pair 1 Enabled", parent = "Easy Trigger Pair 1")
+    public static boolean EasyTriggerPair1Enabled = false;
+
+    @Property(type = Property.Type.TEXT, name = "Easy Trigger Pair 1 - On Receive", parent = "Easy Trigger Pair 1")
+    public static String EasyTriggerPair1OnReceive = "^Party > (\\[MVP\\+*\\]|\\[VIP\\+*\\]|)[0-9a-zA-Z_]+: Mimic Dead!$";
+
+    @Property(type = Property.Type.TEXT, name = "Easy Trigger Pair 1 - Do Command", parent = "Easy Trigger Pair 1")
+    public static String EasyTriggerPair1DoCommand = "/pc Mimic Dead!";
+
+    @Property(type = Property.Type.FOLDER, name = "Easy Trigger Pair 2", parent = "Easy Trigger")
+    public static boolean EasyTriggerPair2 = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Easy Trigger Pair 2 Enabled", parent = "Easy Trigger Pair 2")
+    public static boolean EasyTriggerPair2Enabled = false;
+
+    @Property(type = Property.Type.TEXT, name = "Easy Trigger Pair 2 - On Receive", parent = "Easy Trigger Pair 2")
+    public static String EasyTriggerPair2OnReceive = "";
+
+    @Property(type = Property.Type.TEXT, name = "Easy Trigger Pair 2 - Do Command", parent = "Easy Trigger Pair 2")
+    public static String EasyTriggerPair2DoCommand = "";
+
+    @Property(type = Property.Type.FOLDER, name = "Easy Trigger Pair 3", parent = "Easy Trigger")
+    public static boolean EasyTriggerPair3 = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Easy Trigger Pair 3 Enabled", parent = "Easy Trigger Pair 3")
+    public static boolean EasyTriggerPair3Enabled = false;
+
+    @Property(type = Property.Type.TEXT, name = "Easy Trigger Pair 3 - On Receive", parent = "Easy Trigger Pair 3")
+    public static String EasyTriggerPair3OnReceive = "";
+
+    @Property(type = Property.Type.TEXT, name = "Easy Trigger Pair 3 - Do Command", parent = "Easy Trigger Pair 3")
+    public static String EasyTriggerPair3DoCommand = "";
+
+    @Property(type = Property.Type.FOLDER, name = "Easy Trigger Pair 4", parent = "Easy Trigger")
+    public static boolean EasyTriggerPair4 = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Easy Trigger Pair 4 Enabled", parent = "Easy Trigger Pair 4")
+    public static boolean EasyTriggerPair4Enabled = false;
+
+    @Property(type = Property.Type.TEXT, name = "Easy Trigger Pair 4 - On Receive", parent = "Easy Trigger Pair 4")
+    public static String EasyTriggerPair4OnReceive = "";
+
+    @Property(type = Property.Type.TEXT, name = "Easy Trigger Pair 4 - Do Command", parent = "Easy Trigger Pair 4")
+    public static String EasyTriggerPair4DoCommand = "";
+
+    @Property(type = Property.Type.FOLDER, name = "Easy Trigger Pair 5", parent = "Easy Trigger")
+    public static boolean EasyTriggerPair5 = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Easy Trigger Pair 5 Enabled", parent = "Easy Trigger Pair 5")
+    public static boolean EasyTriggerPair5Enabled = false;
+
+    @Property(type = Property.Type.TEXT, name = "Easy Trigger Pair 5 - On Receive", parent = "Easy Trigger Pair 5")
+    public static String EasyTriggerPair5OnReceive = "";
+
+    @Property(type = Property.Type.TEXT, name = "Easy Trigger Pair 5 - Do Command", parent = "Easy Trigger Pair 5")
+    public static String EasyTriggerPair5DoCommand = "";
+
     @Property(type = Property.Type.FOLDER, name = "API", parent = "Misc")
     public static boolean API = false;
 
