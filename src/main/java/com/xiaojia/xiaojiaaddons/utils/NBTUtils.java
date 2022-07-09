@@ -120,6 +120,6 @@ public class NBTUtils {
     }
 
     public static boolean isBookUltimateFromName(String name) {
-        return name.contains("\u00a79\u00a7d\u00a7l");
+        return name.contains("\u00a7d\u00a7l");
     }
 }

@@ -30,10 +30,10 @@ public class ShowBookName {
         if (inventory.getName().contains("Superpairs (")) return;
         ItemStack itemStack = event.itemStack;
         if (itemStack == null || !itemStack.hasDisplayName()) return;
-        String name = ChatLib.removeFormatting(itemStack.getDisplayName()).toLowerCase();
+        String name = ChatLib.removeFormatting(itemStack.getDisplayName());
         if (!itemStack.getUnlocalizedName().contains("enchantedBook")) return;
         boolean auction = inventory.getName().contains("Auction") || inventory.getName().contains("Bids");
-        if (!name.startsWith("enchanted book") && !auction) return;
+        if (!name.toLowerCase().startsWith("enchanted book") && !auction) return;
 
         String nameString = "";
         String levelString = "";
