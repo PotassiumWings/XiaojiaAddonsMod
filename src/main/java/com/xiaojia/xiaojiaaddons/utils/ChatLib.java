@@ -30,6 +30,10 @@ public class ChatLib {
     }
 
     public static void chat(String chatMessage) {
+        chat(chatMessage, true);
+    }
+
+    public static void chat(String chatMessage, boolean post) {
         if (chatMessage == null) chatMessage = "null";
         if (!Configs.ShowXJAMessage) {
             System.err.println("Chat: " + chatMessage);
@@ -41,7 +45,7 @@ public class ChatLib {
             text = addColor(text);
             System.out.println(text);
             IChatComponent component = new ChatComponentText(text);
-            addComponent(component);
+            addComponent(component, post);
         }
     }
 

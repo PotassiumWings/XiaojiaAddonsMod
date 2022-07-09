@@ -19,9 +19,9 @@ public class EasyTrigger {
     private static final ArrayDeque<Long> queue = new ArrayDeque<>();
 
     public static void doCommand(String command, int trigger) {
-        if (Configs.EasyTriggerDebugMode) ChatLib.chat("Easy Trigger - " + trigger + " triggered");
+        if (Configs.EasyTriggerDebugMode) ChatLib.chat("Easy Trigger - " + trigger + " triggered", false);
         if (queue.size() >= 5) {
-            if (Configs.EasyTriggerDebugMode) ChatLib.chat("Easy Trigger - but queue length exceeded.");
+            if (Configs.EasyTriggerDebugMode) ChatLib.chat("Easy Trigger - but queue length exceeded.", false);
             return;
         }
         queue.offerLast(TimeUtils.curTime());
