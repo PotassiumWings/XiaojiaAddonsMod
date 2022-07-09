@@ -97,7 +97,7 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Bottle Enable", parent = "Auto Bottle")
     public static boolean AutoBottle = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Bottle Threshold", parent = "Auto Bottle", min = 0, max = 150)
+    @Property(type = Property.Type.NUMBER, name = "Auto Bottle Threshold", parent = "Auto Bottle", min = 0, max = 1500, step = 10)
     public static int AutoBottleThreshold = 100;
 
     // Misc
@@ -108,7 +108,7 @@ public class Configs {
             description = "When you receive something matches 'On Receive',\n" +
                     "do the command in 'Do Command'.\n" +
                     "Use reg-expression to work. Ignores color code.\n" +
-                    "&c&lBe aware that in some cases you might spam the command or crash the game " +
+                    "&c&lBe aware that in some cases you might spam the command or crash the game\n" +
                     "&c&lif you don't know how to use this correctly.\n" +
                     "So there's a limit where you can trigger at most 5 times in 1 second.")
     public static boolean EasyTriggerEnabled = false;
