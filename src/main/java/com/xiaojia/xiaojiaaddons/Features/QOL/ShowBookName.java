@@ -44,14 +44,13 @@ public class ShowBookName {
         } else {
             try {
                 ArrayList<String> nameAndLevel;
-                if (auction) {
-                    nameAndLevel = NBTUtils.getBookNameAndLevelFromString(name);
-                } else {
+                if (auction) nameAndLevel = NBTUtils.getBookNameAndLevelFromString(name);
+                else nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
 
-                    nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
-                }
                 if (nameAndLevel.size() != 2) return;
-                boolean isUltimate = NBTUtils.isBookUltimate(itemStack);
+                boolean isUltimate;
+                if (auction) isUltimate = NBTUtils.isBookUltimateFromName(itemStack.getDisplayName());
+                else isUltimate = NBTUtils.isBookUltimate(itemStack);
 
                 String colorPrefix = (isUltimate ? "\u00a7d\u00a7l" : "");
                 String bookName = nameAndLevel.get(0);

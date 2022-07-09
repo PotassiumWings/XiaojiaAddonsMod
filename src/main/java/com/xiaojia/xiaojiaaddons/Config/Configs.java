@@ -105,9 +105,11 @@ public class Configs {
     public static boolean MiscEnabled = false;
 
     @Property(type = Property.Type.FOLDER, name = "Easy Trigger", parent = "Misc",
-            description = "When you receive something matches 'On Receive', do the command in 'Do Command'.\n" +
+            description = "When you receive something matches 'On Receive',\n" +
+                    "do the command in 'Do Command'.\n" +
                     "Use reg-expression to work. Ignores color code.\n" +
-                    "Be aware that in some cases you might spam the command if you dont know how to use this correctly.\n" +
+                    "&c&lBe aware that in some cases you might spam the command or crash the game " +
+                    "&c&lif you don't know how to use this correctly.\n" +
                     "So there's a limit where you can trigger at most 5 times in 1 second.")
     public static boolean EasyTriggerEnabled = false;
 

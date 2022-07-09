@@ -57,6 +57,7 @@ public class ShowAttribute {
         String finalNameString = nameString;
         if (Arrays.stream(names).noneMatch(e -> finalNameString.toLowerCase().contains(e))) return;
 
-        GuiUtils.drawNameAndLevel(event.renderer, nameString, levelString, event.x, event.y, nameScale, levelScale);
+        GuiUtils.drawNameAndLevel(event.renderer, nameString.substring(0, Math.min(nameString.length(), 3)),
+                levelString, event.x, event.y, nameScale, levelScale);
     }
 }
