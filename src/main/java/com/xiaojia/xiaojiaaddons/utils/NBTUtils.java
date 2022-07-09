@@ -87,6 +87,8 @@ public class NBTUtils {
         try {
             String bookName = ChatLib.removeFormatting(getLore(itemStack).get(1));
             bookName = bookName.replaceAll(" ✖", "");
+            if (bookName.contains(","))
+                bookName = bookName.split(",")[0];
             return getBookNameAndLevelFromString(bookName);
         } catch (Exception e) {
             return res;
