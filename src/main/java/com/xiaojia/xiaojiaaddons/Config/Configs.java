@@ -91,6 +91,15 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Auto Eat Hunger", parent = "Combat Related", min = 0, max = 19)
     public static int AutoEatHunger = 14;
 
+    @Property(type = Property.Type.FOLDER, name = "Auto Bottle", parent = "Accentry")
+    public static boolean AutoBottleEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Bottle Enable", parent = "Auto Bottle")
+    public static boolean AutoBottle = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Bottle Threshold", parent = "Auto Bottle", min = 0, max = 150)
+    public static int AutoBottleThreshold = 100;
+
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")
     public static boolean MiscEnabled = false;
