@@ -86,6 +86,15 @@ public class NBTUtils {
         ArrayList<String> res = new ArrayList<>();
         try {
             String bookName = ChatLib.removeFormatting(getLore(itemStack).get(1));
+            return getBookNameAndLevelFromString(bookName);
+        } catch (Exception e) {
+            return res;
+        }
+    }
+
+    public static ArrayList<String> getBookNameAndLevelFromString(String bookName) {
+        ArrayList<String> res = new ArrayList<>();
+        try {
             // "Feather", "Falling", "VI"
             ArrayList<String> bookNameSplit = new ArrayList<>(Arrays.asList(bookName.split(" ")));
             // "VI" -> 6
@@ -103,9 +112,13 @@ public class NBTUtils {
 
     public static boolean isBookUltimate(ItemStack itemStack) {
         try {
-            return getLore(itemStack).get(1).contains("\u00a79\u00a7d\u00a7l");
+            return isBookUltimateFromName(getLore(itemStack).get(1));
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static boolean isBookUltimateFromName(String name) {
+        return name.contains("\u00a79\u00a7d\u00a7l");
     }
 }

@@ -32,8 +32,8 @@ public class ShowBookName {
         if (itemStack == null || !itemStack.hasDisplayName()) return;
         String name = ChatLib.removeFormatting(itemStack.getDisplayName()).toLowerCase();
         if (!itemStack.getUnlocalizedName().contains("enchantedBook")) return;
-        if (!name.startsWith("enchanted book") && !(inventory.getName().contains("Auction") || inventory.getName().contains("Bids")))
-            return;
+        boolean auction = inventory.getName().contains("Auction") || inventory.getName().contains("Bids");
+        if (!name.startsWith("enchanted book") && !auction) return;
 
         String nameString = "";
         String levelString = "";
@@ -43,7 +43,13 @@ public class ShowBookName {
             levelString = p.split(" ")[1];
         } else {
             try {
-                ArrayList<String> nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
+                ArrayList<String> nameAndLevel;
+                if (auction) {
+                    nameAndLevel = NBTUtils.getBookNameAndLevelFromString(name);
+                } else {
+
+                    nameAndLevel = NBTUtils.getBookNameAndLevel(itemStack);
+                }
                 if (nameAndLevel.size() != 2) return;
                 boolean isUltimate = NBTUtils.isBookUltimate(itemStack);
 

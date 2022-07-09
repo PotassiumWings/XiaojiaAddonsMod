@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ShowAttribute {
@@ -52,7 +53,10 @@ public class ShowAttribute {
                 return;
             }
         }
-        if (!nameString.toLowerCase().contains(Configs.ShowAttributeName.toLowerCase())) return;
+        String[] names = Configs.ShowAttributeName.toLowerCase().split(",");
+        String finalNameString = nameString;
+        if (Arrays.stream(names).noneMatch(e -> finalNameString.toLowerCase().contains(e))) return;
+
         GuiUtils.drawNameAndLevel(event.renderer, nameString, levelString, event.x, event.y, nameScale, levelScale);
     }
 }

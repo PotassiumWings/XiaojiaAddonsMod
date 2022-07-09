@@ -1078,7 +1078,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Show Attribute Enable", parent = "Show Attribute")
     public static boolean ShowAttribute = false;
 
-    @Property(type = Property.Type.TEXT, name = "Show Attribute Contains", parent = "Show Attribute")
+    @Property(type = Property.Type.TEXT, name = "Show Attribute Contains", parent = "Show Attribute",
+            description = "Use comma to split more than one attributes.\n" +
+                    "For example, 'Mana Pool,Life Regen,Fishing Exp'.")
     public static String ShowAttributeName = "Mana Pool";
 
     @Property(type = Property.Type.FOLDER, name = "Item Attribute Filter", parent = "QOL",
