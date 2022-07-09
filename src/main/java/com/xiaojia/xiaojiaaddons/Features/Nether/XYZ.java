@@ -3,11 +3,9 @@ package com.xiaojia.xiaojiaaddons.Features.Nether;
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.PacketSendEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
-import com.xiaojia.xiaojiaaddons.XiaojiaAddons;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
-import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.NBTUtils;
@@ -20,22 +18,16 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getX;
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getY;
-import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 

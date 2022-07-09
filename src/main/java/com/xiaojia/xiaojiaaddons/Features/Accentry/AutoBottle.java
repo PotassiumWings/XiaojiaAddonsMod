@@ -8,7 +8,6 @@ import com.xiaojia.xiaojiaaddons.Objects.KeyBind;
 import com.xiaojia.xiaojiaaddons.Objects.Pair;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
-import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,8 +17,14 @@ import org.lwjgl.input.Keyboard;
 import java.util.ArrayList;
 
 public class AutoBottle {
-    private final KeyBind keyBind = new KeyBind("Auto Bottle", Keyboard.KEY_NONE);
     private static boolean should = false;
+    private final KeyBind keyBind = new KeyBind("Auto Bottle", Keyboard.KEY_NONE);
+
+    public static void stop(String reason) {
+        ChatLib.chat(reason);
+        ChatLib.chat("Auto Bottle &cdeactivated");
+        should = false;
+    }
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
@@ -44,11 +49,8 @@ public class AutoBottle {
                 hotbarSlots.add(new Pair<>(i, itemStack.stackSize));
         }
         if (hotbarSlots.size() == 0) {
-            if (slots.size() == 0) {
-                stop("No enough bottles.");
-            } else {
-                for (int i : slots) inventory.click(i, true, "LEFT");
-            }
+            if (slots.size() == 0) stop("No enough bottles.");
+            else for (int i : slots) inventory.click(i, true, "LEFT");
         } else {
             for (Pair<Integer, Integer> pair : hotbarSlots) {
                 ControlUtils.setHeldItemIndex(pair.getKey());
@@ -58,11 +60,5 @@ public class AutoBottle {
                 }
             }
         }
-    }
-
-    public static void stop(String reason) {
-        ChatLib.chat(reason);
-        ChatLib.chat("Auto Bottle &cdeactivated");
-        should = false;
     }
 }

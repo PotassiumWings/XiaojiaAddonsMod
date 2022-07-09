@@ -66,7 +66,12 @@ public class Config {
     private static void dfs(ArrayList<Setting> settings, Setting currentSetting) {
         settings.add(currentSetting);
         for (Setting setting : currentSetting.sons) {
-            dfs(settings, setting);
+            if (!(setting instanceof FolderSetting))
+                dfs(settings, setting);
+        }
+        for (Setting setting : currentSetting.sons) {
+            if (setting instanceof FolderSetting)
+                dfs(settings, setting);
         }
     }
 

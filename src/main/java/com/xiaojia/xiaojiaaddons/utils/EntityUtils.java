@@ -30,6 +30,10 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class EntityUtils {
+    private static final ArrayList<String> summonItemIDs = new ArrayList<>(
+            Arrays.asList("HEAVY_HELMET", "ZOMBIE_KNIGHT_HELMET", "SKELETOR_HELMET", "SUPER_HEAVY_HELMET")
+    );
+
     public static String getHeadOwner(Entity entity) {
         if (!(entity instanceof EntityArmorStand)) return null;
         ItemStack helm = ((EntityArmorStand) entity).getEquipmentInSlot(4);
@@ -75,7 +79,6 @@ public class EntityUtils {
         return res;
     }
 
-
     public static void tryRightClickEntity(Entity entity, double reach) {
         ControlUtils.face(getX(entity), getY(entity) + entity.height / 2, getZ(entity));
 
@@ -99,10 +102,6 @@ public class EntityUtils {
         );
         XiaojiaAddons.mc.getNetHandler().getNetworkManager().sendPacket(new C02PacketUseEntity(entity, vec));
     }
-
-    private static final ArrayList<String> summonItemIDs = new ArrayList<>(
-            Arrays.asList("HEAVY_HELMET", "ZOMBIE_KNIGHT_HELMET", "SKELETOR_HELMET", "SUPER_HEAVY_HELMET")
-    );
 
     public static boolean isSummon(Entity entity) {
         if (entity instanceof EntityPlayer)

@@ -4,7 +4,6 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
-import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -18,6 +17,18 @@ import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class EasyTrigger {
     private static final ArrayDeque<Long> queue = new ArrayDeque<>();
+
+    public static void doCommand(String command, int trigger) {
+        if (Configs.EasyTriggerDebugMode) ChatLib.chat("Easy Trigger - " + trigger + " triggered");
+        if (queue.size() >= 5) {
+            if (Configs.EasyTriggerDebugMode) ChatLib.chat("Easy Trigger - but queue length exceeded.");
+            return;
+        }
+        queue.offerLast(TimeUtils.curTime());
+
+        if (!command.startsWith("/") || ClientCommandHandler.instance.executeCommand(mc.thePlayer, command) == 0)
+            mc.thePlayer.sendChatMessage(command);
+    }
 
     @SubscribeEvent
     public void onReceive(ClientChatReceivedEvent event) {
@@ -57,17 +68,5 @@ public class EasyTrigger {
         while (!queue.isEmpty() && cur - queue.getFirst() > 1000) {
             queue.pollFirst();
         }
-    }
-
-    public static void doCommand(String command, int trigger) {
-        if (Configs.EasyTriggerDebugMode) ChatLib.chat("Easy Trigger - " + trigger + " triggered");
-        if (queue.size() >= 5) {
-            if (Configs.EasyTriggerDebugMode) ChatLib.chat("Easy Trigger - but queue length exceeded.");
-            return;
-        }
-        queue.offerLast(TimeUtils.curTime());
-
-        if (!command.startsWith("/") || ClientCommandHandler.instance.executeCommand(mc.thePlayer, command) == 0)
-            mc.thePlayer.sendChatMessage(command);
     }
 }

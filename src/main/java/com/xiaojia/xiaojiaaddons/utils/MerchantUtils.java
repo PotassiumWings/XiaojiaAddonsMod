@@ -1,6 +1,5 @@
 package com.xiaojia.xiaojiaaddons.utils;
 
-import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.Objects.Inventory;
 import net.minecraft.entity.IMerchant;
