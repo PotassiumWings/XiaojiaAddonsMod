@@ -2,10 +2,13 @@ package com.xiaojia.xiaojiaaddons.utils;
 
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Deque;
 import java.util.LinkedList;
+
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class CommandsUtils {
     private static final Deque<String> commandsQueue = new LinkedList<>();
@@ -33,7 +36,9 @@ public class CommandsUtils {
             if (commandsQueue.size() > 0) {
                 String command = commandsQueue.pollFirst();
                 sentQueue.addLast(TimeUtils.curTime());
-                ChatLib.say(command);
+                if (!command.startsWith("/") ||
+                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, command) == 0)
+                    mc.thePlayer.sendChatMessage(command);
                 lastSent = TimeUtils.curTime();
             }
         }

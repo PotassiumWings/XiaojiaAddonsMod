@@ -6,12 +6,15 @@ import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.CommandsUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayDeque;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.xiaojia.xiaojiaaddons.XiaojiaAddons.mc;
 
 public class EasyTrigger {
     private static final ArrayDeque<Long> queue = new ArrayDeque<>();
@@ -29,22 +32,22 @@ public class EasyTrigger {
         if (Configs.EasyTriggerPair2Enabled) {
             Pattern pattern = Pattern.compile(Configs.EasyTriggerPair2OnReceive);
             Matcher matcher = pattern.matcher(message);
-            if (matcher.find()) doCommand(Configs.EasyTriggerPair2DoCommand, 1);
+            if (matcher.find()) doCommand(Configs.EasyTriggerPair2DoCommand, 2);
         }
         if (Configs.EasyTriggerPair3Enabled) {
             Pattern pattern = Pattern.compile(Configs.EasyTriggerPair3OnReceive);
             Matcher matcher = pattern.matcher(message);
-            if (matcher.find()) doCommand(Configs.EasyTriggerPair3DoCommand, 1);
+            if (matcher.find()) doCommand(Configs.EasyTriggerPair3DoCommand, 3);
         }
         if (Configs.EasyTriggerPair4Enabled) {
             Pattern pattern = Pattern.compile(Configs.EasyTriggerPair4OnReceive);
             Matcher matcher = pattern.matcher(message);
-            if (matcher.find()) doCommand(Configs.EasyTriggerPair4DoCommand, 1);
+            if (matcher.find()) doCommand(Configs.EasyTriggerPair4DoCommand, 4);
         }
         if (Configs.EasyTriggerPair5Enabled) {
             Pattern pattern = Pattern.compile(Configs.EasyTriggerPair5OnReceive);
             Matcher matcher = pattern.matcher(message);
-            if (matcher.find()) doCommand(Configs.EasyTriggerPair5DoCommand, 1);
+            if (matcher.find()) doCommand(Configs.EasyTriggerPair5DoCommand, 5);
         }
     }
 
@@ -63,6 +66,8 @@ public class EasyTrigger {
             return;
         }
         queue.offerLast(TimeUtils.curTime());
-        CommandsUtils.addCommand(command);
+
+        if (!command.startsWith("/") || ClientCommandHandler.instance.executeCommand(mc.thePlayer, command) == 0)
+            mc.thePlayer.sendChatMessage(command);
     }
 }
