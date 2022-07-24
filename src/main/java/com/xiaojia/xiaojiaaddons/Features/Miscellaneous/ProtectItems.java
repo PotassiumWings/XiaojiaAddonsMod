@@ -31,7 +31,8 @@ public class ProtectItems {
         if (event.slotId == -999 && event.mode == 0) itemStack = getPlayer().inventory.getItemStack();
         // q
         if (event.slotId != -999 && event.mode == 4 && (event.mouseButtonClicked == 0 || event.mouseButtonClicked == 1))
-            itemStack = ControlUtils.getOpenedInventory().getItemInSlot(event.slotId);
+            if (ControlUtils.getOpenedInventory() != null) // in case Checker.enabled == false, at com/xiaojia/xiaojiaaddons/utils/ControlUtils.java:508
+                itemStack = ControlUtils.getOpenedInventory().getItemInSlot(event.slotId);
         if (itemStack != null && shouldProtect(itemStack))
             protect(event, "dropping");
     }
