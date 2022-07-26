@@ -47,6 +47,7 @@ public class KillAll {
             ChatLib.chat(should ? "Kill All &aactivated" : "Kill All &cdeactivated");
         }
         if (!should) return;
+        if (AutoRegenBow.shouldFastBow && Configs.StopKillAllWhenAutoRegen) return;
         if (PacketRelated.getReceivedQueueLength() == 0) return;
         long cur = TimeUtils.curTime();
         if (cur - lastClicked > 1000 / Configs.AutoClickCPS) {

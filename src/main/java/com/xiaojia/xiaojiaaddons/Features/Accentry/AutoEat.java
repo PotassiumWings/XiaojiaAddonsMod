@@ -18,6 +18,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 public class AutoEat {
     private long lastEat = 0;
     public static boolean autoEating = false;
+    private Thread eatingThread = null;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -29,7 +30,12 @@ public class AutoEat {
 
         int level = player.getFoodStats().getFoodLevel();
         long cur = TimeUtils.curTime();
-        if (level <= Configs.AutoEatHunger && cur - lastEat > 5 * 1000) {
+        autoEating = level <= Configs.AutoEatHunger && cur - lastEat > 5 * 1000;
+        if (autoEating && cur - lastEat > 5 * 1000) {
+            if (AutoRegenBow.healingThread != null && AutoRegenBow.healingThread.isAlive()) {
+                AutoRegenBow.healingThread.interrupt();
+                return;
+            }
             int index = -1;
             for (int i = 0; i < 9; i++) {
                 ItemStack itemStack = inventory.getItemInSlot(inventory.getSize() - 9 + i);
@@ -46,8 +52,7 @@ public class AutoEat {
             if (XiaojiaAddons.mc.playerController.sendUseItem(player, getWorld(), held)) {
                 XiaojiaAddons.mc.entityRenderer.itemRenderer.resetEquippedProgress2();
             }
-            new Thread(() -> {
-                autoEating = true;
+            eatingThread = new Thread(() -> {
                 try {
                     ControlUtils.holdRightClick();
                     Thread.sleep(200);
@@ -57,7 +62,8 @@ public class AutoEat {
                     e.printStackTrace();
                 }
                 autoEating = false;
-            }).start();
+            });
+            eatingThread.start();
         }
     }
 }

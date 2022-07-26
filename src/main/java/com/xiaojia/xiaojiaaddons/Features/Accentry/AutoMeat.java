@@ -32,7 +32,11 @@ public class AutoMeat {
                                 (npc == EnumNPC.JY && !itemStack.getDisplayName().contains("精盐肉块")) ||
                                 (npc == EnumNPC.XNH && !itemStack.getDisplayName().contains("臭肉")) ||
                                 (npc == EnumNPC.CXK && !itemStack.getDisplayName().contains("白羽鸡肉")) ||
-                                itemStack.stackSize != 64) continue;
+                                itemStack.stackSize != 64) {
+                            if (itemStack != null && npc == EnumNPC.JY && itemStack.getDisplayName().contains("浓缩精华")) {
+                                inventory.click(0, true, "LEFT", 0);
+                            } else continue;
+                        }
                         inventory.click(i, false, "LEFT", 0);
                         inventory.click(slot, false, "LEFT", 0);
                         if (npc == EnumNPC.CXK) slot = 1 - slot;

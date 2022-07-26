@@ -22,8 +22,8 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class AutoRegenBow {
-    private Thread healingThread = null;
-    private boolean shouldFastBow = false;
+    public static Thread healingThread = null;
+    public static boolean shouldFastBow = false;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -31,31 +31,41 @@ public class AutoRegenBow {
         if (!Configs.AutoRegenBow) return;
         EntityPlayer player = getPlayer();
         if (player == null || player.getHealth() / player.getMaxHealth() > Configs.AutoRegenBowHP / 20.0) return;
-        if (player.getFoodStats().getFoodLevel() != 20 || AutoEat.autoEating) return;
+        if (player.getFoodStats().getFoodLevel() <= 17 || AutoEat.autoEating) return;
         if (healingThread != null && healingThread.isAlive()) return;
         healingThread = new Thread(() -> {
-            Inventory inventory = ControlUtils.getOpenedInventory();
-            if (inventory == null || inventory.getSize() < 9) return;
-            List<ItemStack> items = inventory.getItemStacks().subList(inventory.getSize() - 9, inventory.getSize());
-            for (int i = 0; i < 9; i++) {
-                ItemStack item = items.get(i);
-                if (item == null) continue;
-                String name = item.getDisplayName();
-                if (name.contains("永生之弓")) {
-                    int curIndex = ControlUtils.getHeldItemIndex();
-                    ControlUtils.setHeldItemIndex(i);
-                    if (XiaojiaAddons.mc.playerController.sendUseItem(player, getWorld(), item)) {
-                        XiaojiaAddons.mc.entityRenderer.itemRenderer.resetEquippedProgress2();
+            while (player.getHealth() / player.getMaxHealth() < Configs.AutoRegenBowHP2 / 20.0) {
+                Inventory inventory = ControlUtils.getOpenedInventory();
+                if (inventory == null || inventory.getSize() < 9) return;
+                List<ItemStack> items = inventory.getItemStacks().subList(inventory.getSize() - 9, inventory.getSize());
+                int curIndex = ControlUtils.getHeldItemIndex();
+
+                boolean found = false;
+                for (int i = 0; i < 9; i++) {
+                    ItemStack item = items.get(i);
+                    if (item == null) continue;
+                    String name = item.getDisplayName();
+                    if (name.contains("永生之弓")) {
+                        found = true;
+                        ControlUtils.setHeldItemIndex(i);
+                        if (XiaojiaAddons.mc.playerController.sendUseItem(player, getWorld(), item)) {
+                            XiaojiaAddons.mc.entityRenderer.itemRenderer.resetEquippedProgress2();
+                        }
+                        shouldFastBow = true;
+                        ControlUtils.holdRightClick();
+                        try {
+                            Thread.sleep(200);
+                        } catch (Exception e) {
+                            return;
+                        } finally {
+                            shouldFastBow = false;
+                            ControlUtils.setHeldItemIndex(curIndex);
+                            ControlUtils.releaseRightClick();
+                        }
+                        break;
                     }
-                    shouldFastBow = true;
-                    ControlUtils.holdRightClick();
-                    try {
-                        Thread.sleep(200);
-                    } catch (Exception ignored) {}
-                    shouldFastBow = false;
-                    ControlUtils.setHeldItemIndex(curIndex);
-                    return;
                 }
+                if (!found) break;
             }
         });
         healingThread.start();

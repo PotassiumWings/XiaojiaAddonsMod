@@ -9,11 +9,17 @@ public class Configs {
             description = "Auto use bow with name contains 永生之弓 when your health is low.")
     public static boolean AutoRegenBowEnabled = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Regen Bow HP", parent = "Auto Regen Bow", min = 0, max = 20)
-    public static int AutoRegenBowHP = 8;
+    @Property(type = Property.Type.NUMBER, name = "Auto Regen Bow HP - min", parent = "Auto Regen Bow", min = 0, max = 20)
+    public static int AutoRegenBowHP = 10;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Regen Bow HP - max", parent = "Auto Regen Bow", min = 0, max = 20)
+    public static int AutoRegenBowHP2 = 16;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Regen Bow Enabled", parent = "Auto Regen Bow")
     public static boolean AutoRegenBow = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Stop Kill All When Auto Regen", parent = "Auto Regen Bow")
+    public static boolean StopKillAllWhenAutoRegen = false;
 
     @Property(type = Property.Type.FOLDER, name = "Auto Pick", parent = "Accentry",
             description = "Auto pick up certain items from far away.")
