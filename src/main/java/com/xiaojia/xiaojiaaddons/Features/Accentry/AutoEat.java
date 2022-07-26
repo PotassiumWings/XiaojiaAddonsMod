@@ -30,8 +30,8 @@ public class AutoEat {
 
         int level = player.getFoodStats().getFoodLevel();
         long cur = TimeUtils.curTime();
-        autoEating = level <= Configs.AutoEatHunger && cur - lastEat > 5 * 1000;
-        if (autoEating && cur - lastEat > 5 * 1000) {
+        autoEating = level <= Configs.AutoEatHunger || eatingThread != null && eatingThread.isAlive();
+        if (level <= Configs.AutoEatHunger && cur - lastEat > 5 * 1000) {
             if (AutoRegenBow.healingThread != null && AutoRegenBow.healingThread.isAlive()) {
                 AutoRegenBow.healingThread.interrupt();
                 return;
