@@ -55,7 +55,7 @@ public class AutoBottle {
             for (Pair<Integer, Integer> pair : hotbarSlots) {
                 ControlUtils.setHeldItemIndex(pair.getKey());
                 for (int i = 0; i < pair.getValue(); i++) {
-                    if (PacketRelated.getSentQueueLength() > Configs.AutoBottleThreshold) return;
+                    if (PacketRelated.getSentQueueLength() > Configs.PacketThreshold) return;
                     ControlUtils.rightClick();
                 }
             }

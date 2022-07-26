@@ -125,7 +125,7 @@ public class EntityUtils {
 
     public static boolean isPlayer(EntityOtherPlayerMP entity) {
         UUID uuid = entity.getUniqueID();
-        return (uuid.version() == 3 || uuid.version() == 4) && !entity.getName().contains(" ");
+        return (uuid.version() == 3 || uuid.version() == 4) && entity.getName().matches("[a-zA-Z0-9_]+");
     }
 
     public static boolean isEmptyArmorStand(Entity entity) {

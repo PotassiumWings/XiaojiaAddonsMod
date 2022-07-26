@@ -17,6 +17,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class AutoEat {
     private long lastEat = 0;
+    public static boolean autoEating = false;
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
@@ -46,6 +47,7 @@ public class AutoEat {
                 XiaojiaAddons.mc.entityRenderer.itemRenderer.resetEquippedProgress2();
             }
             new Thread(() -> {
+                autoEating = true;
                 try {
                     ControlUtils.holdRightClick();
                     Thread.sleep(200);
@@ -54,6 +56,7 @@ public class AutoEat {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                autoEating = false;
             }).start();
         }
     }

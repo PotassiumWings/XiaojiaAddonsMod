@@ -5,6 +5,16 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Accentry")
     public static boolean AriaEnabled = false;
 
+    @Property(type = Property.Type.FOLDER, name = "Auto Regen Bow", parent = "Accentry",
+            description = "Auto use bow with name contains 永生之弓 when your health is low.")
+    public static boolean AutoRegenBowEnabled = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Regen Bow HP", parent = "Auto Regen Bow", min = 0, max = 20)
+    public static int AutoRegenBowHP = 8;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Regen Bow Enabled", parent = "Auto Regen Bow")
+    public static boolean AutoRegenBow = false;
+
     @Property(type = Property.Type.FOLDER, name = "Auto Pick", parent = "Accentry",
             description = "Auto pick up certain items from far away.")
     public static boolean AutoPickEnabled = false;
@@ -97,8 +107,11 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Auto Bottle Enable", parent = "Auto Bottle")
     public static boolean AutoBottle = false;
 
-    @Property(type = Property.Type.NUMBER, name = "Auto Bottle Threshold", parent = "Auto Bottle", min = 0, max = 1500, step = 10)
-    public static int AutoBottleThreshold = 100;
+    @Property(type = Property.Type.FOLDER, name = "Accentry General", parent = "Accentry")
+    public static boolean AccentryGeneral = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Packet Threshold", parent = "Accentry General", min = 0, max = 1500, step = 10)
+    public static int PacketThreshold = 110;
 
     // Misc
     @Property(type = Property.Type.FOLDER, name = "Misc")
