@@ -29,7 +29,8 @@ public class AutoMeat {
                         if (inventory == null) return;
                         ItemStack itemStack = inventory.getItemInSlot(i);
                         if (itemStack == null ||
-                                (npc == EnumNPC.JY && !itemStack.getDisplayName().contains("精盐肉块")) ||
+                                (npc == EnumNPC.JY && !itemStack.getDisplayName().contains("精盐肉块") &&
+                                        !itemStack.getDisplayName().contains("寒冰碎片")) ||
                                 (npc == EnumNPC.XNH && !itemStack.getDisplayName().contains("臭肉")) ||
                                 (npc == EnumNPC.CXK && !itemStack.getDisplayName().contains("白羽鸡肉")) ||
                                 itemStack.stackSize != 64) {

@@ -35,6 +35,7 @@ public class AutoRegenBow {
         if (healingThread != null && healingThread.isAlive()) return;
         healingThread = new Thread(() -> {
             while (player.getHealth() / player.getMaxHealth() < Configs.AutoRegenBowHP2 / 20.0) {
+                if (PacketRelated.getReceivedQueueLength() == 0) return;
                 Inventory inventory = ControlUtils.getOpenedInventory();
                 if (inventory == null || inventory.getSize() < 9) return;
                 List<ItemStack> items = inventory.getItemStacks().subList(inventory.getSize() - 9, inventory.getSize());

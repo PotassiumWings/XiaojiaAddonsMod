@@ -142,7 +142,7 @@ public class ClientSocket {
                         // type 7, xc online
                         pattern = Pattern.compile("^\\{" +
                                 "\"type\": \"(.*)\", " +
-                                "\"msg\": \"((.|\\n)*)\"}$"
+                                "\"msg\": \"((.*\\n*)*)\"}$"
                         );
                         matcher = pattern.matcher(s);
                         if (matcher.find()) {

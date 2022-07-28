@@ -35,6 +35,7 @@ public class AutoBottle {
             ChatLib.chat(should ? "Auto Bottle &aactivated" : "Auto Bottle &cdeactivated");
         }
         if (!should) return;
+        if (PacketRelated.getReceivedQueueLength() == 0) return;
         Inventory inventory = ControlUtils.getOpenedInventory();
         if (inventory == null) return;
         ArrayList<Integer> slots = new ArrayList<>();
