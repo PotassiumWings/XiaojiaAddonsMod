@@ -84,7 +84,7 @@ public class ControlUtils {
             leftClickMethod = mc.getClass().getDeclaredMethod("clickMouse");
         } catch (NoSuchMethodException e) {
             try {
-            leftClickMethod = mc.getClass().getDeclaredMethod("func_147116_af");
+                leftClickMethod = mc.getClass().getDeclaredMethod("func_147116_af");
             } catch (NoSuchMethodException e1) {
                 e1.printStackTrace();
             }
@@ -95,7 +95,7 @@ public class ControlUtils {
             rightClickMethod = mc.getClass().getDeclaredMethod("rightClickMouse");
         } catch (NoSuchMethodException e) {
             try {
-            rightClickMethod = mc.getClass().getDeclaredMethod("func_147121_ag");
+                rightClickMethod = mc.getClass().getDeclaredMethod("func_147121_ag");
             } catch (NoSuchMethodException e1) {
                 e1.printStackTrace();
             }

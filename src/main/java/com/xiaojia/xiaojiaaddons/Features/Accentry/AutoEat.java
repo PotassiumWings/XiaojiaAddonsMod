@@ -16,8 +16,8 @@ import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class AutoEat {
-    private long lastEat = 0;
     public static boolean autoEating = false;
+    private long lastEat = 0;
     private Thread eatingThread = null;
 
     @SubscribeEvent
@@ -32,10 +32,10 @@ public class AutoEat {
         long cur = TimeUtils.curTime();
         autoEating = level <= Configs.AutoEatHunger || eatingThread != null && eatingThread.isAlive();
         if (level <= Configs.AutoEatHunger && cur - lastEat > 5 * 1000) {
-            if (AutoRegenBow.healingThread != null && AutoRegenBow.healingThread.isAlive()) {
-                AutoRegenBow.healingThread.interrupt();
-                return;
-            }
+//            if (AutoRegenBow.healingThread != null && AutoRegenBow.healingThread.isAlive()) {
+//                AutoRegenBow.healingThread.interrupt();
+//                return;
+//            }
             int index = -1;
             for (int i = 0; i < 9; i++) {
                 ItemStack itemStack = inventory.getItemInSlot(inventory.getSize() - 9 + i);

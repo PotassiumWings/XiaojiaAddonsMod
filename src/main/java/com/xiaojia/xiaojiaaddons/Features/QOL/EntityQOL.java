@@ -2,7 +2,6 @@ package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
-import com.xiaojia.xiaojiaaddons.Features.Accentry.KillAll;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.EntityUtils;
@@ -35,7 +34,7 @@ public class EntityQOL {
         count = 0;
         for (Entity entity : allEntities) {
             if (EntityUtils.isPlayer(entity)) {
-                KillAll.onPlayerNearby(entity);
+//                KillAll.onPlayerNearby(entity);
                 Velocity.onPlayerNearby(entity);
                 if (Configs.HidePlayers && MathUtils.distanceSquareFromPlayer(entity) <= Configs.HidePlayerRadius * Configs.HidePlayerRadius) {
                     entity.posY = entity.lastTickPosY = 9999;
