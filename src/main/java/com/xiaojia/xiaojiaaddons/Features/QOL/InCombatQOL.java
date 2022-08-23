@@ -31,7 +31,7 @@ public class InCombatQOL {
     };
 
     public static final String[] dungTrash = new String[]{
-            "Training Weight", "Health Potion VIII", "Health Potion 8",
+            "Training Weight", "Health VIII Potion", "Health 8 Potion",
             "Beating Heart", "Premium Flesh", "Mimic Fragment",
             "Defuse Kit", "Tripwire Hook", "Button", "Carpet", "Lever", "Sign",
             "Enchanted Rotten Flesh", "Enchanted Bone", "Enchanted Ice",
