@@ -64,7 +64,7 @@ public class Dungeon {
             "[BOSS] The Professor: I was burdened with terrible news recently...",
             "[BOSS] Thorn: Welcome Adventurers! I am Thorn, the Spirit! And host of the Vegan Trials!",
             "[BOSS] Livid: Welcome, you arrive right on time. I am Livid, the Master of Shadows.",
-            "[BOSS] Sadan: So you made it all the way here...and you wish to defy me? Sadan?!",
+            "[BOSS] Sadan: So you made it all the way here... Now you wish to defy me? Sadan?!",
             "[BOSS] Necron: Finally, I heard so much about you. The Eye likes you very much.",
             "[BOSS] Maxor: I’VE BEEN TOLD I COULD HAVE A BIT OF FUN WITH YOU."
     };
