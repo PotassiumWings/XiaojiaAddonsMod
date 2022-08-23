@@ -295,7 +295,7 @@ public class Dungeon {
                                 MathUtils.floor((j - Map.startCorner.y) * (190F / 128)) - 200));
                 if (coords == null) continue;
                 byte color = colors[i + j * 128];
-                byte secondColor = colors[(i - 3) + j * 128];
+                byte secondColor = colors[(i - 2) + j * 128];
                 Room room = getRoomAt(coords);
                 if (room == null) continue;
 

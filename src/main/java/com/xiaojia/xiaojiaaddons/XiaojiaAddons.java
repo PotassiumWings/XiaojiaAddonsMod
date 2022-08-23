@@ -237,23 +237,23 @@ public class XiaojiaAddons {
 
         // AriaCraft
         MinecraftForge.EVENT_BUS.register(new AutoClick());
-        MinecraftForge.EVENT_BUS.register(new KillAll());
-        MinecraftForge.EVENT_BUS.register(new AutoPick());
+//        MinecraftForge.EVENT_BUS.register(new KillAll());
+//        MinecraftForge.EVENT_BUS.register(new AutoPick());
         MinecraftForge.EVENT_BUS.register(new HoverCommand());
         MinecraftForge.EVENT_BUS.register(new AutoMeat());
         MinecraftForge.EVENT_BUS.register(new AutoRongYao());
         MinecraftForge.EVENT_BUS.register(new FastUse());
         MinecraftForge.EVENT_BUS.register(new AutoQuestion());
-        AutoMiNi mini = new AutoMiNi();
-        mini.init();
-        AutoMiQi miqi = new AutoMiQi();
-        miqi.init();
-        MinecraftForge.EVENT_BUS.register(mini);
-        MinecraftForge.EVENT_BUS.register(miqi);
+//        AutoMiNi mini = new AutoMiNi();
+//        mini.init();
+//        AutoMiQi miqi = new AutoMiQi();
+//        miqi.init();
+//        MinecraftForge.EVENT_BUS.register(mini);
+//        MinecraftForge.EVENT_BUS.register(miqi);
         MinecraftForge.EVENT_BUS.register(new AutoBack());
         MinecraftForge.EVENT_BUS.register(new AutoEat());
         MinecraftForge.EVENT_BUS.register(new AutoBottle());
-        MinecraftForge.EVENT_BUS.register(new AutoRegenBow());
+//        MinecraftForge.EVENT_BUS.register(new AutoRegenBow());
 
         // Utils
         MinecraftForge.EVENT_BUS.register(new ControlUtils());

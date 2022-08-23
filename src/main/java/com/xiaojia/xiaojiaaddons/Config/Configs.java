@@ -5,35 +5,35 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Accentry")
     public static boolean AriaEnabled = false;
 
-    @Property(type = Property.Type.FOLDER, name = "Auto Regen Bow", parent = "Accentry",
-            description = "Auto use bow with name contains 永生之弓 when your health is low.")
-    public static boolean AutoRegenBowEnabled = false;
-
-    @Property(type = Property.Type.NUMBER, name = "Auto Regen Bow HP - min", parent = "Auto Regen Bow", min = 0, max = 20)
-    public static int AutoRegenBowHP = 10;
-
-    @Property(type = Property.Type.NUMBER, name = "Auto Regen Bow HP - max", parent = "Auto Regen Bow", min = 0, max = 20)
-    public static int AutoRegenBowHP2 = 16;
-
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Regen Bow Enabled", parent = "Auto Regen Bow")
-    public static boolean AutoRegenBow = false;
-
-    @Property(type = Property.Type.BOOLEAN, name = "Stop Kill All When Auto Regen", parent = "Auto Regen Bow")
-    public static boolean StopKillAllWhenAutoRegen = false;
-
-    @Property(type = Property.Type.FOLDER, name = "Auto Pick", parent = "Accentry",
-            description = "Auto pick up certain items from far away.")
-    public static boolean AutoPickEnabled = false;
-
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Pick Enabled", parent = "Auto Pick")
-    public static boolean AutoPick = false;
-
-    @Property(type = Property.Type.TEXT, name = "Auto Pick Names", parent = "Auto Pick", description = "xx,yy,z")
-    public static String AutoPickNames = "银,金,钻,蜘蛛卵";
-
-    @Property(type = Property.Type.NUMBER, name = "Auto Pick CD", parent = "Auto Pick", description = "CD between 2 picks.",
-            min = 100, max = 5000, step = 20)
-    public static int AutoPickCD = 1000;
+//    @Property(type = Property.Type.FOLDER, name = "Auto Regen Bow", parent = "Accentry",
+//            description = "Auto use bow with name contains 永生之弓 when your health is low.")
+//    public static boolean AutoRegenBowEnabled = false;
+//
+//    @Property(type = Property.Type.NUMBER, name = "Auto Regen Bow HP - min", parent = "Auto Regen Bow", min = 0, max = 20)
+//    public static int AutoRegenBowHP = 10;
+//
+//    @Property(type = Property.Type.NUMBER, name = "Auto Regen Bow HP - max", parent = "Auto Regen Bow", min = 0, max = 20)
+//    public static int AutoRegenBowHP2 = 16;
+//
+//    @Property(type = Property.Type.BOOLEAN, name = "Auto Regen Bow Enabled", parent = "Auto Regen Bow")
+//    public static boolean AutoRegenBow = false;
+//
+//    @Property(type = Property.Type.BOOLEAN, name = "Stop Kill All When Auto Regen", parent = "Auto Regen Bow")
+//    public static boolean StopKillAllWhenAutoRegen = false;
+//
+//    @Property(type = Property.Type.FOLDER, name = "Auto Pick", parent = "Accentry",
+//            description = "Auto pick up certain items from far away.")
+//    public static boolean AutoPickEnabled = false;
+//
+//    @Property(type = Property.Type.BOOLEAN, name = "Auto Pick Enabled", parent = "Auto Pick")
+//    public static boolean AutoPick = false;
+//
+//    @Property(type = Property.Type.TEXT, name = "Auto Pick Names", parent = "Auto Pick", description = "xx,yy,z")
+//    public static String AutoPickNames = "银,金,钻,蜘蛛卵";
+//
+//    @Property(type = Property.Type.NUMBER, name = "Auto Pick CD", parent = "Auto Pick", description = "CD between 2 picks.",
+//            min = 100, max = 5000, step = 20)
+//    public static int AutoPickCD = 1000;
 
     @Property(type = Property.Type.FOLDER, name = "Auto Left Click", parent = "Accentry")
     public static boolean AutoLeftClickEnabled = false;
@@ -44,22 +44,22 @@ public class Configs {
     @Property(type = Property.Type.NUMBER, name = "Auto Left Click CPS", parent = "Auto Left Click", min = 1, max = 20)
     public static int AutoClickCPS = 12;
 
-    @Property(type = Property.Type.FOLDER, name = "Kill All", parent = "Accentry", description = "&c&lVERY DANGEROUS.\n" +
-            "&c&lDON'T USE THIS IN ANY SERVER WITH ANTI CHEAT.\n" +
-            "Automatically attack nearby entities without aiming or swinging.")
-    public static boolean KilAllEnabled = false;
-
-    @Property(type = Property.Type.TEXT, name = "Kill All Contains", parent = "Kill All")
-    public static String KillAllName = "Pig";
-
-    @Property(type = Property.Type.NUMBER, name = "Kill All Stop Radius", parent = "Kill All", min = 1, max = 100)
-    public static int KillAllStopRadius = 15;
-
-    @Property(type = Property.Type.BOOLEAN, name = "Kill All Stop When Player Neaby", parent = "Kill All")
-    public static boolean KillAllStop = false;
-
-    @Property(type = Property.Type.SELECT, name = "Kill All Click Mode", parent = "Kill All", options = {"LEFT", "RIGHT"})
-    public static int KillAllLeft = 0;
+//    @Property(type = Property.Type.FOLDER, name = "Kill All", parent = "Accentry", description = "&c&lVERY DANGEROUS.\n" +
+//            "&c&lDON'T USE THIS IN ANY SERVER WITH ANTI CHEAT.\n" +
+//            "Automatically attack nearby entities without aiming or swinging.")
+//    public static boolean KilAllEnabled = false;
+//
+//    @Property(type = Property.Type.TEXT, name = "Kill All Contains", parent = "Kill All")
+//    public static String KillAllName = "Pig";
+//
+//    @Property(type = Property.Type.NUMBER, name = "Kill All Stop Radius", parent = "Kill All", min = 1, max = 100)
+//    public static int KillAllStopRadius = 15;
+//
+//    @Property(type = Property.Type.BOOLEAN, name = "Kill All Stop When Player Neaby", parent = "Kill All")
+//    public static boolean KillAllStop = false;
+//
+//    @Property(type = Property.Type.SELECT, name = "Kill All Click Mode", parent = "Kill All", options = {"LEFT", "RIGHT"})
+//    public static int KillAllLeft = 0;
 
     @Property(type = Property.Type.FOLDER, name = "Trades", parent = "Accentry")
     public static boolean Trades = false;
@@ -91,11 +91,11 @@ public class Configs {
                     "Right click a food, and you ate it.")
     public static boolean FastUse = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Ni", parent = "Combat Related")
-    public static boolean AutoMiNi = false;
-
-    @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Qi", parent = "Combat Related")
-    public static boolean AutoMiQi = false;
+//    @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Ni", parent = "Combat Related")
+//    public static boolean AutoMiNi = false;
+//
+//    @Property(type = Property.Type.BOOLEAN, name = "Auto Mi Qi", parent = "Combat Related")
+//    public static boolean AutoMiQi = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Auto Back", parent = "Combat Related", description = "WIP")
     public static boolean AutoBack = false;
@@ -362,6 +362,10 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Close Gui When Clicking", parent = "General XJA Setting")
     public static boolean CloseInvWhenClicking = true;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Raw Click", parent = "General XJA Setting",
+            description = "Disable this.")
+    public static boolean RawClick = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "General ESP toggle", parent = "General XJA Setting")
     public static boolean GeneralESP = true;

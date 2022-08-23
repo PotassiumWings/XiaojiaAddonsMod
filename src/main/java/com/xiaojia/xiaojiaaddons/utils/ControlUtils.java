@@ -48,6 +48,8 @@ public class ControlUtils {
     private static Inventory openedInventory = null;
 
     private static Method synHeldItem = null;
+    private static Method leftClickMethod = null;
+    private static Method rightClickMethod = null;
     private static Field pressTime = null;
 
     static {
@@ -77,6 +79,28 @@ public class ControlUtils {
             if (pressTime != null)
                 pressTime.setAccessible(true);
         }
+
+        try {
+            leftClickMethod = mc.getClass().getDeclaredMethod("clickMouse");
+        } catch (NoSuchMethodException e) {
+            try {
+            leftClickMethod = mc.getClass().getDeclaredMethod("func_147116_af");
+            } catch (NoSuchMethodException e1) {
+                e1.printStackTrace();
+            }
+        }
+        leftClickMethod.setAccessible(true);
+
+        try {
+            rightClickMethod = mc.getClass().getDeclaredMethod("rightClickMouse");
+        } catch (NoSuchMethodException e) {
+            try {
+            rightClickMethod = mc.getClass().getDeclaredMethod("func_147121_ag");
+            } catch (NoSuchMethodException e1) {
+                e1.printStackTrace();
+            }
+        }
+        rightClickMethod.setAccessible(true);
     }
 
     public static boolean reportedFacing(double yaw, double pitch) {
@@ -108,14 +132,11 @@ public class ControlUtils {
         try {
             if (Configs.CloseInvWhenClicking)
                 getPlayer().closeScreen();
-            Method rightClickMethod;
-            try {
-                rightClickMethod = mc.getClass().getDeclaredMethod("rightClickMouse");
-            } catch (NoSuchMethodException e) {
-                rightClickMethod = mc.getClass().getDeclaredMethod("func_147121_ag");
+            if (Configs.RawClick)
+                KeyBinding.onTick(-99);
+            else {
+                rightClickMethod.invoke(mc);
             }
-            rightClickMethod.setAccessible(true);
-            rightClickMethod.invoke(mc);
         } catch (Exception ignored) {
         }
     }
@@ -124,14 +145,12 @@ public class ControlUtils {
         try {
             if (Configs.CloseInvWhenClicking)
                 getPlayer().closeScreen();
-            Method leftClickMethod;
-            try {
-                leftClickMethod = mc.getClass().getDeclaredMethod("clickMouse");
-            } catch (NoSuchMethodException e) {
-                leftClickMethod = mc.getClass().getDeclaredMethod("func_147116_af");
+
+            if (Configs.RawClick)
+                KeyBinding.onTick(-100);
+            else {
+                leftClickMethod.invoke(mc);
             }
-            leftClickMethod.setAccessible(true);
-            leftClickMethod.invoke(mc);
         } catch (Exception ignored) {
         }
     }
