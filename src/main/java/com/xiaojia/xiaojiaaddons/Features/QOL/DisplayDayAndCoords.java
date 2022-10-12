@@ -124,12 +124,15 @@ public class DisplayDayAndCoords {
 //            display.addLine(line4);
         }
         if (Configs.DisplayPlayers) {
-            List<Entity> entities = EntityUtils.getEntities();
-            entities.removeIf(e -> !EntityUtils.isPlayer(e));
-            entities.sort((a, b) -> (int) (MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
+            try {
+                List<Entity> entities = EntityUtils.getEntities();
+                entities.removeIf(e -> !EntityUtils.isPlayer(e));
+                entities.sort((a, b) -> (int) (MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
 
-            display.addLine(new DisplayLine(String.format("&f&lNearby Players: (%d)", entities.size())).setScale(Configs.DisplayScale / 20F));
-            entities.forEach(e -> display.addLine(new DisplayLine(" " + e.getName() + getDistanceString(e)).setScale(Configs.DisplayScale / 20F)));
+                display.addLine(new DisplayLine(String.format("&f&lNearby Players: (%d)", entities.size())).setScale(Configs.DisplayScale / 20F));
+                entities.forEach(e -> display.addLine(new DisplayLine(" " + e.getName() + getDistanceString(e)).setScale(Configs.DisplayScale / 20F)));
+            } catch (Exception ignored) {
+            }
         }
     }
 

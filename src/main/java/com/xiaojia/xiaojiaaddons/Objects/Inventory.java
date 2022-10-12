@@ -68,6 +68,7 @@ public class Inventory {
             case "MIDDLE":
                 button = 2;
                 if (shift) mode = 1;
+                else mode = 3;
                 break;
             case "RIGHT":
                 button = 1;

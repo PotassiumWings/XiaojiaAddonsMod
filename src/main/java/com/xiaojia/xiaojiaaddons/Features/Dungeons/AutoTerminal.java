@@ -102,7 +102,7 @@ public class AutoTerminal {
                     }
                     if (windowID + windowClicks > inventory.getWindowId() + Configs.TerminalClicksInAdvance) return;
                     mc.playerController.windowClick(
-                            windowID + windowClicks, slot, 2, 0, getPlayer()
+                            windowID + windowClicks, slot, 2, 3, getPlayer()
                     );
                     if (Configs.ZeroPingTerminal) {
                         windowClicks++;
