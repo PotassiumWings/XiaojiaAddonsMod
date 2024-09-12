@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerControllerMP.class)
 public class MixinPlayerControllerMP {
-    @Inject(method = "func_181040_m", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getIsHittingBlock", at = @At("HEAD"), cancellable = true)
     public void onReset(CallbackInfoReturnable<Boolean> ci) {
         if (Configs.OldBlockBreak)
             ci.setReturnValue(false);

@@ -13,7 +13,7 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath "com.github.asbyth:ForgeGradle:6f53277"
+        classpath "com.github.CCBlueX:ForgeGradle:a3d86a5"
         classpath "com.github.LxGaming:MixinGradle:d75e32e"
         classpath "com.github.jengelman.gradle.plugins:shadow:6.1.0"
     }
@@ -24,7 +24,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: "com.github.johnrengelman.shadow"
 
-version = "2.4.8.3"
+version = "2.5"
 group= "com.xiaojia.xiaojiaaddons"
 archivesBaseName = "XiaojiaAddons"
 compileJava.options.encoding = "UTF-8"
@@ -32,7 +32,7 @@ compileJava.options.encoding = "UTF-8"
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
-    mappings = "stable_20"
+    mappings = "stable_22"
 }
 
 repositories {

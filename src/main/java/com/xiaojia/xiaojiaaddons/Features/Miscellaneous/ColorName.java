@@ -308,7 +308,7 @@ public class ColorName {
 
         if (event.packet instanceof S38PacketPlayerListItem) {
             S38PacketPlayerListItem packet = (S38PacketPlayerListItem) event.packet;
-            List<S38PacketPlayerListItem.AddPlayerData> list = packet.func_179767_a();
+            List<S38PacketPlayerListItem.AddPlayerData> list = packet.getEntries();
             List<S38PacketPlayerListItem.AddPlayerData> newList = new ArrayList<>();
 //            StringBuilder out = new StringBuilder();
             for (S38PacketPlayerListItem.AddPlayerData player : list) {

@@ -20,6 +20,6 @@ public class Checker {
 
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
-        enabled = auth > connect;
+        enabled = true;
     }
 }
