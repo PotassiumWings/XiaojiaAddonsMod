@@ -130,7 +130,8 @@ public class DisplayDayAndCoords {
                 entities.sort((a, b) -> (int) (MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
 
                 display.addLine(new DisplayLine(String.format("&f&lNearby Players: (%d)", entities.size())).setScale(Configs.DisplayScale / 20F));
-                entities.forEach(e -> display.addLine(new DisplayLine(" " + e.getName() + getDistanceString(e)).setScale(Configs.DisplayScale / 20F)));
+                entities.forEach(e -> display.addLine(new DisplayLine(" " + e.getDisplayName().getFormattedText()
+                        + getDistanceString(e)).setScale(Configs.DisplayScale / 20F)));
             } catch (Exception ignored) {
             }
         }
