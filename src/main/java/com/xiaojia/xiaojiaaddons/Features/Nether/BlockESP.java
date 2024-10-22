@@ -86,6 +86,10 @@ public abstract class BlockESP {
             synchronized (blocks) {
                 blocks.add(new BlockPos(x, y, z));
             }
+        } else if (blocks.contains(new BlockPos(x, y, z))) {
+            synchronized (blocks) {
+                blocks.remove(new BlockPos(x, y, z));
+            }
         }
     }
 
@@ -109,7 +113,14 @@ public abstract class BlockESP {
     @SubscribeEvent
     public void onBlockChange(BlockChangeEvent event) {
         if (event.oldBlock.getBlock() == block && event.newBlock.getBlock() != block) {
-            blocks.remove(event.position);
+            synchronized (blocks) {
+                blocks.remove(event.position);
+            }
+        }
+        if (event.oldBlock.getBlock() != block && event.newBlock.getBlock() == block) {
+            synchronized (blocks) {
+                blocks.add(event.position);
+            }
         }
     }
 

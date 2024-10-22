@@ -38,7 +38,8 @@ public class Room {
         StringBuilder res = new StringBuilder();
         for (int y = 140; y > 11; y--) {
             int id = Block.getIdFromBlock(BlockUtils.getBlockAt(this.x, y, this.z));
-            if (id != 5 && id != 54) res.append(id);
+            if (id != 101 && id != 54) res.append(id);
+            else res.append(0);
         }
         return res.toString().hashCode();
     }
