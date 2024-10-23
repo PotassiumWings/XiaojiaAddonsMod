@@ -635,7 +635,9 @@ public class AutoBlaze {
             if (name.contains("Blaze") && name.contains("/")) {
                 String blazeName = ChatLib.removeFormatting(entity.getName());
                 try {
-                    int health = Integer.parseInt(blazeName.substring(blazeName.indexOf("/") + 1, blazeName.length() - 1));
+                    String healthString = blazeName.substring(blazeName.indexOf("/") + 1, blazeName.length() - 1);
+                    healthString = healthString.replaceAll(",", "");
+                    int health = Integer.parseInt(healthString);
                     newBlaze.add(new BlazeInfo(getX(entity), getY(entity) - 1, getZ(entity), health, entity));
                 } catch (NumberFormatException ex) {
                     ex.printStackTrace();
