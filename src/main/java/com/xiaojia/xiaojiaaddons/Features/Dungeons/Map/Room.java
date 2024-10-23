@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.Dungeons.Map;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.AutoBlaze;
 import com.xiaojia.xiaojiaaddons.utils.BlockUtils;
 import com.xiaojia.xiaojiaaddons.utils.ColorUtils;
 import com.xiaojia.xiaojiaaddons.utils.RenderUtils;
@@ -39,7 +40,7 @@ public class Room {
         for (int y = 140; y > 11; y--) {
             int id = Block.getIdFromBlock(BlockUtils.getBlockAt(this.x, y, this.z));
             if (id != 101 && id != 54) res.append(id);
-            else res.append(0);
+            else res.append("0");
         }
         return res.toString().hashCode();
     }
