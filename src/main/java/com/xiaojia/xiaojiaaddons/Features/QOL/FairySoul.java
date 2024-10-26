@@ -35,6 +35,7 @@ public class FairySoul extends RenderEntityESP {
             hashMap.put("height", 0.7F);
             hashMap.put("fontColor", 0x33ff33);
             hashMap.put("isFilled", true);
+            hashMap.put("isESP", true);
             hashMap.put("kind", "Fairy Soul");
             return new EntityInfo(hashMap);
         }

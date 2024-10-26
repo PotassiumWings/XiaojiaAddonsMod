@@ -42,6 +42,10 @@ public class SkyblockUtils {
             "Royal Quarters", "Lava Springs", "Cliffside Veins", "Rampart's Quarry",
             "Upper Mines", "Royal Mines", "Dwarven Mines", "Gates to the Mines"
     ));
+    private static final ArrayList<String> spiderDenMaps = new ArrayList<>(Arrays.asList(
+            "Spider Mound", "Gravel Mines", "Grandma's House", "Arachne's Burrow",
+            "Arachne's Sanctuary", "Archaeologist's Camp", "Spider's Den"
+    ));
     private static final ArrayList<String> crystalHollowsMaps = new ArrayList<>(Arrays.asList(
             "Fairy Grotto",
             "Goblin Holdout", "Goblin Queen's Den",
@@ -60,6 +64,7 @@ public class SkyblockUtils {
     private static boolean isInCrystalHollows = false;
     private static boolean isInDwarven = false;
     private static boolean isInNether = false;
+    private static boolean isInSpiderDen = false;
     private static String dungeon = "F6";
     private long lastPing;
     private Thread pingThread;
@@ -92,6 +97,17 @@ public class SkyblockUtils {
                 break;
             }
         }
+
+        isInSpiderDen = result.equals("Spider's Den");
+        if (result.equals("Others")) {
+            for (String map : spiderDenMaps) {
+                if (line.contains(map)) {
+                    result = map;
+                    isInSpiderDen = true;
+                }
+            }
+        }
+
         isInCrystalHollows = false;
         if (result.equals("Others")) {
             for (String map : crystalHollowsMaps) {
@@ -153,7 +169,7 @@ public class SkyblockUtils {
     }
 
     public static boolean isInSpiderDen() {
-        return currentMap.equals("Spider's Den");
+        return isInSpiderDen;
     }
 
     public static boolean isInDungeon() {
