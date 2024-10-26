@@ -7,6 +7,7 @@ import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.ContainerMerchant;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C0EPacketClickWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,9 +84,11 @@ public class Inventory {
                 if (shift) mode = 1;
                 break;
         }
-        mc.playerController.windowClick(
-                windowId, slot, button, mode, getPlayer()
-        );
+        mc.getNetHandler().addToSendQueue(
+                new C0EPacketClickWindow(windowId, slot, button, mode, null, (short) 0));
+//        mc.playerController.windowClick(
+//                windowId, slot, button, mode, getPlayer()
+//        );
         ChatLib.debug(String.format("%d %d %d %d", windowId, slot, button, mode));
     }
 

@@ -16,6 +16,7 @@ import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C0EPacketClickWindow;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
@@ -91,7 +92,19 @@ public class DevMode {
         if (!Checker.enabled) return;
         if (!SessionUtils.isDev()) return;
         if (!Configs.PacketSent) return;
-        ChatLib.debug(event.packet.getClass().toString());
+        if (event.packet instanceof C0EPacketClickWindow) {
+            C0EPacketClickWindow packet = (C0EPacketClickWindow) event.packet;
+            String s = "";
+            if (packet.getClickedItem() != null) {
+                s = packet.getClickedItem().toString();
+            }
+            ChatLib.chat(String.format("window %d, slot %d, button %d, action %d, itemstack %s, mode %d",
+                    packet.getWindowId(), packet.getSlotId(), packet.getUsedButton(), packet.getActionNumber(),
+                    s, packet.getMode()));
+        } else if (!event.packet.getClass().toString().contains("C0FPacketConfirmTransaction") &&
+                   !event.packet.getClass().toString().contains("C03PacketPlayer")) {
+            ChatLib.debug(event.packet.getClass().toString());
+        }
     }
 
     @SubscribeEvent

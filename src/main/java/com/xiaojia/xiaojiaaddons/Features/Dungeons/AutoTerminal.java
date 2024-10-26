@@ -9,6 +9,7 @@ import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.SkyblockUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C0EPacketClickWindow;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -101,9 +102,13 @@ public class AutoTerminal {
                         windowClicks = 0;
                     }
                     if (windowID + windowClicks > inventory.getWindowId() + Configs.TerminalClicksInAdvance) return;
-                    mc.playerController.windowClick(
-                            windowID + windowClicks, slot, 2, 3, getPlayer()
-                    );
+//                    mc.playerController.windowClick(
+//                            windowID + windowClicks, slot, 2, 3, getPlayer()
+//                    );
+
+                    mc.getNetHandler().addToSendQueue(
+                            new C0EPacketClickWindow(windowID + windowClicks, slot,
+                                    2, 3, null, (short) 0));
                     if (Configs.ZeroPingTerminal) {
                         windowClicks++;
                         clickQueue.pollFirst();
