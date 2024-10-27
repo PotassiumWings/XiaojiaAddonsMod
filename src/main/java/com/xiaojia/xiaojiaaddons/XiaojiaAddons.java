@@ -129,6 +129,7 @@ import com.xiaojia.xiaojiaaddons.Features.Remote.DungeonLoot;
 import com.xiaojia.xiaojiaaddons.Features.Remote.DupedItems;
 import com.xiaojia.xiaojiaaddons.Features.Remote.LowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
+import com.xiaojia.xiaojiaaddons.Features.Rift.ShowMirrorPath;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmPumpkin;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmVertical;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoCloseCrystalHollowsChest;
@@ -389,6 +390,9 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new JadeCrystalHelper());
         MinecraftForge.EVENT_BUS.register(new Experimentation());
         MinecraftForge.EVENT_BUS.register(new SuperPairs());
+
+        // Rift
+        MinecraftForge.EVENT_BUS.register(new ShowMirrorPath());
 
         // Slayer
         MinecraftForge.EVENT_BUS.register(new Blaze());

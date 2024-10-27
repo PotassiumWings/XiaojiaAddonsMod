@@ -2261,4 +2261,15 @@ public class Configs {
             description = "Assume paul's +10 point perk is active.\n" +
                     "Will automatically check in future updates!")
     public static boolean AssumePaul = false;
+
+
+    // Rift
+    @Property(type = Property.Type.FOLDER, name = "Rift")
+    public static boolean RiftEnabled = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Rift QOL", parent = "Rift")
+    public static boolean RiftQOLEabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Show Mirror Path", parent = "Rift QOL")
+    public static boolean ShowMirrorPath = false;
 }

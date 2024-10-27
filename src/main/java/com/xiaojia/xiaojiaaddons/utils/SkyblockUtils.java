@@ -31,7 +31,7 @@ public class SkyblockUtils {
             "Dungeon Hub", "Kuudra's End", "Deep Caverns",
             "Hub", "Spider's Den", "Gunpowder Mines", "Void Sepulture", "Dragon's Nest",
             "The End", "The Mist", "Blazing Fortress", "The Catacombs", "Howling Cave",
-            "Your Island", "Dojo Arena", "None"
+            "Your Island", "Dojo Arena", "Rift Dimension", "None"
     ));
 
     private static final ArrayList<String> dwarvenMaps = new ArrayList<>(Arrays.asList(
@@ -182,6 +182,10 @@ public class SkyblockUtils {
 
     public static boolean isInDragon() {
         return currentMap.equals("Dragon's Nest");
+    }
+
+    public static boolean isInRift() {
+        return currentMap.equals("Rift Dimension");
     }
 
     public static boolean isInTheEnd() {
