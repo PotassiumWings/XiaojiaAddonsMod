@@ -97,15 +97,21 @@ public abstract class BlockESP {
         return BlockUtils.getBlockAt(x, y, z) == block;
     }
 
+    public boolean enableESP() {
+        return true;
+    }
+
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
         if (!Checker.enabled) return;
         if (!isEnabled()) return;
         synchronized (blocks) {
             for (BlockPos pos : blocks) {
-                GuiUtils.enableESP();
+                if (enableESP())
+                    GuiUtils.enableESP();
                 GuiUtils.drawBoxAtBlock(pos, color, 1, 1, 0.0020000000949949026F);
-                GuiUtils.disableESP();
+                if (enableESP())
+                    GuiUtils.disableESP();
             }
         }
     }

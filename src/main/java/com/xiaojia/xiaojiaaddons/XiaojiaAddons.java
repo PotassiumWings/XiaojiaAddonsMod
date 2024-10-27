@@ -129,6 +129,7 @@ import com.xiaojia.xiaojiaaddons.Features.Remote.DungeonLoot;
 import com.xiaojia.xiaojiaaddons.Features.Remote.DupedItems;
 import com.xiaojia.xiaojiaaddons.Features.Remote.LowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
+import com.xiaojia.xiaojiaaddons.Features.Rift.BarrierESP;
 import com.xiaojia.xiaojiaaddons.Features.Rift.ShowMirrorPath;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmPumpkin;
 import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmVertical;
@@ -393,6 +394,7 @@ public class XiaojiaAddons {
 
         // Rift
         MinecraftForge.EVENT_BUS.register(new ShowMirrorPath());
+        MinecraftForge.EVENT_BUS.register(new BarrierESP());
 
         // Slayer
         MinecraftForge.EVENT_BUS.register(new Blaze());

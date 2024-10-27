@@ -2272,4 +2272,7 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Show Mirror Path", parent = "Rift QOL")
     public static boolean ShowMirrorPath = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Barrier ESP", parent = "Rift QOL")
+    public static boolean BarrierESP = false;
 }

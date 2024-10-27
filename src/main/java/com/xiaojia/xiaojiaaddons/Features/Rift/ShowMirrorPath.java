@@ -27,7 +27,7 @@ public class ShowMirrorPath {
         if (pos.getX() > -120 || pos.getY() < 35 || pos.getY() > 46 || pos.getZ() > -90 || pos.getZ() < -124) return;
         for (int x = -120; x >= -300; x--) {
             for (int y = 46; y <= 57; y++) {
-                for (int z = -90; z >= -124; z--) {
+                for (int z = -90; z >= -125; z--) {
                     BlockPos position = new BlockPos(x, y, z);
                     if (getWorld().getBlockState(position).getBlock() instanceof BlockPlanks) {
                         GuiUtils.drawBoxAtBlock(
