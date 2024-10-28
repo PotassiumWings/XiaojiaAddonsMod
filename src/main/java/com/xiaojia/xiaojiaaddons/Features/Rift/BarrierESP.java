@@ -27,4 +27,9 @@ public class BarrierESP extends BlockESP {
     public boolean enableESP() {
         return false;
     }
+
+    @Override
+    public int getYMin() {
+        return 0;
+    }
 }

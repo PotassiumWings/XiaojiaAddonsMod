@@ -34,6 +34,14 @@ public abstract class BlockESP {
 
     public abstract boolean isEnabled();
 
+    public int getYMin() {
+        return 40;
+    }
+
+    public int getYMax() {
+        return 240;
+    }
+
     @SubscribeEvent
     public void onTick(TickEndEvent event) {
         if (!Checker.enabled) return;
@@ -44,7 +52,7 @@ public abstract class BlockESP {
                     int x = MathUtils.floor(getX(getPlayer())), z = MathUtils.floor(getZ(getPlayer()));
                     for (int r = 0; r < 400; r++) {
                         for (int i = 0; i < 4; i++) {
-                            for (int sy = 40; sy <= 240; sy++) {
+                            for (int sy = getYMin(); sy <= getYMax(); sy++) {
                                 if (!isEnabled()) return;
                                 int cx = MathUtils.floor(getX(getPlayer())), cz = MathUtils.floor(getZ(getPlayer()));
                                 if (Math.abs(cx - x) > 10 || Math.abs(cz - z) > 10) return;

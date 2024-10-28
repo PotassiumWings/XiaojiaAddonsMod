@@ -217,7 +217,7 @@ public class Fishing {
             lastReeledIn = TimeUtils.curTime();
             new Thread(this::reelIn).start();
         }
-        if (cur - lastMove > 2000) {
+        if (cur - lastMove > Configs.AutoMoveCD * 1000) {
             lastMove = cur;
             if (Configs.MainLobbyAutoMove) {
                 new Thread(() -> {

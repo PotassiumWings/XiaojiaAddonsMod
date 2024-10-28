@@ -1935,6 +1935,11 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Safer Auto Move", parent = "Fishing",
             description = "Disable Auto Move on world change.")
     public static boolean SafeAutoMove = true;
+
+    @Property(type = Property.Type.NUMBER, name = "Auto Move CD", parent = "Fishing", min = 1, max = 120,
+            description = "CD between moves.")
+    public static int AutoMoveCD = 60;
+
     @Property(type = Property.Type.BOOLEAN, name = "Auto Move Timer", parent = "Fishing",
             description = "Alarm when you auto-moved for 4min40s.\n" +
                     "Display timer in 'display day and coords'.")
