@@ -2280,4 +2280,21 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Barrier ESP", parent = "Rift QOL")
     public static boolean BarrierESP = false;
+
+
+    // Custom ESP
+    @Property(type = Property.Type.FOLDER, name = "Custom ESP", parent = "Misc")
+    public static boolean CustomESPEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Enabled", parent = "Misc")
+    public static boolean CustomESP = false;
+
+    @Property(type = Property.Type.TEXT, name = "Custom ESP Enabled", parent = "Misc")
+    public static String CustomESPName = "Mort";
+
+    @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Through Walls", parent = "Misc")
+    public static boolean CustomESPESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Draw String", parent = "Misc")
+    public static boolean CustomESPString = false;
 }

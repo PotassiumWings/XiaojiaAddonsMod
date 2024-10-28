@@ -60,22 +60,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESP;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StarredMobESPBox;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.StonklessStonk;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.TrapChestESP;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChatCopy;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestFiller;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ChestProfit;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ColorName;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.CommandKeybind;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.DevMode;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.EasyTrigger;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ItemRename;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.KeepSprint;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.MusicRune;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.NoRotate;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.PacketRelated;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ProtectItems;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.RenderRank;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.ShowLowestBin;
-import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.Velocity;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.*;
 import com.xiaojia.xiaojiaaddons.Features.Nether.AshFangESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.AshFangGravityESP;
 import com.xiaojia.xiaojiaaddons.Features.Nether.ConvergenceESP;
@@ -324,6 +309,8 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new MusicRune());
         MinecraftForge.EVENT_BUS.register(new PacketRelated());
         MinecraftForge.EVENT_BUS.register(new EasyTrigger());
+
+//        MinecraftForge.EVENT_BUS.register(new CustomESP());
 
         // Nether
         MinecraftForge.EVENT_BUS.register(new CorruptedESP());
