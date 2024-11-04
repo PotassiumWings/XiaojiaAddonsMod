@@ -2286,15 +2286,31 @@ public class Configs {
     @Property(type = Property.Type.FOLDER, name = "Custom ESP", parent = "Misc")
     public static boolean CustomESPEnabled = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Enabled", parent = "Misc")
+    @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Enabled", parent = "Custom ESP")
     public static boolean CustomESP = false;
 
-    @Property(type = Property.Type.TEXT, name = "Custom ESP Enabled", parent = "Misc")
+    @Property(type = Property.Type.TEXT, name = "Custom ESP Name", parent = "Custom ESP")
     public static String CustomESPName = "Mort";
 
-    @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Through Walls", parent = "Misc")
+    @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Box", parent = "Custom ESP")
     public static boolean CustomESPESP = false;
 
-    @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Draw String", parent = "Misc")
+    @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Draw String", parent = "Custom ESP")
     public static boolean CustomESPString = false;
+
+    @Property(type = Property.Type.NUMBER, name = "Custom ESP Width", parent = "Custom ESP",
+            min = 0, max = 400, step = 10)
+    public static int CustomESPWidth = 40;
+
+    @Property(type = Property.Type.NUMBER, name = "Custom ESP Height", parent = "Custom ESP",
+            min = 0, max = 400, step = 10)
+    public static int CustomESPHeight = 200;
+
+    // remove fog
+    @Property(type = Property.Type.FOLDER, name = "Remove Fog", parent = "Misc")
+    public static boolean RemoveFogEnabled = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Remove Fog Enabled", parent = "Remove Fog",
+            description = "@全体成员 有没有remove fog的方法?")
+    public static boolean RemoveFog = false;
 }
