@@ -2312,5 +2312,17 @@ public class Configs {
 
     @Property(type = Property.Type.FOLDER, name = "Remove Fog Enabled", parent = "Remove Fog",
             description = "@全体成员 有没有remove fog的方法?")
+    public static boolean RemoveFogF = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Remove Fog Enable", parent = "Remove Fog Enabled")
     public static boolean RemoveFog = false;
+
+    @Property(type = Property.Type.FOLDER, name = "Particle ESP", parent = "Misc")
+    public static boolean ParticleESPEnabled = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Particle ESP Enabled", parent = "Particle ESP")
+    public static boolean ParticleESP = false;
+
+    @Property(type = Property.Type.TEXT, name = "Particle ESP Type", parent = "Particle ESP")
+    public static String ParticleESPType = "witchMagic";
 }

@@ -116,19 +116,7 @@ import com.xiaojia.xiaojiaaddons.Features.Remote.LowestBin;
 import com.xiaojia.xiaojiaaddons.Features.Remote.XiaojiaChat;
 import com.xiaojia.xiaojiaaddons.Features.Rift.BarrierESP;
 import com.xiaojia.xiaojiaaddons.Features.Rift.ShowMirrorPath;
-import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmPumpkin;
-import com.xiaojia.xiaojiaaddons.Features.Skills.AutoBuildFarmVertical;
-import com.xiaojia.xiaojiaaddons.Features.Skills.AutoCloseCrystalHollowsChest;
-import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowder;
-import com.xiaojia.xiaojiaaddons.Features.Skills.AutoPowderChest;
-import com.xiaojia.xiaojiaaddons.Features.Skills.Experimentation;
-import com.xiaojia.xiaojiaaddons.Features.Skills.Farming;
-import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
-import com.xiaojia.xiaojiaaddons.Features.Skills.Foraging;
-import com.xiaojia.xiaojiaaddons.Features.Skills.GemstoneESP;
-import com.xiaojia.xiaojiaaddons.Features.Skills.JadeCrystalHelper;
-import com.xiaojia.xiaojiaaddons.Features.Skills.SuperPairs;
-import com.xiaojia.xiaojiaaddons.Features.Skills.TitaniumESP;
+import com.xiaojia.xiaojiaaddons.Features.Skills.*;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Blaze;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.ClickScreenMaddox;
 import com.xiaojia.xiaojiaaddons.Features.Slayers.Revenant;
@@ -311,6 +299,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new EasyTrigger());
 
         MinecraftForge.EVENT_BUS.register(new CustomESP());
+        MinecraftForge.EVENT_BUS.register(new ParticleESP());
 
         // Nether
         MinecraftForge.EVENT_BUS.register(new CorruptedESP());
