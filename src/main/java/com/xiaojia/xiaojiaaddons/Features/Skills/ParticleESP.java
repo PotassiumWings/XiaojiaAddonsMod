@@ -4,6 +4,7 @@ import com.xiaojia.xiaojiaaddons.Config.Configs;
 import com.xiaojia.xiaojiaaddons.Events.PacketReceivedEvent;
 import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
+import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -18,7 +19,7 @@ public class ParticleESP {
     @SubscribeEvent
     public void renderWorld(RenderWorldLastEvent event) {
         if (!Checker.enabled) return;
-        if (Configs.ParticleESP) return;
+        if (!Configs.ParticleESP) return;
         synchronized (particalPosTTL) {
             for (ConcurrentHashMap.Entry<Vector3f, Integer> entry : particalPosTTL.entrySet()) {
                 Vector3f pos = entry.getKey();
@@ -58,6 +59,9 @@ public class ParticleESP {
         if (event.packet instanceof S2APacketParticles) {
             S2APacketParticles packet = (S2APacketParticles) event.packet;
             Vector3f pos = new Vector3f((float) packet.getXCoordinate(), (float) packet.getYCoordinate(), (float) packet.getZCoordinate());
+            if (Configs.ParticleESPDebug) {
+                ChatLib.chat(packet.getParticleType().getParticleName());
+            }
             if (packet.getParticleType().getParticleName().equals(Configs.ParticleESPType)) {
                 synchronized (particalPosTTL) {
                     particalPosTTL.put(pos, 1);

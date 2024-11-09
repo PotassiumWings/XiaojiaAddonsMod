@@ -2323,6 +2323,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Particle ESP Enabled", parent = "Particle ESP")
     public static boolean ParticleESP = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Particle ESP Debug", parent = "Particle ESP")
+    public static boolean ParticleESPDebug = false;
+
     @Property(type = Property.Type.TEXT, name = "Particle ESP Type", parent = "Particle ESP")
     public static String ParticleESPType = "witchMagic";
 }
