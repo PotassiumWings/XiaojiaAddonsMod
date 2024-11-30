@@ -298,7 +298,8 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new PacketRelated());
         MinecraftForge.EVENT_BUS.register(new EasyTrigger());
 
-        MinecraftForge.EVENT_BUS.register(new CustomESP());
+        CustomESP customESP = new CustomESP();
+        MinecraftForge.EVENT_BUS.register(customESP);
         MinecraftForge.EVENT_BUS.register(new ParticleESP());
 
         // Nether
@@ -333,7 +334,7 @@ public class XiaojiaAddons {
         MinecraftForge.EVENT_BUS.register(new AutoUseItem());
         MinecraftForge.EVENT_BUS.register(new BlockAbility());
         MinecraftForge.EVENT_BUS.register(new DisableEntityRender());
-        MinecraftForge.EVENT_BUS.register(new DisplayDayAndCoords());
+        MinecraftForge.EVENT_BUS.register(new DisplayDayAndCoords(customESP));
         MinecraftForge.EVENT_BUS.register(new EntityQOL());
         MinecraftForge.EVENT_BUS.register(new FindFairy());
         MinecraftForge.EVENT_BUS.register(new GhostBlock());

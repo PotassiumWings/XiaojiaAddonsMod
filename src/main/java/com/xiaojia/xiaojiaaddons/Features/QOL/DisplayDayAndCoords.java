@@ -1,6 +1,7 @@
 package com.xiaojia.xiaojiaaddons.Features.QOL;
 
 import com.xiaojia.xiaojiaaddons.Config.Configs;
+import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.CustomESP;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.DevMode;
 import com.xiaojia.xiaojiaaddons.Features.Miscellaneous.PacketRelated;
 import com.xiaojia.xiaojiaaddons.Features.Skills.Fishing;
@@ -21,18 +22,21 @@ import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
 
 public class DisplayDayAndCoords {
     private final Display display = new Display();
+    public CustomESP customESP;
 
-    public DisplayDayAndCoords() {
+    public DisplayDayAndCoords(CustomESP customESP) {
         display.setShouldRender(true);
         display.setBackground("full");
         display.setBackgroundColor(0);
         display.setAlign("left");
+        this.customESP = customESP;
     }
 
     @SubscribeEvent
@@ -130,6 +134,17 @@ public class DisplayDayAndCoords {
                 entities.sort((a, b) -> (int) (MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
 
                 display.addLine(new DisplayLine(String.format("&f&lNearby Players: (%d)", entities.size())).setScale(Configs.DisplayScale / 20F));
+                entities.forEach(e -> display.addLine(new DisplayLine(" " + e.getDisplayName().getFormattedText()
+                        + getDistanceString(e)).setScale(Configs.DisplayScale / 20F)));
+            } catch (Exception ignored) {
+            }
+        }
+        if (Configs.DisplayCustomESP) {
+            try {
+                ArrayList<Entity> entities = this.customESP.getCustomESPEntities();
+                entities.sort((a, b) -> (int) (MathUtils.distanceSquareFromPlayer(a) - MathUtils.distanceSquareFromPlayer(b)));
+
+                display.addLine(new DisplayLine(String.format("&f&lCustomESP: (%d)", entities.size())).setScale(Configs.DisplayScale / 20F));
                 entities.forEach(e -> display.addLine(new DisplayLine(" " + e.getDisplayName().getFormattedText()
                         + getDistanceString(e)).setScale(Configs.DisplayScale / 20F)));
             } catch (Exception ignored) {

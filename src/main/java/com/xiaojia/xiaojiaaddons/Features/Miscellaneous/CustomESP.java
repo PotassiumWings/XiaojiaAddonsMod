@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.passive.EntityBat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.*;
@@ -28,7 +29,8 @@ public class CustomESP extends RenderEntityESP {
     public EntityInfo getEntityInfo(Entity entity) {
         if (!Checker.enabled) return null;
         if (Configs.CustomESPName.isEmpty()) return null;
-        if (!(entity instanceof EntityArmorStand) || !entity.getName().contains(Configs.CustomESPName)) return null;
+        if (!(entity instanceof EntityArmorStand) && Configs.CustomESPArmorstandOnly) return null;
+        if (!entity.getName().contains(Configs.CustomESPName)) return null;
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("entity", entity);
         if (MathUtils.distanceSquareFromPlayer(getX(entity), getY(entity), getZ(entity)) < 144) {
@@ -49,5 +51,11 @@ public class CustomESP extends RenderEntityESP {
     @Override
     public boolean enabled() {
         return Configs.CustomESP;
+    }
+
+    public ArrayList<Entity> getCustomESPEntities() {
+        ArrayList<Entity> result = new ArrayList<>();
+        this.renderEntities.forEach(e -> result.add(e.getEntity()));
+        return result;
     }
 }

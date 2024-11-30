@@ -21,7 +21,7 @@ import static com.xiaojia.xiaojiaaddons.utils.MathUtils.getZ;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public abstract class RenderEntityESP {
-    private List<EntityInfo> renderEntities = new ArrayList<>();
+    protected List<EntityInfo> renderEntities = new ArrayList<>();
 
     @SubscribeEvent
     public final void onTick(TickEndEvent event) {

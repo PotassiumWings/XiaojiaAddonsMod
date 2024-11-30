@@ -893,6 +893,9 @@ public class Configs {
     @Property(type = Property.Type.BOOLEAN, name = "Display Players", parent = "Information Display")
     public static boolean DisplayPlayers = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Display Custom ESP Entities", parent = "Information Display")
+    public static boolean DisplayCustomESP = false;
+
     @Property(type = Property.Type.BOOLEAN, name = "Display Coords", parent = "Information Display",
             description = "Display current block you're at.")
     public static boolean DisplayCoords = false;
@@ -2294,6 +2297,9 @@ public class Configs {
 
     @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Box", parent = "Custom ESP")
     public static boolean CustomESPESP = false;
+
+    @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Only Armor Stand", parent = "Custom ESP")
+    public static boolean CustomESPArmorstandOnly = false;
 
     @Property(type = Property.Type.BOOLEAN, name = "Custom ESP Draw String", parent = "Custom ESP")
     public static boolean CustomESPString = false;

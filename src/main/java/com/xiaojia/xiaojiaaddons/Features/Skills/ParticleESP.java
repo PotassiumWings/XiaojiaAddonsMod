@@ -6,11 +6,13 @@ import com.xiaojia.xiaojiaaddons.Events.TickEndEvent;
 import com.xiaojia.xiaojiaaddons.Objects.Checker;
 import com.xiaojia.xiaojiaaddons.utils.ChatLib;
 import com.xiaojia.xiaojiaaddons.utils.GuiUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.vecmath.Vector3f;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ParticleESP {
@@ -43,7 +45,7 @@ public class ParticleESP {
                 Vector3f pos = entry.getKey();
                 int ttl = entry.getValue();
                 ttl += 1;
-                if (ttl < 10) {
+                if (ttl < 15) {
                     temp.put(pos, ttl);
                 }
             }
