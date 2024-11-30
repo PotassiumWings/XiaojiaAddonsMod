@@ -51,6 +51,7 @@ import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Quiz;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.TeleportMaze;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.ThreeWeirdos;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.DevWater;
+import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.Patterns;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.Puzzles.Water.WaterSolver;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.SecretChecker;
 import com.xiaojia.xiaojiaaddons.Features.Dungeons.ShadowAssassinESP;
@@ -188,6 +189,9 @@ public class XiaojiaAddons {
 //        ClientSocket.connect();
         DupedItems.load();
         RelicESP.load();
+        try {
+            Patterns.load();
+        } catch (Exception ignored) {}
 
         ClientCommandHandler.instance.registerCommand(new Command());
         ClientCommandHandler.instance.registerCommand(new FarmingPoint());
