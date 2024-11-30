@@ -359,6 +359,7 @@ public class AutoBlaze {
 
     private void executeOrder(int slot, ArrayList<BlazeOrder> seq) throws Exception {
         long lastBlazeHitTime = 0;
+        log.append(seq.toString());
         for (BlazeOrder todo : seq) {
             if (!should) break;
             if (todo.type == BlazeOrder.Type.WARP) {
@@ -711,7 +712,7 @@ public class AutoBlaze {
                 diffAlpha = Math.min(diffAlpha, 2 * Math.PI - diffAlpha);
 
                 log.append(String.format("diff: %.2f, diffAlpha: %.2f\n", diff, diffAlpha));
-                if (diff < 0.5 && diffAlpha < 0.1)
+                if (diffAlpha < 0.1)
                     arrowShot = true;
             }
         }
