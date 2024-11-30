@@ -516,7 +516,7 @@ public class AutoBlaze {
             return;
         }
         // in blaze, not cleared
-        lowFirst = (room.core == 1103121487);
+        lowFirst = (room.core == -2089908593);
         if (shootingThread != null && shootingThread.isAlive()) return;
         shootingThread = new Thread(() -> {
             try {

@@ -24,7 +24,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: "com.github.johnrengelman.shadow"
 
-version = "2.5.1"
+version = "2.5.2"
 group= "com.xiaojia.xiaojiaaddons"
 archivesBaseName = "XiaojiaAddons"
 compileJava.options.encoding = "UTF-8"
