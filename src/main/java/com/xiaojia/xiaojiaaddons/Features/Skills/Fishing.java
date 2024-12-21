@@ -12,16 +12,21 @@ import com.xiaojia.xiaojiaaddons.utils.ControlUtils;
 import com.xiaojia.xiaojiaaddons.utils.HotbarUtils;
 import com.xiaojia.xiaojiaaddons.utils.MathUtils;
 import com.xiaojia.xiaojiaaddons.utils.TimeUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
+import java.util.List;
+
 import static com.xiaojia.xiaojiaaddons.utils.MathUtils.floor;
 import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getPlayer;
+import static com.xiaojia.xiaojiaaddons.utils.MinecraftUtils.getWorld;
 
 public class Fishing {
     public static long startPushing = 0;
@@ -102,10 +107,21 @@ public class Fishing {
         }
     }
 
+    private boolean canReelIn() {
+        try {
+            return getWorld().loadedEntityList.stream().anyMatch(e -> ChatLib.removeFormatting(e.getName()).equals("!!!"));
+        } catch (Exception e) {
+            ChatLib.chat("Wrong in rell in check");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @SubscribeEvent
     public void onParticle(PacketReceivedEvent event) {
         if (!Checker.enabled) return;
         if (!Configs.AutoPullRod) return;
+        if (Configs.AutoPullRod2) return;
         if (!(event.packet instanceof S2APacketParticles)) return;
         S2APacketParticles packet = (S2APacketParticles) event.packet;
         if (packet.getParticleType() != EnumParticleTypes.WATER_BUBBLE &&
@@ -156,6 +172,22 @@ public class Fishing {
         if (message.equals("NEW DISCOVERY")) {
             if (Configs.StopWhenNewDiscovery) {
                 stopMove();
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onTickReel2(TickEndEvent event) {
+        if (!Checker.enabled) return;
+        if (!Configs.AutoPullRod) return;
+        if (!Configs.AutoPullRod2) return;
+        if (getPlayer() == null) return;
+        if (getPlayer().fishEntity == null) return;
+
+        if (TimeUtils.curTime() - lastReeledIn > Configs.ReelCD) {
+            if (canReelIn()) {
+                lastReeledIn = TimeUtils.curTime();
+                new Thread(this::reelIn).start();
             }
         }
     }

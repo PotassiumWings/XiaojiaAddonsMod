@@ -1891,6 +1891,11 @@ public class Configs {
                     "Water / lava fishing are supported.")
     public static boolean AutoPullRod = false;
 
+    @Property(type = Property.Type.BOOLEAN, name = "Auto Pulling Rod - New", parent = "Fishing", illegal = true,
+            description = "Auto Pull Rod When fishing.\n" +
+                    "Using !!! for checking.")
+    public static boolean AutoPullRod2 = false;
+
     @Property(type = Property.Type.SELECT, name = "Fishing Mode", parent = "Fishing",
             description = "Lava Fishing - Pull rod, swap to ice spray, right click, swap to wither blade.\n" +
                     "Regular Fishing - Pull rod, wait 200ms, cast rod.", options = {"Lava", "Regular"})
